@@ -1,43 +1,45 @@
 # MVP List
 
-FauxTwitterClone, a Twitter clone, is a website for users to share brief thoughts, engage in light discussion, post memes, and spread propaganda.
+NomNow, an UberEats clone, is a website for hungry users to get food delivered quckly to their homes from local restaraunts. 
 
 ## New account creation, log in, log out, and guest/demo login
 _Please note: users are not 1 of your 4 features, but are required for the project._
 
 * Users can sign up, log in, and log out.
 * Users can use a demo log in to try the site.
-* Users can't use certain features without logging in (like fauxtweeting and fauxliking posts).
+* Users can't use certain features without logging in.
 * Logged in users are directed to their profile page which displays their fauxtweets.
-* Logged out users are directed to a page displaying several recent fauxtweets.
+* Logged out users are directed to a page.
 
-## 1. FauxTweets
+## Restaurants
+* Users should be able to view all restaurants for delivery.
+* Users should be able to create a restaurant.
+* Users should be able to update their restaurant(s).
+* Users should be able to delete their restaurant(s).
 
-* Logged in users can post fauxtweets.
-* Logged in users can edit and delete their own fauxtweets.
-* All users can view a sampling of the most recent fauxtweets.
+## Reviews
+* Users should be able to view all reviews on a restaurant.
+* Users should be able to create a review for a restaurant.
+* Users should be able to update their review for a restaurant.
+* Users should be able to delete their review from a restaurant.
 
-## 2. FauxComments
-
-* Logged in users can post fauxcomments on fauxtweets.
-* Logged in users can edit and delete their own fauxcomments.
-* All users can view fauxcomments on fauxtweets.
-
-## 3. FauxLikes
-
-* Logged in users can fauxlike fauxtweets and fauxcomments.
-* Logged in users can remove their own fauxlike from fauxtweets and fauxcomments.
-* All users can see how many users have fauxliked a fauxtweet or fauxcomment.
+## Shopping Cart
+* Users should be able to view all products added to their cart.
+* Users should be able to add products to their shopping cart.
+* Users should be able to remove products from their shopping cart.
+* Users should be able to preform a "transaction" to complete their purchase
 
 
-## 4. FauxTags
+## Menu Items
+* Users should be able to view all menu items for a restaurant.
+* Users should be able to add menu items to their restaurants.
+* Users should be able to update menu items on their restaurants.
+* Users should be able to delete menu items from their restaurants.
 
-* Logged in users can add fauxtags to their fauxtweets.
-* All users can click on fauxtags to view a list of recent fauxtweets that contain that fauxtag.
+## Bonus: Search
+* Users should be able to search for restaurants.
+* Users should be able to view the results of their search.
 
-## Bonus Features
-
-## 5. Bonus Features
-
-* Display a list of recent commonly used fauxtags.
-* Users can search for other users to view all of their fauxtweets.
+## Bonus: Past Order/Reorder
+* Users should be able to view their past orders.
+* Users should be able to reorder any of their past orders.
