@@ -38,7 +38,47 @@
     * I can log out of my account and be redirected to a page displaying recent FauxTweets.
       * So that I can easily log out to keep my information secure.
 
-## FauxTweets
+## Restaraunts 
+
+  ## Customer-Side 
+
+* I want to be able to view all the restaraunts by clicking hte restaraunt tab on the navbar so that I can find options to order from. 
+
+* As a logged in user i want to be able to favorite a restaraunt by clicking the "Heart" button. 
+
+* While logged out, if attempting to do any "logged in" features, I'm directed to the signup/login page. 
+
+* As a user,
+I want to view, create, update, and delete restaurants for delivery,
+so that I can manage the restaurants available for delivery according to my preferences.
+
+* As a logged out user, clicking the "Add your restaraunt" will take me to a sign in/sign up page.
+
+## Reviews
+
+* As a customer I want to be able to view a preview of the reviews just below the featured items section that also navigates me to the "all reviews" section after clicking the "see more" button. 
+
+* I want to be able to create a review for a restaraunt so that i can share my experinece with others. 
+
+* I want be able to update my review to provide more accurate feedback.
+
+* I want to be able to delete my review from a restaurant,
+so that I can remove any review I no longer wish to share.
+
+
+## Shopping Cart
+
+* I want to be able to view, add, and remove products from my shopping cart, so that I can manage my selections before completing my purchase.
+
+* Acceptance Criteria:
+
+* The user can see a list of all products currently in their cart.
+* The user can add new products to the shopping cart.
+* The user can remove products from the shopping cart.
+
+## Menu Items
+
+* As a customer, I want to be able to view all menu items for a restaurant so that I can see what’s available. I also want the ability to add new items to the restaurant's menu, update existing menu items, or delete items if necessary, so I can keep the menu up-to-date and aligned with my preferences.
 
 ### Create FauxTweets
 

@@ -8,8 +8,8 @@ _Please note: users are not 1 of your 4 features, but are required for the proje
 * Users can sign up, log in, and log out.
 * Users can use a demo log in to try the site.
 * Users can't use certain features without logging in.
-* Logged in users are directed to their profile page which displays their fauxtweets.
-* Logged out users are directed to a page.
+* Logged in Users are 
+* Logged out users are directed to the home page.
 
 ## Restaurants
 * Users should be able to view all restaurants for delivery.
