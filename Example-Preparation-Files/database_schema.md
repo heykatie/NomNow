@@ -1,50 +1,120 @@
-# **Database Schema**
+# Database Schema
 
-## `users`
+## Users
+| Column | Type | Constraints |
+|--------|------|-------------|
+| id | int | PRIMARY KEY |
+| firsName | varchar | |
+| lastName | varchar | |
+| phoneNumber | varchar | |
+| restarauntOwner | boolean | |
+| address | varchar | |
+| city | varchar | |
+| state | varchar | |
+| country | varchar | |
+| zip | int | |
+| lat | decimal | |
+| lng | decimal | |
+| paymentMethod | varchar | |
+| walletBalance | decimal | |
+| hashedPassword | varchar | |
+| email | varchar | |
+| createdAt | timestamp | |
+| updatedAt | timestamp | |
 
-| column name | data type | details                   |
-|-------------|-----------|---------------------------|
-| id          | integer   | not null, primary key     |
-| username    | string    | not null,                 |
-| email       | string    | not null, indexed, unique |
-| created_at  | datetime  | not null                  |
-| updated-at  | datetime  | not null                  |
+## Restaraunts
+| Column | Type | Constraints |
+|--------|------|-------------|
+| id | int | PRIMARY KEY |
+| ownerId | int | |
+| address | varchar | |
+| city | varchar | |
+| state | varchar | |
+| country | varchar | |
+| zip | int | |
+| lat | decimal | |
+| lng | decimal | |
+| name | varchar | |
+| cuisineType | varchar | |
+| deliveryFee | decimal | |
+| BusinessHours | varchar | |
+| Servicing | boolean | |
+| imgUrl | url | |
+| description | text | |
+| avgRating | decimal | |
+| DeliveryTime | int | |
+| createdAt | timestamp | |
+| updatedAt | timestamp | |
 
-## `fauxtweets`
+## Reviews
+| Column | Type | Constraints |
+|--------|------|-------------|
+| id | int | PRIMARY KEY |
+| restarauntId | int | |
+| userId | int | |
+| orderId | int | |
+| review | text | |
+| orderRating | int | |
+| restarauntRating | int | |
+| createdAt | timestamp | |
+| updatedAt | timestamp | |
 
-| column name | data type | details               |
-|-------------|-----------|-----------------------|
-| id          | integer   | not null, primary key |
-| content     | string    | not null              |
-| userId      | integer   | not null, foreign key |
-| created_at  | datetime  | not null              |
-| updated-at  | datetime  | not null              |
+## menuItems
+| Column | Type | Constraints |
+|--------|------|-------------|
+| id | int | PRIMARY KEY |
+| restarauntId | int | |
+| name | varchar | |
+| description | text | |
+| price | decimal | |
+| imgUrl | url | |
+| createdAt | timestamp | |
+| updatedAt | timestamp | |
 
-* `userId` references `users` table
+## shoppingCart Table
+| Column | Type | Constraints |
+|--------|------|-------------|
+| id | int | PRIMARY KEY |
+| userId | int | |
+| itemId | int | |
+| paymentMethod | varchar | |
+| walletBalance | decimal | |
+| quantity | int | |
+| promo | varchar | |
+| createdAt | timestamp | |
+| updatedAt | timestamp | |
 
-## `fauxcomments`
+## Transactions Table
+| Column | Type | Constraints |
+|--------|------|-------------|
+| id | int | PRIMARY KEY |
+| userId | int | |
+| totalAmount | decimal | |
+| status | ENUM | ('Pending', 'Completed', 'Canceled', 'Failed', 'Refunded') |
+| createdAt | timestamp | |
 
-| column name   | data type | details               |
-|---------------|-----------|-----------------------|
-| id            | integer   | not null, primary key |
-| content       | string    | not null              |
-| userId        | integer   | not null, foreign key |
-| fauxCommentId | integer   | not null, foreign key |
-| created_at    | datetime  | not null              |
-| updated-at    | datetime  | not null              |
+## TransactionItems Table
+| Column | Type | Constraints |
+|--------|------|-------------|
+| id | int | PRIMARY KEY |
+| userId | int | |
+| itemId | int | |
+| restarauntId | int | |
+| price | decimal | |
+| createdAt | timestamp | |
 
-* `userId` references `users` table
-* `fauxCommentId` references `fauxcomments` table
-
-## `fauxlikes`
-
-| column name   | data type | details                        |
-|---------------|-----------|--------------------------------|
-| id            | integer   | not null, primary key          |
-| userId        | integer   | not null, indexed, foreign key |
-| fauxTweetId   | integer   | indexed, foreign key           |
-| fauxCommentId | integer   | indexed, foreign key           |
-
-* `userId` references `users` table
-* `fauxTweetId` references `fauxtweets` table
-* `fauxCommentId` references `fauxcomments` table
+## Foreign Key References
+```
+Users.id < Reviews.userId
+Users.id < shoppingCart.userId
+Users.id < TransactionItems.userId
+Users.id < Restaraunts.ownerId
+Users.id < Transactions.userId
+Restaraunts.id < menuItems.restarauntId
+Restaraunts.id < Reviews.restarauntId
+Restaraunts.id < TransactionItems.restarauntId
+Users.paymentMethod < shoppingCart.paymentMethod
+Users.walletBalance < shoppingCart.walletBalance
+menuItems.id < TransactionItems.itemId
+menuItems.id < shoppingCart.itemId
+```
