@@ -1,6 +1,12 @@
 # Database Schema
 
-## Users
+## Layout
+<img width="611" alt="image" src="https://github.com/user-attachments/assets/48257556-aaf7-44f5-975f-15c1776ada46" />
+
+
+## Tables 
+
+### Users
 | Column | Type | Constraints |
 |--------|------|-------------|
 | id | int | PRIMARY KEY |
@@ -22,7 +28,7 @@
 | createdAt | timestamp | |
 | updatedAt | timestamp | |
 
-## Restaraunts
+### Restaraunts
 | Column | Type | Constraints |
 |--------|------|-------------|
 | id | int | PRIMARY KEY |
@@ -46,7 +52,7 @@
 | createdAt | timestamp | |
 | updatedAt | timestamp | |
 
-## Reviews
+### Reviews
 | Column | Type | Constraints |
 |--------|------|-------------|
 | id | int | PRIMARY KEY |
@@ -59,7 +65,7 @@
 | createdAt | timestamp | |
 | updatedAt | timestamp | |
 
-## menuItems
+### MenuItems
 | Column | Type | Constraints |
 |--------|------|-------------|
 | id | int | PRIMARY KEY |
@@ -71,7 +77,7 @@
 | createdAt | timestamp | |
 | updatedAt | timestamp | |
 
-## shoppingCart Table
+### ShoppingCart
 | Column | Type | Constraints |
 |--------|------|-------------|
 | id | int | PRIMARY KEY |
@@ -84,7 +90,7 @@
 | createdAt | timestamp | |
 | updatedAt | timestamp | |
 
-## Transactions Table
+### Transactions
 | Column | Type | Constraints |
 |--------|------|-------------|
 | id | int | PRIMARY KEY |
@@ -93,7 +99,7 @@
 | status | ENUM | ('Pending', 'Completed', 'Canceled', 'Failed', 'Refunded') |
 | createdAt | timestamp | |
 
-## TransactionItems Table
+### TransactionItems
 | Column | Type | Constraints |
 |--------|------|-------------|
 | id | int | PRIMARY KEY |
@@ -103,18 +109,22 @@
 | price | decimal | |
 | createdAt | timestamp | |
 
-## Foreign Key References
+### Foreign Key References
 ```
 Users.id < Reviews.userId
-Users.id < shoppingCart.userId
+Users.id < ShoppingCart.userId
 Users.id < TransactionItems.userId
 Users.id < Restaraunts.ownerId
 Users.id < Transactions.userId
-Restaraunts.id < menuItems.restarauntId
+Restaraunts.id < MenuItems.restarauntId
 Restaraunts.id < Reviews.restarauntId
 Restaraunts.id < TransactionItems.restarauntId
-Users.paymentMethod < shoppingCart.paymentMethod
-Users.walletBalance < shoppingCart.walletBalance
-menuItems.id < TransactionItems.itemId
-menuItems.id < shoppingCart.itemId
+Users.paymentMethod < ShoppingCart.paymentMethod
+Users.walletBalance < ShoppingCart.walletBalance
+MenuItems.id < TransactionItems.itemId
+MenuItems.id < ShoppingCart.itemId
 ```
+
+
+
+
