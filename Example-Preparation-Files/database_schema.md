@@ -39,7 +39,7 @@
 | deliveryFee | decimal | |
 | BusinessHours | varchar | |
 | Servicing | boolean | |
-| imgUrl | url | |
+| storeImage | url | |
 | description | text | |
 | avgRating | decimal | |
 | DeliveryTime | int | |
@@ -67,7 +67,7 @@
 | name | varchar | |
 | description | text | |
 | price | decimal | |
-| imgUrl | url | |
+| foodImage | url | |
 | createdAt | timestamp | |
 | updatedAt | timestamp | |
 
