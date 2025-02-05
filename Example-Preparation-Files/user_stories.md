@@ -63,7 +63,7 @@ so that I can manage the restaurants available for delivery according to my pref
 * I want be able to update my review to provide more accurate feedback.
 
 * I want to be able to delete my review from a restaurant,
-so that I can remove any review I no longer wish to share.
+so that I can remove any review I no longer wish to share. a
 
 
 ## Shopping Cart
