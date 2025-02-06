@@ -2,6 +2,7 @@
   "workbench.colorCustomizations": {
     "editorError.foreground": "#009561",
     "errorLens.statusBarIconErrorForeground": "#009561",
-    "errorLens.statusBarErrorForeground": "#009561"
+    "errorLens.statusBarErrorForeground": "#009561",
+    "tab.activeBorder": "#00B62B"
   }
 }
