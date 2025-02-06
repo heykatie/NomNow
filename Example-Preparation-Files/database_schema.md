@@ -1,5 +1,7 @@
 # Database Schema
 
+Link: https://dbdiagram.io/d/Nomnow-67577b48e9daa85aca2de6c4
+
 ## Layout
 <img width="611" alt="image" src="https://github.com/user-attachments/assets/48257556-aaf7-44f5-975f-15c1776ada46" />
 
