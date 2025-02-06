@@ -8,6 +8,11 @@
          username: "Demo",
          email: "demo@aa.io"
       },
+      2: {
+         id: 2,
+         username: 'Demo2',
+         email: 'test'
+      }
    },
    todolists: {
       1: {
