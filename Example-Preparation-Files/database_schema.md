@@ -12,7 +12,7 @@ Link: https://dbdiagram.io/d/Nomnow-67577b48e9daa85aca2de6c4
 | Column | Type | Constraints |
 |--------|------|-------------|
 | id | int | PRIMARY KEY |
-| firsName | varchar | |
+| firstName | varchar | |
 | lastName | varchar | |
 | phoneNumber | varchar | |
 | restarauntOwner | boolean | |
