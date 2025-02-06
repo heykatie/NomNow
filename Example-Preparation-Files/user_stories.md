@@ -79,36 +79,3 @@ so that I can remove any review I no longer wish to share. a
 ## Menu Items
 
 * As a customer, I want to be able to view all menu items for a restaurant so that I can see what’s available. I also want the ability to add new items to the restaurant's menu, update existing menu items, or delete items if necessary, so I can keep the menu up-to-date and aligned with my preferences.
-
-### Create FauxTweets
-
-* As a logged in user, I want to be able to post new FauxTweets.
-  * When I'm on the `/new-fauxtweet` page:
-    * I can write and submit a new FauxTweet.
-      * So that I can share my thoughts and memes with my friends.
-
-### Viewing FauxTweets
-
-* As a logged in _or_ logged out user, I want to be able to view a selection of the most recent FauxTweets.
-  * When I'm on the `/fauxtweets` page:
-    * I can view the ten most recently posted FauxTweets.
-      * So that I can read and interact with the thoughts and memes of my friends.
-
-* As a logged in _or_ logged out user, I want to be able to view a specific FauxTweet and its associated FauxComments and FauxLikes.
-  * When I'm on the `/fauxtweets/:id` page:
-    * I can view the content of the FauxTweet, as well as the associated FauxComments and FauxLikes.
-      * So that I can read and interact with the thoughts and memes of my friends, and add my own thoughts and memes in the FauxComments.
-
-### Updating FauxTweets
-
-* As a logged in user, I want to be able to edit my FauxTweets by clicking an Edit button associated with the FauxTweet anywhere that FauxTweet appears.
-  * When I'm on the `/fauxtweets`, `/fauxtweets/:id`, or `/users/:id/fauxtweets` pages:
-    * I can click "Edit" to make permanent changes to FauxTweets I have posted.
-      * So that I can fix any errors I make in my FauxTweets.
-
-### Deleting FauxTweets
-
-* As a logged in user, I want to be able to delete my FauxTweets by clicking a Delete button associated with the FauxTweet anywhere that FauxTweet appears.
-  * When I'm on the `/fauxtweets`, `/fauxtweets/:id`, or `/users/:id/fauxtweets` pages:
-    * I can click "Delete" to permanently delete a FauxTweet I have posted.
-      * So that when I realize I shouldn't have publicly said something, I can easily remove it.
