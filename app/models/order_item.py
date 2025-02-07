@@ -1,5 +1,5 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
-
+import datetime
 
 class OrderItem(db.Model):
     __tablename__ = "order_items"
@@ -18,6 +18,10 @@ class OrderItem(db.Model):
     price = db.Column(
         db.Numeric(10, 2), nullable=False
     )  # Stores price at the time of purchase
+    created_at = db.Column(db.DateTime, default=datetime.datetime.now())
+    updated_at = db.Column(
+        db.DateTime, default=datetime.datetime.now(), onupdate=datetime.datetime.now()
+    )
 
     order = db.relationship("Order", back_populates="order_items")
     menu_items = db.relationship("MenuItem", back_populates="order_items")
@@ -29,4 +33,6 @@ class OrderItem(db.Model):
             "menuitem_id": self.menuitem_id,
             "quantity": self.quantity,
             "price": float(self.price),
+            "created_at": self.created_at,
+            "updated_at": self.updated_at,
         }
