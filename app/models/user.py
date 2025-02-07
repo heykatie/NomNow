@@ -14,18 +14,18 @@ class User(db.Model, UserMixin):
     first_name = db.Column(db.String(40), nullable=False)
     last_name = db.Column(db.String(40), nullable=False)
     phone_number = db.Column(db.String(20), nullable=False, unique=True)
-    restaurantOwner = db.Column(db.Boolean, nullable=False)
+    restaurantOwner = db.Column(db.Boolean, nullable=True)
     address = db.Column(db.String(40), nullable=False)
     city = db.Column(db.String(40), nullable=False)
     state = db.Column(db.String(40), nullable=False)
     zip = db.Column(db.Integer, nullable=False)
-    wallet = db.Column(Numeric(10, 2), nullable=False)
+    wallet = db.Column(Numeric(10, 2), nullable=True)
     email = db.Column(db.String(255), nullable=False, unique=True)
     hashed_password = db.Column(db.String(255), nullable=False)
 
     reviews = db.relationship('Review', back_populates='users')
     restaurants = db.relationship('Restaurant', back_populates='users')
-
+    orders = db.relationship('Order', back_populates='users')
 
     @property
     def password(self):

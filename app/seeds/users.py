@@ -4,16 +4,72 @@ from sqlalchemy.sql import text
 
 # Adds a demo user, you can add other users here if you want
 def seed_users():
-    demo = User(
-        username='Demo', email='demo@aa.io', password='password')
-    marnie = User(
-        username='marnie', email='marnie@aa.io', password='password')
-    bobbie = User(
-        username='bobbie', email='bobbie@aa.io', password='password')
+    mar = User(
+        first_name='Mar',
+        last_name='Eats',
+        phone_number='999033959',
+        address='Same St',
+        city='Same City',
+        state='Same State',
+        zip=11111,
+        wallet=9999999.99,
+        hashed_password='password',
+        email='m@user.io',
+        )
+    gabe = User(
+        first_name='Gabe',
+        last_name='Eats',
+        phone_number='999033958',
+        address='Same St',
+        city='Same City',
+        state='Same State',
+        zip=11111,
+        wallet=9999999.99,
+        hashed_password='password',
+        email='g@user.io',
+        )
+    burak = User(
+        first_name='Burak',
+        last_name='Eats',
+        phone_number='999033957',
+        address='Same St',
+        city='Same City',
+        state='Same State',
+        zip=11111,
+        wallet=9999999.99,
+        hashed_password='password',
+        email='b@user.io',
+        )
+    katie = User(
+        first_name='Katie',
+        last_name='Eats',
+        phone_number='999033956',
+        address='Same St',
+        city='Same City',
+        state='Same State',
+        zip=11111,
+        wallet=9999999.99,
+        hashed_password='password',
+        email='k@user.io',
+        )
+    sama = User(
+        first_name='Sama',
+        last_name='Eats',
+        phone_number='999033955',
+        address='Same St',
+        city='Same City',
+        state='Same State',
+        zip=11111,
+        wallet=9999999.99,
+        hashed_password='password',
+        email='s@user.io',
+        )
 
-    db.session.add(demo)
-    db.session.add(marnie)
-    db.session.add(bobbie)
+    db.session.add(mar)
+    db.session.add(gabe)
+    db.session.add(burak)
+    db.session.add(katie)
+    db.session.add(sama)
     db.session.commit()
 
 

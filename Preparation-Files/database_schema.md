@@ -8,16 +8,16 @@
 | Column | Type | Constraints |
 |--------|------|-------------|
 | id | int | PRIMARY KEY |
-| firstName | varchar | NOT NULL |
-| lastName | varchar | NOT NULL |
-| phoneNumber | varchar | UNIQUE | NOT NULL | 
+| first_name | varchar | NOT NULL |
+| last_name | varchar | NOT NULL |
+| phone_number | varchar | UNIQUE | NOT NULL | 
 | restarauntOwner | boolean | |
 | address | varchar | NOT NULL |
 | city | varchar | NOT NULL |
 | state | varchar | NOT NULL |
 | zip | int | NOT NULL |
 | wallet | decimal | |
-| hashedPassword | varchar | NOT NULL |
+| hashed_password | varchar | NOT NULL |
 | email | varchar | NOT NULL |
 | createdAt | timestamp | |
 | updatedAt | timestamp | |
