@@ -1,7 +1,11 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
+from sqlalchemy import Numeric
+<<<<<<< Updated upstream
+=======
 
+>>>>>>> Stashed changes
 
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
@@ -22,8 +26,11 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(255), nullable=False, unique=True)
     hashed_password = db.Column(db.String(255), nullable=False)
 
+<<<<<<< Updated upstream
     # posts = db.relationship('Post', back_populates='users')
     # restaraunts = db.relationship('Restaraunt', back_populates='users')
+=======
+>>>>>>> Stashed changes
 
     @property
     def password(self):

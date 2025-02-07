@@ -6,8 +6,15 @@ import "./SignupForm.css";
 
 function SignupFormModal() {
   const dispatch = useDispatch();
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
+  // const [username, setUsername] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("")
+  const [address, setAddress] = useState("")
+  const [city, setCity] = useState("")
+  const [state, setState] = useState("")
+  const [zip, setZip] = useState("")
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -26,8 +33,14 @@ function SignupFormModal() {
     const serverResponse = await dispatch(
       thunkSignup({
         email,
-        username,
+        firstName,
+        lastName,
         password,
+        phoneNumber,
+        address,
+        city,
+        state,
+        zip
       })
     );
 
@@ -42,6 +55,26 @@ function SignupFormModal() {
     <>
       <h1>Sign Up</h1>
       {errors.server && <p>{errors.server}</p>}
+      <label>
+        First Name
+        <input
+          type="text"
+          value={firstName}
+          onChange={(e) => setFirstName(e.target.value)}
+          required
+        />
+      </label>
+      {errors.firstName && <p>{errors.firstName}</p>}
+      <label>
+        Last Name
+        <input
+          type="text"
+          value={lastName}
+          onChange={(e) => setLastName(e.target.value)}
+          required
+        />
+      </label>
+      {errors.lastName && <p>{errors.lastName}</p>}
       <form onSubmit={handleSubmit}>
         <label>
           Email
@@ -54,15 +87,55 @@ function SignupFormModal() {
         </label>
         {errors.email && <p>{errors.email}</p>}
         <label>
-          Username
+          Phone Number
           <input
             type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
             required
           />
         </label>
-        {errors.username && <p>{errors.username}</p>}
+        {errors.phoneNumber && <p>{errors.phoneNumber}</p>}
+        <label>
+          Address
+          <input
+            type="text"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            required
+          />
+        </label>
+        {errors.address && <p>{errors.address}</p>}
+        <label>
+          City
+          <input
+            type="text"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            required
+          />
+        </label>
+        {errors.city && <p>{errors.city}</p>}
+        <label>
+          State
+          <input
+            type="text"
+            value={state}
+            onChange={(e) => setState(e.target.value)}
+            required
+          />
+        </label>
+        {errors.state && <p>{errors.state}</p>}
+        <label>
+          Zip Code
+          <input
+            type="text"
+            value={zip}
+            onChange={(e) => setZip(e.target.value)}
+            required
+          />
+        </label>
+        {errors.zip && <p>{errors.zip}</p>}
         <label>
           Password
           <input

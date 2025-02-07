@@ -62,7 +62,6 @@ def sign_up():
             city=form.data['city'],
             state=form.data['state'],
             zip=form.data['zip']
-
         )
         db.session.add(user)
         db.session.commit()

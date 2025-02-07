@@ -10,14 +10,14 @@
 | id | int | PRIMARY KEY |
 | firstName | varchar | NOT NULL |
 | lastName | varchar | NOT NULL |
-| phoneNumber | varchar | UNIQUE, NOT NULL |
+| phoneNumber | varchar | UNIQUE | NOT NULL | 
 | restarauntOwner | boolean | |
 | address | varchar | NOT NULL |
-| city | varchar | |
-| state | varchar | |
-| zip | int | |
+| city | varchar | NOT NULL |
+| state | varchar | NOT NULL |
+| zip | int | NOT NULL |
 | wallet | decimal | |
-| hashedPassword | varchar | |
+| hashedPassword | varchar | NOT NULL |
 | email | varchar | NOT NULL |
 | createdAt | timestamp | |
 | updatedAt | timestamp | |
