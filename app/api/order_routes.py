@@ -198,6 +198,17 @@ def delete_order(order_id):
 
 
 
+
+
+
+
+
+
+
+
+
+# # possible future routes
+
 # # Cancels an order. If still in cart (Active), it's deleted. Otherwise, it's marked as Canceled
 # @order_routes.route("/<int:order_id>/cancel", methods=["PUT"])
 # @login_required
