@@ -179,33 +179,94 @@ def complete_order(order_id):
     return jsonify(order.to_dict()), 200
 
 
-# Cancels an order. If still in cart (Active), it's deleted. Otherwise, it's marked as Canceled
-@order_routes.route("/<int:order_id>/cancel", methods=["PUT"])
+# deletes order by trashing cart
+@order_routes.route("/<int:order_id>", methods=["DELETE"])
 @login_required
-def cancel_order(order_id):
-
+def delete_order(order_id):
     order = Order.query.get(order_id)
     if not order:
         return {"message": "Order not found"}, 404
     if order.user_id != current_user.id:
         return {"message": "Unauthorized"}, 403
 
-    if order.status == "Active":
-        # If still in cart mode, remove completely
-        db.session.delete(order)
-        db.session.commit()
-        return {"message": "Order successfully removed from cart"}, 200
-
-    if order.status == "Completed":
-        return {"message": "Cannot cancel a completed order"}, 403
-
-    # Mark order as canceled
-    order.status = "Canceled"
+    # Delete all associated order items first
+    OrderItem.query.filter_by(order_id=order.id).delete()
+    db.session.delete(order)
     db.session.commit()
 
-    return jsonify(
-        {"message": "Order successfully canceled", "order": order.to_dict()}
-    ), 200
+    return {"message": "Successfully deleted order"}, 200
+
+
+
+# # Cancels an order. If still in cart (Active), it's deleted. Otherwise, it's marked as Canceled
+# @order_routes.route("/<int:order_id>/cancel", methods=["PUT"])
+# @login_required
+# def cancel_order(order_id):
+#     order = Order.query.get(order_id)
+#     if not order:
+#         return {"message": "Order not found"}, 404
+#     if order.user_id != current_user.id:
+#         return {"message": "Unauthorized"}, 403
+
+#     if order.status == "Active":
+#         # If still in cart mode, remove completely
+#         db.session.delete(order)
+#         db.session.commit()
+#         return {"message": "Order successfully removed from cart"}, 200
+
+#     if order.status == "Completed":
+#         return {"message": "Cannot cancel a completed order"}, 403
+
+#     # Mark order as canceled
+#     order.status = "Canceled"
+#     db.session.commit()
+
+#     return jsonify(
+#         {"message": "Order successfully canceled", "order": order.to_dict()}
+#     ), 200
+
+
+# # Update an existing order's status or promo
+# @order_routes.route("/<int:order_id>", methods=["PUT"])
+# @login_required
+# def update_order(order_id):
+#     order = Order.query.get(order_id)
+#     if not order:
+#         return {"message": "Order not found"}, 404
+#     if order.user_id != current_user.id:
+#         return {"message": "Unauthorized"}, 403
+
+#     data = request.get_json()
+#     order.status = data.get("status", order.status)
+#     order.promo = data.get("promo", order.promo)
+
+#     db.session.commit()
+
+#     return jsonify(order.to_dict()), 200
+
+
+# # creates empty cart as a new order
+# @order_routes.route("/", methods=["POST"])
+# @login_required
+# def create_order():
+#     data = request.get_json()
+#     restaurant_id = data.get("restaurant_id")
+#     promo = data.get("promo", None)
+
+#     if not restaurant_id:
+#         return {"message": "Restaurant ID is required"}, 400
+
+#     new_order = Order(
+#         user_id=current_user.id,
+#         restaurant_id=restaurant_id,
+#         status="Active",  # Cart mode
+#         promo=promo,
+#     )
+
+#     db.session.add(new_order)
+#     db.session.commit()
+
+#     return jsonify(new_order.to_dict()), 201
 
 # # Create a new order with multiple menu items
 # @order_routes.route("/", methods=["POST"])
@@ -255,67 +316,6 @@ def cancel_order(order_id):
 #         order_item.order_id = new_order.id
 #         db.session.add(order_item)
 
-#     db.session.commit()
-
-#     return jsonify(new_order.to_dict()), 201
-
-# # Update an existing order's status or promo
-# @order_routes.route("/<int:order_id>", methods=["PUT"])
-# @login_required
-# def update_order(order_id):
-#     order = Order.query.get(order_id)
-#     if not order:
-#         return {"message": "Order not found"}, 404
-#     if order.user_id != current_user.id:
-#         return {"message": "Unauthorized"}, 403
-
-#     data = request.get_json()
-#     order.status = data.get("status", order.status)
-#     order.promo = data.get("promo", order.promo)
-
-#     db.session.commit()
-
-#     return jsonify(order.to_dict()), 200
-
-
-# @order_routes.route("/<int:order_id>", methods=["DELETE"])
-# @login_required
-# def delete_order(order_id):
-#     """
-#     Delete an order.
-#     """
-#     order = Order.query.get(order_id)
-#     if not order:
-#         return {"message": "Order not found"}, 404
-#     if order.user_id != current_user.id:
-#         return {"message": "Unauthorized"}, 403
-
-#     # Delete all associated order items first
-#     OrderItem.query.filter_by(order_id=order.id).delete()
-#     db.session.delete(order)
-#     db.session.commit()
-
-#     return {"message": "Successfully deleted order"}, 200
-
-# # creates empty cart as a new order
-# @order_routes.route("/", methods=["POST"])
-# @login_required
-# def create_order():
-#     data = request.get_json()
-#     restaurant_id = data.get("restaurant_id")
-#     promo = data.get("promo", None)
-
-#     if not restaurant_id:
-#         return {"message": "Restaurant ID is required"}, 400
-
-#     new_order = Order(
-#         user_id=current_user.id,
-#         restaurant_id=restaurant_id,
-#         status="Active",  # Cart mode
-#         promo=promo,
-#     )
-
-#     db.session.add(new_order)
 #     db.session.commit()
 
 #     return jsonify(new_order.to_dict()), 201

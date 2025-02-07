@@ -361,7 +361,7 @@ Returns all restaurants owned and managed by current user
       },
    ]
   }
-  ``` 
+  ```
 
 
 ### Get details of one restaurant
@@ -987,7 +987,7 @@ Deletes a review and returns a success message
   {
     "message": "Review couldn't be found"
   }
-  ``` 
+  ```
 
 
 ## Order Routes
@@ -1013,10 +1013,12 @@ Returns all past orders for a user determined by Id
     "past_orders": [
       {
         "id": 1,
+        "restaurantId": 23,
         "userId": 1,
         "totalCost": 11.0,
-        "promo": "SUMMER20", 
-        "menuItems": [
+        "status": "Active",
+        "promo": "SUMMER20",
+        "orderItems": [
           {
             "id": 1,
             "name": "Chips and Guac",
@@ -1043,14 +1045,14 @@ Creates and returns a past order
 * Require Authentication: true
 * Request
   * Method: POST
-  * URL: /api/orders/new
+  * URL: /api/orders
   * Body:
 
   ```json
   {
     // "menu_items": "1,13,85", // if you wanted to order multiple items
-    "menu_items": "1",
-    "total_cost": 14.50,
+    "items": {"menuitem_id": 12, "quantity": 3},
+    "promo": "SUMMER20",
     "restaurant_id": 1
   }
   ```
@@ -1062,28 +1064,28 @@ Creates and returns a past order
 
   ```json
   {
-    "id": 11,
+    "id": 1,
+    "restaurantId": 23,
     "userId": 1,
-    "restaurantId": 1,
-    "totalCost": 14.5,
+    "totalCost": 11.0,
+    "status": "Active",
     "promo": "SUMMER20",
-    "items": [
+    "orderItems": [
       {
         "id": 1,
         "name": "Chips and Guac",
         "restaurantId": 1,
+        "foodType": "Appetizers",
         "description": "Fresh and made in-house",
         "foodImage": "https://id1.jpg",
         "price": 11.0,
-        "foodType": "Appetizers",
         "createdAt": "Sun, 03 Sep 2023 00:00:00 GMT",
         "updatedAt": "Sun, 03 Sep 2023 00:00:00 GMT"
-      }
+      },
     ],
-    "createdAt": "Mon, 04 Sep 2023 00:00:00 GMT",
-    "updatedAt": "Mon, 04 Sep 2023 00:00:00 GMT"
-
-  }
+    "createdAt": "Sun, 03 Sep 2023 00:00:00 GMT",
+    "updatedAt": "Sun, 03 Sep 2023 00:00:00 GMT"
+  },
   ```
 
 * Error Response: Body validation error
@@ -1095,10 +1097,7 @@ Creates and returns a past order
   ```json
   {
     "errors": {
-      "menu_items": [
-        "This field is required",
-      ],
-      "total_cost": [
+      "items": [
         "This field is required",
       ],
       "restaurant_id": [
