@@ -57,7 +57,7 @@ def sign_up():
             last_name=form.data['lastName'],
             phone_number=form.data['phoneNumber'],
             email=form.data['email'],
-            hashed_password=form.data['password'],
+            password=form.data['password'],
             address=form.data['address'],
             city=form.data['city'],
             state=form.data['state'],

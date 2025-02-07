@@ -13,7 +13,7 @@ def seed_users():
         state='Same State',
         zip=11111,
         wallet=9999999.99,
-        hashed_password='password',
+        password='password',
         email='m@user.io',
         )
     gabe = User(
@@ -25,7 +25,7 @@ def seed_users():
         state='Same State',
         zip=11111,
         wallet=9999999.99,
-        hashed_password='password',
+        password='password',
         email='g@user.io',
         )
     burak = User(
@@ -37,7 +37,7 @@ def seed_users():
         state='Same State',
         zip=11111,
         wallet=9999999.99,
-        hashed_password='password',
+        password='password',
         email='b@user.io',
         )
     katie = User(
@@ -49,7 +49,7 @@ def seed_users():
         state='Same State',
         zip=11111,
         wallet=9999999.99,
-        hashed_password='password',
+        password='password',
         email='k@user.io',
         )
     sama = User(
@@ -61,7 +61,7 @@ def seed_users():
         state='Same State',
         zip=11111,
         wallet=9999999.99,
-        hashed_password='password',
+        password='password',
         email='s@user.io',
         )
 

@@ -38,9 +38,12 @@ class User(db.Model, UserMixin):
     @password.setter
     def password(self, password):
         self.hashed_password = generate_password_hash(password)
+        print('\nPASSWORD AFTER HASH: ', self.hashed_password, '\n')
 
     def check_password(self, password):
+        print('\nPASSWORD: ', password)
         return check_password_hash(self.password, password)
+    
 
     def to_dict(self):
         return {
