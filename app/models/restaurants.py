@@ -3,6 +3,13 @@ import datetime
 from enum import Enum
 from sqlalchemy import Numeric
 
+class priceLevel(Enum):
+    INEXPENSIVE = '$'
+    MODERATE = '$$'
+    EXPENSIVE = '$$$'
+    VERY_EXPENSIVE = '$$$$'
+
+
 class cuisineType(Enum):
     AMERICAN = 'American'
     CHINESE = 'Chinese'
@@ -44,7 +51,7 @@ class Restaurant(db.Model):
     Servicing = db.Column(db.Boolean, nullable = False)
     storeImage = db.Column(db.String(255)) #URL
     description = db.Column(db.Text, nullable = False)
-    priceLevel = db.Column(db.Enum("$","$$","$$$","$$$$", name='priceLevel'), nullable = False)
+    priceLevel = db.Column(db.Enum(priceLevel), nullable = False)
     deliveryTime = db.Column(db.Integer)
     created_at = db.Column(db.DateTime, default=datetime.datetime.now())
     updated_at = db.Column(db.DateTime, default=datetime.datetime.now())  # onupdate=datetime.datetime.now()
