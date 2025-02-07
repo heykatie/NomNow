@@ -14,11 +14,13 @@ class Review(db.Model):
     review = db.Column(db.Text, nullable=True)
     orderRating = db.Column(db.Integer, nullable=False)
     restarauntRating = db.Column(db.Integer, nullable=False)
-    createdAt = db.Column(db.DateTime, default=datetime.utcnow)
-    updatedAt = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.datetime.now())
+    updated_at = db.Column(
+        db.DateTime, default=datetime.datetime.now(), onupdate=datetime.datetime.now()
+    )
 
-    user = db.relationship('User', back_populates='reviews')
-    restaraunt = db.relationship('Restaraunt', back_populates='reviews')
+    # user = db.relationship('User', back_populates='reviews')
+    # restaraunt = db.relationship('Restaraunt', back_populates='reviews')
 
     def to_dict(self):
         return {
