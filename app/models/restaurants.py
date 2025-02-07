@@ -24,8 +24,8 @@ class cuisineType(Enum):
     CARIBBEAN = 'Caribbean'
     SOUL_FOOD = 'Soul Food'
 
-class Restaraunt(db.Model):
-    __tablename__ = "restaraunts"
+class Restaurant(db.Model):
+    __tablename__ = "restaurants"
 
     if environment == "production":
         __table_args__ = {"schema": SCHEMA}
@@ -50,7 +50,7 @@ class Restaraunt(db.Model):
 
 # RELATIONSHIPS 
     owner = db.relationship('User', back_populates='restaurants')
-    menu_items = db.relationship('MenuItem', back_populates='restaurant')
+    menu_items_rel = db.relationship('MenuItem', back_populates='restaurant')
     reviews = db.relationship('Review', back_populates='restaurant')
     orders = db.relationship('Order', back_populates='restaurant')
     
