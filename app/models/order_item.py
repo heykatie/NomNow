@@ -12,7 +12,7 @@ class OrderItem(db.Model):
         db.Integer, db.ForeignKey(add_prefix_for_prod("orders.id")), nullable=False
     )
     menuitem_id = db.Column(
-        db.Integer, db.ForeignKey(add_prefix_for_prod("menuitems.id")), nullable=False
+        db.Integer, db.ForeignKey(add_prefix_for_prod("menu_items.id")), nullable=False
     )
     quantity = db.Column(db.Integer, nullable=False, default=1)
     price = db.Column(
