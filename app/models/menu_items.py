@@ -13,7 +13,7 @@ class MenuItemEnum(enum.Enum):
     @staticmethod
     def to_list():
         return [item.value for item in MenuItemEnum]
-    
+
 class MenuItem(db.Model):
     __tablename__ = 'menu_items'
 
@@ -31,10 +31,10 @@ class MenuItem(db.Model):
     updatedAt = db.Column(db.DateTime, nullable=False)
 
     # one-to-many: one restaurant can have many menu_items
-    restaurants_rel = db.relationship("Restaurant", back_populates="menu_items_rel")
+    restaurants = db.relationship("Restaurant", back_populates="menu_items")
     # one-to-many: one order can have many menu_items
-    order_rel = db.relationship("Order", back_populates="menu_items_rel")
-
+    order_items = db.relationship("OrderItem", back_populates="menu_items")
+    
 
     def to_dict(self):
         return {
