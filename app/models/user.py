@@ -47,6 +47,10 @@ class User(db.Model, UserMixin):
             'address': self.address,
             'city': self.city,
             'state': self.state,
+<<<<<<< Updated upstream
             'zip': self.zip,
+=======
+            'zip': self.zip
+>>>>>>> Stashed changes
             'wallet': self.wallet
         }
