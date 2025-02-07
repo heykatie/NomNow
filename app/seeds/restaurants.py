@@ -1,5 +1,5 @@
 from datetime import datetime
-from app.models import db, Restaurant, SCHEMA
+from app.models import db, Restaurant, SCHEMA, environment
 from app.models.restaurants import cuisineType
 from sqlalchemy.sql import text
 
@@ -118,7 +118,7 @@ def seed_restaurants():
 
     for restaurant in restaurants:
         db.session.add(restaurant)
-    
+
     db.session.commit()
 
 def undo_restaurants():
@@ -126,5 +126,5 @@ def undo_restaurants():
         db.session.execute(f"TRUNCATE table {SCHEMA}.users RESTART IDENTITY CASCADE;")
     else:
         db.session.execute(text("DELETE FROM users"))
-        
+
     db.session.commit()

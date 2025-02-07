@@ -22,6 +22,10 @@ class User(db.Model, UserMixin):
     wallet = db.Column(Numeric(10, 2), nullable=True)
     email = db.Column(db.String(255), nullable=False, unique=True)
     hashed_password = db.Column(db.String(255), nullable=False)
+    created_at = db.Column(db.DateTime, default=datetime.datetime.now())
+    updated_at = db.Column(
+        db.DateTime, default=datetime.datetime.now(), onupdate=datetime.datetime.now()
+    )
 
     reviews = db.relationship('Review', back_populates='users')
     restaurants = db.relationship('Restaurant', back_populates='users')
@@ -40,17 +44,15 @@ class User(db.Model, UserMixin):
 
     def to_dict(self):
         return {
-            'id': self.id,
-            'firstName': self.first_name,
-            'firstName': self.first_name,
-            'email': self.email,
-            'address': self.address,
-            'city': self.city,
-            'state': self.state,
-<<<<<<< Updated upstream
-            'zip': self.zip,
-=======
-            'zip': self.zip
->>>>>>> Stashed changes
-            'wallet': self.wallet
+            "id": self.id,
+            "firstName": self.first_name,
+            "lastName": self.last_name,
+            "email": self.email,
+            "address": self.address,
+            "city": self.city,
+            "state": self.state,
+            "zip": self.zip,
+            "wallet": self.wallet,
+            "created_at": self.created_at,
+            "updated_at": self.updated_at,
         }
