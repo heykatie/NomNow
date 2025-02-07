@@ -49,10 +49,10 @@ class Restaraunt(db.Model):
     updated_at = db.Column(db.DateTime, default=datetime.datetime.now())  # onupdate=datetime.datetime.now()
 
 # RELATIONSHIPS 
-    #owner = db.relationship('User', back_populates='restaurants')
-    #menu_items = db.relationship('MenuItem', back_populates='restaurant')
-    #reviews = db.relationship('Review', back_populates='restaurant')
-    #orders = db.relationship('Order', back_populates='restaurant')
+    owner = db.relationship('User', back_populates='restaurants')
+    menu_items = db.relationship('MenuItem', back_populates='restaurant')
+    reviews = db.relationship('Review', back_populates='restaurant')
+    orders = db.relationship('Order', back_populates='restaurant')
     
     def to_dict(self):
         return {
