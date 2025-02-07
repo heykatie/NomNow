@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+from flask_login import current_user, login_required
 from models import db, Review, User, Restaurant  
 from datetime import datetime
 
@@ -15,31 +16,31 @@ def success_response(message, data=None, status_code=200):
         response["data"] = data
     return jsonify(response), status_code
 
-# Create a new review
+# Create a new review (Only logged-in users can create a review)
 @review_routes.route('/reviews', methods=['POST'])
+@login_required
 def create_review():
     data = request.get_json()
 
     # Validation (Check for missing required fields)
-    if not data.get('restaurantId') or not data.get('userId') or not data.get('orderId'):
+    if not data.get('restaurantId') or not data.get('orderId'):
         return error_response("Missing required fields", 400)
 
-    # Check if the referenced restaurant and user exist
+    # Check if the referenced restaurant exists
     restaurant = Restaurant.query.get(data['restaurantId'])
-    user = User.query.get(data['userId'])
-    if not restaurant or not user:
-        return error_response("Invalid restaurant or user ID", 400)
+    if not restaurant:
+        return error_response("Invalid restaurant ID", 400)
 
     # Validate orderRating and restaurantRating to be between 1 and 5
     if not (1 <= data['orderRating'] <= 5) or not (1 <= data['restaurantRating'] <= 5):
         return error_response("Ratings must be between 1 and 5", 400)
 
-    # Create the new review
+    # Create the new review with the logged-in user's ID
     new_review = Review(
         restaurantId=data['restaurantId'],
-        userId=data['userId'],
+        userId=current_user.id,  # Ensuring only the logged-in user can create a review
         orderId=data['orderId'],
-        review=data.get('review'),  # Optional review text
+        review=data.get('review'),
         orderRating=data['orderRating'],
         restaurantRating=data['restaurantRating'],
         createdAt=datetime.utcnow(),
@@ -56,6 +57,7 @@ def create_review():
 
 # Get a review by its ID
 @review_routes.route('/reviews/<int:id>', methods=['GET'])
+@login_required
 def get_review(id):
     review = Review.query.get(id)
     if review:
@@ -63,8 +65,9 @@ def get_review(id):
     else:
         return error_response("Review not found", 404)
 
-# Update a review by its ID
+# Update a review by its ID (Only the owner of the review can update it)
 @review_routes.route('/reviews/<int:id>', methods=['PUT'])
+@login_required
 def update_review(id):
     data = request.get_json()
 
@@ -72,16 +75,18 @@ def update_review(id):
     if not review:
         return error_response("Review not found", 404)
 
+    # Ensure only the owner of the review can update it
+    if review.userId != current_user.id:
+        return error_response("You are not authorized to update this review", 403)
+
     # Update fields if provided
     if 'review' in data:
         review.review = data['review']
     if 'orderRating' in data:
-        # Validate orderRating to be between 1 and 5
         if not (1 <= data['orderRating'] <= 5):
             return error_response("Order rating must be between 1 and 5", 400)
         review.orderRating = data['orderRating']
     if 'restaurantRating' in data:
-        # Validate restaurantRating to be between 1 and 5
         if not (1 <= data['restaurantRating'] <= 5):
             return error_response("Restaurant rating must be between 1 and 5", 400)
         review.restaurantRating = data['restaurantRating']
@@ -95,12 +100,17 @@ def update_review(id):
         db.session.rollback()
         return error_response(str(e), 500)
 
-# Delete a review by its ID
+# Delete a review by its ID (Only the owner of the review can delete it)
 @review_routes.route('/reviews/<int:id>', methods=['DELETE'])
+@login_required
 def delete_review(id):
     review = Review.query.get(id)
     if not review:
         return error_response("Review not found", 404)
+
+    # Ensure only the owner of the review can delete it
+    if review.userId != current_user.id:
+        return error_response("You are not authorized to delete this review", 403)
 
     try:
         db.session.delete(review)
@@ -112,6 +122,7 @@ def delete_review(id):
 
 # Get all reviews for a specific restaurant
 @review_routes.route('/reviews/restaurant/<int:restaurantId>', methods=['GET'])
+@login_required
 def get_reviews_for_restaurant(restaurantId):
     reviews = Review.query.filter_by(restaurantId=restaurantId).all()
     if reviews:
