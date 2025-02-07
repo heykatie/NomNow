@@ -9,7 +9,7 @@ def seed_reviews():
             orderId=1,
             review="The food was incredible and came out quickly! Definitely coming back.",
             orderRating=5,
-            u=4,  
+            restaurantRating=4,  
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -19,7 +19,7 @@ def seed_reviews():
             orderId=2,
             review="Food was delicious, but a bit too spicy for my taste. Still good overall.",
             orderRating=4,
-            u=4,
+            restaurantRating=4,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -29,7 +29,7 @@ def seed_reviews():
             orderId=3,
             review="A decent experience. The service was fast, but the food could have been hotter.",
             orderRating=3,
-            u=3,
+            restaurantRating=3,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -39,7 +39,7 @@ def seed_reviews():
             orderId=4,
             review="Absolutely fantastic! The flavor was on point, and the ambiance was great.",
             orderRating=5,
-            u=5,
+            restaurantRating=5,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -49,7 +49,7 @@ def seed_reviews():
             orderId=5,
             review="Not the best experience. The food took longer than expected to arrive.",
             orderRating=2,
-            u=3,
+            restaurantRating=3,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -59,7 +59,7 @@ def seed_reviews():
             orderId=6,
             review="Food was okay, but delivery was late and the order was cold.",
             orderRating=3,
-            u=3,
+            restaurantRating=3,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -69,7 +69,7 @@ def seed_reviews():
             orderId=7,
             review="The food had good flavors, but the portion sizes were small for the price.",
             orderRating=4,
-            u=3,
+            restaurantRating=3,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -79,7 +79,7 @@ def seed_reviews():
             orderId=8,
             review="It was an average meal. Nothing special, but it satisfied my hunger.",
             orderRating=3,
-            u=3,
+            restaurantRating=3,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -89,7 +89,7 @@ def seed_reviews():
             orderId=9,
             review="The food tasted good, but the portion size was smaller than expected.",
             orderRating=3,
-            u=4,
+            restaurantRating=4,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -99,7 +99,7 @@ def seed_reviews():
             orderId=10,
             review="I enjoyed the food, but I had to wait much longer than expected.",
             orderRating=4,
-            u=4,
+            restaurantRating=4,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -109,7 +109,7 @@ def seed_reviews():
             orderId=11,
             review="Dessert was amazing! I couldn’t stop eating it.",
             orderRating=5,
-            u=5,
+            restaurantRating=5,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -119,7 +119,7 @@ def seed_reviews():
             orderId=12,
             review="The dessert was good, but a bit too sweet for my liking.",
             orderRating=4,
-            u=5,
+            restaurantRating=5,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -129,7 +129,7 @@ def seed_reviews():
             orderId=13,
             review="Desserts were delicious, but the service could have been a bit faster.",
             orderRating=4,
-            u=5,
+            restaurantRating=5,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -139,7 +139,7 @@ def seed_reviews():
             orderId=14,
             review="The dessert was perfect. Sweet but not overwhelming. Will definitely return!",
             orderRating=5,
-            u=5,
+            restaurantRating=5,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -149,7 +149,7 @@ def seed_reviews():
             orderId=15,
             review="Desserts were alright, but I expected more variety on the menu.",
             orderRating=3,
-            u=5,
+            restaurantRating=5,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -159,7 +159,7 @@ def seed_reviews():
             orderId=16,
             review="The meal was delicious, but I had a long wait for my food.",
             orderRating=4,
-            u=4,
+            restaurantRating=4,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -169,7 +169,7 @@ def seed_reviews():
             orderId=17,
             review="Great food, quick service, but the atmosphere could be better.",
             orderRating=4,
-            u=4,
+            restaurantRating=4,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -179,7 +179,7 @@ def seed_reviews():
             orderId=18,
             review="Service was quick, but the food was bland and lacked seasoning.",
             orderRating=2,
-            u=3,
+            restaurantRating=3,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -189,7 +189,7 @@ def seed_reviews():
             orderId=19,
             review="Delicious food, excellent ambiance, but I wish there was a vegetarian option.",
             orderRating=4,
-            u=5,
+            restaurantRating=5,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -199,7 +199,7 @@ def seed_reviews():
             orderId=20,
             review="Food was good, but the prices were higher than I expected.",
             orderRating=3,
-            u=4,
+            restaurantRating=4,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -209,7 +209,7 @@ def seed_reviews():
             orderId=21,
             review="The food arrived on time, but I was disappointed with the taste.",
             orderRating=2,
-            u=3,
+            restaurantRating=3,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -219,7 +219,7 @@ def seed_reviews():
             orderId=22,
             review="It was an average meal. The food was okay, but it didn’t wow me.",
             orderRating=3,
-            u=3,
+            restaurantRating=3,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -229,7 +229,7 @@ def seed_reviews():
             orderId=23,
             review="The food was decent, but the delivery time was longer than expected.",
             orderRating=3,
-            u=3,
+            restaurantRating=3,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -239,7 +239,7 @@ def seed_reviews():
             orderId=24,
             review="It was a great experience. The food was tasty and the service was prompt.",
             orderRating=5,
-            u=4,
+            restaurantRating=4,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -249,7 +249,7 @@ def seed_reviews():
             orderId=25,
             review="I was happy with the meal, but it was a little too greasy for my taste.",
             orderRating=3,
-            u=3,
+            restaurantRating=3,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -259,7 +259,7 @@ def seed_reviews():
             orderId=26,
             review="Dessert was absolutely amazing. Best I’ve had in a long time!",
             orderRating=5,
-            u=5,
+            restaurantRating=5,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -269,7 +269,7 @@ def seed_reviews():
             orderId=27,
             review="I loved the dessert, but the portion size was a bit too small.",
             orderRating=4,
-            u=5,
+            restaurantRating=5,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -279,7 +279,7 @@ def seed_reviews():
             orderId=28,
             review="Amazing desserts, but I had to wait too long to get my order.",
             orderRating=4,
-            u=5,
+            restaurantRating=5,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -289,7 +289,7 @@ def seed_reviews():
             orderId=29,
             review="The dessert was rich in flavor and texture, I would definitely recommend it!",
             orderRating=5,
-            u=5,
+            restaurantRating=5,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),
@@ -299,7 +299,7 @@ def seed_reviews():
             orderId=30,
             review="The dessert was good, but I was expecting more variety in the options.",
             orderRating=3,
-            u=5,
+            restaurantRating=5,
             created_at=datetime.now(),
             updated_at=datetime.now()
         ),

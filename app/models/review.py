@@ -13,7 +13,7 @@ class Review(db.Model):
     orderId = db.Column(db.Integer, nullable=False)
     review = db.Column(db.Text, nullable=True)
     orderRating = db.Column(db.Integer, nullable=False)
-    u =db.Column(db.Integer, nullable=False)
+    restaurantRating =db.Column(db.Integer, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now)
     updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
 
