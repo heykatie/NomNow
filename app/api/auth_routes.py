@@ -50,14 +50,14 @@ def sign_up():
     """
     form = SignUpForm()
     form['csrf_token'].data = request.cookies['csrf_token']
+    print('\n FORM DATA: ', form.data, '\n')
     if form.validate_on_submit():
         user = User(
-            # ======>>> LOOOOOOOOKKK 
-            firstName=form.data['firstName'],
-            lastName=form.data['lastName'],
-            phoneNumber=form.data['phoneNumber'],
+            first_name=form.data['firstName'],
+            last_name=form.data['lastName'],
+            phone_number=form.data['phoneNumber'],
             email=form.data['email'],
-            password=form.data['password'],
+            hashed_password=form.data['password'],
             address=form.data['address'],
             city=form.data['city'],
             state=form.data['state'],
