@@ -1,6 +1,7 @@
 from .db import db, environment, SCHEMA, add_prefix_for_prod
 import datetime
 from enum import Enum
+from sqlalchemy import Numeric
 
 class cuisineType(Enum):
     AMERICAN = 'American'
@@ -38,7 +39,7 @@ class Restaurant(db.Model):
     zip = db.Column(db.Integer, nullable = False)
     name = db.Column(db.String(255), nullable = False, unique=True)
     cuisineType = db.Column(db.Enum(cuisineType), nullable = False)
-    deliveryFee = db.Column(db.Decimal)
+    deliveryFee = db.Column(Numeric(10,2))
     businessHours = db.Column( db.String(255), nullable = False)
     Servicing = db.Column(db.Boolean, nullable = False)
     storeImage = db.Column(db.String(255)) #URL
