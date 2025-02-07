@@ -44,31 +44,65 @@ def get_orders_by_restaurant(restaurant_id):
     return jsonify({"orders": [order.to_dict() for order in orders]}), 200
 
 
-# Create a new order in the cart (status = Active)
+# Create a new order in the cart (status = Active) and add items to it
 @order_routes.route("/", methods=["POST"])
 @login_required
 def create_order():
     data = request.get_json()
     restaurant_id = data.get("restaurant_id")
+    items = data.get("items", [])  # List of {"menuitem_id": X, "quantity": Y}
     promo = data.get("promo", None)
 
     if not restaurant_id:
         return {"message": "Restaurant ID is required"}, 400
 
+    # Validate that all menu items belong to the same restaurant
+    if items:
+        menuitem_ids = [item["menuitem_id"] for item in items]
+        menu_items = MenuItem.query.filter(MenuItem.id.in_(menuitem_ids)).all()
+        if not menu_items:
+            return {"message": "No valid menu items found."}, 400
+
+        # Ensure all menu items belong to the same restaurant
+        for menu_item in menu_items:
+            if menu_item.restaurant_id != restaurant_id:
+                return {"message": "All items must be from the same restaurant."}, 400
+
+    # Create new order
     new_order = Order(
         user_id=current_user.id,
         restaurant_id=restaurant_id,
-        status="Active",  # Cart mode
+        status="Active",  # Start as cart mode
         promo=promo,
     )
-
     db.session.add(new_order)
+    db.session.flush()  # Get order ID before adding items
+
+    # Add items to order
+    total_cost = 0
+    order_items = []
+    for item in items:
+        menu_item = MenuItem.query.get(item["menuitem_id"])
+        quantity = item["quantity"]
+
+        order_items.append(
+            OrderItem(
+                order_id=new_order.id,
+                menuitem_id=menu_item.id,
+                quantity=quantity,
+                price=menu_item.price,
+            )
+        )
+
+        total_cost += menu_item.price * quantity
+
+    db.session.add_all(order_items)
+    new_order.total_cost = total_cost  # Update total price
     db.session.commit()
 
     return jsonify(new_order.to_dict()), 201
 
-
-# Modify items in an order while it's still in the cart (status = Active)
+# Modify items in an order while it's in the cart (status = Active)
 @order_routes.route("/<int:order_id>/items", methods=["PUT"])
 @login_required
 def update_order_items(order_id):
@@ -77,43 +111,44 @@ def update_order_items(order_id):
         return {"message": "Order not found"}, 404
     if order.user_id != current_user.id:
         return {"message": "Unauthorized"}, 403
-
-    # Prevent item modifications if order is already completed
-    if order.status == "Completed":
+    if order.status != "Active":
         return {"message": "Cannot modify items in a completed order."}, 403
 
     data = request.get_json()
-    items = data.get("items")  # Expected list: [{"menuitem_id": X, "quantity": Y}]
+    items = data.get("items", [])
 
-    if not items or not isinstance(items, list):
+    if not isinstance(items, list):
         return {"message": "Invalid request. 'items' must be a list."}, 400
 
-    # Clear old items and add new ones
-    OrderItem.query.filter_by(order_id=order.id).delete()
     total_cost = 0
-    new_order_items = []
 
+    # Process new or updated items
     for item in items:
-        menuitem_id = item.get("menuitem_id")
-        quantity = item.get("quantity", 1)
+        menu_item = MenuItem.query.get(item["menuitem_id"])
+        quantity = item["quantity"]
 
-        menu_item = MenuItem.query.get(menuitem_id)
-        if not menu_item:
-            return {"message": f"Menu item with ID {menuitem_id} not found"}, 404
+        order_item = OrderItem.query.filter_by(
+            order_id=order.id, menuitem_id=menu_item.id
+        ).first()
+
+        if order_item:
+            if quantity > 0:
+                order_item.quantity = quantity  # Update quantity
+            else:
+                db.session.delete(order_item)  # Remove item if quantity is 0
+        else:
+            db.session.add(
+                OrderItem(
+                    order_id=order.id,
+                    menuitem_id=menu_item.id,
+                    quantity=quantity,
+                    price=menu_item.price,
+                )
+            )
 
         total_cost += menu_item.price * quantity
-        new_order_items.append(
-            OrderItem(
-                order_id=order.id,
-                menuitem_id=menuitem_id,
-                quantity=quantity,
-                price=menu_item.price,
-            )
-        )
 
-    # Add new items and update total cost
-    db.session.add_all(new_order_items)
-    order.total_cost = total_cost
+    order.total_cost = total_cost  # Recalculate total
     db.session.commit()
 
     return jsonify(order.to_dict()), 200
@@ -128,13 +163,16 @@ def complete_order(order_id):
         return {"message": "Order not found"}, 404
     if order.user_id != current_user.id:
         return {"message": "Unauthorized"}, 403
-
     if order.status != "Active":
         return {
             "message": "Order cannot be completed. Already processed or canceled."
         }, 403
 
-    # Finalize order
+    # Ensure order has items before completing
+    order_items = OrderItem.query.filter_by(order_id=order.id).all()
+    if not order_items:
+        return {"message": "Cannot complete an empty order. Add items first."}, 400
+
     order.status = "Completed"
     db.session.commit()
 
@@ -258,3 +296,26 @@ def cancel_order(order_id):
 #     db.session.commit()
 
 #     return {"message": "Successfully deleted order"}, 200
+
+# # creates empty cart as a new order
+# @order_routes.route("/", methods=["POST"])
+# @login_required
+# def create_order():
+#     data = request.get_json()
+#     restaurant_id = data.get("restaurant_id")
+#     promo = data.get("promo", None)
+
+#     if not restaurant_id:
+#         return {"message": "Restaurant ID is required"}, 400
+
+#     new_order = Order(
+#         user_id=current_user.id,
+#         restaurant_id=restaurant_id,
+#         status="Active",  # Cart mode
+#         promo=promo,
+#     )
+
+#     db.session.add(new_order)
+#     db.session.commit()
+
+#     return jsonify(new_order.to_dict()), 201
