@@ -1,3 +1,22 @@
-.profile-dropdown {
-  position: absolute;
+li{
+  list-style: none;
+}
+.nav{
+  display: flex;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #f8f9fa;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  gap: 10px;
+}
+.icon{
+  height: 20px;
+  width: 20px;
+}
+.user-actions{
+  display: flex;
+  align-items: center;
+  justify-self: flex-end;
+  gap: 10px;
+  margin-left: auto;
 }
