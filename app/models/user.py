@@ -22,7 +22,7 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(255), nullable=False, unique=True)
     hashed_password = db.Column(db.String(255), nullable=False)
 
-    # posts = db.relationship('Post', back_populates='users')
+    # reviews = db.relationship('Review', back_populates='users')
     # restaraunts = db.relationship('Restaraunt', back_populates='users')
 
 
