@@ -14,10 +14,9 @@ class Review(db.Model):
     review = db.Column(db.Text, nullable=True)
     orderRating = db.Column(db.Integer, nullable=False)
     restarauntRating = db.Column(db.Integer, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.datetime.now())
-    updated_at = db.Column(
-        db.DateTime, default=datetime.datetime.now(), onupdate=datetime.datetime.now()
-    )
+    created_at = db.Column(db.DateTime, default=datetime.now)   
+    updated_at = db.Column(db.DateTime, default=datetime.now, onupdate=datetime.now)
+
 
     # user = db.relationship('User', back_populates='reviews')
     # restaraunt = db.relationship('Restaraunt', back_populates='reviews')
