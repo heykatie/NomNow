@@ -13,7 +13,7 @@ class User(db.Model, UserMixin):
     first_name = db.Column(db.String(40), nullable=False)
     last_name = db.Column(db.String(40), nullable=False)
     phone_number = db.Column(db.String(20), nullable=False, unique=True)
-    restarauntOwner = db.Column(db.Boolean, nullable=False)
+    restaurantOwner = db.Column(db.Boolean, nullable=False)
     address = db.Column(db.String(40), nullable=False)
     city = db.Column(db.String(40), nullable=False)
     state = db.Column(db.String(40), nullable=False)
@@ -23,7 +23,7 @@ class User(db.Model, UserMixin):
     hashed_password = db.Column(db.String(255), nullable=False)
 
     # reviews = db.relationship('Review', back_populates='users')
-    # restaraunts = db.relationship('Restaraunt', back_populates='users')
+    # restaurants = db.relationship('Restaurant', back_populates='users')
 
 
     @property
