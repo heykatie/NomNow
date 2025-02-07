@@ -41,19 +41,19 @@ class Restaurant(db.Model):
     deliveryFee = db.Column(db.Decimal)
     businessHours = db.Column( db.String(255), nullable = False)
     Servicing = db.Column(db.Boolean, nullable = False)
-    storeImage = db.Column(db.String(255)) #URL 
+    storeImage = db.Column(db.String(255)) #URL
     description = db.Column(db.Text, nullable = False)
     priceLevel = db.Column(db.Enum("$","$$","$$$","$$$$", name='priceLevel'), nullable = False)
     deliveryTime = db.Column(db.Integer)
     created_at = db.Column(db.DateTime, default=datetime.datetime.now())
     updated_at = db.Column(db.DateTime, default=datetime.datetime.now())  # onupdate=datetime.datetime.now()
 
-# RELATIONSHIPS 
-    owner = db.relationship('User', back_populates='restaurants')
-    menu_items_rel = db.relationship('MenuItem', back_populates='restaurant')
-    reviews = db.relationship('Review', back_populates='restaurant')
-    orders = db.relationship('Order', back_populates='restaurant')
-    
+# RELATIONSHIPS
+    users = db.relationship('User', back_populates='restaurants')
+    menu_items = db.relationship('MenuItem', back_populates='restaurants')
+    reviews = db.relationship('Review', back_populates='restaurants')
+    orders = db.relationship('Order', back_populates='restaurants')
+
     def to_dict(self):
         return {
             "id": self.id,

@@ -30,11 +30,11 @@ class Order(db.Model):
         db.DateTime, default=datetime.datetime.now(), onupdate=datetime.datetime.now()
     )
 
-    # user = db.relationship("User", back_populates="orders")
-    # restaurant = db.relationship("Restaurant", back_populates="orders")
-    # order_items = db.relationship(
-    #     "OrderItem", back_populates="order", cascade="all, delete-orphan"
-    # )
+    users = db.relationship("User", back_populates="orders")
+    restaurants = db.relationship("Restaurant", back_populates="orders")
+    order_items = db.relationship(
+        "OrderItem", back_populates="order", cascade="all, delete-orphan"
+    )
 
     def to_dict(self):
         return {

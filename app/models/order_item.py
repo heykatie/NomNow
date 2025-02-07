@@ -19,8 +19,8 @@ class OrderItem(db.Model):
         db.Numeric(10, 2), nullable=False
     )  # Stores price at the time of purchase
 
-    # order = db.relationship("Order", back_populates="order_items")
-    # menuitem = db.relationship("MenuItem")
+    order = db.relationship("Order", back_populates="order_items")
+    menu_items = db.relationship("MenuItem", back_populates="order_items")
 
     def to_dict(self):
         return {
