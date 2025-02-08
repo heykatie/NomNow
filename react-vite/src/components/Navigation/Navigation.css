@@ -15,7 +15,9 @@
   justify-self: flex-start;
   margin-right: auto;
 }
-
+.hidden{
+  display: none;
+}
 li{
   list-style: none;
 }
@@ -35,4 +37,10 @@ li{
   justify-self: flex-end;
   gap: 10px;
   margin-left: auto;
+}
+
+
+/* Clickables */
+button:hover{
+  cursor: pointer;
 }
