@@ -1,17 +1,28 @@
 import { NavLink } from "react-router-dom";
-import ProfileButton from "./ProfileButton";
+import { useSelector } from "react-redux";
+// import ProfileButton from "./ProfileButton";
 import "./Navigation.css";
 
 function Navigation() {
+  const user = useSelector((store) => store.session.user);
   return (
-    <ul>
+    <ul className="nav">
       <li>
-        <NavLink to="/">Home</NavLink>
+        <img src="../../icons/menu.png" alt="" className='icon' />
+      </li>
+      <li>
+        <NavLink to="/">Nom Now</NavLink>
       </li>
 
-      <li>
-        <ProfileButton />
-      </li>
+      {!user && (
+        <li className="user-actions">
+          <NavLink to='/login'>
+            <button>Log in</button>
+          </NavLink>
+          <NavLink to='/signup'>
+            <button>Sign up</button>
+          </NavLink>
+        </li>)}
     </ul>
   );
 }
