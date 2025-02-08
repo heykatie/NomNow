@@ -11,6 +11,10 @@ function LoginFormPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
+  console.log({
+    email,
+    password
+  })
 
   if (sessionUser) return <Navigate to="/" replace={true} />;
 
@@ -63,11 +67,30 @@ function LoginFormPage() {
         <div>
           <div className="overlay">or</div>
         </div>
-        <button>Login as Burak</button>
-        <button>Login as Gabe</button>
-        <button>Login as Katie</button>
-        <button>Login as Mar</button>
-        <button>Login as Sama</button>
+        <button onClick={()=>{
+          setEmail('b@user.io')
+          setPassword('password')
+        }}>Login as Burak</button>
+
+        <button onClick={()=>{
+          setEmail('g@user.io')
+          setPassword('password')
+        }}>Login as Gabe</button>
+
+        <button onClick={()=>{
+          setEmail('k@user.io')
+          setPassword('password')
+        }}>Login as Katie</button>
+
+        <button onClick={()=>{
+          setEmail('m@user.io')
+          setPassword('password')
+        }}>Login as Mar</button>
+
+        <button onClick={()=>{
+          setEmail('s@user.io')
+          setPassword('password')
+        }}>Login as Sama</button>
       </div>
     </div>
   );
