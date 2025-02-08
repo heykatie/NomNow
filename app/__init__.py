@@ -96,20 +96,3 @@ def react_root(path):
 def not_found(e):
     return app.send_static_file('index.html')
 
-@app.route("/menu-items/<int:item_id>")
-def get_menu_item(item_id):
-    item = MenuItem.query.get(item_id)
-    if item is None:
-        return jsonify({"error": "Menu item not found"}), 404
-
-    return jsonify({
-        "id": item.id,
-        "restaurantId": item.restaurantId,
-        "name": item.name,
-        "foodType": item.foodType.value if isinstance(item.foodType, Enum) else str(item.foodType),
-        "description": item.description,
-        "price": str(item.price),  # Fix Decimal issue
-        "foodImage": item.foodImage,
-        "createdAt": item.createdAt.isoformat() if item.createdAt else None,
-        "updatedAt": item.updatedAt.isoformat() if item.updatedAt else None
-    })

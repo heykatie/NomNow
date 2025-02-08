@@ -33,7 +33,7 @@ class MenuItem(db.Model):
     # one-to-many: one restaurant can have many menu_items
     restaurants = db.relationship("Restaurant", back_populates="menu_items")
     # one-to-many: one order can have many menu_items
-    order_items = db.relationship("OrderItem", back_populates="menu_items")
+    order_items = db.relationship("OrderItem", back_populates="menu_items", cascade="all, delete-orphan")
     
 
     def to_dict(self):
@@ -41,7 +41,7 @@ class MenuItem(db.Model):
             "id": self.id,
             "restaurantId": self.restaurantId,
             "name": self.name,
-            "foodType": self.foodType,
+            "foodType": self.foodType.value,
             "description": self.description,
             "price": self.price,
             "foodImage": self.foodImage,
