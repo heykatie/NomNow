@@ -16,7 +16,7 @@ function LoginFormPage() {
     password
   })
 
-  if (sessionUser) return <Navigate to="/" replace={true} />;
+  if (sessionUser) return <Navigate to="/" replace={true} />
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -67,34 +67,34 @@ function LoginFormPage() {
         <div>
           <div className="overlay">or</div>
         </div>
-        <button onClick={()=>{
+        <button onClick={(e)=>{
           setEmail('b@user.io')
           setPassword('password')
-          handleSubmit()
+          handleSubmit(e)
         }}>Login as Burak</button>
 
-        <button onClick={()=>{
+        <button onClick={(e)=>{
           setEmail('g@user.io')
           setPassword('password')
-          handleSubmit()
+          handleSubmit(e)
         }}>Login as Gabe</button>
 
-        <button onClick={()=>{
+        <button onClick={(e)=>{
           setEmail('k@user.io')
           setPassword('password')
-          handleSubmit()
+          handleSubmit(e)
         }}>Login as Katie</button>
 
-        <button onClick={()=>{
+        <button onClick={(e)=>{
           setEmail('m@user.io')
           setPassword('password')
-          handleSubmit()
+          handleSubmit(errors)
         }}>Login as Mar</button>
 
-        <button onClick={()=>{
+        <button onClick={(e)=>{
           setEmail('s@user.io')
           setPassword('password')
-          handleSubmit()
+          handleSubmit(e)
         }}>Login as Sama</button>
       </div>
     </div>
