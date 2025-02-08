@@ -5,7 +5,7 @@ import './LandingPage.css';
 function LandingPage(){
     const [address, setAddress] = useState('');
     const [deliveryTime, setDeliveryTime] = useState('');
-
+    const navigate = useNavigate();
     const user = useSelector((store) => store.session.user);
     useEffect(() => {
         if (user) {

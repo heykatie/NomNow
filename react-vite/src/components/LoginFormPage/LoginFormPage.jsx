@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { thunkLogin } from "../../redux/session";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 import "./LoginForm.css";
 
 function LoginFormPage() {
@@ -70,26 +70,31 @@ function LoginFormPage() {
         <button onClick={()=>{
           setEmail('b@user.io')
           setPassword('password')
+          handleSubmit()
         }}>Login as Burak</button>
 
         <button onClick={()=>{
           setEmail('g@user.io')
           setPassword('password')
+          handleSubmit()
         }}>Login as Gabe</button>
 
         <button onClick={()=>{
           setEmail('k@user.io')
           setPassword('password')
+          handleSubmit()
         }}>Login as Katie</button>
 
         <button onClick={()=>{
           setEmail('m@user.io')
           setPassword('password')
+          handleSubmit()
         }}>Login as Mar</button>
 
         <button onClick={()=>{
           setEmail('s@user.io')
           setPassword('password')
+          handleSubmit()
         }}>Login as Sama</button>
       </div>
     </div>
