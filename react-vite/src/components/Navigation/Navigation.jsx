@@ -1,14 +1,15 @@
 import { NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
-// import ProfileButton from "./ProfileButton";
+import DropdownMenu from "./DropdownMenu";
 import "./Navigation.css";
 
 function Navigation() {
   const user = useSelector((store) => store.session.user);
+
   return (
     <ul className="nav">
       <li>
-        <img src="../../icons/menu.png" alt="" className='icon' />
+        {user ? <DropdownMenu user={user}/> : <DropdownMenu />}
       </li>
       <li>
         <NavLink to="/">Nom Now</NavLink>

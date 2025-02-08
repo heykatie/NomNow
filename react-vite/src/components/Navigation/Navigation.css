@@ -1,3 +1,21 @@
+.menu-dropdown {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 200px;
+  background-color: #FFFFFF;
+  display: grid;
+
+}
+.menu-button{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  justify-self: flex-start;
+  margin-right: auto;
+}
+
 li{
   list-style: none;
 }
@@ -5,8 +23,6 @@ li{
   display: flex;
   align-items: center;
   padding: 10px 20px;
-  background-color: #f8f9fa;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   gap: 10px;
 }
 .icon{
