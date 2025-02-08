@@ -7,9 +7,11 @@ from datetime import datetime
 from flask import jsonify
 from flask_cors import CORS
 
-menu_item_routes = Blueprint('menu_items', __name__)
+menu_item_routes = Blueprint('menu_items', __name__)  
 
-### Get menu item: GET /api/menu-items/:menu_item_id
+# api/menu-items/
+
+### Get a menu item by id 
 @menu_item_routes.route('/<int:id>', methods=['GET'])
 def get_menu_item(id):
     menu_item = MenuItem.query.get(id)
@@ -18,6 +20,26 @@ def get_menu_item(id):
         return jsonify(menu_item.to_dict()), 200
     else:
         return jsonify({"error": "Menu item not found"}), 404
+    
+
+### Get all-menu item
+@menu_item_routes.route('/', methods=['GET'])
+def get_menu_items():
+    menu_items = MenuItem.query.all()  # Get all menu items
+    
+    # Convert SQLAlchemy objects to dictionaries manually
+    menu_list = [
+        {
+            "id": item.id,
+            "name": item.name,
+            "description": item.description,
+            "price": item.price
+        }
+        for item in menu_items
+    ]
+
+    return jsonify(menu_list), 200
+    
     
 
 
