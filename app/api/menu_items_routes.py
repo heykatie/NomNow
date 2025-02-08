@@ -65,3 +65,26 @@ def delete_menu_item(id):
         "id": id
         }
         return res
+
+
+
+
+# ==>>> this is working on the __init__ but not here whyy ??
+
+# @app.route("/menu-items/<int:item_id>")
+# def get_menu_item(item_id):
+#     item = MenuItem.query.get(item_id)
+#     if item is None:
+#         return jsonify({"error": "Menu item not found"}), 404
+
+#     return jsonify({
+#         "id": item.id,
+#         "restaurantId": item.restaurantId,
+#         "name": item.name,
+#         "foodType": item.foodType.value if isinstance(item.foodType, Enum) else str(item.foodType),
+#         "description": item.description,
+#         "price": str(item.price),  # Fix Decimal issue
+#         "foodImage": item.foodImage,
+#         "createdAt": item.createdAt.isoformat() if item.createdAt else None,
+#         "updatedAt": item.updatedAt.isoformat() if item.updatedAt else None
+#     })

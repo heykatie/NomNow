@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, session, redirect
+from flask import Flask, render_template, request, session, redirect,jsonify,Blueprint
 from flask_cors import CORS
 from flask_migrate import Migrate
 from flask_wtf.csrf import CSRFProtect, generate_csrf
@@ -11,6 +11,7 @@ from .api.order_routes import order_routes
 from .api.menu_items_routes import menu_item_routes
 from .seeds import seed_commands
 from .config import Config
+from enum import Enum
 
 app = Flask(__name__, static_folder='../react-vite/dist', static_url_path='/')
 
@@ -94,3 +95,21 @@ def react_root(path):
 @app.errorhandler(404)
 def not_found(e):
     return app.send_static_file('index.html')
+
+@app.route("/menu-items/<int:item_id>")
+def get_menu_item(item_id):
+    item = MenuItem.query.get(item_id)
+    if item is None:
+        return jsonify({"error": "Menu item not found"}), 404
+
+    return jsonify({
+        "id": item.id,
+        "restaurantId": item.restaurantId,
+        "name": item.name,
+        "foodType": item.foodType.value if isinstance(item.foodType, Enum) else str(item.foodType),
+        "description": item.description,
+        "price": str(item.price),  # Fix Decimal issue
+        "foodImage": item.foodImage,
+        "createdAt": item.createdAt.isoformat() if item.createdAt else None,
+        "updatedAt": item.updatedAt.isoformat() if item.updatedAt else None
+    })
