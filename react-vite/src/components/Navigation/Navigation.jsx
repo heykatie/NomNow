@@ -1,11 +1,16 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useState} from "react";
 import DropdownMenu from "./DropdownMenu";
 import "./Navigation.css";
 
 function Navigation() {
   const user = useSelector((store) => store.session.user);
+  const [deliveryType, setDeliveryType] = useState('delivery');
+  const location = useLocation().pathname.split('/');
+  const homepage = location[location.length - 1] === 'home'
 
+  console.log('DELIVERY TYPE:', deliveryType);  
   return (
     <ul className="nav">
       <li>
@@ -14,16 +19,42 @@ function Navigation() {
       <li>
         <NavLink to="/">Nom Now</NavLink>
       </li>
+      {user && homepage && (
+        <li className="delivery-type">
+          {deliveryType === 'delivery' ? (
+            <button className="selected">Delivery</button>
+            ) : (
+            <button onClick={(e)=> {
+              e.preventDefault()
+              setDeliveryType('delivery')}}
+            >Delivery</button>
+          )}
 
-      {!user && (
-        <li className="user-actions">
-          <NavLink to='/login'>
-            <button>Log in</button>
-          </NavLink>
-          <NavLink to='/signup'>
-            <button>Sign up</button>
-          </NavLink>
-        </li>)}
+          {deliveryType === 'pickup' ? (
+            <button className="selected">Pickup</button>
+            ) : (
+            <button onClick={(e)=> {
+              e.preventDefault()
+              setDeliveryType('pickup')}}
+            >Pickup</button>
+          )}
+        </li>
+      )}
+      <li className="user-actions">
+        <NavLink to='/'>
+          <button>Cart</button>
+        </NavLink>
+        {!user && (
+          <li>
+            <NavLink to='/login'>
+              <button>Log in</button>
+            </NavLink>
+            <NavLink to='/signup'>
+              <button>Sign up</button>
+            </NavLink>
+          </li>
+          )}
+      </li>
     </ul>
   );
 }
