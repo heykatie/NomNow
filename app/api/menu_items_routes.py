@@ -45,8 +45,8 @@ def get_menu_items():
 
 
 ### Update a menu item # api/menu-items/id/update
-@menu_item_routes.route('/<int:id>/update', methods=['PUT'])
-@login_required
+@menu_item_routes.route('/<int:id>', methods=['PUT'])
+# @login_required
 def update_menu_item(id):
     """
     Updates a menu item
@@ -63,11 +63,11 @@ def update_menu_item(id):
 
     if form.validate_on_submit():
         item_to_update.name = data.get("name", item_to_update.name)
-        item_to_update.foodType = data.get("foodType", item_to_update.foodType)
+        item_to_update.food_type = data.get("food_type", item_to_update.food_type)
         item_to_update.description = data.get("description", item_to_update.description)
         item_to_update.price = data.get("price", item_to_update.price)
-        item_to_update.foodImage = data.get("foodImage", item_to_update.foodImage)
-        item_to_update.updatedAt = datetime.now()
+        item_to_update.food_image = data.get("food_image", item_to_update.food_image)
+        item_to_update.updated_at = datetime.now()
 
         try:
             db.session.commit()
@@ -82,8 +82,8 @@ def update_menu_item(id):
 
 
 ### Delete a menu item # api/menu-items/id/delete
-@menu_item_routes.route('/<int:id>/delete', methods=['DELETE'])
-@login_required
+@menu_item_routes.route('/<int:id>', methods=['DELETE'])
+# @login_required
 def delete_menu_item(id):
     menu_item = MenuItem.query.get(id)
 
@@ -103,8 +103,8 @@ def delete_menu_item(id):
 
 
 ### Create a new menu item # api/menu-items/new
-@menu_item_routes.route('/new', methods=['POST'])
-@login_required
+@menu_item_routes.route('/', methods=['POST'])
+# @login_required
 def create_menu_item():
     """
     Creates a new menu item
@@ -115,20 +115,20 @@ def create_menu_item():
     if not data:
         return jsonify({"error": "Invalid request, JSON data required"}), 400
 
-    restaurant_id = data.get("restaurantId")
+    restaurant_id = data.get("restaurant_id")
     if not restaurant_id:
-        return jsonify({"error": "restaurantId is required"}), 400
+        return jsonify({"error": "restaurant_id is required"}), 400
 
     if form.validate_on_submit():
         new_item = MenuItem(
-            restaurantId=restaurant_id, 
+            restaurant_id=restaurant_id, 
             name=data.get("name"),
-            foodType=data.get("foodType"),
+            food_type=data.get("food_type"),
             description=data.get("description"),
             price=data.get("price"),
-            foodImage=data.get("foodImage"),
-            createdAt=datetime.now(),
-            updatedAt=datetime.now(),
+            food_image=data.get("food_image"),
+            created_at=datetime.now(),
+            updated_at=datetime.now(),
         )
 
         try:

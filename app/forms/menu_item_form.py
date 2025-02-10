@@ -8,9 +8,9 @@ item_types = ["appetizer", "entree", "dessert", "beverage"]
 
 class MenuItemForm(FlaskForm):
     name = StringField("Name", validators=[DataRequired()])
-    food_type = SelectField("FoodType", choices=item_types, validators=[DataRequired()])
+    food_type = SelectField("food_type", choices=item_types, validators=[DataRequired()])
     description = TextAreaField("Description")
     price = FloatField("Price", validators=[DataRequired()])
     food_image = StringField(
-        "FoodImage URL", validators=[DataRequired(), URL(), Length(min=1, max=255)]
+        "food_image URL", validators=[DataRequired(), URL(), Length(min=1, max=255)]
     )
