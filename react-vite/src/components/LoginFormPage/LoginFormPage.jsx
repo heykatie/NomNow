@@ -20,8 +20,28 @@ function LoginFormPage({isLogin, isSignup}) {
 
   if (sessionUser) return <Navigate to="/" replace={true} />
 
+  const demoSubmit = async(e, name) =>{
+    e.preventDefault()
+    if(name === 'burak'){
+      await dispatch(thunkLogin({email: 'b@user.io', password: 'password'}))
+    }
+    else if(name === 'gabe'){
+      await dispatch(thunkLogin({email: 'g@user.io', password: 'password'}))
+    }
+    else if(name === 'katie'){
+      await dispatch(thunkLogin({email: 'k@user.io', password: 'password'}))
+    }
+    else if(name === 'mar'){
+      await dispatch(thunkLogin({email: 'm@user.io', password: 'password'}))
+    }
+    else if(name === 'sama'){
+      await dispatch(thunkLogin({email: 's@user.io', password: 'password'}))
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     const userSubmission = {
       password
     }
@@ -46,7 +66,7 @@ function LoginFormPage({isLogin, isSignup}) {
       userSubmission.first_name = name
     }
 
-    if(!userSubmission) return setErrors({credential: "Please enter a valid email or phone number"})
+    if(!userSubmission.email || !userSubmission.phone_number) return setErrors({credential: "Please enter a valid email or phone number"})
     let serverResponse 
     if(isLogin) serverResponse = await dispatch(thunkLogin(userSubmission))
     if(isSignup) serverResponse = await dispatch(thunkSignup(userSubmission))
@@ -112,31 +132,31 @@ function LoginFormPage({isLogin, isSignup}) {
             <button onClick={(e)=>{
               setCredential('b@user.io')
               setPassword('password')
-              handleSubmit(e)
+              demoSubmit(e, 'burak')
             }}>Login as Burak</button>
 
             <button onClick={(e)=>{
               setCredential('g@user.io')
               setPassword('password')
-              handleSubmit(e)
+              demoSubmit(e, 'gabe')
             }}>Login as Gabe</button>
 
             <button onClick={(e)=>{
               setCredential('k@user.io')
               setPassword('password')
-              handleSubmit(e)
+              demoSubmit(e, 'katie')
             }}>Login as Katie</button>
 
             <button onClick={(e)=>{
               setCredential('m@user.io')
               setPassword('password')
-              handleSubmit(e)
+              demoSubmit(e, 'mar')
             }}>Login as Mar</button>
 
             <button onClick={(e)=>{
               setCredential('s@user.io')
               setPassword('password')
-              handleSubmit(e)
+              demoSubmit(e, 'sama')
             }}>Login as Sama</button>
           </div>
         )}
