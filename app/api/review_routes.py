@@ -1,6 +1,6 @@
 from flask import Blueprint, request, jsonify
 from flask_login import current_user, login_required
-from models import db, Review, User, Restaurant
+from app.models import db, Review, User, Restaurant
 from datetime import datetime
 
 review_routes = Blueprint("reviews", __name__)
