@@ -106,7 +106,7 @@ def update_restaurant(restaurant_id):
             for key, value in restaurant_data.items():
                 setattr(restaurant, key, value)
 
-            restaurant.updated_at = datetime.now()
+            restaurant.updated_at = datetime.datetime.now()
             db.session.commit()
             return {"restaurant": restaurant.to_dict()}
 

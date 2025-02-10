@@ -48,8 +48,8 @@ class User(db.Model, UserMixin):
     def to_dict(self):
         return {
             "id": self.id,
-            "firstName": self.first_name,
-            "lastName": self.last_name,
+            "first_name": self.first_name,
+            "last_name": self.last_name,
             "email": self.email,
             "address": self.address,
             "city": self.city,

@@ -9,7 +9,7 @@ from wtforms import (
     URLField,
 )
 from wtforms.validators import DataRequired, Length, NumberRange, URL, Optional
-from app.models.restaurants import cuisine_type
+from app.models.restaurants import CuisineType
 
 
 class RestaurantForm(FlaskForm):
@@ -29,7 +29,7 @@ class RestaurantForm(FlaskForm):
     state = StringField(
         "State",
         validators=[
-            DataRequired(message="Please Select a cuisine_type"),
+            DataRequired(message="Please Select a CuisineType"),
             Length(max=255),
         ],
     )
@@ -40,7 +40,7 @@ class RestaurantForm(FlaskForm):
 
     cuisine_type = SelectField(
         "Cuisine Type",
-        choices=[(cuisine.value, cuisine.value) for cuisine in cuisine_type],
+        choices=[(cuisine.value, cuisine.value) for cuisine in CuisineType],
         validators=[DataRequired()],
     )
 

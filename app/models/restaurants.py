@@ -60,8 +60,8 @@ class Restaurant(db.Model):
     delivery_time = db.Column(db.Integer)
     created_at = db.Column(db.DateTime, default=datetime.datetime.now())
     updated_at = db.Column(
-        db.DateTime, default=datetime.datetime.now(), 
-    onupdate=datetime.datetime.now())
+        db.DateTime, default=datetime.datetime.now(), onupdate=datetime.datetime.now()
+    )
 
     # RELATIONSHIPS
     users = db.relationship("User", back_populates="restaurants")

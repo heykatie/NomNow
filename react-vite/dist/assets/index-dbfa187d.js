@@ -13618,7 +13618,7 @@ function _0() {
 				firstName: r,
 				lastName: o,
 				password: m,
-				phoneNumber: s,
+				phone_number: s,
 				address: v,
 				city: x,
 				state: w,
@@ -13681,7 +13681,7 @@ function _0() {
 							}),
 						],
 					}),
-					C.phoneNumber && k.jsx('p', { children: C.phoneNumber }),
+					C.phone_number && k.jsx('p', { children: C.phone_number }),
 					k.jsxs('label', {
 						children: [
 							'Address',

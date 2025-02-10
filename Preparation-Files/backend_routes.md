@@ -47,8 +47,8 @@ Authenticates current user and returns their information as a dictionary
      "zip": 90001,
      "wallet": 818947.57,
      "restarauntOwner": true,
-     "created_at": "2023-09-03T00:00:00Z",
-     "updated_at": "2023-09-03T00:00:00Z"
+     "createdAt": "2023-09-03T00:00:00Z",
+     "updatedAt": "2023-09-03T00:00:00Z"
     }
     ```
 
@@ -103,8 +103,8 @@ Logs in a current user with valid credentials and returns the current user's inf
        "zip": 90001,
        "wallet": 818947.57,
        "restarauntOwner": true,
-       "created_at": "2023-09-03T00:00:00Z",
-       "updated_at": "2023-09-03T00:00:00Z"
+       "createdAt": "2023-09-03T00:00:00Z",
+       "updatedAt": "2023-09-03T00:00:00Z"
     }
   ```
 
@@ -190,8 +190,8 @@ user's information.
       "zip": 90001,
       "wallet": 0.00,
       "restarauntOwner": false,
-      "created_at": "2023-09-04T00:00:00Z",
-      "updated_at": "2023-09-04T00:00:00Z"
+      "createdAt": "2023-09-04T00:00:00Z",
+      "updatedAt": "2023-09-04T00:00:00Z"
     }
     ```
 
@@ -256,22 +256,22 @@ Returns all restaurants that have at least one menu item
       {
         "id": 1,
         "name": "Gusanoz",
-        "owner_id": 1,
-        "price_level": 1,
-        "cuisine_type": "Mexican",
-        "store_image": "https://main-image.jpg",
+        "ownerId": 1,
+        "priceLevel": 1,
+        "cuisineType": "Mexican",
+        "storeImage": "https://main-image.jpg",
         "address": "59 Main St",
         "city": "Vancouver",
         "state": "BC",
         "zip": "V5K 0A1",
-        "delivery_fee": 5.00,
-        "business_hours": "9:00 AM - 9:00 PM",
+        "deliveryFee": 5.00,
+        "businessHours": "9:00 AM - 9:00 PM",
         "servicing": true,
         "description": "Authentic Mexican cuisine with fresh ingredients.",
         "avgRating": 4.5,
-        "delivery_time": 30,
-        "created_at": "2023-09-03T00:00:00Z",
-        "updated_at": "2023-09-03T00:00:00Z"
+        "deliveryTime": 30,
+        "createdAt": "2023-09-03T00:00:00Z",
+        "updatedAt": "2023-09-03T00:00:00Z"
       }
     ]
   }
@@ -299,22 +299,22 @@ Returns all restaurants of a particular category
       {
         "id": 8,
         "name": "Mike's Grill",
-        "owner_id": 6,
-        "price_level": 4,
-        "cuisine_type": "Fast_Food",
-        "store_image": "https://shes.jpg",
+        "ownerId": 6,
+        "priceLevel": 4,
+        "cuisineType": "Fast_Food",
+        "storeImage": "https://shes.jpg",
         "address": "876 Oak Rd",
         "city": "Grilleville",
         "state": "NY",
         "zip": "12345",
-        "delivery_fee": 5.00,
-        "business_hours": "10:00 AM - 10:00 PM",
+        "deliveryFee": 5.00,
+        "businessHours": "10:00 AM - 10:00 PM",
         "servicing": true,
         "description": "Delicious fast food with high-quality ingredients.",
         "avgRating": 4.2,
-        "delivery_time": 25,
-        "created_at": "2023-09-03T00:00:00Z",
-        "updated_at": "2023-09-03T00:00:00Z"
+        "deliveryTime": 25,
+        "createdAt": "2023-09-03T00:00:00Z",
+        "updatedAt": "2023-09-03T00:00:00Z"
       }
     ]
   }
@@ -343,21 +343,21 @@ Returns all restaurants owned and managed by current user
       {
         "id": 1,
         "name": "Gusanoz",
-        "owner_id": 1,
+        "ownerId": 1,
         "address": "59 Main St",
         "city": "Vancouver",
         "state": "BC",
         "zip": 12345,
-        "cuisine_type": "Mexican",
-        "delivery_fee": 5.99,
-        "business_hours": "9:00 AM - 9:00 PM",
+        "cuisineType": "Mexican",
+        "deliveryFee": 5.99,
+        "businessHours": "9:00 AM - 9:00 PM",
         "servicing": true,
-        "store_image": "https://main-image.jpg",
+        "storeImage": "https://main-image.jpg",
         "description": "Authentic Mexican food",
-        "price_level": 2,
-        "delivery_time": 30,
-        "created_at": "2023-09-03T00:00:00Z",
-        "updated_at": "2023-09-03T00:00:00Z"
+        "priceLevel": 2,
+        "deliveryTime": 30,
+        "createdAt": "2023-09-03T00:00:00Z",
+        "updatedAt": "2023-09-03T00:00:00Z"
       },
    ]
   }
@@ -371,7 +371,7 @@ Returns details of a restaurant specified by id
 * Require Authentication: false
 * Request
   * Method: GET
-  * URL: /api/restaurants/:restaurant_id
+  * URL: /api/restaurants/:restaurantId
   * Body: none
 
 * Successful Response
@@ -385,21 +385,21 @@ Returns details of a restaurant specified by id
     "restaurant": {
       "id": 1,
       "name": "Gusanoz",
-      "owner_id": 1,
+      "ownerId": 1,
       "address": "59 Main St",
       "city": "Vancouver",
       "state": "BC",
       "zip": 12345,
-      "cuisine_type": "Mexican",
-      "delivery_fee": 5.99,
-      "business_hours": "9:00 AM - 9:00 PM",
+      "cuisineType": "Mexican",
+      "deliveryFee": 5.99,
+      "businessHours": "9:00 AM - 9:00 PM",
       "servicing": true,
-      "store_image": "https://image.jpg",
+      "storeImage": "https://image.jpg",
       "description": "Authentic Mexican food",
-      "price_level": 2,
-      "delivery_time": 30,
-      "created_at": "2023-09-03T00:00:00Z",
-      "updated_at": "2023-09-03T00:00:00Z"
+      "priceLevel": 2,
+      "deliveryTime": 30,
+      "createdAt": "2023-09-03T00:00:00Z",
+      "updatedAt": "2023-09-03T00:00:00Z"
     }
   }
   ```
@@ -422,14 +422,14 @@ Creates and returns a restaurant
     "city": "Vancouver",
     "state": "BC",
     "zip": 12345,
-    "cuisine_type": "Fast Food",
-    "delivery_fee": 3.99,
-    "business_hours": "9:00 AM - 9:00 PM",
+    "cuisineType": "Fast Food",
+    "deliveryFee": 3.99,
+    "businessHours": "9:00 AM - 9:00 PM",
     "servicing": true,
-    "store_image": "https://No_image_available.svg",
+    "storeImage": "https://No_image_available.svg",
     "description": "Casual fast food restaurant",
-    "price_level": 3,
-    "delivery_time": 20
+    "priceLevel": 3,
+    "deliveryTime": 20
   }
   ```
 * Successful Response
@@ -443,21 +443,21 @@ Creates and returns a restaurant
     "restaurant": {
       "id": 12,
       "name": "The Local lol",
-      "owner_id": 1,
+      "ownerId": 1,
       "address": "824 Hinton Ave",
       "city": "Vancouver",
       "state": "BC",
       "zip": 12345,
-      "cuisine_type": "Fast Food",
-      "delivery_fee": 3.99,
-      "business_hours": "9:00 AM - 9:00 PM",
+      "cuisineType": "Fast Food",
+      "deliveryFee": 3.99,
+      "businessHours": "9:00 AM - 9:00 PM",
       "servicing": true,
-      "store_image": "https://No_image_available.svg",
+      "storeImage": "https://No_image_available.svg",
       "description": "Casual fast food restaurant",
-      "price_level": 3,
-      "delivery_time": 20,
-      "created_at": "2023-09-04T00:00:00Z",
-      "updated_at": "2023-09-04T00:00:00Z"
+      "priceLevel": 3,
+      "deliveryTime": 20,
+      "createdAt": "2023-09-04T00:00:00Z",
+      "updatedAt": "2023-09-04T00:00:00Z"
     }
   }
   ```
@@ -476,15 +476,15 @@ Creates and returns a restaurant
       "city: This field is required.",
       "state: This field is required.",
       "zip: This field is required.",
-      "cuisine_type: This field is required.",
-      "delivery_fee: This field is required.",
-      "business_hours: This field is required.",
+      "cuisineType: This field is required.",
+      "deliveryFee: This field is required.",
+      "businessHours: This field is required.",
       "servicing: This field is required.",
-      "store_image: This field is required.",
+      "storeImage: This field is required.",
       "description: This field is required.",
-      "price_level: This field is required.",
-      "price_level: Number must be between 1 and 4.",
-      "delivery_time: This field is required."
+      "priceLevel: This field is required.",
+      "priceLevel: Number must be between 1 and 4.",
+      "deliveryTime: This field is required."
     ]
   }
   ```
@@ -497,7 +497,7 @@ Updates and returns a restaurant by id
 * Require Authentication: true
 * Request
   * Method: PUT
-  * URL: /api/restaurants/:restaurant_id/update
+  * URL: /api/restaurants/:restaurantId/update
   * Body:
 
   ```json
@@ -507,14 +507,14 @@ Updates and returns a restaurant by id
     "city": "Vancouver",
     "state": "BC",
     "zip": 12345,
-    "cuisine_type": "Fast Food",
-    "delivery_fee": 3.99,
-    "business_hours": "9:00 AM - 9:00 PM",
+    "cuisineType": "Fast Food",
+    "deliveryFee": 3.99,
+    "businessHours": "9:00 AM - 9:00 PM",
     "servicing": true,
-    "store_image": "https://No_image_available.svg",
+    "storeImage": "https://No_image_available.svg",
     "description": "Updated casual fast food restaurant",
-    "price_level": 3,
-    "delivery_time": 20
+    "priceLevel": 3,
+    "deliveryTime": 20
   }
   ```
 
@@ -529,21 +529,21 @@ Updates and returns a restaurant by id
     "restaurant": {
       "id": 12,
       "name": "The Local - update",
-      "owner_id": 1,
+      "ownerId": 1,
       "address": "824 Hinton Ave",
       "city": "Vancouver",
       "state": "BC",
       "zip": 12345,
-      "cuisine_type": "Fast Food",
-      "delivery_fee": 3.99,
-      "business_hours": "9:00 AM - 9:00 PM",
+      "cuisineType": "Fast Food",
+      "deliveryFee": 3.99,
+      "businessHours": "9:00 AM - 9:00 PM",
       "servicing": true,
-      "store_image": "https://No_image_available.svg",
+      "storeImage": "https://No_image_available.svg",
       "description": "Updated casual fast food restaurant",
-      "price_level": 3,
-      "delivery_time": 20,
-      "created_at": "2023-09-04T00:00:00Z",
-      "updated_at": "2023-09-04T00:00:00Z"
+      "priceLevel": 3,
+      "deliveryTime": 20,
+      "createdAt": "2023-09-04T00:00:00Z",
+      "updatedAt": "2023-09-04T00:00:00Z"
     }
   }
   ```
@@ -564,15 +564,15 @@ Updates and returns a restaurant by id
       "city: This field is required.",
       "state: This field is required.",
       "zip: This field is required.",
-      "cuisine_type: This field is required.",
-      "delivery_fee: This field is required.",
-      "business_hours: This field is required.",
+      "cuisineType: This field is required.",
+      "deliveryFee: This field is required.",
+      "businessHours: This field is required.",
       "servicing: This field is required.",
-      "store_image: This field is required.",
+      "storeImage: This field is required.",
       "description: This field is required.",
-      "price_level: This field is required.",
-      "price_level: Number must be between 1 and 4.",
-      "delivery_time: This field is required."
+      "priceLevel: This field is required.",
+      "priceLevel: Number must be between 1 and 4.",
+      "deliveryTime: This field is required."
     ]
   }
   ```
@@ -585,7 +585,7 @@ Delete a restaurant and return a successful message
 * Require Authentication: true
 * Request
   * Method: DELETE
-  * URL: /api/restaurants/:restaurant_id/delete
+  * URL: /api/restaurants/:restaurantId/delete
   * Body: None
 
 * Successful Response
@@ -623,7 +623,7 @@ Returns all menu items for a restaurant determined by id
 * Require Authentication: false
 * Request
   * Method: GET
-  * URL: /api/restaurants/:restaurant_id/menu
+  * URL: /api/restaurants/:restaurantId/menu
   * Body: none
 
 * Successful Response
@@ -639,12 +639,12 @@ Returns all menu items for a restaurant determined by id
         "id": 1,
         "name": "Chips and Guac",
         "description": "fresh and made in house",
-        "food_image": "https://id1.jpg",
+        "foodImage": "https://id1.jpg",
         "price": 11.0,
-        "restaurant_id": 1,
-        "food_type": "Appetizers",
-        "created_at": "2023-09-03T00:00:00Z",
-        "updated_at": "2023-09-03T00:00:00Z"
+        "restaurantId": 1,
+        "foodType": "Appetizers",
+        "createdAt": "2023-09-03T00:00:00Z",
+        "updatedAt": "2023-09-03T00:00:00Z"
       },
     ]
   }
@@ -663,10 +663,10 @@ Creates and returns a new menu item for a restaurant determined by id
   ```json
   {
     "name": "testo",
-    "food_type": "Entrees",
+    "foodType": "Entrees",
     "price": 20.00,
     "description": "no",
-    "food_image": "https://imagesite.com"
+    "foodImage": "https://imagesite.com"
   }
   ```
 
@@ -681,12 +681,12 @@ Creates and returns a new menu item for a restaurant determined by id
     "id": 111,
     "name": "testo",
     "description": "no",
-    "food_image": "https://imagesite.com",
+    "foodImage": "https://imagesite.com",
     "price": 20.0,
-    "restaurant_id": 1,
-    "food_type": "Entrees",
-    "created_at": "2023-09-04T00:00:00Z",
-    "updated_at": "2023-09-04T00:00:00Z"
+    "restaurantId": 1,
+    "foodType": "Entrees",
+    "createdAt": "2023-09-04T00:00:00Z",
+    "updatedAt": "2023-09-04T00:00:00Z"
   }
   ```
 
@@ -730,10 +730,10 @@ Updates and returns updated menu item for a restaurant
   ```json
   {
     "name": "testo - update",
-    "food_type": "Entrees",
+    "foodType": "Entrees",
     "price": 20.00,
     "description": "no",
-    "food_image": "https://imagesite.com"
+    "foodImage": "https://imagesite.com"
   }
   ```
 
@@ -748,12 +748,12 @@ Updates and returns updated menu item for a restaurant
     "id": 112,
     "name": "testo - update",
     "description": "no",
-    "food_image": "https://imagesite.com",
+    "foodImage": "https://imagesite.com",
     "price": 20.0,
-    "restaurant_id": 1,
-    "food_type": "Entrees",
-    "created_at": "2023-09-04T00:00:00Z",
-    "updated_at": "2023-09-04T00:00:00Z"
+    "restaurantId": 1,
+    "foodType": "Entrees",
+    "createdAt": "2023-09-04T00:00:00Z",
+    "updatedAt": "2023-09-04T00:00:00Z"
   }
   ```
 
@@ -831,12 +831,12 @@ Returns all reviews for a restaurant determined by id
     "reviews": [
       {
         "id": 1,
-        "restaurant_id": 1,
-        "order_id": 123,
+        "restaurantId": 1,
+        "orderId": 123,
         "review": "Delicious food and a great ambiance! I would recommend the al pastor tacos, they're great and are served with very generous portions of sides.",
-        "order_rating": 5,
-        "restaurant_rating": 5,
-        "user_id": 2,
+        "orderRating": 5,
+        "restaurantRating": 5,
+        "userId": 2,
         "user": {
           "id": 2,
           "firstName": "Jane",
@@ -848,11 +848,11 @@ Returns all reviews for a restaurant determined by id
           "state": "Sample State",
           "zip": 12345,
           "wallet": "143850.87",
-          "created_at": "Sun, 03 Sep 2023 00:00:00 GMT",
-          "updated_at": "Sun, 03 Sep 2023 00:00:00 GMT"
+          "createdAt": "Sun, 03 Sep 2023 00:00:00 GMT",
+          "updatedAt": "Sun, 03 Sep 2023 00:00:00 GMT"
         },
-        "created_at": "Sun, 03 Sep 2023 00:00:00 GMT",
-        "updated_at": "Sun, 03 Sep 2023 00:00:00 GMT"
+        "createdAt": "Sun, 03 Sep 2023 00:00:00 GMT",
+        "updatedAt": "Sun, 03 Sep 2023 00:00:00 GMT"
       },
     ]
   }
@@ -871,8 +871,8 @@ Creates and returns a review for a restaurant determined by id
   ```json
   {
     "review": "testo",
-    "order_rating": 5,
-    "restaurant_rating": 5
+    "orderRating": 5,
+    "restaurantRating": 5
   }
   ```
 
@@ -885,11 +885,11 @@ Creates and returns a review for a restaurant determined by id
   ```json
   {
     "id": 31,
-    "restaurant_id": 1,
+    "restaurantId": 1,
     "review": "testo",
-    "order_rating": 5,
-    "restaurant_rating": 5,
-    "user_id": 1,
+    "orderRating": 5,
+    "restaurantRating": 5,
+    "userId": 1,
     "user": {
       "id": 1,
       "firstName": "Demo",
@@ -902,11 +902,11 @@ Creates and returns a review for a restaurant determined by id
       "state": "Sample State",
       "zip": 12345,
       "wallet": "818947.57",
-      "created_at": "Sun, 03 Sep 2023 00:00:00 GMT",
-      "updated_at": "Sun, 03 Sep 2023 00:00:00 GMT"
+      "createdAt": "Sun, 03 Sep 2023 00:00:00 GMT",
+      "updatedAt": "Sun, 03 Sep 2023 00:00:00 GMT"
     },
-   "created_at": "Mon, 04 Sep 2023 00:00:00 GMT",
-    "updated_at": "Mon, 04 Sep 2023 00:00:00 GMT"
+   "createdAt": "Mon, 04 Sep 2023 00:00:00 GMT",
+    "updatedAt": "Mon, 04 Sep 2023 00:00:00 GMT"
   }
   ```
 
@@ -945,10 +945,10 @@ Creates and returns a review for a restaurant determined by id
     "errors": [
       "review : This field is required",
       "review : Field must be between 5 and 800 characters long.",
-      "order_rating : This field is required",
-      "order_rating : Number must be between 1 and 5",
-      "restaurant_rating : This field is required",
-      "restaurant_rating : Number must be between 1 and 5"
+      "orderRating : This field is required",
+      "orderRating : Number must be between 1 and 5",
+      "restaurantRating : This field is required",
+      "restaurantRating : Number must be between 1 and 5"
     ]
   }
   ```
@@ -999,7 +999,7 @@ Returns all past orders for a user determined by Id
 * Require Authentication: true
 * Request
   * Method: GET
-  * URL: /api/orders/:order_id
+  * URL: /api/orders/:orderId
   * Body: None
 
 * Successful Response
@@ -1013,8 +1013,8 @@ Returns all past orders for a user determined by Id
     "past_orders": [
       {
         "id": 1,
-        "restaurant_id": 23,
-        "user_id": 1,
+        "restaurantId": 23,
+        "userId": 1,
         "totalCost": 11.0,
         "status": "Active",
         "promo": "SUMMER20",
@@ -1022,17 +1022,17 @@ Returns all past orders for a user determined by Id
           {
             "id": 1,
             "name": "Chips and Guac",
-            "restaurant_id": 1,
-            "food_type": "Appetizers",
+            "restaurantId": 1,
+            "foodType": "Appetizers",
             "description": "Fresh and made in-house",
-            "food_image": "https://id1.jpg",
+            "foodImage": "https://id1.jpg",
             "price": 11.0,
-            "created_at": "Sun, 03 Sep 2023 00:00:00 GMT",
-            "updated_at": "Sun, 03 Sep 2023 00:00:00 GMT"
+            "createdAt": "Sun, 03 Sep 2023 00:00:00 GMT",
+            "updatedAt": "Sun, 03 Sep 2023 00:00:00 GMT"
           },
         ],
-        "created_at": "Sun, 03 Sep 2023 00:00:00 GMT",
-        "updated_at": "Sun, 03 Sep 2023 00:00:00 GMT"
+        "createdAt": "Sun, 03 Sep 2023 00:00:00 GMT",
+        "updatedAt": "Sun, 03 Sep 2023 00:00:00 GMT"
       },
     ]
   }
@@ -1051,7 +1051,7 @@ Creates and returns a past order
   ```json
   {
     // "menu_items": "1,13,85", // if you wanted to order multiple items
-    "items": {"menu_item_id": 12, "quantity": 3},
+    "items": {"menuitem_id": 12, "quantity": 3},
     "promo": "SUMMER20",
     "restaurant_id": 1
   }
@@ -1065,8 +1065,8 @@ Creates and returns a past order
   ```json
   {
     "id": 1,
-    "restaurant_id": 23,
-    "user_id": 1,
+    "restaurantId": 23,
+    "userId": 1,
     "totalCost": 11.0,
     "status": "Active",
     "promo": "SUMMER20",
@@ -1074,17 +1074,17 @@ Creates and returns a past order
       {
         "id": 1,
         "name": "Chips and Guac",
-        "restaurant_id": 1,
-        "food_type": "Appetizers",
+        "restaurantId": 1,
+        "foodType": "Appetizers",
         "description": "Fresh and made in-house",
-        "food_image": "https://id1.jpg",
+        "foodImage": "https://id1.jpg",
         "price": 11.0,
-        "created_at": "Sun, 03 Sep 2023 00:00:00 GMT",
-        "updated_at": "Sun, 03 Sep 2023 00:00:00 GMT"
+        "createdAt": "Sun, 03 Sep 2023 00:00:00 GMT",
+        "updatedAt": "Sun, 03 Sep 2023 00:00:00 GMT"
       },
     ],
-    "created_at": "Sun, 03 Sep 2023 00:00:00 GMT",
-    "updated_at": "Sun, 03 Sep 2023 00:00:00 GMT"
+    "createdAt": "Sun, 03 Sep 2023 00:00:00 GMT",
+    "updatedAt": "Sun, 03 Sep 2023 00:00:00 GMT"
   },
   ```
 
