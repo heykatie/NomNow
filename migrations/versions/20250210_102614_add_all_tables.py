@@ -1,21 +1,16 @@
-"""all tables updated
+"""add all tables
 
-Revision ID: 2d04d1a40c5f
+Revision ID: 7c4fee3330da
 Revises: 
-Create Date: 2025-02-10 11:52:21.202720
+Create Date: 2025-02-10 10:26:14.469308
 
 """
 from alembic import op
 import sqlalchemy as sa
 
-import os
-
-environment = os.getenv("FLASK_ENV")
-SCHEMA = os.environ.get("SCHEMA")
-
 
 # revision identifiers, used by Alembic.
-revision = '2d04d1a40c5f'
+revision = '7c4fee3330da'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -54,7 +49,7 @@ def upgrade():
     sa.Column('delivery_fee', sa.Numeric(precision=10, scale=2), nullable=True),
     sa.Column('business_hours', sa.String(length=255), nullable=False),
     sa.Column('servicing', sa.Boolean(), nullable=False),
-    sa.Column('store_image', sa.String(length=255), nullable=True),
+    sa.Column('store_image', sa.Text(), nullable=True),
     sa.Column('description', sa.Text(), nullable=False),
     sa.Column('price_level', sa.Enum('INEXPENSIVE', 'MODERATE', 'EXPENSIVE', 'VERY_EXPENSIVE', name='pricelevel'), nullable=False),
     sa.Column('delivery_time', sa.Integer(), nullable=True),
@@ -116,14 +111,6 @@ def upgrade():
     sa.ForeignKeyConstraint(['order_id'], ['orders.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    
-    if environment == "production":
-        op.execute(f"ALTER TABLE users SET SCHEMA {SCHEMA};")
-        op.execute(f"ALTER TABLE restaurants SET SCHEMA {SCHEMA};")
-        op.execute(f"ALTER TABLE menu_items SET SCHEMA {SCHEMA};")
-        op.execute(f"ALTER TABLE orders SET SCHEMA {SCHEMA};")
-        op.execute(f"ALTER TABLE reviews SET SCHEMA {SCHEMA};")
-        op.execute(f"ALTER TABLE order_items SET SCHEMA {SCHEMA};")
     # ### end Alembic commands ###
 
 
