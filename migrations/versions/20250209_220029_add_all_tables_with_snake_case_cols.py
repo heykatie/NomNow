@@ -1,8 +1,8 @@
 """add all tables with snake case cols
 
-Revision ID: d9642acf0cbf
+Revision ID: 5dad86975e07
 Revises: 
-Create Date: 2025-02-09 20:06:09.766656
+Create Date: 2025-02-09 22:00:29.623647
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'd9642acf0cbf'
+revision = '5dad86975e07'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -77,7 +77,7 @@ def upgrade():
     sa.Column('restaurant_id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('total_cost', sa.Numeric(precision=10, scale=2), nullable=False),
-    sa.Column('status', sa.Enum('Completed', 'Canceled', 'Active', name='order_status'), nullable=False),
+    sa.Column('status', sa.Enum('Submitted', 'Completed', 'Canceled', 'Active', name='order_status'), nullable=False),
     sa.Column('promo', sa.String(length=255), nullable=True),
     sa.Column('created_at', sa.DateTime(), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),

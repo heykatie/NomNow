@@ -27,18 +27,18 @@ def get_all_restaurants():
     return {"restaurants": restaurant_list}
 
 
-# Get the Restaurants owned by the current user
-@restaurant_routes.route("/current")
-@login_required
-def get_current_user_restaurants():
-    restaurants = Restaurant.query.filter(Restaurant.owner_id == current_user.id).all()
-    restaurant_list = []
-    for restaurant in restaurants:
-        restaurant_dict = restaurant.to_dict()
-        restaurant_list.append(restaurant_dict)
+# # Get the Restaurants owned by the current user
+# @restaurant_routes.route("/current")
+# @login_required
+# def get_current_user_restaurants():
+#     restaurants = Restaurant.query.filter(Restaurant.owner_id == current_user.id).all()
+#     restaurant_list = []
+#     for restaurant in restaurants:
+#         restaurant_dict = restaurant.to_dict()
+#         restaurant_list.append(restaurant_dict)
 
-    # Return the list wrapped in a dictionary
-    return {"restaurants": restaurant_list}
+#     # Return the list wrapped in a dictionary
+#     return {"restaurants": restaurant_list}
 
 
 # Get Restaraunt By Id
@@ -96,6 +96,22 @@ def create_restaurant():
     except Exception as e:
         db.session.rollback()
         return {"errors": [str(e)]}, 400
+"""
+{
+    "name": "NomNow Bistro7",
+    "address": "123 Food Street",
+    "city": "San Francisco",
+    "state": "CA",
+    "zip": "94110",
+    "cuisine_type": "MEXICAN",
+    "delivery_fee": 4.99,
+    "business_hours": "Mon-Fri: 10 AM - 9 PM, Sat-Sun: 11 AM - 10 PM",
+    "servicing": true,
+    "description": "A cozy place serving authentic Mexican cuisine.",
+    "price_level": "EXPENSIVE",
+    "delivery_time": 30
+}
+"""
 
 
 # Update an existing restaurant
@@ -132,6 +148,22 @@ def update_restaurant(restaurant_id):
     return {
         "errors": [error for field in form.errors for error in form.errors[field]]
     }, 400
+"""
+{
+    "name": "Updated NomNow Bistro",
+    "address": "456 New Street",
+    "city": "San Francisco",
+    "state": "CA",
+    "zip": 94110,
+    "cuisine_type": "MEXICAN",
+    "delivery_fee": 5.99,
+    "business_hours": "Mon-Fri: 9 AM - 10 PM, Sat-Sun: 10 AM - 11 PM",
+    "servicing": true,
+    "description": "A cozy place serving modern Mexican cuisine with a fresh twist.",
+    "price_level": "MODERATE",
+    "delivery_time": 25
+}
+"""
 
 
 # Delete a restaurant

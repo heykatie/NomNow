@@ -11,6 +11,7 @@ from .api.order_routes import order_routes
 from .api.menu_items_routes import menu_item_routes
 from .api.restaurants_routes import restaurant_routes
 from .api.review_routes import review_routes
+from .api.manage_routes import manage_routes
 from .seeds import seed_commands
 from .config import Config
 from enum import Enum
@@ -37,6 +38,7 @@ app.register_blueprint(order_routes, url_prefix='/api/orders')
 app.register_blueprint(menu_item_routes, url_prefix='/api/menu-items')
 app.register_blueprint(restaurant_routes, url_prefix='/api/restaurants')
 app.register_blueprint(review_routes, url_prefix="/api/reviews")
+app.register_blueprint(manage_routes, url_prefix="/api/manage")
 
 db.init_app(app)
 Migrate(app, db)

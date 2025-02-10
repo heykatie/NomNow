@@ -61,7 +61,15 @@ def create_review():
     except Exception as e:
         db.session.rollback()
         return error_response(str(e), 500)
-
+"""
+{
+    "restaurant_id": 1,
+    "order_id": 10,
+    "review": "The food was amazing and the service was great!",
+    "order_rating": 5,
+    "restaurant_rating": 4
+}
+"""
 
 # Get a review by its ID
 @review_routes.route("/<int:id>", methods=["GET"])
@@ -109,6 +117,13 @@ def update_review(id):
     except Exception as e:
         db.session.rollback()
         return error_response(str(e), 500)
+"""
+{
+    "review": "Updated review: The food was even better the second time!",
+    "order_rating": 5,
+    "restaurant_rating": 5
+}"""
+
 
 
 # Delete a review by its ID (Only the owner of the review can delete it)

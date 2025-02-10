@@ -15,7 +15,7 @@ class User(db.Model, UserMixin):
     first_name = db.Column(db.String(40), nullable=False)
     last_name = db.Column(db.String(40), nullable=False)
     phone_number = db.Column(db.String(20), nullable=False, unique=True)
-    restaurant_owner = db.Column(db.Boolean, nullable=True)
+    restaurant_owner = db.Column(db.Boolean, default=False)
     address = db.Column(db.String(40), nullable=False)
     city = db.Column(db.String(40), nullable=False)
     state = db.Column(db.String(40), nullable=False)

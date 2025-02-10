@@ -32,6 +32,10 @@ def login():
         login_user(user)
         return user.to_dict()
     return form.errors, 401
+"""
+    { "email": "k@user.io",
+    "password": "password"}
+"""
 
 
 @auth_routes.route("/logout")
@@ -68,6 +72,35 @@ def sign_up():
         login_user(user)
         return user.to_dict()
     return form.errors, 401
+"""
+{
+    "address": [
+        "232 bob court"
+    ],
+    "city": [
+        "oakland"
+    ],
+    "email": [
+        "bob@aa.io"
+    ],
+    "first_name": [
+        "bob"
+    ],
+    "last_name": [
+        "bobber"
+    ],
+    "phone_number": [
+        "15102930299"
+    ],
+    "state": [
+        "ca"
+    ],
+    "zip": [
+        "94603"
+    ],
+    "password": "password"
+}
+"""
 
 
 @auth_routes.route("/unauthorized")

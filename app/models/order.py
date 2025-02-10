@@ -20,7 +20,7 @@ class Order(db.Model):
         db.Numeric(10, 2), nullable=False
     )  # Matches `totalCost` in your schema
     status = db.Column(
-        Enum("Completed", "Canceled", "Active", name="order_status"),
+        Enum("Submitted", "Completed", "Canceled", "Active", name="order_status"),
         nullable=False,
         default="Active",
     )

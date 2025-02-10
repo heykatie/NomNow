@@ -23,7 +23,7 @@ def seed_restaurants():
             delivery_time=30,
         ),
         Restaurant(
-            owner_id=1,
+            owner_id=2,
             address="789 Broadway",
             city="New York",
             state="NY",
@@ -39,7 +39,7 @@ def seed_restaurants():
             delivery_time=35,
         ),
         Restaurant(
-            owner_id=2,
+            owner_id=3,
             address="456 9th Avenue",
             city="New York",
             state="NY",
@@ -55,7 +55,7 @@ def seed_restaurants():
             delivery_time=40,
         ),
         Restaurant(
-            owner_id=2,
+            owner_id=4,
             address="234 7th Avenue",
             city="New York",
             state="NY",
@@ -71,7 +71,7 @@ def seed_restaurants():
             delivery_time=45,
         ),
         Restaurant(
-            owner_id=3,
+            owner_id=5,
             address="567 2nd Avenue",
             city="New York",
             state="NY",
@@ -87,7 +87,7 @@ def seed_restaurants():
             delivery_time=35,
         ),
         Restaurant(
-            owner_id=3,
+            owner_id=4,
             address="890 1st Avenue",
             city="New York",
             state="NY",

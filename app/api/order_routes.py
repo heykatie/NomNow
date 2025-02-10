@@ -104,7 +104,6 @@ def create_order():
 
     return jsonify(new_order.to_dict()), 201
 
-
 """
 example request body: {
     "restaurant_id": "1",
@@ -173,10 +172,24 @@ def update_order_items(order_id):
     db.session.commit()
 
     return jsonify(order.to_dict()), 200
+"""
+{
+    "items": [
+        {
+            "menu_item_id": 2,
+            "quantity": 3
+        },
+        {
+            "menu_item_id": 5,
+            "quantity": 3
+        }
+    ]
+}
+"""
 
 
-# User finalizes the order (status = Completed).
-@order_routes.route("/<int:order_id>/complete", methods=["PUT"])
+# User finalizes the order (status = Submitted).
+@order_routes.route("/<int:order_id>/submit", methods=["PUT"])
 @login_required
 def complete_order(order_id):
     order = Order.query.get(order_id)
@@ -194,7 +207,7 @@ def complete_order(order_id):
     if not order_items:
         return {"message": "Cannot complete an empty order. Add items first."}, 400
 
-    order.status = "Completed"
+    order.status = "Submitted"
     db.session.commit()
 
     return jsonify(order.to_dict()), 200
