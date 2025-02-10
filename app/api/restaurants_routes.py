@@ -14,7 +14,7 @@ restaurant_routes = Blueprint("restaurants", __name__)
 def get_all_restaurants():
     restaurants = (
         Restaurant.query.options(joinedload(Restaurant.menu_items))
-        .filter(Restaurant.menu_items.any())
+        # .filter(Restaurant.menu_items.any())
         .all()
     )
 
@@ -121,7 +121,7 @@ def update_restaurant(restaurant_id):
             for key, value in restaurant_data.items():
                 setattr(restaurant, key, value)
 
-            restaurant.updated_at = datetime.datetime.now()
+            restaurant.updated_at = datetime.now()
             db.session.commit()
             return {"restaurant": restaurant.to_dict()}
 
