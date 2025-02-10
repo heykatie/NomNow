@@ -67,6 +67,7 @@ def sign_up():
             state=form.data["state"],
             zip=form.data["zip"],
         )
+        print(user)
         db.session.add(user)
         db.session.commit()
         login_user(user)
