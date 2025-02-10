@@ -41,20 +41,24 @@ function LoginFormPage({isLogin, isSignup}) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrors({})
 
     const userSubmission = {
       password
     }
-    setErrors({})
     
-    if(credential === "") return setErrors({credential: "Please enter a valid email or phone number"})
+    if(credential === "") return setErrors({credential: "Please enter a valid email or phone number", type: 'crendential; None'})
+
     else if(credential.includes("@")){
+      console.log('EMAIL CHECK @-', credential.split('@')[1], credential.split('@')[1].includes('.'))
       if(credential.split('@')[1].includes('.')) userSubmission.email = credential
+      console.log('USER SUBMISSION', userSubmission)
     }
+
     else if(credential.includes('-') || credential.length === 10){
       let phoneNumber = credential
       if(phoneNumber.includes('-')) phoneNumber = phoneNumber.split('-').join('')
-      if(phoneNumber.length !== 10) return setErrors({credential: "Please enter a valid email or phone number"})
+      if(phoneNumber.length !== 10) return setErrors({credential: "Please enter a valid email or phone number", type: 'phone; Invalid'})
       userSubmission.phone_number = phoneNumber
     }
 
@@ -66,7 +70,7 @@ function LoginFormPage({isLogin, isSignup}) {
       userSubmission.first_name = name
     }
 
-    if(!userSubmission.email || !userSubmission.phone_number) return setErrors({credential: "Please enter a valid email or phone number"})
+    if(!(userSubmission.email || userSubmission.phone_number)) return setErrors({credential: "Please enter a valid email or phone number", type: 'credential; No valid email or phone number'})
     let serverResponse 
     if(isLogin) serverResponse = await dispatch(thunkLogin(userSubmission))
     if(isSignup) serverResponse = await dispatch(thunkSignup(userSubmission))
