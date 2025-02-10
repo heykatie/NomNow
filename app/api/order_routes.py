@@ -63,7 +63,7 @@ def create_order():
 
     # Validate that all menu items belong to the same restaurant
     if items:
-        menu_item_ids = [item["menu_item_id"] for item in items]
+        menu_item_ids = [item["id"] for item in items]
         menu_items = MenuItem.query.filter(MenuItem.id.in_(menu_item_ids)).all()
 
         if not menu_items:
