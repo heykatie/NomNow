@@ -1,8 +1,8 @@
-"""add all tables with snake case
+"""add all tables with snake case cols
 
-Revision ID: 14eafba14bec
+Revision ID: f3cdcdced1fe
 Revises: 
-Create Date: 2025-02-09 17:47:46.835035
+Create Date: 2025-02-09 19:05:14.819707
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '14eafba14bec'
+revision = 'f3cdcdced1fe'
 down_revision = None
 branch_labels = None
 depends_on = None

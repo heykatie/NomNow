@@ -46,12 +46,12 @@ class MenuItem(db.Model):
     def to_dict(self):
         return {
             "id": self.id,
-            "restaurant_id": self.restaurant_id,
+            "restaurantId": self.restaurant_id,
             "name": self.name,
-            "food_type": self.food_type.value,
+            "foodType": self.food_type.value,
             "description": self.description,
             "price": self.price,
-            "food_image": self.food_image,
-            "created_at": self.created_at,
-            "updated_at": self.updated_at,
+            "foodImage": self.food_image,
+            "createdAt": self.created_at,
+            "updatedAt": self.updated_at,
         }

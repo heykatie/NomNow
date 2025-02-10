@@ -39,14 +39,14 @@ class Order(db.Model):
     def to_dict(self):
         return {
             "id": self.id,
-            "restaurant_id": self.restaurant_id,
-            "user_id": self.user_id,
-            "total_cost": float(self.total_cost),
+            "restaurantId": self.restaurant_id,
+            "userId": self.user_id,
+            "totalCost": float(self.total_cost),
             "status": self.status,
             "promo": self.promo,
-            "created_at": self.created_at,
-            "updated_at": self.updated_at,
-            "order_items": [
+            "createdAt": self.created_at,
+            "updatedAt": self.updated_at,
+            "orderItems": [
                 item.to_dict() for item in self.order_items
             ],  # Include order items
         }

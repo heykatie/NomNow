@@ -28,12 +28,12 @@ class Review(db.Model):
     def to_dict(self):
         return {
             "id": self.id,
-            "restaurant_id": self.restaurant_id,
-            "user_id": self.user_id,
-            "order_id": self.order_id,
+            "restaurantId": self.restaurant_id,
+            "userId": self.user_id,
+            "orderId": self.order_id,
             "review": self.review,
-            "order_rating": self.order_rating,
-            "restaurant_rating": self.restaurant_rating,
-            "created_at": self.created_at,
-            "updated_at": self.updated_at,
+            "orderRating": self.order_rating,
+            "restaurantRating": self.restaurant_rating,
+            "createdAt": self.created_at,
+            "updatedAt": self.updated_at,
         }
