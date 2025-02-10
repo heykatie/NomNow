@@ -61,11 +61,7 @@ def sign_up():
             last_name=form.data["last_name"],
             phone_number=form.data["phone_number"],
             email=form.data["email"],
-            password=form.data["password"],
-            address=form.data["address"],
-            city=form.data["city"],
-            state=form.data["state"],
-            zip=form.data["zip"],
+            password=form.data["password"]
         )
         print(user)
         db.session.add(user)
