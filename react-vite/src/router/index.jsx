@@ -20,6 +20,10 @@ export const router = createBrowserRouter([
         element: <LoginFormPage isSignup={true} />,
       },
       {
+        path: "home",
+        element: <h1>Home Page</h1>,
+      },
+      {
         path: "*",
         element: <h1>404 Page Not Available</h1>,
       },
