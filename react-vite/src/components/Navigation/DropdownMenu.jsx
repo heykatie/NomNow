@@ -29,7 +29,7 @@ function DropdownMenu({ user }) {
           <li>{user.firstName} Profile</li>
           <li>Orders</li>
           <li>Favorites</li>
-          <li>Wallet</li>
+          <li><NavLink to={`/wallet/${user.id}`}>Wallet</NavLink></li>
           <li>Meal Plan</li>
           <li>Help</li>
           <li>Promotions</li>

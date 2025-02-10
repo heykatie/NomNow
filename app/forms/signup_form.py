@@ -29,7 +29,3 @@ class SignUpForm(FlaskForm):
     phone_number = StringField("phone Number", validators=[phone_exists])
     email = StringField("email", validators=[user_exists])
     password = StringField("password", validators=[DataRequired()])
-    address = StringField("address")
-    city = StringField("city")
-    state = StringField("state")
-    zip = IntegerField("zip")

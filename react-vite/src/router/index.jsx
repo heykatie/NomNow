@@ -7,6 +7,7 @@ import CreateMenuItem from '../components/CreateMenuItem';
 import EditMenuItem from '../components/EditMenuItem';
 import DeleteMenuItem from '../components/DeleteMenuItem';
 import Layout from './Layout';
+import WalletPage from '../components/WalletPage/WalletPage';
 
 
 export const router = createBrowserRouter([
@@ -28,6 +29,10 @@ export const router = createBrowserRouter([
       {
         path: "home",
         element: <h1>Home Page</h1>,
+      },
+      {
+        path: "wallet/:id",
+        element: <WalletPage />,
       },
       {
         path: "*",
