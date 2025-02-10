@@ -1,7 +1,7 @@
 # Database Schema
 
-# Layout 
-<img width="538" alt="image" src="https://github.com/user-attachments/assets/bc1dc9bc-5b2b-422a-b634-1b18ef407cd5" />
+# Layout
+<img width="848" alt="image" src="https://github.com/user-attachments/assets/93682c52-f826-4efe-8fd5-9067050d7d9d" />
 
 
 ## Users Table
@@ -12,12 +12,16 @@
 | lastName | varchar | NOT NULL |
 | phoneNumber | varchar | UNIQUE, NOT NULL |
 | restaurantOwner | boolean | |
+| first_name | varchar | NOT NULL |
+| last_name | varchar | NOT NULL |
+| phone_number | varchar | UNIQUE | NOT NULL |
+| restarauntOwner | boolean | |
 | address | varchar | NOT NULL |
-| city | varchar | |
-| state | varchar | |
-| zip | int | |
+| city | varchar | NOT NULL |
+| state | varchar | NOT NULL |
+| zip | int | NOT NULL |
 | wallet | decimal | |
-| hashedPassword | varchar | |
+| hashed_password | varchar | NOT NULL |
 | email | varchar | NOT NULL |
 | createdAt | timestamp | |
 | updatedAt | timestamp | |
