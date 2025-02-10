@@ -20,7 +20,7 @@ def success_response(message, data=None, status_code=200):
 
 
 # Create a new review (Only logged-in users can create a review)
-@review_routes.route("/reviews", methods=["POST"])
+@review_routes.route("/", methods=["POST"])
 @login_required
 def create_review():
     data = request.get_json()
@@ -64,18 +64,19 @@ def create_review():
 
 
 # Get a review by its ID
-@review_routes.route("/reviews/<int:id>", methods=["GET"])
-@login_required
+@review_routes.route("/<int:id>", methods=["GET"])
+# @login_required
 def get_review(id):
     review = Review.query.get(id)
     if review:
+        print("Review Found:", review.to_dict())
         return success_response("Review retrieved successfully", review.to_dict())
     else:
         return error_response("Review not found", 404)
 
 
 # Update a review by its ID (Only the owner of the review can update it)
-@review_routes.route("/reviews/<int:id>", methods=["PUT"])
+@review_routes.route("/<int:id>", methods=["PUT"])
 @login_required
 def update_review(id):
     data = request.get_json()
@@ -111,7 +112,7 @@ def update_review(id):
 
 
 # Delete a review by its ID (Only the owner of the review can delete it)
-@review_routes.route("/reviews/<int:id>", methods=["DELETE"])
+@review_routes.route("/<int:id>", methods=["DELETE"])
 @login_required
 def delete_review(id):
     review = Review.query.get(id)
@@ -132,7 +133,7 @@ def delete_review(id):
 
 
 # Get all reviews for a specific restaurant
-@review_routes.route("/reviews/restaurant/<int:restaurant_id>", methods=["GET"])
+@review_routes.route("/restaurant/<int:restaurant_id>", methods=["GET"])
 @login_required
 def get_reviews_for_restaurant(restaurant_id):
     reviews = Review.query.filter_by(restaurant_id=restaurant_id).all()
