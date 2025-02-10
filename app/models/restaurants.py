@@ -54,7 +54,7 @@ class Restaurant(db.Model):
     delivery_fee = db.Column(Numeric(10, 2))
     business_hours = db.Column(db.String(255), nullable=False)
     servicing = db.Column(db.Boolean, nullable=False)
-    store_image = db.Column(db.String(255))  # URL
+    store_image = db.Column(db.Text)  # URL
     description = db.Column(db.Text, nullable=False)
     price_level = db.Column(db.Enum(PriceLevel), nullable=False)
     delivery_time = db.Column(db.Integer)
@@ -79,7 +79,7 @@ class Restaurant(db.Model):
             "zip": self.zip,
             "name": self.name,
             "cuisineType": self.cuisine_type.value if self.cuisine_type else None,
-            "deliveryFee": float(self.delivery_fee) if self.delivery_fee else None,  
+            "deliveryFee": float(self.delivery_fee) if self.delivery_fee else None,
             "businessHours": self.business_hours,
             "servicing": self.servicing,
             "storeImage": self.store_image,
