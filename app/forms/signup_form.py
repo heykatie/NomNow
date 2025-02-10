@@ -7,22 +7,29 @@ from app.models import User
 def user_exists(form, field):
     # Checking if user exists
     email = field.data
-    print(email)
-    user = User.query.filter(User.email == email).first()
-    if user:
-        raise ValidationError("Email address is already in use.")
+    if email:
+        user = User.query.filter(User.email == email).first()
+        if user:
+            raise ValidationError("Email address is already in use.")
 
 
-# // ==> LOOOOOOOOKKK
+def phone_exists(form, field):
+    # Checking if user exists
+    phone_number = field.data
+    if phone_number:
+        user = User.query.filter(User.phone_number == phone_number).first()
+        if user:
+            raise ValidationError("Phone number is already in use.")
+
 
 
 class SignUpForm(FlaskForm):
-    first_name = StringField("first_name", validators=[DataRequired()])
-    last_name = StringField("last_name", validators=[DataRequired()])
-    phone_number = StringField("phone_number", validators=[DataRequired()])
-    email = StringField("email", validators=[DataRequired(), user_exists])
+    first_name = StringField("first Name", validators=[DataRequired()])
+    last_name = StringField("last Name")
+    phone_number = StringField("phone Number", validators=[phone_exists])
+    email = StringField("email", validators=[user_exists])
     password = StringField("password", validators=[DataRequired()])
-    address = StringField("address", validators=[DataRequired()])
-    city = StringField("city", validators=[DataRequired()])
-    state = StringField("state", validators=[DataRequired()])
-    zip = IntegerField("zip", validators=[DataRequired()])
+    address = StringField("address")
+    city = StringField("city")
+    state = StringField("state")
+    zip = IntegerField("zip")

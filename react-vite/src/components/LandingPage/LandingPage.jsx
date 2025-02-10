@@ -11,7 +11,7 @@ function LandingPage() {
 		if (user) {
 			navigate('/home');
 		}
-	}, [user]);
+	}, [user, navigate]);
 
 	return (
 		<div className='landing-page'>
