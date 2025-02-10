@@ -1,29 +1,27 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { deleteMenuItem } from '../../redux/menuItems';
-import { useHistory } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getMenuItem } from '../../redux/menuItems';
+import { useParams } from 'react-router-dom';
 
-const MenuItem = ({ item }) => {
+const MenuItemDetail = () => {
+  const { id } = useParams();
   const dispatch = useDispatch();
-  const history = useHistory();
+  const menuItem = useSelector((state) => state.menu.menuItem);
 
-  const handleDelete = () => {
-    dispatch(deleteMenuItem(item.id));
-  };
+  useEffect(() => {
+    dispatch(getMenuItem(id));
+  }, [dispatch, id]);
 
-  const handleEdit = () => {
-    history.push(`/edit-menu-item/${item.id}`);
-  };
+  if (!menuItem) return <h2>Loading...</h2>;
 
   return (
     <div>
-      <h3>{item.name}</h3>
-      <p>{item.description}</p>
-      <p>${item.price}</p>
-      <button onClick={handleEdit}>Edit</button>
-      <button onClick={handleDelete}>Delete</button>
+      <h1>{menuItem.name}</h1>
+      <p>{menuItem.description}</p>
+      <p>Price: ${menuItem.price}</p>
+      <img src={menuItem.foodImage} alt={menuItem.name} />
     </div>
   );
 };
 
-export default MenuItem;
+export default MenuItemDetail;

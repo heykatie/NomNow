@@ -1,30 +1,26 @@
-import './MenuItemList.css';
-
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getMenuItems } from '../../redux/menuItems';
-import MenuItem from './MenuItem';
+import { getMenuItems } from '../../redux/menuItems'
+import { Link } from 'react-router-dom';
 
 const MenuItemList = () => {
   const dispatch = useDispatch();
-  const { menuItems, error } = useSelector((state) => state.menu);
-
+  const menuItems = useSelector((state) => state.menu.menuItems);
+  
   useEffect(() => {
     dispatch(getMenuItems());
   }, [dispatch]);
 
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
-
   return (
     <div>
-      <h2>Menu Items</h2>
-      <div>
+      <h1>Menu Items</h1>
+      <ul>
         {menuItems.map((item) => (
-          <MenuItem key={item.id} item={item} />
+          <li key={item.id}>
+            <Link to={`/menu-items/${item.id}`}>{item.name}</Link>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 };
