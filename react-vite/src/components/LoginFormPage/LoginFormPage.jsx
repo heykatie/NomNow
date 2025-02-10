@@ -8,6 +8,7 @@ function LoginFormPage({isLogin, isSignup}) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) => state.session.user);
+  const [name, setName] = useState("")
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -21,18 +22,28 @@ function LoginFormPage({isLogin, isSignup}) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let userSubmission
+    const userSubmission = {
+      password
+    }
     setErrors({})
     
     if(credential === "") return setErrors({credential: "Please enter a valid email or phone number"})
     else if(credential.includes("@")){
-      if(credential.split('@')[1].includes('.')) userSubmission = {email: credential, password}
+      if(credential.split('@')[1].includes('.')) userSubmission.email = credential
     }
     else if(credential.includes('-') || credential.length === 10){
       let phoneNumber = credential
       if(phoneNumber.includes('-')) phoneNumber = phoneNumber.split('-').join('')
       if(phoneNumber.length !== 10) return setErrors({credential: "Please enter a valid email or phone number"})
-      userSubmission = {phone_number: phoneNumber, password}
+      userSubmission.phone_number = phoneNumber
+    }
+
+    if(name.includes(' ')){
+      const nameSplit = name.split(' ')
+      userSubmission.first_name = nameSplit[0]
+      userSubmission.last_name = nameSplit[nameSplit.length-1]
+    } else {
+      userSubmission.first_name = name
     }
 
     if(!userSubmission) return setErrors({credential: "Please enter a valid email or phone number"})
@@ -58,6 +69,17 @@ function LoginFormPage({isLogin, isSignup}) {
         errors.map((message) => <p key={message}>{message}</p>)}
       <div className="content">
         <form onSubmit={handleSubmit} className="login-form">
+          {isSignup && (
+            <label>
+              {"What's your name"}
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+              />
+            </label>
+          )}
           <label>
             {"What's your phone number or email"}
             <input
