@@ -25,7 +25,7 @@ export const router = createBrowserRouter([
         element: <h1>Home Page</h1>,
       },
       {
-        path: "wallet/:id",
+        path: "wallet",
         element: <WalletPage />,
       },
       {

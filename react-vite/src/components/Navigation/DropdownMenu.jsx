@@ -4,6 +4,7 @@ import { thunkLogout } from "../../redux/session";
 import { NavLink } from "react-router-dom";
 import OpenModalMenuItem from "./OpenModalMenuItem";
 import { useModal } from "../../context/Modal";
+import "./Navigation.css";
 
 function DropdownMenu({ user }) {
   const dispatch = useDispatch();
@@ -15,6 +16,7 @@ function DropdownMenu({ user }) {
     dispatch(thunkLogout());
     closeModal();
   };
+  console.log(user)
   
   let content = (
       <div className='menu-dropdown' ref={ulRef}>
@@ -26,10 +28,18 @@ function DropdownMenu({ user }) {
   if (user) {
     content = (
       <div className='menu-dropdown' ref={ulRef}>
-          <li>{user.firstName} Profile</li>
+          <li>
+            <div className="profile">
+              <img src="../../public/icons/user.png" alt="" className='icon' />
+              <div className="profile-info">
+                <h4>{user.firstName} {user.lastName}</h4>
+                <a href="/">Manage account</a>
+              </div>
+            </div>
+          </li>
           <li>Orders</li>
           <li>Favorites</li>
-          <li><NavLink to={`/wallet/${user.id}`}>Wallet</NavLink></li>
+          <li><NavLink to={`/wallet`} onClick={closeModal}>Wallet</NavLink></li>
           <li>Meal Plan</li>
           <li>Help</li>
           <li>Promotions</li>

@@ -40,6 +40,28 @@ li{
 }
 
 
+.profile{
+  display: flex;
+  padding: 10px;
+  align-items: center;
+  gap : 10px;
+}
+.profile-info{
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-items: flex-start;
+}
+.profile img{
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+}
+.profile-info h4{
+  margin: 0;
+}
+
+
 /* Clickables */
 button:hover{
   cursor: pointer;
