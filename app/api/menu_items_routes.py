@@ -7,9 +7,11 @@ from datetime import datetime
 from flask import jsonify
 from flask_cors import CORS
 
-menu_item_routes = Blueprint('menu_items', __name__)
+menu_item_routes = Blueprint('menu_items', __name__)  
+# api/menu-items/
 
-### Get menu item: GET /api/menu-items/:menu_item_id
+
+### Get a menu item by id   # api/menu-items/id
 @menu_item_routes.route('/<int:id>', methods=['GET'])
 def get_menu_item(id):
     menu_item = MenuItem.query.get(id)
@@ -20,8 +22,68 @@ def get_menu_item(id):
         return jsonify({"error": "Menu item not found"}), 404
     
 
+    
 
-@menu_item_routes.route('/<int:id>', methods=['DELETE'])
+### Get all-menu item # api/menu-items
+@menu_item_routes.route('/', methods=['GET'])
+def get_menu_items():
+    menu_items = MenuItem.query.all()  # Get all menu items
+    
+    # Convert SQLAlchemy objects to dictionaries manually
+    menu_list = [
+        {
+            "id": item.id,
+            "name": item.name,
+            "description": item.description,
+            "price": item.price
+        }
+        for item in menu_items
+    ]
+
+    return jsonify(menu_list), 200
+    
+
+
+### Update a menu item # api/menu-items/id/update
+@menu_item_routes.route('/<int:id>/update', methods=['PUT'])
+@login_required
+def update_menu_item(id):
+    """
+    Updates a menu item
+    """
+    item_to_update = MenuItem.query.get(id)
+    if not item_to_update:
+        return jsonify({"error": "Menu item not found"}), 404
+
+    form = MenuItemForm(meta={'csrf': False})  # Disable CSRF if needed for API requests
+    data = request.get_json()  # Extract JSON body
+
+    if not data:
+        return jsonify({"error": "Invalid request, JSON data required"}), 400
+
+    if form.validate_on_submit():
+        item_to_update.name = data.get("name", item_to_update.name)
+        item_to_update.foodType = data.get("foodType", item_to_update.foodType)
+        item_to_update.description = data.get("description", item_to_update.description)
+        item_to_update.price = data.get("price", item_to_update.price)
+        item_to_update.foodImage = data.get("foodImage", item_to_update.foodImage)
+        item_to_update.updatedAt = datetime.now()
+
+        try:
+            db.session.commit()
+            return jsonify(item_to_update.to_dict()), 200
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"error": f"Database error: {str(e)}"}), 500
+
+    return jsonify({"errors": form.errors}), 400
+
+
+
+
+### Delete a menu item # api/menu-items/id/delete
+@menu_item_routes.route('/<int:id>/delete', methods=['DELETE'])
+@login_required
 def delete_menu_item(id):
     menu_item = MenuItem.query.get(id)
 
@@ -35,3 +97,46 @@ def delete_menu_item(id):
             return jsonify({"error": f"An error occurred: {str(e)}"}), 500
     else:
         return jsonify({"error": "Menu item not found"}), 404
+
+
+
+
+
+### Create a new menu item # api/menu-items/new
+@menu_item_routes.route('/new', methods=['POST'])
+@login_required
+def create_menu_item():
+    """
+    Creates a new menu item
+    """
+    form = MenuItemForm(meta={'csrf': False})  # Disable CSRF for API
+    data = request.get_json()  # Extract JSON body
+
+    if not data:
+        return jsonify({"error": "Invalid request, JSON data required"}), 400
+
+    restaurant_id = data.get("restaurantId")
+    if not restaurant_id:
+        return jsonify({"error": "restaurantId is required"}), 400
+
+    if form.validate_on_submit():
+        new_item = MenuItem(
+            restaurantId=restaurant_id, 
+            name=data.get("name"),
+            foodType=data.get("foodType"),
+            description=data.get("description"),
+            price=data.get("price"),
+            foodImage=data.get("foodImage"),
+            createdAt=datetime.now(),
+            updatedAt=datetime.now(),
+        )
+
+        try:
+            db.session.add(new_item)
+            db.session.commit()
+            return jsonify(new_item.to_dict()), 201  # Return created item with status 201
+        except Exception as e:
+            db.session.rollback()
+            return jsonify({"error": f"Database error: {str(e)}"}), 500
+
+    return jsonify({"errors": form.errors}), 400
