@@ -1,7 +1,7 @@
 # Import needed dependencies
 from flask import Blueprint, request, jsonify
 from flask_login import login_required, current_user
-from app.models import Restaurant, db, cuisine_type
+from app.models import Restaurant, db, CuisineType
 from app.forms.restaurant_form import RestaurantForm
 from sqlalchemy.orm import joinedload
 from datetime import datetime
@@ -10,7 +10,7 @@ restaurant_routes = Blueprint("restaurants", __name__)
 
 
 # Get all restaurants with their menu items
-@restaurant_routes.route("")
+@restaurant_routes.route("/")
 def get_all_restaurants():
     restaurants = (
         Restaurant.query.options(joinedload(Restaurant.menu_items))

@@ -57,29 +57,34 @@ def create_order():
         return {"message": "Restaurant ID is required"}, 400
 
     # Validate that all menu items belong to the same restaurant
-    if items:
-        menu_item_ids = [item["menu_item_id"] for item in items]
-        menu_items = MenuItem.query.filter(MenuItem.id.in_(menu_item_ids)).all()
-        if not menu_items:
-            return {"message": "No valid menu items found."}, 400
+    menu_item_ids = [int(item["menu_item_id"]) for item in items]
+    menu_items = MenuItem.query.filter(MenuItem.id.in_(menu_item_ids)).all()
 
-        # Ensure all menu items belong to the same restaurant
-        for menu_item in menu_items:
-            if menu_item.restaurant_id != restaurant_id:
-                return {"message": "All items must be from the same restaurant."}, 400
+    if not menu_items or len(menu_items) != len(menu_item_ids):
+        return {"message": "Invalid menu items provided."}, 400
 
-    # Create new order
+    # Verify that all items are from the same restaurant
+    for menu_item in menu_items:
+        if int(menu_item.restaurant_id) != int(restaurant_id):
+            return {"message": "All items must be from the same restaurant."}, 400
+
+    total_cost = sum(
+        menu_item.price * int(item["quantity"])
+        for menu_item, item in zip(menu_items, items)
+    )
+
     new_order = Order(
         user_id=current_user.id,
         restaurant_id=restaurant_id,
-        status="Active",  # Start as cart mode
+        status="Active",
         promo=promo,
+        total_cost=total_cost,  # Set the total_cost here
     )
+
     db.session.add(new_order)
     db.session.flush()  # Get order ID before adding items
 
     # Add items to order
-    total_cost = 0
     order_items = []
     for item in items:
         menu_item = MenuItem.query.get(item["menu_item_id"])
@@ -94,17 +99,32 @@ def create_order():
             )
         )
 
-        total_cost += menu_item.price * quantity
-
     db.session.add_all(order_items)
-    new_order.total_cost = total_cost  # Update total price
     db.session.commit()
 
     return jsonify(new_order.to_dict()), 201
 
 
+"""
+example request body: {
+    "restaurant_id": "1",
+    "items": [
+        {
+            "menu_item_id": "2",
+            "quantity": "2"
+        },
+        {
+            "menu_item_id": "3",
+            "quantity": "1"
+        }
+    ]
+    "promo": "DISCOUNT10"
+}
+"""
+
+
 # Modify items in an order while it's in the cart (status = Active)
-@order_routes.route("/<int:order_id>/items", methods=["PUT"])
+@order_routes.route("/<int:order_id>", methods=["PUT"])
 @login_required
 def update_order_items(order_id):
     order = Order.query.get(order_id)

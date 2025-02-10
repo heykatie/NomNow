@@ -48,6 +48,8 @@ def create_review():
         review=data.get("review"),
         order_rating=data["order_rating"],
         restaurant_rating=data["restaurant_rating"],
+        created_at=datetime.now(),
+        updated_at=datetime.now(),
     )
 
     try:
@@ -98,7 +100,7 @@ def update_review(id):
             return error_response("Restaurant rating must be between 1 and 5", 400)
         review.restaurant_rating = data["restaurant_rating"]
 
-    review.updated_at = datetime.datetime.now()
+    review.updated_at = datetime.now()
 
     try:
         db.session.commit()
