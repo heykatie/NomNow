@@ -7,6 +7,7 @@ import "./Navigation.css";
 function Navigation() {
   const user = useSelector((store) => store.session.user);
   const [deliveryType, setDeliveryType] = useState('delivery');
+  const [search, setSearch] = useState('');
   const location = useLocation().pathname.split('/');
   const homepage = location[location.length - 1] === 'home'
 
@@ -19,7 +20,7 @@ function Navigation() {
       <li>
         <NavLink to="/">Nom Now</NavLink>
       </li>
-      {user && homepage && (
+      {homepage && user ? (
         <li className="delivery-type">
           {deliveryType === 'delivery' ? (
             <button className="selected">Delivery</button>
@@ -39,7 +40,21 @@ function Navigation() {
             >Pickup</button>
           )}
         </li>
+      ) : (
+        <li className="delivery-type">
+          Enter delivery address
+        </li>
       )}
+
+      <li>
+        <input 
+          type="search" 
+          placeholder="Search Nom Now"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
+      </li>
+
       <li className="user-actions">
         <NavLink to='/'>
           <button>Cart</button>
