@@ -54,7 +54,7 @@ def get_restaurant_by_id(restaurant_id):
 
 
 # Create a New Restaurant
-@restaurant_routes.route("/new", methods=["POST"])
+@restaurant_routes.route("/", methods=["POST"])
 @login_required
 def create_restaurant():
     form = RestaurantForm()
@@ -99,7 +99,7 @@ def create_restaurant():
 
 
 # Update an existing restaurant
-@restaurant_routes.route("/<int:restaurant_id>/update", methods=["PUT"])
+@restaurant_routes.route("/<int:restaurant_id>", methods=["PUT"])
 @login_required
 def update_restaurant(restaurant_id):
     restaurant = Restaurant.query.get(restaurant_id)
@@ -135,7 +135,7 @@ def update_restaurant(restaurant_id):
 
 
 # Delete a restaurant
-@restaurant_routes.route("/<int:restaurant_id>/delete", methods=["DELETE"])
+@restaurant_routes.route("/<int:restaurant_id>", methods=["DELETE"])
 @login_required
 def delete_restaurant(restaurant_id):
     restaurant = Restaurant.query.get(restaurant_id)
