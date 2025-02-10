@@ -1,13 +1,18 @@
 """add all tables with snake case cols
 
 Revision ID: 5dad86975e07
-Revises: 
+Revises:
 Create Date: 2025-02-09 22:00:29.623647
 
 """
 from alembic import op
 import sqlalchemy as sa
 
+
+import os
+
+environment = os.getenv("FLASK_ENV")
+SCHEMA = os.environ.get("SCHEMA")
 
 # revision identifiers, used by Alembic.
 revision = '5dad86975e07'
@@ -111,6 +116,14 @@ def upgrade():
     sa.ForeignKeyConstraint(['order_id'], ['orders.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
+
+    if environment == "production":
+        op.execute(f"ALTER TABLE users SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE restaurants SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE menu_items SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE orders SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE reviews SET SCHEMA {SCHEMA};")
+        op.execute(f"ALTER TABLE order_items SET SCHEMA {SCHEMA};")
     # ### end Alembic commands ###
 
 
