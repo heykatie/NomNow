@@ -73,8 +73,10 @@ function LoginFormPage({isLogin, isSignup}) {
     if(!(userSubmission.email || userSubmission.phone_number)) return setErrors({credential: "Please enter a valid email or phone number", type: 'credential; No valid email or phone number'})
     let serverResponse 
     if(isLogin) serverResponse = await dispatch(thunkLogin(userSubmission))
-    if(isSignup) serverResponse = await dispatch(thunkSignup(userSubmission))
-
+    if(isSignup){
+      userSubmission.wallet = 999.99
+      serverResponse = await dispatch(thunkSignup(userSubmission))
+    }
     if (serverResponse) {
       if (serverResponse.phone_number) setErrors({ credential: serverResponse.phone_number });
       else if (serverResponse.email) setErrors({ credential: serverResponse.email });
