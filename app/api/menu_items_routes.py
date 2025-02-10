@@ -5,6 +5,7 @@ from ..forms.menu_item_form import MenuItemForm
 from flask_login import login_required
 import datetime
 import json
+from ..utils import convert_camel_to_snake
 
 menu_item_routes = Blueprint('menu_items', __name__)
 
@@ -22,30 +23,34 @@ def get_menu_item(id):
         # return { "error": "Menu item couldn't be found" }, 404
 
 
-
 ### Update menu item: PUT /api/menu-items/:menu_item_id/update
-@menu_item_routes.route('/<int:id>/update', methods=['PUT'])
+@menu_item_routes.route("/<int:id>/update", methods=["PUT"])
 @login_required
 def update_menu_item(id):
     """
     Updates a menu item
     """
     form = MenuItemForm()
-    form['csrf_token'].data = request.cookies['csrf_token']
+    form["csrf_token"].data = request.cookies["csrf_token"]
+
+    # Convert request JSON from camelCase to snake_case
+    converted_data = convert_camel_to_snake(request.get_json())
 
     if form.validate_on_submit():
         item_to_update = MenuItem.query.get(id)
-        item_to_update.name = form.data['name']
-        item_to_update.foodType = form.data['foodType']
-        item_to_update.description = form.data['description']
-        item_to_update.price = form.data['price']
-        item_to_update.foodImage = form.data['foodImage']
-        item_to_update.updatedAt = datetime.datetime.now()
+
+        item_to_update.name = converted_data["name"]
+        item_to_update.food_type = converted_data["food_type"]
+        item_to_update.description = converted_data["description"]
+        item_to_update.price = converted_data["price"]
+        item_to_update.food_image = converted_data["food_image"]
+        item_to_update.updated_at = datetime.datetime.now()
+
         db.session.commit()
-        res = item_to_update.to_dict()
-        return res
+        return item_to_update.to_dict()  # Returns camelCase response
+
     if form.errors:
-        return { "errors": form.errors }, 400
+        return {"errors": form.errors}, 400
 
 
 ### Delete menu item: DELETE /api/menu-items/:menu_item_id/delete

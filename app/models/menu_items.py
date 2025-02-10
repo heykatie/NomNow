@@ -21,30 +21,30 @@ class MenuItem(db.Model):
         __table_args__ = {'schema': SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True)
-    restaurantId = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('restaurants.id')), nullable=False)
+    restaurant_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod('restaurants.id')), nullable=False)
     name = db.Column(db.String, nullable=False)
-    foodType = db.Column(db.Enum(MenuItemEnum), nullable=False)
+    food_type = db.Column(db.Enum(MenuItemEnum), nullable=False)
     description = db.Column(db.Text, nullable=False)
     price = db.Column(db.Float, nullable=False)
-    foodImage = db.Column(db.String(255), nullable=False)
-    createdAt = db.Column(db.DateTime, nullable=False)
-    updatedAt = db.Column(db.DateTime, nullable=False)
+    food_image = db.Column(db.String(255), nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False)
+    updated_at = db.Column(db.DateTime, nullable=False)
 
     # one-to-many: one restaurant can have many menu_items
     restaurants = db.relationship("Restaurant", back_populates="menu_items")
     # one-to-many: one order can have many menu_items
     order_items = db.relationship("OrderItem", back_populates="menu_items")
-    
+
 
     def to_dict(self):
         return {
             "id": self.id,
-            "restaurantId": self.restaurantId,
+            "restaurantId": self.restaurant_id,
             "name": self.name,
-            "foodType": self.foodType,
+            "foodType": self.food_type,
             "description": self.description,
             "price": self.price,
-            "foodImage": self.foodImage,
-            "createdAt": self.createdAt,
-            "updatedAt": self.updatedAt
+            "foodImage": self.food_image,
+            "createdAt": self.created_at,
+            "updatedAt": self.updated_at
         }

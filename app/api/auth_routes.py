@@ -3,7 +3,7 @@ from app.models import User, db
 from app.forms import LoginForm
 from app.forms import SignUpForm
 from flask_login import current_user, login_user, logout_user, login_required
-
+from ..utils import convert_camel_to_snake
 auth_routes = Blueprint('auth', __name__)
 
 
@@ -43,25 +43,30 @@ def logout():
     return {'message': 'User logged out'}
 
 
-@auth_routes.route('/signup', methods=['POST'])
+@auth_routes.route("/signup", methods=["POST"])
 def sign_up():
     """
     Creates a new user and logs them in
     """
     form = SignUpForm()
-    form['csrf_token'].data = request.cookies['csrf_token']
-    print('\n FORM DATA: ', form.data, '\n')
+    form["csrf_token"].data = request.cookies["csrf_token"]
+
+    # Convert JSON request from camelCase to snake_case
+    converted_data = convert_camel_to_snake(request.get_json())
+
+    print("\n CONVERTED FORM DATA: ", converted_data, "\n")
+
     if form.validate_on_submit():
         user = User(
-            first_name=form.data['firstName'],
-            last_name=form.data['lastName'],
-            phone_number=form.data['phoneNumber'],
-            email=form.data['email'],
-            password=form.data['password'],
-            address=form.data['address'],
-            city=form.data['city'],
-            state=form.data['state'],
-            zip=form.data['zip']
+            first_name=converted_data["first_name"],
+            last_name=converted_data["last_name"],
+            phone_number=converted_data["phone_number"],
+            email=converted_data["email"],
+            password=converted_data["password"],
+            address=converted_data["address"],
+            city=converted_data["city"],
+            state=converted_data["state"],
+            zip=converted_data["zip"],
         )
         db.session.add(user)
         db.session.commit()

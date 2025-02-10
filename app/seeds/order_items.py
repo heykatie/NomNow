@@ -10,14 +10,14 @@ def seed_order_items():
         num_items = random.randint(1, 3)  # Each order gets 1 to 3 items
 
         for _ in range(num_items):
-            menuitem_id = random.randint(1, 48)  # Assuming 10 menu items exist
+            menu_item_id = random.randint(1, 48)  # Assuming 10 menu items exist
             quantity = random.randint(1, 3)  # Random quantity per item
             price = round(random.uniform(5.00, 20.00), 2)  # Random price
 
             order_items.append(
                 OrderItem(
                     order_id=order_id,
-                    menuitem_id=menuitem_id,
+                    menu_item_id=menu_item_id,
                     quantity=quantity,
                     price=price,
                 )

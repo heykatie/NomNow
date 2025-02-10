@@ -3,14 +3,14 @@ import datetime
 from enum import Enum
 from sqlalchemy import Numeric
 
-class priceLevel(Enum):
+class PriceLevel(Enum):
     INEXPENSIVE = '$'
     MODERATE = '$$'
     EXPENSIVE = '$$$'
     VERY_EXPENSIVE = '$$$$'
 
 
-class cuisineType(Enum):
+class CuisineType(Enum):
     AMERICAN = 'American'
     CHINESE = 'Chinese'
     ITALIAN = 'Italian'
@@ -39,20 +39,20 @@ class Restaurant(db.Model):
         __table_args__ = {"schema": SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    ownerId = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("users.id")))
+    owner_id = db.Column(db.Integer, db.ForeignKey(add_prefix_for_prod("users.id")))
     address = db.Column(db.String(255), nullable = False, )
     city = db.Column(db.String(255), nullable = False)
     state = db.Column(db.String(255), nullable = False)
     zip = db.Column(db.Integer, nullable = False)
     name = db.Column(db.String(255), nullable = False, unique=True)
-    cuisineType = db.Column(db.Enum(cuisineType), nullable = False)
-    deliveryFee = db.Column(Numeric(10,2))
-    businessHours = db.Column( db.String(255), nullable = False)
-    Servicing = db.Column(db.Boolean, nullable = False)
-    storeImage = db.Column(db.String(255)) #URL
+    cuisine_type = db.Column(db.Enum(CuisineType), nullable=False)
+    delivery_fee = db.Column(Numeric(10,2))
+    business_hours = db.Column( db.String(255), nullable = False)
+    servicing = db.Column(db.Boolean, nullable = False)
+    store_image = db.Column(db.String(255)) #URL
     description = db.Column(db.Text, nullable = False)
-    priceLevel = db.Column(db.Enum(priceLevel), nullable = False)
-    deliveryTime = db.Column(db.Integer)
+    price_level = db.Column(db.Enum(PriceLevel), nullable=False)
+    delivery_time = db.Column(db.Integer)
     created_at = db.Column(db.DateTime, default=datetime.datetime.now())
     updated_at = db.Column(db.DateTime, default=datetime.datetime.now())  # onupdate=datetime.datetime.now()
 
@@ -65,20 +65,20 @@ class Restaurant(db.Model):
     def to_dict(self):
         return {
             "id": self.id,
-            "ownerId": self.ownerId,
+            "ownerId": self.owner_id,
             "address": self.address,
             "city":self.city,
             "state":self.state,
             "zip": self.zip,
             "name": self.name,
-            "cuisineType": self.cuisineType,
-            "deliveryFee": self.deliveryFee,
-            "businessHours": self.businessHours,
-            "Servicing": self.Servicing,
-            "storeImage": self.storeImage,
+            "cuisineType": self.cuisine_type,
+            "deliveryFee": self.delivery_fee,
+            "businessHours": self.business_hours,
+            "servicing": self.servicing,
+            "storeImage": self.store_image,
             "description": self.description,
-            "priceLevel": self.priceLevel,
-            "deliveryTime": self.deliveryTime,
-            "created_at": self.created_at,
-            "updated_at": self.updated_at,
+            "priceLevel": self.price_level,
+            "deliveryTime": self.delivery_time,
+            "createdAt": self.created_at,
+            "updatedAt": self.updated_at,
         }

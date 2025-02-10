@@ -11,7 +11,7 @@ class OrderItem(db.Model):
     order_id = db.Column(
         db.Integer, db.ForeignKey(add_prefix_for_prod("orders.id")), nullable=False
     )
-    menuitem_id = db.Column(
+    menu_item_id = db.Column(
         db.Integer, db.ForeignKey(add_prefix_for_prod("menu_items.id")), nullable=False
     )
     quantity = db.Column(db.Integer, nullable=False, default=1)
@@ -29,10 +29,10 @@ class OrderItem(db.Model):
     def to_dict(self):
         return {
             "id": self.id,
-            "order_id": self.order_id,
-            "menuitem_id": self.menuitem_id,
+            "orderId": self.order_id,
+            "menuItemId": self.menu_item_id,
             "quantity": self.quantity,
             "price": float(self.price),
-            "created_at": self.created_at,
-            "updated_at": self.updated_at,
+            "createdAt": self.created_at,
+            "updatedAt": self.updated_at,
         }

@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from flask_login import current_user, login_required
 from app.models.db import db
 from app.models import Order, OrderItem, MenuItem, User
+from app.utils import convert_camel_to_snake
 
 order_routes = Blueprint("orders", __name__)
 
@@ -48,9 +49,13 @@ def get_orders_by_restaurant(restaurant_id):
 @order_routes.route("/", methods=["POST"])
 @login_required
 def create_order():
-    data = request.get_json()
+
+    data = convert_camel_to_snake(request.get_json())
+
     restaurant_id = data.get("restaurant_id")
-    items = data.get("items", [])  # List of {"menuitem_id": X, "quantity": Y}
+    items = data.get(
+        "items", []
+    )  # Expecting list of {"menu_item_id": X, "quantity": Y}
     promo = data.get("promo", None)
 
     if not restaurant_id:
@@ -58,15 +63,20 @@ def create_order():
 
     # Validate that all menu items belong to the same restaurant
     if items:
-        menuitem_ids = [item["menuitem_id"] for item in items]
-        menu_items = MenuItem.query.filter(MenuItem.id.in_(menuitem_ids)).all()
+        menu_item_ids = [item["menu_item_id"] for item in items]
+        menu_items = MenuItem.query.filter(MenuItem.id.in_(menu_item_ids)).all()
+
         if not menu_items:
             return {"message": "No valid menu items found."}, 400
 
-        # Ensure all menu items belong to the same restaurant
         for menu_item in menu_items:
+            print(
+                f"MenuItem ID: {menu_item.id}, Restaurant ID: {menu_item.restaurant_id}"
+            )
             if menu_item.restaurant_id != restaurant_id:
-                return {"message": "All items must be from the same restaurant."}, 400
+                return {
+                    "message": f"All items must be from the same restaurant. Found {menu_item.restaurant_id}, expected {restaurant_id}."
+                }, 400
 
     # Create new order
     new_order = Order(
@@ -82,13 +92,13 @@ def create_order():
     total_cost = 0
     order_items = []
     for item in items:
-        menu_item = MenuItem.query.get(item["menuitem_id"])
+        menu_item = MenuItem.query.get(item["menu_item_id"])
         quantity = item["quantity"]
 
         order_items.append(
             OrderItem(
                 order_id=new_order.id,
-                menuitem_id=menu_item.id,
+                menu_item_id=menu_item.id,
                 quantity=quantity,
                 price=menu_item.price,
             )
@@ -106,6 +116,7 @@ def create_order():
 @order_routes.route("/<int:order_id>/items", methods=["PUT"])
 @login_required
 def update_order_items(order_id):
+
     order = Order.query.get(order_id)
     if not order:
         return {"message": "Order not found"}, 404
@@ -114,7 +125,7 @@ def update_order_items(order_id):
     if order.status != "Active":
         return {"message": "Cannot modify items in a completed order."}, 403
 
-    data = request.get_json()
+    data = convert_camel_to_snake(request.get_json())
     items = data.get("items", [])
 
     if not isinstance(items, list):
@@ -124,11 +135,11 @@ def update_order_items(order_id):
 
     # Process new or updated items
     for item in items:
-        menu_item = MenuItem.query.get(item["menuitem_id"])
+        menu_item = MenuItem.query.get(item["menu_item_id"])
         quantity = item["quantity"]
 
         order_item = OrderItem.query.filter_by(
-            order_id=order.id, menuitem_id=menu_item.id
+            order_id=order.id, menu_item_id=menu_item.id
         ).first()
 
         if order_item:
@@ -140,7 +151,7 @@ def update_order_items(order_id):
             db.session.add(
                 OrderItem(
                     order_id=order.id,
-                    menuitem_id=menu_item.id,
+                    menu_item_id=menu_item.id,
                     quantity=quantity,
                     price=menu_item.price,
                 )
