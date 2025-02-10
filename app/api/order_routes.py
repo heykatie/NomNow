@@ -50,7 +50,7 @@ def get_orders_by_restaurant(restaurant_id):
 def create_order():
     data = request.get_json()
     restaurant_id = data.get("restaurant_id")
-    items = data.get("items", [])  # List of {"menuitem_id": X, "quantity": Y}
+    items = data.get("items", [])  # List of {"menu_item_id": X, "quantity": Y}
     promo = data.get("promo", None)
 
     if not restaurant_id:
@@ -58,8 +58,8 @@ def create_order():
 
     # Validate that all menu items belong to the same restaurant
     if items:
-        menuitem_ids = [item["menuitem_id"] for item in items]
-        menu_items = MenuItem.query.filter(MenuItem.id.in_(menuitem_ids)).all()
+        menu_item_ids = [item["menu_item_id"] for item in items]
+        menu_items = MenuItem.query.filter(MenuItem.id.in_(menu_item_ids)).all()
         if not menu_items:
             return {"message": "No valid menu items found."}, 400
 
@@ -82,13 +82,13 @@ def create_order():
     total_cost = 0
     order_items = []
     for item in items:
-        menu_item = MenuItem.query.get(item["menuitem_id"])
+        menu_item = MenuItem.query.get(item["menu_item_id"])
         quantity = item["quantity"]
 
         order_items.append(
             OrderItem(
                 order_id=new_order.id,
-                menuitem_id=menu_item.id,
+                menu_item_id=menu_item.id,
                 quantity=quantity,
                 price=menu_item.price,
             )
@@ -101,6 +101,7 @@ def create_order():
     db.session.commit()
 
     return jsonify(new_order.to_dict()), 201
+
 
 # Modify items in an order while it's in the cart (status = Active)
 @order_routes.route("/<int:order_id>/items", methods=["PUT"])
@@ -124,11 +125,11 @@ def update_order_items(order_id):
 
     # Process new or updated items
     for item in items:
-        menu_item = MenuItem.query.get(item["menuitem_id"])
+        menu_item = MenuItem.query.get(item["menu_item_id"])
         quantity = item["quantity"]
 
         order_item = OrderItem.query.filter_by(
-            order_id=order.id, menuitem_id=menu_item.id
+            order_id=order.id, menu_item_id=menu_item.id
         ).first()
 
         if order_item:
@@ -140,7 +141,7 @@ def update_order_items(order_id):
             db.session.add(
                 OrderItem(
                     order_id=order.id,
-                    menuitem_id=menu_item.id,
+                    menu_item_id=menu_item.id,
                     quantity=quantity,
                     price=menu_item.price,
                 )
@@ -195,16 +196,6 @@ def delete_order(order_id):
     db.session.commit()
 
     return {"message": "Successfully deleted order"}, 200
-
-
-
-
-
-
-
-
-
-
 
 
 # # possible future routes
@@ -286,7 +277,7 @@ def delete_order(order_id):
 #     data = request.get_json()
 #     items = data.get(
 #         "items"
-#     )  # Expected format: [{"menuitem_id": 1, "quantity": 2}, {...}]
+#     )  # Expected format: [{"menu_item_id": 1, "quantity": 2}, {...}]
 #     promo = data.get("promo", None)
 
 #     if not items or not isinstance(items, list):
@@ -299,23 +290,23 @@ def delete_order(order_id):
 
 #     # Validate menu items and calculate total cost
 #     for item in items:
-#         menuitem_id = item.get("menuitem_id")
+#         menu_item_id = item.get("menu_item_id")
 #         quantity = item.get("quantity", 1)
 
-#         menu_item = MenuItem.query.get(menuitem_id)
+#         menu_item = MenuItem.query.get(menu_item_id)
 #         if not menu_item:
-#             return {"message": f"Menu item with ID {menuitem_id} not found"}, 404
+#             return {"message": f"Menu item with ID {menu_item_id} not found"}, 404
 
 #         total_cost += menu_item.price * quantity
 
 #         order_items.append(
-#             OrderItem(menuitem_id=menuitem_id, quantity=quantity, price=menu_item.price)
+#             OrderItem(menu_item_id=menu_item_id, quantity=quantity, price=menu_item.price)
 #         )
 
 #     # Create order
 #     new_order = Order(
 #         user_id=current_user.id,
-#         restaurant_id=menu_item.restaurantId,
+#         restaurant_id=menu_item.restaurant_id,
 #         total_cost=total_cost,
 #         promo=promo,
 #     )

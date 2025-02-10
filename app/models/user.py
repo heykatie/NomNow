@@ -4,17 +4,18 @@ from flask_login import UserMixin
 from sqlalchemy import Numeric
 import datetime
 
+
 class User(db.Model, UserMixin):
-    __tablename__ = 'users'
+    __tablename__ = "users"
 
     if environment == "production":
-        __table_args__ = {'schema': SCHEMA}
+        __table_args__ = {"schema": SCHEMA}
 
     id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(40), nullable=False)
     last_name = db.Column(db.String(40), nullable=False)
     phone_number = db.Column(db.String(20), nullable=False, unique=True)
-    restaurantOwner = db.Column(db.Boolean, nullable=True)
+    restaurant_owner = db.Column(db.Boolean, nullable=True)
     address = db.Column(db.String(40), nullable=False)
     city = db.Column(db.String(40), nullable=False)
     state = db.Column(db.String(40), nullable=False)
@@ -27,9 +28,9 @@ class User(db.Model, UserMixin):
         db.DateTime, default=datetime.datetime.now(), onupdate=datetime.datetime.now()
     )
 
-    reviews = db.relationship('Review', back_populates='users')
-    restaurants = db.relationship('Restaurant', back_populates='users')
-    orders = db.relationship('Order', back_populates='users')
+    reviews = db.relationship("Review", back_populates="users")
+    restaurants = db.relationship("Restaurant", back_populates="users")
+    orders = db.relationship("Order", back_populates="users")
 
     @property
     def password(self):
@@ -38,12 +39,11 @@ class User(db.Model, UserMixin):
     @password.setter
     def password(self, password):
         self.hashed_password = generate_password_hash(password)
-        print('\nPASSWORD AFTER HASH: ', self.hashed_password, '\n')
+        print("\nPASSWORD AFTER HASH: ", self.hashed_password, "\n")
 
     def check_password(self, password):
-        print('\nPASSWORD: ', password)
+        print("\nPASSWORD: ", password)
         return check_password_hash(self.password, password)
-    
 
     def to_dict(self):
         return {
@@ -56,6 +56,7 @@ class User(db.Model, UserMixin):
             "state": self.state,
             "zip": self.zip,
             "wallet": self.wallet,
+            "restaurant_owner": self.restaurant_owner,
             "created_at": self.created_at,
             "updated_at": self.updated_at,
         }

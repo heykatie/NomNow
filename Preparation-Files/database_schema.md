@@ -1,6 +1,6 @@
 # Database Schema
 
-# Layout 
+# Layout
 <img width="848" alt="image" src="https://github.com/user-attachments/assets/93682c52-f826-4efe-8fd5-9067050d7d9d" />
 
 
@@ -10,7 +10,7 @@
 | id | int | PRIMARY KEY |
 | first_name | varchar | NOT NULL |
 | last_name | varchar | NOT NULL |
-| phone_number | varchar | UNIQUE | NOT NULL | 
+| phone_number | varchar | UNIQUE | NOT NULL |
 | restarauntOwner | boolean | |
 | address | varchar | NOT NULL |
 | city | varchar | NOT NULL |
@@ -19,42 +19,42 @@
 | wallet | decimal | |
 | hashed_password | varchar | NOT NULL |
 | email | varchar | NOT NULL |
-| createdAt | timestamp | |
-| updatedAt | timestamp | |
+| created_at | timestamp | |
+| updated_at | timestamp | |
 
 ## Restaraunts Table
 | Column | Type | Constraints |
 |--------|------|-------------|
 | id | int | PRIMARY KEY |
-| ownerId | int | |
+| owner_id | int | |
 | address | varchar | NOT NULL |
 | city | varchar | NOT NULL |
 | state | varchar | NOT NULL |
 | zip | int | NOT NULL |
 | name | varchar | UNIQUE, NOT NULL |
-| cuisineType | varchar | |
-| deliveryFee | decimal | |
-| businessHours | varchar | NOT NULL |
-| Servicing | boolean | |
-| storeImage | url | |
+| cuisine_type | varchar | |
+| delivery_fee | decimal | |
+| business_hours | varchar | NOT NULL |
+| servicing | boolean | |
+| store_image | url | |
 | description | text | |
-| priceLevel | int | |
-| deliveryTime | int | |
-| createdAt | timestamp | |
-| updatedAt | timestamp | |
+| price_level | int | |
+| delivery_time | int | |
+| created_at | timestamp | |
+| updated_at | timestamp | |
 
 ## Reviews Table
 | Column | Type | Constraints |
 |--------|------|-------------|
 | id | int | PRIMARY KEY |
 | restarauntId | int | |
-| userId | int | |
-| orderId | int | |
+| user_id | int | |
+| order_id | int | |
 | review | text | |
-| orderRating | int | |
+| order_rating | int | |
 | restarauntRating | int | |
-| createdAt | timestamp | |
-| updatedAt | timestamp | |
+| created_at | timestamp | |
+| updated_at | timestamp | |
 
 ## MenuItems Table
 | Column | Type | Constraints |
@@ -65,26 +65,26 @@
 | foodtype | ENUM | ('Appetizers', 'Entrees', 'Desserts', 'Drinks') |
 | description | text | |
 | price | decimal | |
-| foodImage | url | |
-| createdAt | timestamp | |
-| updatedAt | timestamp | |
+| food_image | url | |
+| created_at | timestamp | |
+| updated_at | timestamp | |
 
 ## PastOrders Table
 | Column | Type | Constraints |
 |--------|------|-------------|
 | id | int | PRIMARY KEY |
-| userId | int | |
+| user_id | int | |
 | itemId | int | |
 | quantity | int | |
 | promo | varchar | |
-| createdAt | timestamp | |
-| updatedAt | timestamp | |
+| created_at | timestamp | |
+| updated_at | timestamp | |
 
 ## Foreign Key References
 ```
-Users.id < Reviews.userId
-Users.id < PastOrders.userId
-Users.id < Restaraunts.ownerId
+Users.id < Reviews.user_id
+Users.id < PastOrders.user_id
+Users.id < Restaraunts.owner_id
 Restaraunts.id < MenuItems.restarauntId
 Restaraunts.id < Reviews.restarauntId
 MenuItems.id < PastOrders.itemId
