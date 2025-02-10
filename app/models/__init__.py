@@ -5,4 +5,4 @@ from .order import Order
 from .order_item import OrderItem
 from .review import Review
 from .menu_items import MenuItem
-from .restaurants import Restaurant, CuisineType
+from .restaurants import Restaurant, CuisineType, PriceLevel

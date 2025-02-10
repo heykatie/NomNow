@@ -1,7 +1,7 @@
 # Import needed dependencies
 from flask import Blueprint, request, jsonify
 from flask_login import login_required, current_user
-from app.models import Restaurant, db, CuisineType
+from app.models import Restaurant, db, CuisineType, PriceLevel
 from app.forms.restaurant_form import RestaurantForm
 from sqlalchemy.orm import joinedload
 from datetime import datetime
@@ -60,27 +60,42 @@ def create_restaurant():
     form = RestaurantForm()
     form["csrf_token"].data = request.cookies["csrf_token"]
 
-    if form.validate_on_submit():
-        try:
-            # Create new restaurant using form data
-            restaurant_data = form.to_dict()
-            new_restaurant = Restaurant(
-                # **unpacks all the data automatically instead of writing it all out. name = form.name.data, address = form.addres....
-                **restaurant_data,
-                owner_id=current_user.id,
-            )
+    if not form.validate_on_submit():
+        print("Validation Errors:", form.errors)  # Debugging
+        return {"errors": form.errors}, 400
 
-            db.session.add(new_restaurant)
-            db.session.commit()
-            return {"restaurant": new_restaurant.to_dict()}
+    try:
+        # Convert Enums correctly
+        form.cuisine_type.data = CuisineType[form.cuisine_type.data].name
+        form.price_level.data = PriceLevel[form.price_level.data].name
 
-        except Exception as e:
-            db.session.rollback()
-            return {"errors": [str(e)]}, 400
+        restaurant_data = {
+            "name": form.name.data,
+            "address": form.address.data,
+            "city": form.city.data,
+            "state": form.state.data,
+            "zip": form.zip.data,
+            "cuisine_type": form.cuisine_type.data,
+            "delivery_fee": form.delivery_fee.data,
+            "business_hours": form.business_hours.data,
+            "servicing": form.servicing.data,
+            "description": form.description.data,
+            "price_level": form.price_level.data,
+            "delivery_time": form.delivery_time.data,
+            "owner_id": current_user.id,
+        }
 
-    return {
-        "errors": [error for field in form.errors for error in form.errors[field]]
-    }, 400
+        new_restaurant = Restaurant(**restaurant_data)
+
+        db.session.add(new_restaurant)
+        db.session.commit()
+        return {"restaurant": new_restaurant.to_dict()}, 201
+
+    except KeyError as e:
+        return {"errors": [f"Invalid choice: {str(e)}"]}, 400
+    except Exception as e:
+        db.session.rollback()
+        return {"errors": [str(e)]}, 400
 
 
 # Update an existing restaurant

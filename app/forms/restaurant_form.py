@@ -9,7 +9,7 @@ from wtforms import (
     URLField,
 )
 from wtforms.validators import DataRequired, Length, NumberRange, URL, Optional
-from app.models.restaurants import CuisineType
+from app.models.restaurants import CuisineType, PriceLevel
 
 
 class RestaurantForm(FlaskForm):
@@ -40,7 +40,13 @@ class RestaurantForm(FlaskForm):
 
     cuisine_type = SelectField(
         "Cuisine Type",
-        choices=[(cuisine.value, cuisine.value) for cuisine in CuisineType],
+        choices=[(c.name, c.value) for c in CuisineType],  # Store as Enum keys
+        validators=[DataRequired()],
+    )
+    
+    price_level = SelectField(
+        "Price Level",
+        choices=[(p.name, p.value) for p in PriceLevel],  # Store as Enum keys
         validators=[DataRequired()],
     )
 
@@ -55,12 +61,6 @@ class RestaurantForm(FlaskForm):
     store_image = URLField("Store Image URL", validators=[Optional(), URL()])
 
     description = TextAreaField("Description", validators=[DataRequired()])
-
-    price_level = SelectField(
-        "Price Level",
-        choices=[("$", "$"), ("$$", "$$"), ("$$$", "$$$"), ("$$$$", "$$$$")],
-        validators=[DataRequired()],
-    )
 
     delivery_time = IntegerField(
         "Delivery Time (minutes)", validators=[Optional(), NumberRange(min=1)]
