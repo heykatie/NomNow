@@ -1,4 +1,5 @@
 import { csrfFetch } from './csrf';
+import { setError } from './errors';
 
 const LOAD_USER_ORDERS = 'orders/loadUserOrders';
 const LOAD_USER_ORDER = 'orders/loadUserOrder';
@@ -14,111 +15,116 @@ const loadUserOrders = (orders) => ({
 	type: LOAD_USER_ORDERS,
 	payload: orders,
 });
-
-const loadUserOrder = (order) => ({
-	type: LOAD_USER_ORDER,
-	payload: order,
-});
-
+const loadUserOrder = (order) => ({ type: LOAD_USER_ORDER, payload: order });
 const loadUserOrders4Rest = (orders) => ({
 	type: LOAD_USER_ORDERS_4_REST,
 	payload: orders,
 });
-
-const addOrder = (order) => ({
-	type: ADD_ORDER,
-	payload: order,
-});
-
-const editOrder = (order) => ({
-	type: EDIT_ORDER,
-	payload: order,
-});
-
-const submitOrder = (order) => ({
-	type: SUBMIT_ORDER,
-	payload: order,
-});
-
-const removeOrder = (orderId) => ({
-	type: REMOVE_ORDER,
-	payload: orderId,
-});
+const addOrder = (order) => ({ type: ADD_ORDER, payload: order });
+const editOrder = (order) => ({ type: EDIT_ORDER, payload: order });
+const submitOrder = (order) => ({ type: SUBMIT_ORDER, payload: order });
+const removeOrder = (orderId) => ({ type: REMOVE_ORDER, payload: orderId });
 
 
-// Fetch all orders for the logged-in user
 export const getUserOrders = () => async (dispatch) => {
-	const response = await csrfFetch('/api/orders/');
-	if (response.ok) {
+	try {
+		const response = await csrfFetch('/api/orders/');
+		if (!response.ok) throw response;
+
 		const data = await response.json();
 		dispatch(loadUserOrders(data.orders));
+	} catch (error) {
+		const errorMessage = await error.json();
+		dispatch(setError(errorMessage));
 	}
 };
 
-// Fetch a single order by ID
 export const getUserOrder = (orderId) => async (dispatch) => {
-	const response = await csrfFetch(`/api/orders/${orderId}`);
-	if (response.ok) {
+	try {
+		const response = await csrfFetch(`/api/orders/${orderId}`);
+		if (!response.ok) throw response;
+
 		const data = await response.json();
 		dispatch(loadUserOrder(data));
+	} catch (error) {
+		const errorMessage = await error.json();
+		dispatch(setError(errorMessage));
 	}
 };
 
-// Fetch all orders for a restaurant made by current user
 export const getUserOrders4Rest = (restaurantId) => async (dispatch) => {
-	const response = await csrfFetch(`/api/orders/restaurant/${restaurantId}`);
-	if (response.ok) {
+	try {
+		const response = await csrfFetch(
+			`/api/orders/restaurant/${restaurantId}`
+		);
+		if (!response.ok) throw response;
+
 		const data = await response.json();
 		dispatch(loadUserOrders4Rest(data.orders));
+	} catch (error) {
+		const errorMessage = await error.json();
+		dispatch(setError(errorMessage));
 	}
 };
 
-// Create a new order
 export const addToCart = (orderData) => async (dispatch) => {
-	const response = await csrfFetch('/api/orders/', {
-		method: 'POST',
-		body: JSON.stringify(orderData),
-	});
+	try {
+		const response = await csrfFetch('/api/orders/', {
+			method: 'POST',
+			body: JSON.stringify(orderData),
+		});
+		if (!response.ok) throw response;
 
-	if (response.ok) {
 		const data = await response.json();
 		dispatch(addOrder(data));
+	} catch (error) {
+		const errorMessage = await error.json();
+		dispatch(setError(errorMessage));
 	}
 };
 
-// Edit an existing order (modifying items)
 export const editCart = (orderId, orderData) => async (dispatch) => {
-	const response = await csrfFetch(`/api/orders/${orderId}`, {
-		method: 'PUT',
-		body: JSON.stringify(orderData),
-	});
+	try {
+		const response = await csrfFetch(`/api/orders/${orderId}`, {
+			method: 'PUT',
+			body: JSON.stringify(orderData),
+		});
+		if (!response.ok) throw response;
 
-	if (response.ok) {
 		const data = await response.json();
 		dispatch(editOrder(data));
+	} catch (error) {
+		const errorMessage = await error.json();
+		dispatch(setError(errorMessage));
 	}
 };
 
-// Submit an order (finalize)
 export const checkoutCart = (orderId) => async (dispatch) => {
-	const response = await csrfFetch(`/api/orders/${orderId}/submit`, {
-		method: 'PUT',
-	});
+	try {
+		const response = await csrfFetch(`/api/orders/${orderId}/submit`, {
+			method: 'PUT',
+		});
+		if (!response.ok) throw response;
 
-	if (response.ok) {
 		const data = await response.json();
 		dispatch(submitOrder(data));
+	} catch (error) {
+		const errorMessage = await error.json();
+		dispatch(setError(errorMessage));
 	}
 };
 
-// Delete an order
 export const trashCart = (orderId) => async (dispatch) => {
-	const response = await csrfFetch(`/api/orders/${orderId}`, {
-		method: 'DELETE',
-	});
+	try {
+		const response = await csrfFetch(`/api/orders/${orderId}`, {
+			method: 'DELETE',
+		});
+		if (!response.ok) throw response;
 
-	if (response.ok) {
 		dispatch(removeOrder(orderId));
+	} catch (error) {
+		const errorMessage = await error.json();
+		dispatch(setError(errorMessage));
 	}
 };
 
@@ -135,47 +141,34 @@ export default function ordersReducer(state = initialState, action) {
 			return { ...state, userOrders: action.payload };
 		case LOAD_USER_ORDER:
 			return { ...state, currentOrder: action.payload };
-      case LOAD_USER_ORDERS_4_REST:
-        return { ...state, userOrdersForRestaurant: action.payload };
-        case ADD_ORDER:
-          return { ...state, userOrders: [...state.userOrders, action.payload] };
-          case EDIT_ORDER:
-            return {
-              ...state,
-              userOrders: state.userOrders.map((order) =>
+		case LOAD_USER_ORDERS_4_REST:
+			return { ...state, userOrdersForRestaurant: action.payload };
+		case ADD_ORDER:
+			return { ...state, userOrders: [...state.userOrders, action.payload] };
+		case EDIT_ORDER:
+			return {
+				...state,
+				userOrders: state.userOrders.map((order) =>
 					order.id === action.payload.id ? action.payload : order
-            ),
-          };
-          case SUBMIT_ORDER:
-            return {
-              ...state,
+				),
+			};
+		case SUBMIT_ORDER:
+			return {
+				...state,
 				userOrders: state.userOrders.map((order) =>
 					order.id === action.payload.id
-        ? { ...order, status: 'Submitted' }
+						? { ...order, status: 'Submitted' }
 						: order
 				),
 			};
-      case REMOVE_ORDER:
-        return {
-          ...state,
-          userOrders: state.userOrders.filter(
-            (order) => order.id !== action.payload
-          ),
-        };
-        default:
-          return state;
-        }
-      }
-
-
-      
-      // case LOAD_USER_ORDER:
-      // 	return {
-      // 		...state,
-      // 		currentOrder: action.payload,
-      // 		userOrders: state.userOrders.some(
-      // 			(order) => order.id === action.payload.id
-      // 		)
-      // 			? state.userOrders
-      // 			: [...state.userOrders, action.payload], // Store if not already in list
-      // 	};
+		case REMOVE_ORDER:
+			return {
+				...state,
+				userOrders: state.userOrders.filter(
+					(order) => order.id !== action.payload
+				),
+			};
+		default:
+			return state;
+	}
+}
