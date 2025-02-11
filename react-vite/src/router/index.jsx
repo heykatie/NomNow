@@ -15,6 +15,7 @@ import DeleteMenuItem from '../components/MenuItemDelete';
 import AddRestaurant from '../components/CreateRestaurant/AddRestaurant';
 import ManageRestaurants from '../components/ManageRestaurants/ManageRestaurants';
 
+import {AccountFormPage, NameFormPage, PhoneNumberPage, EmailPage} from '../components/AccountFormPage'
 
 export const router = createBrowserRouter([
   {
@@ -31,6 +32,22 @@ export const router = createBrowserRouter([
       {
         path: "signup",
         element: <LoginFormPage isSignup={true} />,
+      },
+      {
+        path: "account",
+        element: <AccountFormPage />,
+      },
+      {
+        path: "account/name",
+        element: <NameFormPage />
+      },
+      {
+        path: "account/phone",
+        element: <PhoneNumberPage />
+      },
+      {
+        path: "account/email",
+        element: <EmailPage />
       },
       {
         path: "wallet",

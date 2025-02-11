@@ -65,7 +65,7 @@ class Restaurant(db.Model):
 
     # RELATIONSHIPS
     users = db.relationship("User", back_populates="restaurants")
-    menu_items = db.relationship("MenuItem", back_populates="restaurants")
+    menu_items = db.relationship("MenuItem", back_populates="restaurants", cascade="all, delete-orphan")
     reviews = db.relationship("Review", back_populates="restaurants")
     orders = db.relationship("Order", back_populates="restaurants")
 

@@ -47,27 +47,45 @@ function DropdownMenu({ user }) {
   )
   if (user) {
     content = (
-      <div className='menu-dropdown' ref={ulRef}>
-          <li>
-            <div className="profile">
-              <img src="../../public/icons/user.png" alt="" className='icon' />
-              <div className="profile-info">
-                <h4>{user.firstName} {user.lastName}</h4>
-                <a href="/">Manage account</a>
-              </div>
-            </div>
-          </li>
-          <li>Orders</li>
-          <li>Favorites</li>
-          <li><NavLink to={`/wallet`} onClick={closeModal}>Wallet</NavLink></li>
-          <li>Meal Plan</li>
-          <li>Help</li>
-          <li>Promotions</li>
-          <li>Invite a friend</li>
-          <li><button onClick={logout}>Sign out</button></li>
-          <li><button onClick={handleRestaurantClick}>{getButtonText()}</button></li>
-      </div>
-    )
+			<div className='menu-dropdown' ref={ulRef}>
+				<li>
+					<div className='profile'>
+						<img
+							src='../../public/icons/user.png'
+							alt=''
+							className='icon'
+						/>
+						<div className='profile-info'>
+							<h4>
+								{user.firstName} {user.lastName}
+							</h4>
+							<a href='/'>Manage account</a>
+						</div>
+					</div>
+				</li>
+				<li>
+					<NavLink to={`/orders`} onClick={closeModal}>
+						Orders
+					</NavLink>
+				</li>
+				<li>Favorites</li>
+				<li>
+					<NavLink to={`/wallet`} onClick={closeModal}>
+						Wallet
+					</NavLink>
+				</li>
+				<li>Meal Plan</li>
+				<li>Help</li>
+				<li>Promotions</li>
+				<li>Invite a friend</li>
+				<li>
+					<button onClick={logout}>Sign out</button>
+				</li>
+				<li>
+        <button onClick={handleRestaurantClick}>{getButtonText()}</button>
+				</li>
+			</div>
+		);
   }
 
   return (

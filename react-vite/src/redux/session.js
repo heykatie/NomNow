@@ -91,6 +91,26 @@ export const addFundsThunk = (fundsObject) => async (dispatch) => {
       return {server: 'Something went wrong. Please try again'}
     }
 }
+export const editUserThunk = (updateObj) => async (dispatch) => {
+    const {id} = updateObj
+    const response = await csrfFetch(`/api/users/${id}`, {
+        method: "PUT",
+        body: JSON.stringify(updateObj),
+    });
+    if(response.ok){
+        const data = await response.json()
+        console.log('DATA', data)
+        dispatch(editUser(data))
+    }
+    else if(response.status < 500){
+        const errorMessages = await response.json()
+        return errorMessages
+    } else {
+      return {server: 'Something went wrong. Please try again'}
+    }
+}
+
+
 const initialState = { user: null };
 
 function sessionReducer(state = initialState, action) {
