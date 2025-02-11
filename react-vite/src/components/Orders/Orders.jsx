@@ -60,7 +60,7 @@ export default function Orders() {
 
 					{/* Order Actions */}
 					<div className='order-actions'>
-						<a href={`/orders/${order.id}/receipt`}>View receipt</a>
+						<a href={`/orders/${order.id}/receipt`}>View receipt</a>•
 						<a href={`/orders/${order.id}/invoice`}>Request Invoice</a>
 					</div>
 
