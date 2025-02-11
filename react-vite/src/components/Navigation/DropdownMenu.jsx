@@ -39,7 +39,7 @@ function DropdownMenu({ user }) {
 							<h4>
 								{user.firstName} {user.lastName}
 							</h4>
-							<a href='/'>Manage account</a>
+							<a href='/account'>Manage account</a>
 						</div>
 					</div>
 				</li>

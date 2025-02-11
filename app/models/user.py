@@ -51,6 +51,7 @@ class User(db.Model, UserMixin):
             "firstName": self.first_name,
             "lastName": self.last_name,
             "email": self.email,
+            "phoneNumber": self.phone_number,
             "address": self.address,
             "city": self.city,
             "state": self.state,
@@ -60,7 +61,17 @@ class User(db.Model, UserMixin):
             "createdAt": self.created_at,
             "updatedAt": self.updated_at,
         }
+    
     def add_funds(self, amount):
         self.wallet += amount
         db.session.commit()
         return self.wallet
+    
+    def update(self, values):
+        for key, val in values.items():
+            print('\n USER KEY:', key)
+            print('VALUES GOING IN: ', val, '\n')
+            if(hasattr(self, key) and val != None):
+                setattr(self, key, val)
+            else: print(key, ': ', val, "didn't go it")
+        db.session.commit()

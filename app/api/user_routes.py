@@ -40,13 +40,14 @@ def add_funds(id):
     # user.update(form.json)
     # return user.to_dict()
 
-# @user_routes.route('/<int:id>', methods=['PUT, PATCH'])
-#@login_required
-#def update_user():
+@user_routes.route('/<int:id>', methods=['PUT', 'PATCH'])
+@login_required
+def update_user(id):
     form = UserForm()
+    print('\n FORM: ', form.data, '\n')
     """
     Update a user by id and returns that user in a dictionary
     """
     user = User.query.get(id)
-    user.update(form.json)
+    user.update(form.data)
     return user.to_dict()

@@ -30,6 +30,22 @@ export const router = createBrowserRouter([
         element: <LoginFormPage isSignup={true} />,
       },
       {
+        path: "account",
+        element: <AccountFormPage />,
+      },
+      {
+        path: "account/name",
+        element: <NameFormPage />
+      },
+      {
+        path: "account/phone",
+        element: <PhoneNumberPage />
+      },
+      {
+        path: "account/email",
+        element: <EmailPage />
+      },
+      {
         path: "wallet",
         element: <WalletPage />,
       },
