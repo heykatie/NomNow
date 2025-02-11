@@ -1,5 +1,14 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SelectField, TextAreaField, IntegerField, DecimalField, BooleanField, URLField
+from flask_wtf.file import FileField, FileAllowed
+from wtforms import (
+    StringField,
+    SelectField,
+    TextAreaField,
+    IntegerField,
+    DecimalField,
+    BooleanField,
+    URLField,
+)
 from wtforms.validators import DataRequired, Length, NumberRange, URL, Optional
 from app.models.restaurants import cuisineType
 
@@ -24,36 +33,25 @@ class RestaurantForm(FlaskForm):
         choices=[(cuisine.value, cuisine.value) for cuisine in cuisineType],
         validators=[DataRequired()]
     )
-    
-    deliveryFee = DecimalField('Delivery Fee', 
-        validators=[Optional()],
-        places=2)
-    
-    businessHours = StringField('Business Hours', 
-        validators=[DataRequired(), Length(max=255)])
-    
-    Servicing = BooleanField('Currently Servicing',
-        default=True)
-    
-    storeImage = URLField('Store Image URL',
-        validators=[Optional(), URL()])
-    
-    description = TextAreaField('Description',
-        validators=[DataRequired()])
-    
-    priceLevel = SelectField(
-        'Price Level',
-        choices=[
-            ('$', '$'),
-            ('$$', '$$'),
-            ('$$$', '$$$'),
-            ('$$$$', '$$$$')
-        ],
-        validators=[DataRequired()]
+
+    delivery_fee = DecimalField("Delivery Fee", validators=[Optional()], places=2)
+
+    business_hours = StringField(
+        "Business Hours", validators=[DataRequired(), Length(max=255)]
     )
-    
-    deliveryTime = IntegerField('Delivery Time (minutes)',
-        validators=[Optional(), NumberRange(min=1)])
+
+    servicing = BooleanField("Currently servicing", default=True)
+
+    store_image = FileField('Upload Image', validators=[
+        Optional(),
+        FileAllowed(['jpg', 'jpeg', 'png'], 'Images only!')
+    ])
+
+    description = TextAreaField("Description", validators=[DataRequired()])
+
+    delivery_time = IntegerField(
+        "Delivery Time (minutes)", validators=[Optional(), NumberRange(min=1)]
+    )
 
     def to_dict(self):
         return {
