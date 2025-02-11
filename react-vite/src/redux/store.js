@@ -32,3 +32,5 @@ const configureStore = (preloadedState) => {
 };
 
 export default configureStore;
+
+console.log('Redux Environment Mode:', import.meta.env.MODE);
