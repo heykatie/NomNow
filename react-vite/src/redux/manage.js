@@ -9,5 +9,7 @@ const LOAD_ALL_ORDERS_BY_REST = 'manage/loadOrdersByRest';
 const LOAD_ORDER = 'manage/loadOrder';
 const UPDATE_ORDER = 'manage/updateOrder';
 
-const LOAD_MENU = 'manage/setOrder';
-const REMOVE_ORDER = 'manage/removeOrder';
+const LOAD_MENU = 'manage/loadMenu';
+const ADD_MENU = 'manage/addMenu';
+const EDIT_MENU = 'manage/editMenu';
+const REMOVE_MENU = 'manage/removeMenu';
