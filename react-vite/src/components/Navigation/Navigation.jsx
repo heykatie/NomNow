@@ -8,8 +8,7 @@ function Navigation() {
   const user = useSelector((store) => store.session.user);
   const [deliveryType, setDeliveryType] = useState('delivery');
   const [search, setSearch] = useState('');
-  const location = useLocation().pathname.split('/');
-  const homepage = location[location.length - 1] === 'home'
+  // const location = useLocation().pathname.split('/');
 
   console.log('DELIVERY TYPE:', deliveryType);  
   console.log(user)

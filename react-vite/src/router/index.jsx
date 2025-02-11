@@ -12,6 +12,7 @@ import MenuItemCreate from '../components/MenuItemCreate';
 import UpdateMenuItem from '../components/MenuItemUpdate/MenuItemUpdate';
 // import MenuItem from '../components/MenuItem/MenuItem';
 import DeleteMenuItem from '../components/MenuItemDelete';
+import {AccountFormPage, NameFormPage, PhoneNumberPage, EmailPage} from '../components/AccountFormPage'
 
 export const router = createBrowserRouter([
   {
@@ -28,6 +29,22 @@ export const router = createBrowserRouter([
       {
         path: "signup",
         element: <LoginFormPage isSignup={true} />,
+      },
+      {
+        path: "account",
+        element: <AccountFormPage />,
+      },
+      {
+        path: "account/name",
+        element: <NameFormPage />
+      },
+      {
+        path: "account/phone",
+        element: <PhoneNumberPage />
+      },
+      {
+        path: "account/email",
+        element: <EmailPage />
       },
       {
         path: "wallet",
