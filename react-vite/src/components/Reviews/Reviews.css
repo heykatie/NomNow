@@ -1,0 +1,30 @@
+.reviews-container {
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+  }
+  
+  .review-item {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+  }
+  
+  .review-list {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  button {
+    background-color: #ff6347;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #ff4500;
+  }
+  

@@ -2,9 +2,9 @@ import { createBrowserRouter } from 'react-router-dom';
 import LoginFormPage from '../components/LoginFormPage';
 import LandingPage from '../components/LandingPage/LandingPage';
 import Layout from './Layout';
+import Reviews from '../components/Reviews';
 import WalletPage from '../components/WalletPage/WalletPage';
 import Orders from '../components/Orders';
-
 
 export const router = createBrowserRouter([
   {
@@ -23,10 +23,6 @@ export const router = createBrowserRouter([
         element: <LoginFormPage isSignup={true} />,
       },
       {
-        path: "home",
-        element: <h1>Home Page</h1>,
-      },
-      {
         path: "wallet",
         element: <WalletPage />,
       },
@@ -35,10 +31,13 @@ export const router = createBrowserRouter([
         element: <Orders />,
       },
       {
+        path: "reviews/:restaurantId",  
+        element: <Reviews />,  
+      },
+      {
         path: "*",
         element: <h1>404 Page Not Available</h1>,
       },
-
     ],
   },
 ]);
