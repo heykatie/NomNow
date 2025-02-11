@@ -14,7 +14,7 @@ export default function Orders() {
 		dispatch(getUserOrders());
 	}, [dispatch]);
 
-	console.log('Orders from Redux:', orders);
+	// console.log('Orders from Redux:', orders);
 
 	if (isLoading) return <div>Loading orders...</div>;
 	if (error) return <div className='error-message'>{error}</div>;
