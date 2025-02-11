@@ -39,3 +39,42 @@
     background-color: darkgreen;
   }
   
+  /* MenuItemList.css */
+
+/* Ensure the container of the menu item has a relative positioning */
+.menu-item {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+/* Position the button at the bottom right corner of the image */
+.add-to-cart-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: green;
+  color: white;
+  border: none;
+  font-size: 24px;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.add-to-cart-btn:hover {
+  background-color: darkgreen;
+}
+
+.add-to-cart-btn:focus {
+  outline: none;
+}
+
+/* MenuItemList.css */
+
+/* Styling for the review count text */
+.review-count {
+  font-size: 14px;
+  color: gray;
+  margin-top: 5px;
+}

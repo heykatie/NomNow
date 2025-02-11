@@ -33,12 +33,12 @@ const CreateMenuItem = () => {
     const newItemData = { ...formData };
 
     try {
-      // Dispatch the action and wait for the new item to be returned
+      // Dispatch the action to create the new item
       const createdItem = await dispatch(createMenuItem(newItemData));
 
-      // Navigate to the newly created menu item's detail page after creation
+      // If the item is created successfully, navigate to the detail page of the newly created item
       if (createdItem && createdItem.id) {
-        navigate(`/menu-items`);
+        navigate(`/menu-items/${createdItem.id}`); // Navigate to the detail page of the newly created item
       }
     } catch (err) {
       setError('Failed to create menu item. Please try again.');

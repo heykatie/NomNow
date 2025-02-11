@@ -7,10 +7,8 @@ import WalletPage from '../components/WalletPage/WalletPage';
 import Orders from '../components/Orders';
 import MenuItemList from '../components/MenuItemList/MenuItemList';
 import MenuItemDetail from '../components/MenuItemDetail/MenuItemDetail';
-// import MenuItemForm from '../components/MenuItemForm/MenuItemForm';
 import MenuItemCreate from '../components/MenuItemCreate';
 import UpdateMenuItem from '../components/MenuItemUpdate/MenuItemUpdate';
-// import MenuItem from '../components/MenuItem/MenuItem';
 import DeleteMenuItem from '../components/MenuItemDelete';
 import {AccountFormPage, NameFormPage, PhoneNumberPage, EmailPage} from '../components/AccountFormPage'
 

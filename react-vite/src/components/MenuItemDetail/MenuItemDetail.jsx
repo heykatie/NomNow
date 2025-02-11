@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMenuItem } from '../../redux/menuItems';
 import { addToCart } from '../../redux/orders';  // Import addToCart action from orders
+import { toggleLike } from '../../redux/menuItems';  // Import toggleLike action
 import { useParams, Link, useNavigate } from 'react-router-dom';
 
 const MenuItemDetail = () => {
@@ -9,6 +10,7 @@ const MenuItemDetail = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const menuItem = useSelector(state => state.menuItems.menuItem);
+  const likedItems = useSelector(state => state.menuItems.likedItems); // Access liked items from Redux
   const error = useSelector(state => state.menuItems.error);
 
   const [quantity, setQuantity] = useState(1);
@@ -52,6 +54,12 @@ const MenuItemDetail = () => {
     setTimeout(() => setMessage(''), 2000);
   };
 
+  const handleToggleLike = () => {
+    dispatch(toggleLike(menuItem.id));
+  };
+
+  const isLiked = likedItems.includes(menuItem.id);  // Check if the item is liked
+
   return (
     <div>
       {/* Button to navigate back */}
@@ -77,6 +85,13 @@ const MenuItemDetail = () => {
         onClick={handleAddToCart} 
         style={{ marginLeft: '10px', fontSize: '18px', padding: '8px 15px', marginTop: '10px' }}>
         + Add {quantity} to Cart
+      </button>
+
+      {/* Like Button (Heart) */}
+      <button 
+        onClick={handleToggleLike} 
+        style={{ marginLeft: '10px', fontSize: '24px', padding: '8px 15px', marginTop: '10px', color: isLiked ? 'red' : 'gray' }}>
+        {isLiked ? '❤️' : '🤍'}
       </button>
 
       {/* Confirmation Message */}
