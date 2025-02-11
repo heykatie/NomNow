@@ -1,11 +1,6 @@
 import { createBrowserRouter } from 'react-router-dom';
 import LoginFormPage from '../components/LoginFormPage';
 import LandingPage from '../components/LandingPage/LandingPage';
-import MenuItemList from '../components/MenuItemList';
-import MenuItem from '../components/MenuItem';
-import CreateMenuItem from '../components/CreateMenuItem';
-import EditMenuItem from '../components/EditMenuItem';
-import DeleteMenuItem from '../components/DeleteMenuItem';
 import Layout from './Layout';
 import WalletPage from '../components/WalletPage/WalletPage';
 
@@ -37,26 +32,6 @@ export const router = createBrowserRouter([
       {
         path: "*",
         element: <h1>404 Page Not Available</h1>,
-      },
-      {
-        path: "menu-items",
-        element: <MenuItemList />,
-      },
-      {
-        path: "menu-items/:id",
-        element: <MenuItem/>,
-      },
-      {
-        path: "menu-items/new",
-        element: <CreateMenuItem />,
-      },
-      {
-        path: "menu-items/:id/edit",
-        element: <EditMenuItem />,
-      },
-      {
-        path: "menu-items/:id/delete",
-        element: <DeleteMenuItem />,
       },
 
     ],
