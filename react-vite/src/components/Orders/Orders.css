@@ -1,56 +1,49 @@
 .orders-container {
-  padding: 20px;
+  padding: 30px;
 }
 
 .order-card {
-  background: #fff;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
   padding: 16px;
+  background: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
 }
 
-/* .order-card {
-  background: #fff;
-  padding: 20px;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-} */
-
-/* .order-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.order-header img {
-  width: 80px;
-  height: 80px;
+.restaurant-image {
+  width: 120px;
+  height: 120px;
   border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
 }
-
-.order-header h3 {
-  margin: 0;
-} */
 
 .order-header {
   display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.order-header img {
-  width: 100px;
-  height: 100px;
-  border-radius: 8px;
-  object-fit: cover;
+  flex-direction: column;
+  flex-grow: 1;
 }
 
 .order-header h3 {
   font-size: 20px;
   font-weight: bold;
   color: #333;
+}
+
+.order-details {
+  display: flex;
+  gap: 8px;
+  font-size: 14px;
+  color: #666;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.order-details p {
+  margin: 0;
 }
 
 .order-header p {
@@ -78,7 +71,7 @@
 
 .order-actions a {
   color: black;
-  font-weight: bold;
+  /* font-weight: bold; */
 }
 
 .order-actions a:hover {
@@ -116,83 +109,3 @@
   cursor: not-allowed;
   opacity: 0.5;
 }
-
-
-/* .orders-container {
-  padding: 20px;
-}
-
-.order-card {
-  background: #fff;
-  padding: 16px;
-  border-radius: 8px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-}
-
-.order-header {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.order-items {
-  list-style: none;
-  padding: 0;
-  margin-top: 10px;
-}
-
-.order-item {
-  display: flex;
-  flex-direction: column;
-  padding: 8px 0;
-  border-bottom: 1px solid #ddd;
-}
-
-.order-item-details {
-  display: flex;
-  gap: 8px;
-  font-weight: bold;
-}
-
-.quantity {
-  color: #666;
-}
-
-.customizations {
-  color: #888;
-  font-size: 14px;
-}
-
-.order-actions a {
-  color: #007aff;
-  margin-right: 10px;
-}
-
-.order-buttons {
-  display: flex;
-  gap: 10px;
-}
-
-.reorder-btn,
-.rate-btn {
-  padding: 8px 12px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
-
-.reorder-btn {
-  background-color: black;
-  color: white;
-}
-
-.rate-btn {
-  background-color: #f0f0f0;
-  color: #666;
-}
-
-.rate-btn:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
-} */
