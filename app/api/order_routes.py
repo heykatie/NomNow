@@ -7,17 +7,70 @@ order_routes = Blueprint("orders", __name__)
 
 
 # Get all orders for the current user
+# @order_routes.route("/")
+# @login_required
+# def get_orders():
+#     orders = Order.query.filter_by(user_id=current_user.id).all()
+#     if not orders:
+#         return {"message": "No orders found"}, 404
+
+#     return jsonify({"orders": [order.to_dict() for order in orders]}), 200
+
 @order_routes.route("/")
 @login_required
 def get_orders():
     orders = Order.query.filter_by(user_id=current_user.id).all()
     if not orders:
-        return {"message": "No orders found"}, 404
+        return jsonify({"message": "No orders found"}), 404
 
-    return jsonify({"orders": [order.to_dict() for order in orders]}), 200
+    formatted_orders = []
+    for order in orders:
+        # Get restaurant details
+        restaurant = order.restaurants
+        restaurant_data = (
+            {
+                "id": restaurant.id,
+                "name": restaurant.name,
+                "image": restaurant.store_image,
+            }
+            if restaurant
+            else {"id": None, "name": "Unknown", "image": None}
+        )
 
+        # Get order items with menu item names
+        order_items = [
+            {
+                "id": item.id,
+                "menu_item_name": item.menu_items.name,  # Assuming relationship is set
+                "quantity": item.quantity,
+                "price": item.price, #item.menu_item.price
+            }
+            for item in order.order_items
+        ]
 
-# Get details of a specific order
+        formatted_orders.append(
+            {
+                "id": order.id,
+                "createdAt": order.created_at,
+                "updatedAt": order.updated_at,
+                "status": order.status,
+                "totalCost": float(order.total_cost),  # Ensure it's a float
+                "restaurant": restaurant_data,
+                "orderItems": [
+                    {
+                        "id": item.id,
+                        "menu_item_name": item.menu_items.name,
+                        "quantity": item.quantity,
+                        "price": float(item.price),  # Ensure price is a float
+                    }
+                    for item in order.order_items
+                ],
+            }
+        )
+
+    return jsonify({"orders": formatted_orders}), 200
+
+# Get details of a specific order made by the user
 @order_routes.route("/<int:order_id>")
 @login_required
 def get_order(order_id):
