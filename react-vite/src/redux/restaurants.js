@@ -74,19 +74,29 @@ export const updateRestaurant = (id, formData) => async (dispatch) => {
 };
 
 // Delete a restaurant
+// Delete a restaurant
 export const deleteRestaurant = (id) => async (dispatch) => {
     try {
         const response = await fetch(`/api/restaurants/${id}`, {
             method: 'DELETE'
         });
-
+        
         if (!response.ok) {
-            throw new Error('Failed to delete restaurant');
+            const data = await response.json();
+            throw new Error(data.errors?.[0] || 'Failed to delete restaurant');
         }
 
-        dispatch({ type: DELETE_RESTAURANT, payload: id });
+        const data = await response.json();
+        
+        if (data.id) {
+            dispatch({ type: DELETE_RESTAURANT, payload: data.id });
+            return true; // Return success
+        } else {
+            throw new Error('Invalid response from server');
+        }
     } catch (error) {
         dispatch({ type: RESTAURANT_ERROR, payload: error.message });
+        throw error; // Re-throw to handle in component
     }
 };
 

@@ -10,8 +10,6 @@ import reviewsReducer from "./reviews";
 import ordersReducer from './orders';
 import menuReducer from "./menuItems";
 import errorsReducer from './errors';
-
-
 import restaurantReducer from './restaurants';
 
 

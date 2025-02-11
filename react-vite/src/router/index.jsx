@@ -12,9 +12,8 @@ import MenuItemCreate from '../components/MenuItemCreate';
 import UpdateMenuItem from '../components/MenuItemUpdate/MenuItemUpdate';
 // import MenuItem from '../components/MenuItem/MenuItem';
 import DeleteMenuItem from '../components/MenuItemDelete';
-import WalletPage from '../components/WalletPage/WalletPage';
-import AddRestaurant from '../components/ManageRestaurantPages/AddRestaurantForm';
-import ManageRestaurants from '../components/ManageRestaurantPages/ManageRestaurants';
+import AddRestaurant from '../components/CreateRestaurant/AddRestaurant';
+import ManageRestaurants from '../components/ManageRestaurants/ManageRestaurants';
 
 
 export const router = createBrowserRouter([
