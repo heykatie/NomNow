@@ -82,3 +82,25 @@ button:hover{
 .link-button:hover {
   text-decoration: underline;
 }
+
+.checkout-navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8f8f8;
+  padding: 12px 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.back-to-store {
+  background: none;
+  border: none;
+  color: black;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.checkout-title {
+  font-size: 20px;
+  font-weight: bold;
+}
