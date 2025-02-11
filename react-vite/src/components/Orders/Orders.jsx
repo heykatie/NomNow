@@ -14,8 +14,6 @@ export default function Orders() {
 		dispatch(getUserOrders());
 	}, [dispatch]);
 
-	// console.log('Orders from Redux:', orders);
-
 	if (isLoading) return <div>Loading orders...</div>;
 	if (error) return <div className='error-message'>{error}</div>;
 	if (orders.length === 0) return <div>No past orders found.</div>;
