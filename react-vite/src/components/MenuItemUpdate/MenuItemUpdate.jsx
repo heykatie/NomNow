@@ -56,6 +56,12 @@ const UpdateMenuItem = () => {
 
   return (
     <form onSubmit={handleSubmit}>
+
+       {/* Button to navigate back */}
+       <button onClick={() => navigate('/menu-items/${item.id}')} style={{ marginTop: '20px' }}>
+        Back to Menu Items List
+      </button>
+
       <h3>Update Menu Item</h3>
       
       <input 
