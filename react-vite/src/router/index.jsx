@@ -12,6 +12,10 @@ import MenuItemCreate from '../components/MenuItemCreate';
 import UpdateMenuItem from '../components/MenuItemUpdate/MenuItemUpdate';
 // import MenuItem from '../components/MenuItem/MenuItem';
 import DeleteMenuItem from '../components/MenuItemDelete';
+import WalletPage from '../components/WalletPage/WalletPage';
+import AddRestaurant from '../components/ManageRestaurantPages/AddRestaurantForm';
+import ManageRestaurants from '../components/ManageRestaurantPages/ManageRestaurants';
+
 
 export const router = createBrowserRouter([
   {
@@ -64,6 +68,20 @@ export const router = createBrowserRouter([
         path: "menu-items/:id/delete",
         element: < DeleteMenuItem/>,
       },
+      {
+        path: "restaurants/new",  //If Logged in Navigates to Add Restaurant Form. If not, to Signup/Login. 
+        element: <AddRestaurant />
+      },
+      {
+        path: "restaurants/manage",  //If Logged in Navigates to Add Restaurant Form. If not, to Signup/Login. 
+        element: <ManageRestaurants />
+      },
+
+      {
+        path: "*",
+        element: <h1>404 Page Not Available</h1>,
+      },
+
     ],
   },
 ]);

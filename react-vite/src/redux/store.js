@@ -12,6 +12,8 @@ import menuReducer from "./menuItems";
 import errorsReducer from './errors';
 
 
+import restaurantReducer from './restaurants';
+
 
 const rootReducer = combineReducers({
 	session: sessionReducer,
@@ -21,6 +23,7 @@ const rootReducer = combineReducers({
 	errors: errorsReducer,
   reviews: reviewsReducer,
   // import manageReducer from './manage';
+  restaurants: restaurantReducer,
 });
 
 let enhancer;
