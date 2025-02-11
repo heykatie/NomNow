@@ -17,7 +17,7 @@ def get_orders():
     return jsonify({"orders": [order.to_dict() for order in orders]}), 200
 
 
-# Get details of a specific order
+# Get details of a specific order made by the user
 @order_routes.route("/<int:order_id>")
 @login_required
 def get_order(order_id):

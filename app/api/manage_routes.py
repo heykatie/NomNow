@@ -106,12 +106,12 @@ def get_orders_for_restaurant(restaurant_id):
     return jsonify({"orders": [order.to_dict() for order in orders]}), 200
 
 
-# Get details of a specific order
+# Get details of a specific order from an owned restaurant
 @manage_routes.route("/orders/<int:order_id>")
 @restaurant_owner_required
 def get_order_details(order_id):
     order = Order.query.get(order_id)
-    
+
     restaurant = Restaurant.query.filter_by(
         id=order.restaurant_id, owner_id=current_user.id
     ).first()

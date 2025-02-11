@@ -1,12 +1,13 @@
 import { csrfFetch } from './csrf';
 
-const LOAD_RESTAURANTS = 'manage/loadRestaurants';
-const LOAD_RESTAURANT = 'manage/loadRestaurant';
-const EDIT_RESTAURANT = 'manage/editRestaurant';
+const LOAD_OWNER_RESTAURANTS = 'manage/loadOwnerRestaurants';
+const LOAD_OWNER_RESTAURANT = 'manage/loadOwnerRestaurant';
+const EDIT_OWNER_RESTAURANT = 'manage/editOwnerRestaurant';
 
 const LOAD_ALL_ORDERS = 'manage/loadAllOrders';
-const LOAD_ORDERS = 'manage/loadOrders';
+const LOAD_ALL_ORDERS_BY_REST = 'manage/loadOrdersByRest';
+const LOAD_ORDER = 'manage/loadOrder';
+const UPDATE_ORDER = 'manage/updateOrder';
 
-const EDIT_ORDER = 'manage/editOrder';
-const SET_ORDER = 'manage/setOrder';
+const LOAD_MENU = 'manage/setOrder';
 const REMOVE_ORDER = 'manage/removeOrder';
