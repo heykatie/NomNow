@@ -19,6 +19,7 @@ import {AccountFormPage, NameFormPage, PhoneNumberPage, EmailPage} from '../comp
 import CreateRestaurant from '../components/CreateRestaurant/CreateRestaurant';
 
 export const router = createBrowserRouter([
+<<<<<<< HEAD
 	{
 		element: <Layout />,
 		children: [
@@ -100,4 +101,74 @@ export const router = createBrowserRouter([
 			}
 		],
 	},
+=======
+  {
+    element: <Layout />,
+    children: [
+      {
+        path: "/",
+        element: <LandingPage />,
+      },
+      {
+        path: "login",
+        element: <LoginFormPage isLogin={true} />,
+      },
+      {
+        path: "signup",
+        element: <LoginFormPage isSignup={true} />,
+      },
+      {
+        path: "account",
+        element: <AccountFormPage />,
+      },
+      {
+        path: "account/name",
+        element: <NameFormPage />
+      },
+      {
+        path: "account/phone",
+        element: <PhoneNumberPage />
+      },
+      {
+        path: "account/email",
+        element: <EmailPage />
+      },
+      {
+        path: "wallet",
+        element: <WalletPage />,
+      },
+      {
+        path: "orders",
+        element: <Orders />,
+      },
+      {
+        path: "reviews/restaurant/:restaurantId", 
+        element: <Reviews />,
+      },
+      {
+        path: "*",
+        element: <h1>404 Page Not Available</h1>,
+      }, {
+        path: "menu-items",
+        element: <MenuItemList />,
+      },
+      {
+        path: "menu-items/:id",
+        element: < MenuItemDetail/>,
+      },
+      {
+        path: "menu-items/new",
+        element: < MenuItemCreate/>,
+      },
+      {
+        path: "menu-items/:id/update",
+        element: < UpdateMenuItem/>,
+      },
+      {
+        path: "menu-items/:id/delete",
+        element: < DeleteMenuItem/>,
+      },
+    ],
+  },
+>>>>>>> 627f183 (reviews)
 ]);

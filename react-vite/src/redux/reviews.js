@@ -67,7 +67,7 @@ export const createReviewThunk = (review) => async (dispatch) => {
     body: JSON.stringify({
       restaurant_id,
       order_id,
-      review: reviewText,
+      reviewText, // Use `reviewText` here
       order_rating,
       restaurant_rating,
     }),
@@ -75,7 +75,7 @@ export const createReviewThunk = (review) => async (dispatch) => {
 
   if (res.ok) {
     const newReview = await res.json();
-    dispatch(createReview(newReview.data));
+    dispatch(createReview(newReview.data)); // Dispatch the full review object
     return newReview;
   } else {
     const errors = await res.json();
@@ -91,7 +91,7 @@ export const updateReviewThunk = (review) => async (dispatch) => {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      review: reviewText,
+      reviewText, // Use `reviewText` here
       order_rating,
       restaurant_rating,
     }),
