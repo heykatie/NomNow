@@ -13,3 +13,9 @@
 // const ADD_MENU = 'manage/addMenu';
 // const EDIT_MENU = 'manage/editMenu';
 // const REMOVE_MENU = 'manage/removeMenu';
+
+// const initialState = {};
+
+// export default function manageReducer(state = initialState, action) {
+
+// }

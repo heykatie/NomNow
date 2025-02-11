@@ -1,18 +1,20 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserOrders } from '../redux/orders';
-import OrderItem from './OrderItem';
+import { getUserOrders } from '../../redux/orders';
+import OrderItem from '../OrderItem';
 import './Orders.css';
 
-export const Orders = () => {
+export default function Orders() {
 	const dispatch = useDispatch();
-	const orders = useSelector((state) => state.orders.userOrders);
+	const orders = useSelector((state) => state.orders.userOrders || []);
 	const error = useSelector((state) => state.errors.message);
 	const isLoading = !orders;
 
 	useEffect(() => {
 		dispatch(getUserOrders());
 	}, [dispatch]);
+
+	console.log('Orders from Redux:', orders);
 
 	if (isLoading) return <div>Loading orders...</div>;
 	if (error) return <div className='error-message'>{error}</div>;
@@ -24,20 +26,36 @@ export const Orders = () => {
 			{orders.map((order) => (
 				<div key={order.id} className='order-card'>
 					<div className='order-header'>
-						<h3>{order.restaurantName}</h3>
+						<img
+							src={order.restaurant?.image || '/placeholder.jpg'}
+							alt={order.restaurant?.name || 'Unknown Restaurant'}
+							className='restaurant-image'
+						/>
+						<h3>{order.restaurant?.name || 'Unknown Restaurant'}</h3>
 						<p>
-							{order.items.length} item
-							{order.items.length > 1 ? 's' : ''} for $
-							{order.totalCost.toFixed(2)}
+							{Array.isArray(order.orderItems)
+								? order.orderItems.length
+								: 0}{' '}
+							item
+							{order.orderItems?.length > 1 ? 's' : ''} for $
+							{Number(order.totalCost).toFixed(2) || '0.00'}{' '}
 						</p>
-						<p>{new Date(order.createdAt).toLocaleString()}</p>
+						<p>
+							{order.createdAt
+								? new Date(order.createdAt).toLocaleString()
+								: 'No Date Available'}
+						</p>
 					</div>
 
 					{/* Order Items */}
 					<div className='order-items'>
-						{order.orderItems.map((item) => (
-							<OrderItem key={item.id} item={item} />
-						))}
+						{Array.isArray(order.orderItems) ? (
+							order.orderItems.map((item) => (
+								<OrderItem key={item.id} item={item} />
+							))
+						) : (
+							<p>No items found</p>
+						)}
 					</div>
 
 					{/* Order Actions */}
@@ -59,4 +77,4 @@ export const Orders = () => {
 			))}
 		</div>
 	);
-};
+}

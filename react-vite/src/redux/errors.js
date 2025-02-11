@@ -1,7 +1,7 @@
 const SET_ERROR = 'errors/setError';
 const CLEAR_ERROR = 'errors/clearError';
 
-const setError = (error) => ({
+export const setError = (error) => ({
 	type: SET_ERROR,
 	payload: error,
 });
