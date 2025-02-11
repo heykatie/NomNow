@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMenuItems } from '../../redux/menuItems';  
 import { addToCart } from '../../redux/orders'; 
@@ -13,12 +13,23 @@ const MenuItemList = () => {
   const isLoading = useSelector(state => state.menuItems.isLoading); 
   const user = useSelector(state => state.session?.user || null); // Retrieve user from session state
 
+  const [thumbsUpCounts, setThumbsUpCounts] = useState({});
+  const [thumbsStatus, setThumbsStatus] = useState({});  // To track thumbs up/down status
+
   useEffect(() => {
-    // Only dispatch getMenuItems if menuItems is not already populated
-    if (menuItems.length === 0) {
-      dispatch(getMenuItems());
+    dispatch(getMenuItems());
+
+    // Load thumbs-up counts and thumbs status from session storage
+    const savedThumbsUpCounts = sessionStorage.getItem('thumbsUpCounts');
+    const savedThumbsStatus = sessionStorage.getItem('thumbsStatus');
+    
+    if (savedThumbsUpCounts) {
+      setThumbsUpCounts(JSON.parse(savedThumbsUpCounts));
     }
-  }, [dispatch, menuItems.length]);  // This will run only when menuItems length changes
+    if (savedThumbsStatus) {
+      setThumbsStatus(JSON.parse(savedThumbsStatus));
+    }
+  }, [dispatch]);
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -41,10 +52,6 @@ const MenuItemList = () => {
   };
 
   const handleAddToCart = (item) => {
-    if (!user) {
-      alert("You must be logged in to add items to the cart.");
-      return;
-    }
     const orderData = {
       menuItemId: item.id,
       name: item.name,
@@ -53,6 +60,32 @@ const MenuItemList = () => {
     };
 
     dispatch(addToCart(orderData));
+  };
+
+  const handleThumbsUp = (itemId) => {
+    if (!thumbsStatus[itemId]) {
+      // Increment thumbs up count if user hasn't already clicked
+      const updatedThumbsUpCounts = { ...thumbsUpCounts, [itemId]: (thumbsUpCounts[itemId] || 0) + 1 };
+      setThumbsUpCounts(updatedThumbsUpCounts);
+      setThumbsStatus({ ...thumbsStatus, [itemId]: 'thumbedUp' });
+
+      // Store updated thumbs-up counts and status in sessionStorage
+      sessionStorage.setItem('thumbsUpCounts', JSON.stringify(updatedThumbsUpCounts));
+      sessionStorage.setItem('thumbsStatus', JSON.stringify({ ...thumbsStatus, [itemId]: 'thumbedUp' }));
+    }
+  };
+
+  const handleThumbsDown = (itemId) => {
+    if (thumbsStatus[itemId] === 'thumbedUp') {
+      // Decrement thumbs up count if user had already thumbs up
+      const updatedThumbsUpCounts = { ...thumbsUpCounts, [itemId]: (thumbsUpCounts[itemId] || 0) - 1 };
+      setThumbsUpCounts(updatedThumbsUpCounts);
+      setThumbsStatus({ ...thumbsStatus, [itemId]: 'thumbedDown' });
+
+      // Store updated thumbs-up counts and status in sessionStorage
+      sessionStorage.setItem('thumbsUpCounts', JSON.stringify(updatedThumbsUpCounts));
+      sessionStorage.setItem('thumbsStatus', JSON.stringify({ ...thumbsStatus, [itemId]: 'thumbedDown' }));
+    }
   };
 
   return (
@@ -90,6 +123,30 @@ const MenuItemList = () => {
 
               <p> ${item.price}</p>
               <img src={item.food_image} alt={item.name} />
+              
+              {/* Display Thumbs Up with persistent number */}
+              <p className="thumbs-up">
+                <span 
+                  role="img" 
+                  aria-label="thumbs-up" 
+                  style={{ cursor: 'pointer' }} 
+                  onClick={() => handleThumbsUp(item.id)}
+                >
+                  👍
+                </span> 
+                {thumbsUpCounts[item.id] || 0}
+                {thumbsStatus[item.id] === 'thumbedUp' && <span> (You liked it!)</span>}
+              </p>
+
+              {/* Thumbs Down Button */}
+              {thumbsStatus[item.id] === 'thumbedUp' && (
+                <button 
+                  onClick={() => handleThumbsDown(item.id)}
+                  style={{ cursor: 'pointer' }}
+                >
+                  👎 Undo
+                </button>
+              )}
 
               {/* The + button positioned at the bottom right */}
               <button

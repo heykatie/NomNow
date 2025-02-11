@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getMenuItem, toggleLike } from '../../redux/menuItems';
-import { addToCart } from '../../redux/orders';
+import { getMenuItem } from '../../redux/menuItems';
+import { addToCart } from '../../redux/orders';  // Import addToCart action from orders
+import { toggleLike } from '../../redux/menuItems';  // Import toggleLike action
 import { useParams, Link, useNavigate } from 'react-router-dom';
 
 const MenuItemDetail = () => {
@@ -10,7 +11,7 @@ const MenuItemDetail = () => {
   const navigate = useNavigate();
   
   const menuItem = useSelector(state => state.menuItems.menuItem);
-  const likedItems = useSelector(state => state.menuItems.likedItems);
+  const likedItems = useSelector(state => state.menuItems.likedItems); // Access liked items from Redux
   const error = useSelector(state => state.menuItems.error);
   const user = useSelector(state => state.session?.user || null); // FIX: Corrected session user retrieval
 
@@ -57,7 +58,7 @@ const MenuItemDetail = () => {
     dispatch(toggleLike(menuItem.id));
   };
 
-  const isLiked = likedItems.includes(menuItem.id);
+  const isLiked = likedItems.includes(menuItem.id);  // Check if the item is liked
 
   return (
     <div>
@@ -86,11 +87,17 @@ const MenuItemDetail = () => {
             + Add {quantity} to Cart
           </button>
 
-          <button 
-            onClick={handleToggleLike} 
-            style={{ marginLeft: '10px', fontSize: '24px', padding: '8px 15px', marginTop: '10px', color: isLiked ? 'red' : 'gray' }}>
-            {isLiked ? '❤️' : '🤍'}
-          </button>
+      {/* Like Button (Heart) */}
+      <button 
+        onClick={handleToggleLike} 
+        style={{ marginLeft: '10px', fontSize: '24px', padding: '8px 15px', marginTop: '10px', color: isLiked ? 'red' : 'gray' }}>
+        {isLiked ? '❤️' : '🤍'}
+      </button>
+
+      {/* Confirmation Message */}
+      {message && <p style={{ color: 'green', marginTop: '10px' }}>{message}</p>}
+      
+      <br /><br />
 
           {message && <p style={{ color: 'green', marginTop: '10px' }}>{message}</p>}
         </>
