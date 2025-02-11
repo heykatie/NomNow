@@ -6,12 +6,14 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate for naviga
 const CreateMenuItem = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate(); // Use useNavigate hook
+
   const [formData, setFormData] = useState({
     name: '',
     description: '',
     price: '',
     food_image: '',
     food_type: 'appetizer',
+    restaurant_id: '', // Add restaurant_id field to the form
   });
 
   const [error, setError] = useState(null);
@@ -36,7 +38,7 @@ const CreateMenuItem = () => {
 
       // Navigate to the newly created menu item's detail page after creation
       if (createdItem && createdItem.id) {
-        navigate(`/menu-items/${createdItem.id}`);
+        navigate(`/menu-items`);
       }
     } catch (err) {
       setError('Failed to create menu item. Please try again.');
@@ -45,6 +47,11 @@ const CreateMenuItem = () => {
 
   return (
     <form onSubmit={handleSubmit}>
+       {/* Button to navigate back */}
+       <button onClick={() => navigate('/menu-items')} style={{ marginTop: '20px' }}>
+        Back to Menu Items List
+      </button>
+      
       <h3>Create Menu Item</h3>
 
       {error && <div style={{ color: 'red' }}>{error}</div>}  {/* Display error message if any */}
@@ -86,6 +93,16 @@ const CreateMenuItem = () => {
         <option value="dessert">Dessert</option>
         <option value="beverage">Beverage</option>
       </select>
+
+      {/* Restaurant ID Field */}
+      <input 
+        type="text" 
+        name="restaurant_id" 
+        value={formData.restaurant_id} 
+        onChange={handleChange} 
+        placeholder="Restaurant ID" 
+        required 
+      />
 
       <button type="submit">Create Menu Item</button>
     </form>

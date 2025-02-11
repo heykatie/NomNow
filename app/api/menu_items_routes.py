@@ -29,19 +29,8 @@ def get_menu_item(id):
 def get_menu_items():
     menu_items = MenuItem.query.all()  # Get all menu items
     
-    # Convert SQLAlchemy objects to dictionaries manually
-    menu_list = [
-        {
-            "id": item.id,
-            "name": item.name,
-            "description": item.description,
-            "price": item.price,
-            "food_image": item.food_image
-        }
-        for item in menu_items
-    ]
+    return jsonify([item.to_dict() for item in menu_items]), 200
 
-    return jsonify(menu_list), 200
     
 
 
