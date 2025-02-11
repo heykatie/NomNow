@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getUserOrders } from '../../redux/orders';
 import OrderItem from '../OrderItem';
@@ -6,6 +7,7 @@ import './Orders.css';
 
 export default function Orders() {
 	const dispatch = useDispatch();
+	const navigate = useNavigate();
 	const orders = useSelector((state) => state.orders.userOrders || []);
 	const error = useSelector((state) => state.errors.message);
 	const isLoading = !orders;
@@ -25,11 +27,11 @@ export default function Orders() {
 			<h2>Past Orders</h2>
 			{orders.map((order) => (
 				<div key={order.id} className='order-card'>
-						<img
-							src={order.restaurant?.image || '/placeholder.jpg'}
-							alt={order.restaurant?.name || 'Unknown Restaurant'}
-							className='restaurant-image'
-						/>
+					<img
+						src={order.restaurant?.image || '/placeholder.jpg'}
+						alt={order.restaurant?.name || 'Unknown Restaurant'}
+						className='restaurant-image'
+					/>
 					<div className='order-header'>
 						<div className='order-restaurant'>
 							<h3>{order.restaurant?.name || 'Unknown Restaurant'}</h3>
@@ -51,8 +53,11 @@ export default function Orders() {
 							</p>
 							•{/* Order Actions */}
 							<div className='order-actions'>
-								<a href={`/orders/${order.id}/receipt`}>View receipt</a>•
-								<a href={`/orders/${order.id}/invoice`}>Request Invoice</a>
+								<a href={`/orders/${order.id}/receipt`}>View receipt</a>
+								•
+								<a href={`/orders/${order.id}/invoice`}>
+									Request Invoice
+								</a>
 							</div>
 						</div>
 					</div>
@@ -69,10 +74,16 @@ export default function Orders() {
 
 					{/* Buttons */}
 					<div className='order-buttons'>
-						<button className='reorder-btn'>Reorder</button>
+						<button
+							className='reorder-btn'
+							onClick={() =>
+								navigate('/checkout', { state: { order } })
+							}>
+							Reorder
+						</button>
 						<button
 							className='rate-btn'
-							disabled={order.status !== 'Submitted'}>
+							disabled={order.status !== 'Completed'}>
 							Rate your order
 						</button>
 					</div>
