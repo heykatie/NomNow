@@ -1,16 +1,15 @@
 
-
-export const GET_MENU_ITEMS = 'GET_MENU_ITEMS';
-export const GET_MENU_ITEM = 'GET_MENU_ITEM';
-export const CREATE_MENU_ITEM = 'CREATE_MENU_ITEM';
-export const UPDATE_MENU_ITEM = 'UPDATE_MENU_ITEM';
-export const DELETE_MENU_ITEM = 'DELETE_MENU_ITEM';
-export const MENU_ERROR = 'MENU_ERROR';
+ const GET_MENU_ITEMS = 'GET_MENU_ITEMS';
+ const GET_MENU_ITEM = 'GET_MENU_ITEM';
+ const CREATE_MENU_ITEM = 'CREATE_MENU_ITEM';
+ const UPDATE_MENU_ITEM = 'UPDATE_MENU_ITEM';
+ const DELETE_MENU_ITEM = 'DELETE_MENU_ITEM';
+ const MENU_ERROR = 'MENU_ERROR';
 
 // Get all menu items
 export const getMenuItems = () => async (dispatch) => {
   try {
-    const response = await fetch('/api/menu-items/');
+    const response = await fetch('/api/menu-items');
     const data = await response.json();
     dispatch({ type: GET_MENU_ITEMS, payload: data });
   } catch (error) {
@@ -32,7 +31,7 @@ export const getMenuItem = (id) => async (dispatch) => {
 // Create a new menu item
 export const createMenuItem = (newItem) => async (dispatch) => {
   try {
-    const response = await fetch('/api/menu-items/new', {
+    const response = await fetch('/api/menu-items', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -49,7 +48,7 @@ export const createMenuItem = (newItem) => async (dispatch) => {
 // Update an existing menu item
 export const updateMenuItem = (id, updatedItem) => async (dispatch) => {
   try {
-    const response = await fetch(`/api/menu-items/${id}/update`, {
+    const response = await fetch(`/api/menu-items/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -66,7 +65,7 @@ export const updateMenuItem = (id, updatedItem) => async (dispatch) => {
 // Delete a menu item
 export const deleteMenuItem = (id) => async (dispatch) => {
   try {
-    await fetch(`/api/menu-items/${id}/delete`, {
+    await fetch(`/api/menu-items/${id}`, {
       method: 'DELETE',
     });
     dispatch({ type: DELETE_MENU_ITEM, payload: id });
@@ -80,21 +79,6 @@ export const deleteMenuItem = (id) => async (dispatch) => {
 // ------------------- 
 
 // src/redux/menuReducer.js
-
-import {
-	GET_MENU_ITEMS,
-	GET_MENU_ITEM,
-	CREATE_MENU_ITEM,
-	UPDATE_MENU_ITEM,
-	DELETE_MENU_ITEM,
-	MENU_ERROR,
-  } from './menuActions';
-  
-  const initialState = {
-	menuItems: [],
-	menuItem: null,
-	error: null,
-  };
   
   const menuReducer = (state = initialState, action) => {
 	switch (action.type) {
@@ -126,4 +110,3 @@ import {
   export default menuReducer;
 
   
-
