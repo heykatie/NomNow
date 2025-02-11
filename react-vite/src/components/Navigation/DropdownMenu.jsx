@@ -1,7 +1,7 @@
 import React from "react";
 import { useDispatch} from "react-redux";
 import { thunkLogout } from "../../redux/session";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate, useLocation } from "react-router-dom";
 import OpenModalMenuItem from "./OpenModalMenuItem";
 import { useModal } from "../../context/Modal";
 import "./Navigation.css";
@@ -11,6 +11,7 @@ function DropdownMenu({ user }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const ulRef = React.useRef(null); 
+  const location = useLocation();
   const {closeModal} = useModal();
 
 
@@ -34,7 +35,7 @@ function DropdownMenu({ user }) {
   
   const getButtonText = () => {
     if (!user) return "Add your restaurant";
-    if (user.restaurantOwner) return "Manage your restaurants";  
+    if (user.restaurantOwner) return "Manage your restaurants";
     return "Add your restaurant";
   };
   
@@ -82,8 +83,17 @@ function DropdownMenu({ user }) {
 					<button onClick={logout}>Sign out</button>
 				</li>
 				<li>
-        <button onClick={handleRestaurantClick}>{getButtonText()}</button>
+        <button
+         onClick={handleRestaurantClick}
+         className="link-button">
+          {getButtonText()}</button>
 				</li>
+        {/* Show Add New Restaurant button only on manage restaurants page */}
+        {location.pathname === '/restaurants/manage' && (
+          <li>
+            <NavLink to={'/restaurants/new'} onClick={closeModal}>Add New Restaurant</NavLink>
+          </li>
+        )}
 			</div>
 		);
   }

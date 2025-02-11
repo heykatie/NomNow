@@ -73,7 +73,7 @@ export const updateRestaurant = (id, formData) => async (dispatch) => {
     }
 };
 
-// Delete a restaurant
+
 // Delete a restaurant
 export const deleteRestaurant = (id) => async (dispatch) => {
     try {

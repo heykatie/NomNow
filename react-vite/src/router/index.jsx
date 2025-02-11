@@ -12,10 +12,10 @@ import MenuItemCreate from '../components/MenuItemCreate';
 import UpdateMenuItem from '../components/MenuItemUpdate/MenuItemUpdate';
 // import MenuItem from '../components/MenuItem/MenuItem';
 import DeleteMenuItem from '../components/MenuItemDelete';
-import AddRestaurant from '../components/CreateRestaurant/AddRestaurant';
 import ManageRestaurants from '../components/ManageRestaurants/ManageRestaurants';
 
 import {AccountFormPage, NameFormPage, PhoneNumberPage, EmailPage} from '../components/AccountFormPage'
+import CreateRestaurant from '../components/CreateRestaurant/CreateRestaurant';
 
 export const router = createBrowserRouter([
   {
@@ -86,7 +86,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "restaurants/new",  //If Logged in Navigates to Add Restaurant Form. If not, to Signup/Login. 
-        element: <AddRestaurant />
+        element: <CreateRestaurant />
       },
       {
         path: "restaurants/manage",  //If Logged in Navigates to Add Restaurant Form. If not, to Signup/Login. 

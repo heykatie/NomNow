@@ -13,7 +13,7 @@ const PRICE_LEVELS = ["$", "$$", "$$$", "$$$$"];
 
 export default function CreateRestaurant() {
     const dispatch = useDispatch();
-    const error = useSelector((state) => state.restaurant.error);
+    const error = useSelector((state) => state.restaurants.error);
     const [formData, setFormData] = useState({
         name: '',
         description: '',

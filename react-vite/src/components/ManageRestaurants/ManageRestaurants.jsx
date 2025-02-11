@@ -3,7 +3,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { getUserRestaurants, deleteRestaurant } from '../../redux/restaurants';
+import { getUserRestaurants, deleteRestaurant, updateRestaurant } from '../../redux/restaurants';
 
 function ManageRestaurants() {
     const dispatch = useDispatch();
@@ -24,7 +24,11 @@ function ManageRestaurants() {
             await dispatch(deleteRestaurant(id));
         }
     };
-
+    
+       const handleUpdate = async (id) => { 
+            await dispatch(updateRestaurant(id));
+    
+    };
     if (!user) return null; // Security
 
     if (error) return <div>Error: {error}</div>;
@@ -38,6 +42,10 @@ function ManageRestaurants() {
                     <button onClick={() => handleDelete(restaurant.id)}>
                         Delete
                     </button>
+                    <button onClick={() => handleUpdate(restaurant.id)}>
+                        Update
+                    </button>
+
                 </div>
             ))}
         </div>
