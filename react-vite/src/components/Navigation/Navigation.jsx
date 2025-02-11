@@ -12,6 +12,7 @@ function Navigation() {
   const homepage = location[location.length - 1] === 'home'
 
   console.log('DELIVERY TYPE:', deliveryType);  
+  console.log(user)
   return (
     <ul className="nav">
       <li>
@@ -20,7 +21,7 @@ function Navigation() {
       <li>
         <NavLink to="/">Nom Now</NavLink>
       </li>
-      {homepage && user ? (
+      {user && user.address && user.city && user.state && user.zip ? (
         <li className="delivery-type">
           {deliveryType === 'delivery' ? (
             <button className="selected">Delivery</button>
@@ -56,9 +57,9 @@ function Navigation() {
       </li>
 
       <li className="user-actions">
-        <NavLink to='/'>
+        {/* <NavLink to='/'>
           <button>Cart</button>
-        </NavLink>
+        </NavLink> */}
         {!user && (
           <li>
             <NavLink to='/login'>
