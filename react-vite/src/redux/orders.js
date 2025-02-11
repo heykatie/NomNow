@@ -114,7 +114,7 @@ export const checkoutCart = (orderId) => async (dispatch) => {
 	}
 };
 
-export const trashCart = (orderId) => async (dispatch) => {
+export const clearCart = (orderId) => async (dispatch) => {
 	try {
 		const response = await csrfFetch(`/api/orders/${orderId}`, {
 			method: 'DELETE',
