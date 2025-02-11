@@ -90,7 +90,7 @@ export const deleteRestaurant = (id) => async (dispatch) => {
     }
 };
 
-// ---- Reducers
+// ---- Reducer
 
 const initialState = {
     restaurants: [],
