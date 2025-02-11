@@ -35,7 +35,8 @@ def get_menu_items():
             "id": item.id,
             "name": item.name,
             "description": item.description,
-            "price": item.price
+            "price": item.price,
+            "food_image": item.food_image
         }
         for item in menu_items
     ]

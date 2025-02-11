@@ -6,13 +6,21 @@ import {
 } from "redux";
 import thunk from "redux-thunk";
 import sessionReducer from "./session";
-import menuItemsReducer from "./menuItems";
 import reviewsReducer from "./reviews";
+import ordersReducer from './orders';
+import menuReducer from "./menuItems";
+import errorsReducer from './errors';
+
+
 
 const rootReducer = combineReducers({
-  session: sessionReducer,
-  menuItems: menuItemsReducer,
+	session: sessionReducer,
+	orders: ordersReducer,
+  menuItems: menuReducer,
+	// manage: manageReducer,
+	errors: errorsReducer,
   reviews: reviewsReducer,
+  // import manageReducer from './manage';
 });
 
 let enhancer;
