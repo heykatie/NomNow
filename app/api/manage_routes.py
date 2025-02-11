@@ -18,7 +18,7 @@ def restaurant_owner_required(func):
     return login_required(wrapper)
 
 
-# Get restaurant details (owned by current user)
+# Get restaurants details (owned by current user)
 @manage_routes.route("/")
 @restaurant_owner_required
 def get_my_restaurants():
@@ -29,6 +29,7 @@ def get_my_restaurants():
         {"restaurants": [restaurant.to_dict() for restaurant in restaurants]}
     ), 200
 
+# Get restaurant by id
 @manage_routes.route("/<int:restaurant_id>")
 @restaurant_owner_required
 def get_restaurant_by_id(restaurant_id):
@@ -77,7 +78,7 @@ def update_my_restaurant(restaurant_id):
 }
 """
 
-# Get all orders for the restaurant
+# Get all orders for the restaurants
 @manage_routes.route("/orders")
 @restaurant_owner_required
 def get_restaurant_orders():
@@ -110,8 +111,14 @@ def get_orders_for_restaurant(restaurant_id):
 @restaurant_owner_required
 def get_order_details(order_id):
     order = Order.query.get(order_id)
-    if not order or order.restaurant_id != current_user.id:
+    
+    restaurant = Restaurant.query.filter_by(
+        id=order.restaurant_id, owner_id=current_user.id
+    ).first()
+
+    if not order or not restaurant:
         return {"message": "Order not found or unauthorized"}, 404
+
     return jsonify(order.to_dict()), 200
 
 

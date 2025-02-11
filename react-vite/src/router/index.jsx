@@ -3,6 +3,7 @@ import LoginFormPage from '../components/LoginFormPage';
 import LandingPage from '../components/LandingPage/LandingPage';
 import Layout from './Layout';
 import WalletPage from '../components/WalletPage/WalletPage';
+import Orders from '../components/Orders';
 
 
 export const router = createBrowserRouter([
@@ -28,6 +29,10 @@ export const router = createBrowserRouter([
       {
         path: "wallet",
         element: <WalletPage />,
+      },
+      {
+        path: "orders",
+        element: <Orders />,
       },
       {
         path: "*",
