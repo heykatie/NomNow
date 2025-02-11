@@ -1,0 +1,29 @@
+.checkout-container {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.checkout-items {
+  border-top: 1px solid #ddd;
+  padding-top: 10px;
+}
+
+.checkout-item {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+}
+
+.confirm-order-btn {
+  width: 100%;
+  padding: 12px;
+  background: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.confirm-order-btn:hover {
+  background: #333;
+}
