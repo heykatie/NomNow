@@ -19,6 +19,8 @@ export const getMenuItems = () => async (dispatch) => {
   try {
     const response = await fetch('/api/menu-items');
     const data = await response.json();
+    // console.log("Fetched Menu Items:", data); // Debugging log
+
     dispatch({ type: GET_MENU_ITEMS, payload: data });
   } catch (error) {
     console.error('Error fetching menu items:', error);
@@ -108,6 +110,7 @@ export const deleteMenuItem = (id) => async (dispatch) => {
 const menuReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_MENU_ITEMS:
+      // console.log("Updating State with Menu Items:", action.payload); // Debugging log
       return { ...state, menuItems: action.payload, error: null };
 
     case GET_MENU_ITEM:

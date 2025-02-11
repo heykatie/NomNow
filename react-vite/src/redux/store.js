@@ -7,12 +7,14 @@ import {
 import thunk from "redux-thunk";
 import sessionReducer from "./session";
 import ordersReducer from './orders';
+import menuReducer from "./menuItems";
 // import manageReducer from './manage';
 import errorsReducer from './errors';
 
 const rootReducer = combineReducers({
 	session: sessionReducer,
 	orders: ordersReducer,
+  menuItems: menuReducer,
 	// manage: manageReducer,
 	errors: errorsReducer,
 });
