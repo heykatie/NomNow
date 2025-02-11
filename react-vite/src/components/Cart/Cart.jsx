@@ -22,9 +22,7 @@ export default function Cart() {
 			{/* Shopping Cart Icon */}
 			<button className='cart-container' onClick={() => setIsOpen(true)}>
 				<FaShoppingCart className='cart-icon' />
-				{cartItems?.length > 0 && (
-					<span className='cart-badge'>{cartItems.length}</span>
-				)}
+				<span className='cart-badge'>{cartItems?.length || 0}</span>
 			</button>
 
 			{/* Side Panel (Cart Drawer) */}
@@ -51,7 +49,10 @@ export default function Cart() {
 						</p>
 						<button
 							className='start-shopping-btn'
-							onClick={() => navigate('/home')}>
+              onClick={() => {
+                setIsOpen(false);
+                navigate('/home')
+              }}>
 							Start shopping
 						</button>
 					</div>
