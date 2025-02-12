@@ -1,4 +1,4 @@
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector } from "react-redux";
 import { useState} from "react";
 import DropdownMenu from "./DropdownMenu";
@@ -7,10 +7,24 @@ import Cart from '../Cart';
 
 function Navigation() {
   const user = useSelector((store) => store.session.user);
-  const [deliveryType, setDeliveryType] = useState('delivery');
+	const [deliveryType, setDeliveryType] = useState('delivery');
   const [search, setSearch] = useState('');
+	const location = useLocation();
+	const navigate = useNavigate();
+	const isCheckoutPage = location.pathname === '/checkout';
   // const location = useLocation().pathname.split('/');
 
+	if (isCheckoutPage) {
+		return (
+			<div className='checkout-navbar'>
+				<button className='back-to-store' onClick={() => navigate(-1)}>
+					← Back to store
+				</button>
+				<h1 className='checkout-title'>NomNow</h1>
+			</div>
+		);
+	}
+	
   console.log('DELIVERY TYPE:', deliveryType);
   console.log(user)
   return (

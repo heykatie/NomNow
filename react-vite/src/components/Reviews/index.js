@@ -1,3 +1,5 @@
+// react-vite/src/components/Reviews/index.js
+
 import ReviewForm from './ReviewForm';
 import ReviewItem from './ReviewItem';
 import ReviewList from './ReviewList';

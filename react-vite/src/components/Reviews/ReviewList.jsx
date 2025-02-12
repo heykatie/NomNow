@@ -1,4 +1,7 @@
+// react-vite/src/components/Reviews/ReviewList.js
+
 import ReviewItem from './ReviewItem';
+import './Reviews.css';
 
 const ReviewList = ({ reviews }) => {
   if (!reviews || reviews.length === 0) {
