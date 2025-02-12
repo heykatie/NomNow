@@ -109,7 +109,31 @@ export const editUserThunk = (updateObj) => async (dispatch) => {
       return {server: 'Something went wrong. Please try again'}
     }
 }
-
+export const uploadPfp = (file) => async (dispatch) => {
+  const {id} = file
+  // let id
+  // let profile_image
+  // for(let key of file.keys()){
+  //   console.log('KEY', key)
+  //   if(key === 'id') id = file.get(key)
+    // if(key === 'profile_image') profile_image = file.get(key)
+  // }
+  const response = await csrfFetch(`/api/users/pfp/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(file),
+  });
+  if(response.ok){
+      const data = await response.json()
+      console.log('DATA', data)
+      dispatch(editUser(data))
+  }
+  else if(response.status < 500){
+      const errorMessages = await response.json()
+      return errorMessages
+  } else {
+    return {server: 'Something went wrong. Please try again'}
+  }
+}
 
 const initialState = { user: null };
 

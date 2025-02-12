@@ -51,3 +51,17 @@ def update_user(id):
     user = User.query.get(id)
     user.update(form.data)
     return user.to_dict()
+
+
+@user_routes.route('/pfp/<int:id>', methods=['PUT', 'PATCH'])
+@login_required
+def update_pfp(id):
+    form = UserForm()
+    print('\n FORM: ', form.data, '\n')
+    # print('\n PFP TYPE:', form.data['profile_image'].keys(), '\n')
+    """
+    Update a user by id and returns that user in a dictionary
+    """
+    # user = User.query.get(id)
+    # user.update(form.data)
+    # return user.to_dict()
