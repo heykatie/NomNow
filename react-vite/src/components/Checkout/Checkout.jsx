@@ -2,16 +2,29 @@ import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { useModal } from '../../context/Modal';
+import TipModal from '../../context/TipModal';
 import './Checkout.css';
 
 export default function Checkout() {
 	const location = useLocation();
 	const navigate = useNavigate();
-	const user = useSelector((state) => state.session.user);
+  const user = useSelector((state) => state.session.user);
+  const { setModalContent } = useModal();
 	const [orderDetails, setOrderDetails] = useState(
 		location.state?.order || null
 	);
-	const [tip, setTip] = useState(0);
+  const [tip, setTip] = useState(0);
+
+  const subtotal = orderDetails.totalCost || 0;
+  const deliveryFee = 6.49;
+  const taxes = subtotal * 0.1;
+  const orderTotal = subtotal + deliveryFee + taxes
+  const total = subtotal + deliveryFee + taxes + tip;
+
+  const openTipModal = () => {
+    setModalContent(<TipModal orderTotal={orderTotal} setTip={setTip} />);
+  };
 
 	useEffect(() => {
 		if (location.state?.order) {
@@ -21,10 +34,6 @@ export default function Checkout() {
 		}
   }, [location.state, navigate]);
 
-	const subtotal = orderDetails.totalCost || 0;
-	const deliveryFee = 6.49; // Example fixed delivery fee
-	const taxes = subtotal * 0.1; // Example tax calculation (10% of subtotal)
-	const total = subtotal + deliveryFee + taxes + tip;
 
 	return (
 		<div className='checkout-page'>
@@ -90,7 +99,6 @@ export default function Checkout() {
 			{/* Right Sidebar - Order Summary */}
 			<div className='checkout-right'>
 				<h3>{orderDetails.restaurant?.name}</h3>
-
 				<div className='order-summary'>
 					<h4>Cart summary ({orderDetails?.orderItems?.length} item/s)</h4>
 					{orderDetails?.orderItems?.length ? (
@@ -110,48 +118,40 @@ export default function Checkout() {
 					)}
 				</div>
 
-				{/* Tip Selection */}
-				<div className='tip-section'>
-					<h4>Add a tip</h4>
-					<p>100% of your tip goes to your courier.</p>
-					<div className='tip-buttons'>
-						{[0.15, 0.2, 0.25, 0.3].map((percentage) => (
-							<button
-								key={percentage}
-								className={
-									tip === subtotal * percentage ? 'selected-tip' : ''
-								}
-								onClick={() => setTip(subtotal * percentage)}>
-								{`${percentage * 100}%`}
-							</button>
-						))}
-						<button>Other</button>
-					</div>
-				</div>
-
-				{/* Final Total */}
+				{/* Order Total Section including Tip */}
 				<div className='order-total'>
+					<h3>Order total</h3>
 					<p>Subtotal: ${subtotal.toFixed(2)}</p>
-					<p>
-						Delivery Fee: $
-						{orderDetails?.deliveryFee
-							? orderDetails.deliveryFee.toFixed(2)
-							: '0.00'}
-					</p>
-					<p>
-						Taxes & Fees: $
-						{orderDetails?.taxes ? orderDetails.taxes.toFixed(2) : '0.00'}
-					</p>
-					<p>Tip: ${tip.toFixed(2)}</p>
-					<h3>
-						Total: $
-						{(
-							subtotal +
-							(orderDetails?.deliveryFee || 0) +
-							(orderDetails?.taxes || 0) +
-							tip
-						).toFixed(2)}
-					</h3>
+					<p>Delivery Fee: ${deliveryFee.toFixed(2)}</p>
+					<p>Taxes & Other Fees: ${taxes.toFixed(2)}</p>
+
+					{/* Tip Selection - Moved Inside Order Total */}
+					<div className='tip-section'>
+						<h4>
+							Add a tip <span className='tooltip'>ℹ</span>
+						</h4>
+						<p>100% of your tip goes to your courier.</p>
+						<div className='tip-buttons'>
+							{[0.15, 0.2, 0.25, 0.3].map((percentage) => (
+								<button
+									key={percentage}
+									className={
+										tip === subtotal * percentage
+											? 'selected-tip'
+											: ''
+									}
+									onClick={() => setTip(subtotal * percentage)}>
+									{`${percentage * 100}%`}
+								</button>
+							))}
+							<button className='other-tip-btn' onClick={openTipModal}>
+								Other
+							</button>
+						</div>
+						<p>Tip: ${tip.toFixed(2)}</p>
+					</div>
+
+					<h3>Total: ${total.toFixed(2)}</h3>
 				</div>
 			</div>
 		</div>
