@@ -22,13 +22,15 @@ export const getUserRestaurants = () => async (dispatch) => {
 // Get a specific restaurant by id
 export const getRestaurant = (id) => async (dispatch) => {
     try {
-        const response = await fetch(`/api/manage/${id}`);
+        const response = await fetch(`/api/restaurants/${id}`);
         const data = await response.json();
         dispatch({ type: GET_RESTAURANT, payload: data });
     } catch (error) {
         dispatch({ type: RESTAURANT_ERROR, payload: error.message });
     }
 };
+
+
 
 // Get all restaurants
 export const getAllRestaurants = () => async (dispatch) => {

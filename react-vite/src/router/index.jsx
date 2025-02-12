@@ -16,6 +16,7 @@ import Checkout from '../components/Checkout';
 import { AccountFormPage, NameFormPage, PhoneNumberPage, EmailPage } from '../components/AccountFormPage';
 import CreateRestaurant from '../components/CreateRestaurant/CreateRestaurant';
 import HomePage from '../components/HomePage';
+import RestaurantDetail from '../components/RestaurantDetail';
 
 export const router = createBrowserRouter([
   {
@@ -88,6 +89,10 @@ export const router = createBrowserRouter([
       {
         path: 'restaurants/new', // Added from HEAD
         element: <CreateRestaurant />,
+      },
+      {
+        path: 'restaurants/:id',
+        element: <RestaurantDetail />,
       },
       {
         path: 'restaurants/manage', // Added from HEAD
