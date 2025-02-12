@@ -32,6 +32,7 @@ def upgrade():
     sa.Column('city', sa.String(length=40), nullable=True),
     sa.Column('state', sa.String(length=40), nullable=True),
     sa.Column('zip', sa.Integer(), nullable=True),
+    sa.Column('profile_image', sa.Text(), nullable=True),
     sa.Column('wallet', sa.Numeric(precision=10, scale=2), nullable=True),
     sa.Column('email', sa.String(length=255), nullable=True),
     sa.Column('hashed_password', sa.String(length=255), nullable=False),

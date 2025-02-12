@@ -20,6 +20,7 @@ class User(db.Model, UserMixin):
     city = db.Column(db.String(40))
     state = db.Column(db.String(40))
     zip = db.Column(db.Integer)
+    profile_image = db.Column(db.Text)
     wallet = db.Column(Numeric(10, 2))
     email = db.Column(db.String(255), unique=True)
     hashed_password = db.Column(db.String(255), nullable=False)
