@@ -1,5 +1,4 @@
-// react-vite/src/components/Reviews/ReviewForm.js
-
+//react-vite/src/components/Reviews/ReviewForm.jsx
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createReviewThunk } from '../../redux/reviews';
@@ -32,7 +31,7 @@ const ReviewForm = ({ restaurantId, orderId }) => {
     const newReview = {
       restaurant_id: restaurantId,
       order_id: orderId,
-      review: reviewText, // Use `review` here instead of `reviewText`
+      review: reviewText, // Updated key: `review` instead of `reviewText`
       order_rating: orderRating,
       restaurant_rating: restaurantRating,
     };
@@ -52,11 +51,6 @@ const ReviewForm = ({ restaurantId, orderId }) => {
       setErrorMessage('An error occurred. Please try again.');
     }
   };
-
-  // Helper function to convert rating to stars
-  // const getStarRating = (rating) => {
-  //   return '★'.repeat(rating) + '☆'.repeat(5 - rating);
-  // };
 
   const StarRating = ({ rating, setRating, label }) => (
     <div className="star-rating">

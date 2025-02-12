@@ -1,3 +1,4 @@
+//react-vite/src/components/Reviews/ReviewItem.jsx
 import { useDispatch } from 'react-redux';
 import { deleteReviewThunk } from '../../redux/reviews';
 import './Reviews.css';
@@ -5,7 +6,6 @@ import './Reviews.css';
 const ReviewItem = ({ review }) => {
   const dispatch = useDispatch();
 
-  // Helper function to convert rating to stars
   const getStarRating = (rating) => {
     return '★'.repeat(rating) + '☆'.repeat(5 - rating);
   };
@@ -16,7 +16,7 @@ const ReviewItem = ({ review }) => {
 
   return (
     <div className="review-item">
-      <p>{review.review}</p>
+      <p>{review.review}</p> {/* Ensure this matches the key `review` */}
       <div className="rating-container">
         <div className="rating-item">
           <span>Order {getStarRating(review.order_rating)}</span>

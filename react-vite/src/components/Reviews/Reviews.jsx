@@ -1,4 +1,4 @@
-// react-vite/src/components/Reviews/index.jsx
+//react-vite/src/components/Reviews/Reviews.jsx
 
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
