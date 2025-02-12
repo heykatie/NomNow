@@ -38,7 +38,7 @@ export default function Cart() {
 				{!cartItems || cartItems.length === 0 ? (
 					<div className='empty-cart'>
 						<img
-							src='../../../public/images/cart.jpeg'
+							src='/images/cart.jpeg'
 							alt='Empty cart'
 							className='cart-image'
 						/>

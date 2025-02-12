@@ -9,8 +9,8 @@ function AccountFormPage(){
     const dispatch = useDispatch()
 
     if(!user) return navigate('/login')
-    
-    let pfp = '../../public/icons/user.png'
+
+    let pfp = '/icons/user.png'
     if(user.profileImage){
         pfp = user.profileImage
     }
@@ -44,7 +44,7 @@ function AccountFormPage(){
                         alt=''
                         className='pfp'
                     />
-                    <input 
+                    <input
                         id='file-input'
                         type="file"
                         onChange={(e)=>submitImage(e)}
