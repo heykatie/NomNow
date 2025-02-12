@@ -17,6 +17,7 @@ export default function Checkout() {
 	const [tip, setTip] = useState(0);
 	const [customTipUsed, setCustomTipUsed] = useState(false);
 	const [deliveryOption, setDeliveryOption] = useState('standard');
+	const [paymentMethod, setPaymentMethod] = useState('credit-card');
 
   const subtotal = orderDetails.totalCost || 0;
 	const baseDeliveryFee = 6.49;
@@ -109,13 +110,25 @@ export default function Checkout() {
 				{/* Payment */}
 				<div className='payment-section'>
 					<h3>Payment</h3>
-					<div className='payment-method'>
-						<span>
-							💳{' '}
-							{orderDetails?.paymentMethod ||
-								'Payment Method Not Available'}
-						</span>
-						<button>Edit</button>
+					<div className='payment-options'>
+						<div
+							className={`option credit-card ${
+								paymentMethod === 'credit-card' ? 'selected' : ''
+							}`}
+							onClick={() => setPaymentMethod('credit-card')}>
+							<span>💳 Credit Card</span>
+							<span>
+								{orderDetails?.paymentMethod || '**** **** **** 1234'}
+							</span>
+						</div>
+						<div
+							className={`option wallet ${
+								paymentMethod === 'wallet' ? 'selected' : ''
+							}`}
+							onClick={() => setPaymentMethod('wallet')}>
+							<span>💰 Credits</span>
+							<span>Balance: ${parseInt(user?.wallet)?.toFixed(2) || '0.00'}</span>
+						</div>
 					</div>
 				</div>
 
