@@ -1,3 +1,4 @@
+//react-vite/src/redux/reviews.js
 // ========================== ACTION TYPE CONSTANTS ==========================
 const GET_REVIEWS_FOR_REST = 'reviews/getReviewsForRest';
 const GET_SINGLE_REVIEW = 'reviews/getSingleReview';
@@ -35,91 +36,114 @@ const deleteReview = (reviewId) => ({
 
 // THUNK: GET ALL REVIEWS FOR A RESTAURANT
 export const getReviewsForRestThunk = (restaurantId) => async (dispatch) => {
-  const res = await fetch(`/api/reviews/restaurant/${restaurantId}`);
-  if (res.ok) {
+  try {
+    const res = await fetch(`/api/reviews/restaurant/${restaurantId}`);
+    if (!res.ok) {
+      const errors = await res.json();
+      throw errors; // Throw errors to be handled by the caller
+    }
     const reviews = await res.json();
     dispatch(getReviewsForRest(reviews.data));
-  } else {
-    const errors = await res.json();
-    return errors;
+  } catch (error) {
+    console.error('Error fetching reviews:', error);
+    throw error; // Re-throw the error for the caller to handle
   }
 };
 
 // THUNK: GET A SINGLE REVIEW
 export const getSingleReviewThunk = (reviewId) => async (dispatch) => {
-  const res = await fetch(`/api/reviews/${reviewId}`);
-  if (res.ok) {
+  try {
+    const res = await fetch(`/api/reviews/${reviewId}`);
+    if (!res.ok) {
+      const errors = await res.json();
+      throw errors;
+    }
     const review = await res.json();
     dispatch(getSingleReview(review.data));
-  } else {
-    const errors = await res.json();
-    return errors;
+  } catch (error) {
+    console.error('Error fetching single review:', error);
+    throw error;
   }
 };
 
 // THUNK: CREATE A REVIEW
-export const createReviewThunk = (review) => async (dispatch) => {
-  const { restaurant_id, order_id, reviewText, order_rating, restaurant_rating } = review;
+export const createReviewThunk = (reviewData) => async (dispatch) => {
+  try {
+    const { restaurant_id, order_id, review, order_rating, restaurant_rating } = reviewData;
 
-  const res = await fetch(`/api/reviews/`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      restaurant_id,
-      order_id,
-      reviewText, // Use `reviewText` here
-      order_rating,
-      restaurant_rating,
-    }),
-  });
+    const res = await fetch(`/api/reviews/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        restaurant_id,
+        order_id,
+        review,
+        order_rating,
+        restaurant_rating,
+      }),
+    });
 
-  if (res.ok) {
+    if (!res.ok) {
+      const errors = await res.json();
+      throw errors;
+    }
+
     const newReview = await res.json();
-    dispatch(createReview(newReview.data)); // Dispatch the full review object
+    dispatch(createReview(newReview.data));
     return newReview;
-  } else {
-    const errors = await res.json();
-    return errors;
+  } catch (error) {
+    console.error('Error creating review:', error);
+    throw error;
   }
 };
 
 // THUNK: UPDATE A REVIEW
-export const updateReviewThunk = (review) => async (dispatch) => {
-  const { id, reviewText, order_rating, restaurant_rating } = review;
+export const updateReviewThunk = (reviewData) => async (dispatch) => {
+  try {
+    const { id, review, order_rating, restaurant_rating } = reviewData;
 
-  const res = await fetch(`/api/reviews/${id}`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      reviewText, // Use `reviewText` here
-      order_rating,
-      restaurant_rating,
-    }),
-  });
+    const res = await fetch(`/api/reviews/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        review,
+        order_rating,
+        restaurant_rating,
+      }),
+    });
 
-  if (res.ok) {
+    if (!res.ok) {
+      const errors = await res.json();
+      throw errors;
+    }
+
     const updatedReview = await res.json();
     dispatch(updateReview(updatedReview.data));
     return updatedReview;
-  } else {
-    const errors = await res.json();
-    return errors;
+  } catch (error) {
+    console.error('Error updating review:', error);
+    throw error;
   }
 };
 
 // THUNK: DELETE A REVIEW
 export const deleteReviewThunk = (reviewId) => async (dispatch) => {
-  const res = await fetch(`/api/reviews/${reviewId}`, {
-    method: 'DELETE',
-  });
+  try {
+    const res = await fetch(`/api/reviews/${reviewId}`, {
+      method: 'DELETE',
+    });
 
-  if (res.ok) {
+    if (!res.ok) {
+      const errors = await res.json();
+      throw errors;
+    }
+
     const data = await res.json();
     dispatch(deleteReview(reviewId));
     return data;
-  } else {
-    const errors = await res.json();
-    return errors;
+  } catch (error) {
+    console.error('Error deleting review:', error);
+    throw error;
   }
 };
 
@@ -128,35 +152,41 @@ export const deleteReviewThunk = (reviewId) => async (dispatch) => {
 const initialState = {
   allReviewsForRest: [],
   singleReview: {},
+  loading: false,
+  error: null,
 };
 
 export default function reviewsReducer(state = initialState, action) {
   switch (action.type) {
-    case GET_REVIEWS_FOR_REST: {
-      return { ...state, allReviewsForRest: action.reviews };
-    }
-    case GET_SINGLE_REVIEW: {
-      return { ...state, singleReview: action.review };
-    }
-    case CREATE_REVIEW: {
-      return { ...state, allReviewsForRest: [...state.allReviewsForRest, action.review] };
-    }
-    case UPDATE_REVIEW: {
+    case GET_REVIEWS_FOR_REST:
+      return { ...state, allReviewsForRest: action.reviews, loading: false, error: null };
+    case GET_SINGLE_REVIEW:
+      return { ...state, singleReview: action.review, loading: false, error: null };
+    case CREATE_REVIEW:
       return {
         ...state,
-        allReviewsForRest: state.allReviewsForRest.map((review) =>
-          review.id === action.review.id ? action.review : review
-        ),
+        allReviewsForRest: [...state.allReviewsForRest, action.review],
+        loading: false,
+        error: null,
       };
-    }
-    case DELETE_REVIEW: {
+    case UPDATE_REVIEW:
+      return {
+        ...state,
+        allReviewsForRest: state.allReviewsForRest.map((rev) =>
+          rev.id === action.review.id ? action.review : rev
+        ),
+        loading: false,
+        error: null,
+      };
+    case DELETE_REVIEW:
       return {
         ...state,
         allReviewsForRest: state.allReviewsForRest.filter(
-          (review) => review.id !== action.reviewId
+          (rev) => rev.id !== action.reviewId
         ),
+        loading: false,
+        error: null,
       };
-    }
     default:
       return state;
   }

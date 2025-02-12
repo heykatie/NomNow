@@ -20,6 +20,7 @@ def success_response(message, data=None, status_code=200):
 
 
 # Create a new review (Only logged-in users can create a review)
+
 @review_routes.route("/", methods=["POST"])
 @login_required
 def create_review():
@@ -55,12 +56,17 @@ def create_review():
     try:
         db.session.add(new_review)
         db.session.commit()
+
+        # Return the full review object in the response
         return success_response(
-            "Review created successfully", {"review_id": new_review.id}, 201
+            "Review created successfully",
+            new_review.to_dict(),  # Include the full review object
+            201,
         )
     except Exception as e:
         db.session.rollback()
         return error_response(str(e), 500)
+
 """
 {
     "restaurant_id": 1,
