@@ -1,11 +1,13 @@
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import './Checkout.css';
 
 export default function Checkout() {
 	const location = useLocation();
 	const navigate = useNavigate();
+	const user = useSelector((state) => state.session.user);
 	const [orderDetails, setOrderDetails] = useState(
 		location.state?.order || null
 	);
@@ -17,12 +19,10 @@ export default function Checkout() {
 		} else {
 			navigate('/home');
 		}
-	}, [location.state, navigate]);
-
-	if (!orderDetails) return null;
+  }, [location.state, navigate]);
 
 	const subtotal = orderDetails.totalCost || 0;
-	const deliveryFee = 1.49; // Example fixed delivery fee
+	const deliveryFee = 6.49; // Example fixed delivery fee
 	const taxes = subtotal * 0.1; // Example tax calculation (10% of subtotal)
 	const total = subtotal + deliveryFee + taxes + tip;
 
@@ -35,19 +35,18 @@ export default function Checkout() {
 					<div className='address'>
 						<p>
 							<strong>
-								{orderDetails?.address ||
-									'Delivery Address Not Provided'}
+								{user?.address || 'Delivery Address Not Provided'}
 							</strong>
 						</p>
 						<p>
-							{orderDetails?.city
-								? `${orderDetails.city}, ${orderDetails.state}`
+							{user?.city
+								? `${user.city}, ${user.state}`
 								: 'City, State'}
 						</p>
 					</div>
 					<div className='delivery-instructions'>
 						<p>
-							{orderDetails?.deliveryInstructions ||
+							{user?.deliveryInstructions ||
 								'No delivery instructions provided.'}
 						</p>
 					</div>
@@ -57,7 +56,7 @@ export default function Checkout() {
 				<div className='delivery-options'>
 					<h3>Delivery options</h3>
 					<div className='option priority'>
-						<span>⚡ Priority</span>{' '}
+						<span>⚡ Priority</span>
 						<span className='extra-fee'>
 							+ ${orderDetails?.priorityFee || '0.00'}
 						</span>
@@ -101,7 +100,7 @@ export default function Checkout() {
 						orderDetails.orderItems.map((item) => (
 							<div key={item.id} className='summary-item'>
 								<p>
-									{item.name || 'Unknown Item'} x{item.quantity || 1}
+									{item.name || item.menu_item_name || 'Unavailable Item'} x{item.quantity || 1}
 								</p>
 								<p>${item.price ? item.price.toFixed(2) : '0.00'}</p>
 							</div>
@@ -111,7 +110,6 @@ export default function Checkout() {
 					)}
 				</div>
 
-				{/* Tip Selection */}
 				{/* Tip Selection */}
 				<div className='tip-section'>
 					<h4>Add a tip</h4>
@@ -131,7 +129,6 @@ export default function Checkout() {
 					</div>
 				</div>
 
-				{/* Final Total */}
 				{/* Final Total */}
 				<div className='order-total'>
 					<p>Subtotal: ${subtotal.toFixed(2)}</p>
