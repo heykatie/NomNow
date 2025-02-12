@@ -155,7 +155,7 @@ export default function Checkout() {
 					{/* Tip Selection*/}
 					<div className='tip-section'>
 						<h4>
-							Add a tip <span className='tooltip'>ℹ</span>
+							Add a tip <span className='tooltip'></span>
 						</h4>
 						<p>100% of your tip goes to your courier.</p>
 						<div className='tip-buttons'>
