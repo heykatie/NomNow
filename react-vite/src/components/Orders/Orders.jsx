@@ -65,7 +65,6 @@ export default function Orders() {
 								</a>
 							</div>
 						</div>
-					</div>
 					{/* Order Items */}
 					<div className='order-items'>
 						{Array.isArray(order.orderItems) ? (
@@ -75,6 +74,7 @@ export default function Orders() {
 						) : (
 							<p>No items found</p>
 						)}
+					</div>
 					</div>
 
           {/* Buttons */}
