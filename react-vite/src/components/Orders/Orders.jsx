@@ -20,6 +20,8 @@ export default function Orders() {
   if (error) return <div className='error-message'>{error}</div>;
   if (orders.length === 0) return <div>No past orders found.</div>;
 
+	// console.log('Orders from Redux:', orders);
+
   // Handle "Rate your order" button
   const handleRateOrder = (orderId, restaurantId, restaurantName) => {
     navigate(`/reviews/restaurant/${restaurantId}?orderId=${orderId}&restaurantName=${encodeURIComponent(restaurantName)}`);
@@ -29,48 +31,58 @@ export default function Orders() {
     <div className='orders-container'>
       <h2>Past Orders</h2>
       {orders.map((order) => (
-        <div key={order.id} className='order-card'>
-          <div className='order-header'>
-            <img
-              src={order.restaurant?.image || '/placeholder.jpg'}
-              alt={order.restaurant?.name || 'Unknown Restaurant'}
-              className='restaurant-image'
-            />
-            <h3>{order.restaurant?.name || 'Unknown Restaurant'}</h3>
-            <p>
-              {Array.isArray(order.orderItems)
-                ? order.orderItems.length
-                : 0}{' '}
-              item{order.orderItems?.length > 1 ? 's' : ''} for $
-              {Number(order.totalCost).toFixed(2) || '0.00'}{' '}
-            </p>
-            <p>
-              {order.createdAt
-                ? new Date(order.createdAt).toLocaleString()
-                : 'No Date Available'}
-            </p>
-          </div>
-
-          {/* Order Items */}
-          <div className='order-items'>
-            {Array.isArray(order.orderItems) ? (
-              order.orderItems.map((item) => (
-                <OrderItem key={item.id} item={item} />
-              ))
-            ) : (
-              <p>No items found</p>
-            )}
-          </div>
-
-          {/* Order Actions */}
-          <div className='order-actions'>
-            <a href={`/orders/${order.id}/receipt`}>View receipt</a>•
-            <a href={`/orders/${order.id}/invoice`}>Request Invoice</a>
-          </div>
+				<div key={order.id} className='order-card'>
+					<img
+						src={order.restaurant?.image || '/placeholder.jpg'}
+						alt={order.restaurant?.name || 'Unknown Restaurant'}
+						className='restaurant-image'
+					/>
+					<div className='order-header'>
+						<div className='order-restaurant'>
+							<h3>{order.restaurant?.name || 'Unknown Restaurant'}</h3>
+						</div>
+						<div className='order-details'>
+							<p>
+								{Array.isArray(order.orderItems)
+									? order.orderItems.length
+									: 0}{' '}
+								item
+								{order.orderItems?.length > 1 ? 's' : ''} for $
+								{Number(order.totalCost).toFixed(2) || '0.00'}{' '}
+							</p>
+							•
+							<p>
+								{order.createdAt
+									? new Date(order.createdAt).toLocaleString()
+									: 'No Date Available'}
+							</p>
+							•{/* Order Actions */}
+							<div className='order-actions'>
+								<a href={`/orders/${order.id}/receipt`}>View receipt</a>
+								•
+								<a href={`/orders/${order.id}/invoice`}>
+									Request Invoice
+								</a>
+							</div>
+						</div>
+					</div>
+					{/* Order Items */}
+					<div className='order-items'>
+						{Array.isArray(order.orderItems) ? (
+							order.orderItems.map((item) => (
+								<OrderItem key={item.id} item={item} />
+							))
+						) : (
+							<p>No items found</p>
+						)}
+					</div>
 
           {/* Buttons */}
           <div className='order-buttons'>
-            <button className='reorder-btn'>
+            <button className='reorder-btn'
+							onClick={() =>
+								navigate('/checkout', { state: { order } })
+							}>
               Reorder
             </button>
             <button
