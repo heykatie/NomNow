@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from ..models.menu_items import MenuItem
 from ..models import db
 from ..forms.menu_item_form import MenuItemForm
+from .. models.restaurants import Restaurant
 from flask_login import login_required,current_user
 from datetime import datetime
 from flask import jsonify
@@ -27,9 +28,16 @@ def get_menu_item(id):
 ### Get all-menu item # api/menu-items
 @menu_item_routes.route('/', methods=['GET'])
 def get_menu_items():
-    menu_items = MenuItem.query.all()  # Get all menu items
-    
-    return jsonify([item.to_dict() for item in menu_items]), 200
+    menu_items = (
+        db.session.query(MenuItem, Restaurant.name)
+        .join(Restaurant, MenuItem.restaurant_id == Restaurant.id)
+        .all()
+    )
+
+    return jsonify([
+        {**item.to_dict(), "restaurant_name": restaurant_name}
+        for item, restaurant_name in menu_items
+    ]), 200
 
     
 
@@ -92,12 +100,11 @@ def delete_menu_item(id):
 
 
 
-### Create a new menu item # api/menu-items/new
 @menu_item_routes.route('/', methods=['POST'])
 # @login_required
 def create_menu_item():
     """
-    Creates a new menu item
+    Creates a new menu item using restaurant name instead of ID.
     """
     form = MenuItemForm(meta={'csrf': False})  # Disable CSRF for API
     data = request.get_json()  # Extract JSON body
@@ -105,13 +112,18 @@ def create_menu_item():
     if not data:
         return jsonify({"error": "Invalid request, JSON data required"}), 400
 
-    restaurant_id = data.get("restaurant_id")
-    if not restaurant_id:
-        return jsonify({"error": "restaurant_id is required"}), 400
+    restaurant_name = data.get("restaurant_name")
+    if not restaurant_name:
+        return jsonify({"error": "restaurant_name is required"}), 400
+
+    # Look up the restaurant by name
+    restaurant = Restaurant.query.filter_by(name=restaurant_name).first()
+    if not restaurant:
+        return jsonify({"error": "Restaurant not found"}), 404
 
     if form.validate_on_submit():
         new_item = MenuItem(
-            restaurant_id=restaurant_id, 
+            restaurant_id=restaurant.id,  # Use the ID of the found restaurant
             name=data.get("name"),
             food_type=data.get("food_type"),
             description=data.get("description"),

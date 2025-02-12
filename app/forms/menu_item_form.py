@@ -14,3 +14,4 @@ class MenuItemForm(FlaskForm):
     food_image = StringField(
         "food_image URL", validators=[DataRequired(), URL(), Length(min=1, max=255)]
     )
+    restaurant_name = StringField("Restaurant Name", validators=[DataRequired()])  # New field for restaurant name
