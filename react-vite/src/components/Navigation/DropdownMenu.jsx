@@ -75,6 +75,11 @@ function DropdownMenu({ user }) {
 						Wallet
 					</NavLink>
 				</li>
+        <li>
+					<NavLink to={`/menu-items`} onClick={closeModal}>
+						Menu Items
+					</NavLink>
+				</li>
 				<li>Meal Plan</li>
 				<li>Help</li>
 				<li>Promotions</li>

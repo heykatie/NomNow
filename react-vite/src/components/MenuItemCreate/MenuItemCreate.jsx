@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createMenuItem } from '../../redux/menuItems'; // Ensure the path is correct
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
+import './MenuItemCreate.css';
 
 const CreateMenuItem = () => {
   const dispatch = useDispatch();
@@ -33,12 +34,12 @@ const CreateMenuItem = () => {
     const newItemData = { ...formData };
 
     try {
-      // Dispatch the action and wait for the new item to be returned
+      // Dispatch the action to create the new item
       const createdItem = await dispatch(createMenuItem(newItemData));
 
-      // Navigate to the newly created menu item's detail page after creation
+      // If the item is created successfully, navigate to the detail page of the newly created item
       if (createdItem && createdItem.id) {
-        navigate(`/menu-items`);
+        navigate(`/menu-items/${createdItem.id}`); // Navigate to the detail page of the newly created item
       }
     } catch (err) {
       setError('Failed to create menu item. Please try again.');
@@ -47,11 +48,14 @@ const CreateMenuItem = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-       {/* Button to navigate back */}
-       <button onClick={() => navigate('/menu-items')} style={{ marginTop: '20px' }}>
+      {/* Button to navigate back */}
+      <button 
+        onClick={() => navigate('/menu-items')} 
+        className="back-button"  // Added class name
+      >
         Back to Menu Items List
       </button>
-      
+
       <h3>Create Menu Item</h3>
 
       {error && <div style={{ color: 'red' }}>{error}</div>}  {/* Display error message if any */}
@@ -104,7 +108,7 @@ const CreateMenuItem = () => {
         required 
       />
 
-      <button type="submit">Create Menu Item</button>
+      <button type="submit" className="submit-button">Create Menu Item</button> {/* Added class name */}
     </form>
   );
 };

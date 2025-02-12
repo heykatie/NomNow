@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getMenuItem } from '../../redux/menuItems';
-import { addToCart } from '../../redux/orders';  // Import addToCart action from orders
+import { getMenuItem, toggleLike } from '../../redux/menuItems';
+import { addToCart } from '../../redux/orders';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 
 const MenuItemDetail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  
   const menuItem = useSelector(state => state.menuItems.menuItem);
+  const likedItems = useSelector(state => state.menuItems.likedItems);
   const error = useSelector(state => state.menuItems.error);
+  const user = useSelector(state => state.session?.user || null); // FIX: Corrected session user retrieval
 
   const [quantity, setQuantity] = useState(1);
   const [message, setMessage] = useState('');
@@ -19,6 +22,8 @@ const MenuItemDetail = () => {
       dispatch(getMenuItem(id));
     }
   }, [dispatch, id]);
+
+  console.log("Current User:", user); // Debugging log
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -32,6 +37,8 @@ const MenuItemDetail = () => {
   const decreaseQuantity = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
 
   const handleAddToCart = () => {
+    if (!user) return; // Prevent adding to cart if user is not logged in
+
     const orderData = {
       menuItemId: menuItem.id,
       name: menuItem.name,
@@ -39,22 +46,21 @@ const MenuItemDetail = () => {
       quantity,
     };
 
-    // Dispatch the action to add item to the cart
     dispatch(addToCart(orderData));
-
-    // Reset quantity to 1
     setQuantity(1);
-
-    // Show confirmation message
     setMessage(`${quantity} ${menuItem.name} added to cart!`);
 
-    // Clear message after 2 seconds
     setTimeout(() => setMessage(''), 2000);
   };
 
+  const handleToggleLike = () => {
+    dispatch(toggleLike(menuItem.id));
+  };
+
+  const isLiked = likedItems.includes(menuItem.id);
+
   return (
     <div>
-      {/* Button to navigate back */}
       <button onClick={() => navigate('/menu-items')} style={{ marginTop: '20px' }}>
         Back to Menu Items List
       </button>
@@ -65,36 +71,47 @@ const MenuItemDetail = () => {
       <p>{menuItem.food_type}</p>
       <img src={menuItem.food_image} alt={menuItem.name} style={{ width: '200px', height: '200px' }} />
 
-      {/* Quantity Selection */}
-      <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
-        <button onClick={decreaseQuantity} style={{ padding: '5px 10px', fontSize: '20px' }}>-</button>
-        <span style={{ margin: '0 10px', fontSize: '18px' }}>{quantity}</span>
-        <button onClick={increaseQuantity} style={{ padding: '5px 10px', fontSize: '20px' }}>+</button>
-      </div>
+      {/* Show quantity selection and add to cart only if user is logged in */}
+      {user ? (
+        <>
+          <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
+            <button onClick={decreaseQuantity} style={{ padding: '5px 10px', fontSize: '20px' }}>-</button>
+            <span style={{ margin: '0 10px', fontSize: '18px' }}>{quantity}</span>
+            <button onClick={increaseQuantity} style={{ padding: '5px 10px', fontSize: '20px' }}>+</button>
+          </div>
 
-      {/* Add to Cart Button */}
-      <button 
-        onClick={handleAddToCart} 
-        style={{ marginLeft: '10px', fontSize: '18px', padding: '8px 15px', marginTop: '10px' }}>
-        + Add {quantity} to Cart
-      </button>
+          <button 
+            onClick={handleAddToCart} 
+            style={{ marginLeft: '10px', fontSize: '18px', padding: '8px 15px', marginTop: '10px' }}>
+            + Add {quantity} to Cart
+          </button>
 
-      {/* Confirmation Message */}
-      {message && <p style={{ color: 'green', marginTop: '10px' }}>{message}</p>}
-      
-      <br /><br />
+          <button 
+            onClick={handleToggleLike} 
+            style={{ marginLeft: '10px', fontSize: '24px', padding: '8px 15px', marginTop: '10px', color: isLiked ? 'red' : 'gray' }}>
+            {isLiked ? '❤️' : '🤍'}
+          </button>
 
-      {/* Link to the Update Menu Item page */}
-      <Link to={`/menu-items/${menuItem.id}/update`} style={{ marginRight: '10px' }}>
-        <button>Update Menu Item</button>
-      </Link>
+          {message && <p style={{ color: 'green', marginTop: '10px' }}>{message}</p>}
+        </>
+      ) : (
+        <p>Please <Link to="/login">login</Link> to add items to your cart or like menu items.</p>
+      )}
 
-      {/* Link to the MenuItemDelete confirmation page */}
-      <Link to={`/menu-items/${menuItem.id}/delete`}>
-        <button style={{ backgroundColor: 'red', color: 'white' }}>
-          Delete Menu Item
-        </button>
-      </Link>
+      {/* Show Update and Delete buttons only if user is logged in */}
+      {user && (
+        <>
+          <Link to={`/menu-items/${menuItem.id}/update`} style={{ marginRight: '10px' }}>
+            <button>Update Menu Item</button>
+          </Link>
+
+          <Link to={`/menu-items/${menuItem.id}/delete`}>
+            <button style={{ backgroundColor: 'red', color: 'white' }}>
+              Delete Menu Item
+            </button>
+          </Link>
+        </>
+      )}
     </div>
   );
 };

@@ -5,13 +5,8 @@ const CREATE_MENU_ITEM = 'CREATE_MENU_ITEM';
 const UPDATE_MENU_ITEM = 'UPDATE_MENU_ITEM';
 const DELETE_MENU_ITEM = 'DELETE_MENU_ITEM';
 const MENU_ERROR = 'MENU_ERROR';
+const TOGGLE_LIKE = 'TOGGLE_LIKE'; // Add the toggle like action type
 
-// INITIAL STATE
-const initialState = {
-  menuItems: [],
-  menuItem: null,
-  error: null,
-};
 
 // THUNKS
 // Get all menu items
@@ -40,6 +35,7 @@ export const getMenuItem = (id) => async (dispatch) => {
   }
 };
 
+
 // Create a new menu item
 export const createMenuItem = (newItem) => async (dispatch) => {
   try {
@@ -55,6 +51,9 @@ export const createMenuItem = (newItem) => async (dispatch) => {
     if (response.ok) {
       // Add the new item at the front of the list
       dispatch({ type: CREATE_MENU_ITEM, payload: data });
+
+      // Return the created item to be used for navigation
+      return data;
     } else {
       throw new Error(data.error || 'Failed to create menu item');
     }
@@ -63,6 +62,7 @@ export const createMenuItem = (newItem) => async (dispatch) => {
     dispatch({ type: MENU_ERROR, payload: error.message });
   }
 };
+
 
 // Update an existing menu item
 export const updateMenuItem = (id, updatedItem) => async (dispatch) => {
@@ -106,11 +106,27 @@ export const deleteMenuItem = (id) => async (dispatch) => {
   }
 };
 
+// Toggle like on a menu item
+export const toggleLike = (itemId) => {
+  return {
+    type: TOGGLE_LIKE,
+    payload: itemId,
+  };
+};
+
+// INITIAL STATE
+const initialState = {
+  menuItems: [],
+  menuItem: null,
+  error: null,
+  likedItems: JSON.parse(localStorage.getItem('likedItems')) || [], // Load from localStorage or use an empty array
+};
+
+
 // REDUCER
 const menuReducer = (state = initialState, action) => {
   switch (action.type) {
     case GET_MENU_ITEMS:
-      // console.log("Updating State with Menu Items:", action.payload); // Debugging log
       return { ...state, menuItems: action.payload, error: null };
 
     case GET_MENU_ITEM:
@@ -139,6 +155,21 @@ const menuReducer = (state = initialState, action) => {
         error: null,
       };
 
+    case TOGGLE_LIKE:
+      // Toggle the like state
+      const itemId = action.payload;
+      const likedItems = state.likedItems.includes(itemId)
+        ? state.likedItems.filter((id) => id !== itemId) // Remove if already liked
+        : [...state.likedItems, itemId]; // Add if not liked
+
+      // Save the updated liked items to localStorage
+      localStorage.setItem('likedItems', JSON.stringify(likedItems));
+
+      return {
+        ...state,
+        likedItems,
+      };
+
     case MENU_ERROR:
       return { ...state, error: action.payload };
 
@@ -146,5 +177,6 @@ const menuReducer = (state = initialState, action) => {
       return state;
   }
 };
+
 
 export default menuReducer;
