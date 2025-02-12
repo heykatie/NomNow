@@ -17,6 +17,7 @@ import Checkout from '../components/Checkout';
 
 import {AccountFormPage, NameFormPage, PhoneNumberPage, EmailPage} from '../components/AccountFormPage'
 import CreateRestaurant from '../components/CreateRestaurant/CreateRestaurant';
+import HomePage from '../components/HomePage';
 
 export const router = createBrowserRouter([
 	{
@@ -97,6 +98,10 @@ export const router = createBrowserRouter([
 			{
 				path: 'checkout',
 				element: <Checkout />,
+			},
+      {
+				path: 'home',
+				element: <HomePage />,
 			}
 		],
 	},

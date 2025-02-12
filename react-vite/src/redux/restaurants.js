@@ -1,6 +1,7 @@
 //Restaurant Actions
 
 const GET_RESTAURANTS = 'GET_RESTAURANTS';
+const GET_USER_RESTAURANTS = 'GET_USER_RESTAURANTS'
 const GET_RESTAURANT = 'GET_RESTAURANT';
 const CREATE_RESTAURANT = 'CREATE_RESTAURANT';
 const UPDATE_RESTAURANT = 'UPDATE_RESTAURANT';
@@ -12,7 +13,7 @@ export const getUserRestaurants = () => async (dispatch) => {
     try {
         const response = await fetch('/api/manage/');
         const data = await response.json();
-        dispatch({ type: GET_RESTAURANTS, payload: data.restaurants });
+        dispatch({ type: GET_USER_RESTAURANTS, payload: data.restaurants });
     } catch (error) {
         dispatch({ type: RESTAURANT_ERROR, payload: error.message });
     }
@@ -24,6 +25,17 @@ export const getRestaurant = (id) => async (dispatch) => {
         const response = await fetch(`/api/manage/${id}`);
         const data = await response.json();
         dispatch({ type: GET_RESTAURANT, payload: data });
+    } catch (error) {
+        dispatch({ type: RESTAURANT_ERROR, payload: error.message });
+    }
+};
+
+// Get all restaurants
+export const getAllRestaurants = () => async (dispatch) => {
+    try {
+        const response = await fetch('/api/restaurants/');
+        const data = await response.json();
+        dispatch({ type: GET_RESTAURANTS, payload: data.restaurants });
     } catch (error) {
         dispatch({ type: RESTAURANT_ERROR, payload: error.message });
     }
@@ -111,7 +123,7 @@ const initialState = {
 
 const restaurantReducer = (state = initialState, action) => {
     switch (action.type) {
-        case GET_RESTAURANTS:
+        case GET_USER_RESTAURANTS:
             return {
                 ...state,
                 restaurants: action.payload,
@@ -122,6 +134,13 @@ const restaurantReducer = (state = initialState, action) => {
             return {
                 ...state,
                 currentRestaurant: action.payload,
+                error: null
+            };
+
+        case GET_RESTAURANTS:
+            return {
+                ...state,
+                restaurants: action.payload,
                 error: null
             };
             
