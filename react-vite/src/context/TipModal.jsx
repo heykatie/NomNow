@@ -1,14 +1,14 @@
 import { useModal } from './Modal.jsx';
 import { useState } from 'react';
 
-export default function TipModal({ orderTotal, setTip }) {
-	// Accept orderTotal as a prop
+export default function TipModal({ orderTotal, setTip, setCustomTipUsed }) {
 	const { closeModal } = useModal();
 	const [customTip, setCustomTip] = useState('');
 
 	const handleSaveTip = () => {
 		const tipAmount = parseFloat(customTip) || 0;
 		setTip(tipAmount);
+		setCustomTipUsed(true);
 		closeModal();
 	};
 

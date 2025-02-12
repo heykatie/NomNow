@@ -14,16 +14,29 @@ export default function Checkout() {
 	const [orderDetails, setOrderDetails] = useState(
 		location.state?.order || null
 	);
-  const [tip, setTip] = useState(0);
+	const [tip, setTip] = useState(0);
+	const [customTipUsed, setCustomTipUsed] = useState(false);
+	const [deliveryOption, setDeliveryOption] = useState('standard');
 
   const subtotal = orderDetails.totalCost || 0;
-  const deliveryFee = 6.49;
+	const baseDeliveryFee = 6.49;
+	const priorityFee = 1.49;
   const taxes = subtotal * 0.1;
-  const orderTotal = subtotal + deliveryFee + taxes
+  const deliveryFee =
+	deliveryOption === 'priority'
+	? baseDeliveryFee + priorityFee
+	: baseDeliveryFee;
+  const orderTotal = subtotal + deliveryFee + taxes;
   const total = subtotal + deliveryFee + taxes + tip;
 
   const openTipModal = () => {
-    setModalContent(<TipModal orderTotal={orderTotal} setTip={setTip} />);
+    setModalContent(
+			<TipModal
+				orderTotal={orderTotal}
+				setTip={setTip}
+				setCustomTipUsed={setCustomTipUsed}
+			/>
+		);
   };
 
 	useEffect(() => {
@@ -64,16 +77,30 @@ export default function Checkout() {
 				{/* Delivery Options */}
 				<div className='delivery-options'>
 					<h3>Delivery options</h3>
-					<div className='option priority'>
-						<span>⚡ Priority</span>
-						<span>15-30 min • Delivered directly to you</span>
-						<span className='extra-fee'>+$1.49</span>
+					<div
+						className={`option priority ${
+							deliveryOption === 'priority' ? 'selected' : ''
+						}`}
+						onClick={() => setDeliveryOption('priority')}>
+						<span>
+							⚡ Priority <span className='faster-badge'>Faster</span>
+						</span>
+						<span className='extra-fee'>+${priorityFee.toFixed(2)}</span>
+						<span>15-30 min</span>
 					</div>
-					<div className='option standard'>
+					<div
+						className={`option standard ${
+							deliveryOption === 'standard' ? 'selected' : ''
+						}`}
+						onClick={() => setDeliveryOption('standard')}>
 						<span>📦 Standard</span>
 						<span>20-35 min</span>
 					</div>
-					<div className='option schedule'>
+					<div
+						className={`option schedule ${
+							deliveryOption === 'schedule' ? 'selected' : ''
+						}`}
+						onClick={() => setDeliveryOption('schedule')}>
 						<span>⏰ Schedule</span>
 						<span>Choose a time</span>
 					</div>
@@ -125,7 +152,7 @@ export default function Checkout() {
 					<p>Delivery Fee: ${deliveryFee.toFixed(2)}</p>
 					<p>Taxes & Other Fees: ${taxes.toFixed(2)}</p>
 
-					{/* Tip Selection - Moved Inside Order Total */}
+					{/* Tip Selection*/}
 					<div className='tip-section'>
 						<h4>
 							Add a tip <span className='tooltip'>ℹ</span>
@@ -140,11 +167,16 @@ export default function Checkout() {
 											? 'selected-tip'
 											: ''
 									}
-									onClick={() => setTip(subtotal * percentage)}>
+									onClick={() => {
+										setTip(subtotal * percentage);
+										setCustomTipUsed(false);
+									}}>
 									{`${percentage * 100}%`}
 								</button>
 							))}
-							<button className='other-tip-btn' onClick={openTipModal}>
+							<button
+								className={customTipUsed ? 'selected-tip' : ''}
+								onClick={openTipModal}>
 								Other
 							</button>
 						</div>

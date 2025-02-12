@@ -47,11 +47,6 @@ h3 {
   border-radius: 5px;
 }
 
-.option.selected {
-  background: black;
-  color: white;
-}
-
 .confirm-order-btn {
   width: 100%;
   padding: 12px;
@@ -67,6 +62,11 @@ h3 {
   padding: 8px 12px;
   cursor: pointer;
   border-radius: 5px;
+}
+
+.tip-buttons button:hover {
+  background: #eee;
+  border: 1px solid;
 }
 
 .tip-buttons button.selected-tip {
@@ -164,4 +164,76 @@ button:disabled,
   color: #a0a0a0;
   cursor: not-allowed;
   border: none;
+}
+
+.delivery-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid;
+  border-color: rgb(225, 225, 225);
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.option span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.option .extra-fee {
+  font-weight: bold;
+  color: black;
+}
+
+.option:hover {
+  background: #f9f9f9;
+}
+
+.option.selected {
+  border: 1.8px solid black;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.priority {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+}
+
+.priority .faster-badge {
+  background: #0c9b50;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 8px;
+  margin-left: 8px;
+}
+
+.standard,
+.schedule {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  padding: 16px;
+}
+
+.schedule span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
