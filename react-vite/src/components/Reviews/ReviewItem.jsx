@@ -1,34 +1,80 @@
-//react-vite/src/components/Reviews/ReviewItem.jsx
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { deleteReviewThunk } from '../../redux/reviews';
+import { deleteReviewThunk, updateReviewThunk } from '../../redux/reviews';
 import './Reviews.css';
 
 const ReviewItem = ({ review }) => {
   const dispatch = useDispatch();
 
-  const getStarRating = (rating) => {
-    return '★'.repeat(rating) + '☆'.repeat(5 - rating);
-  };
+  const [isEditing, setIsEditing] = useState(false);
+  const [updatedReviewText, setUpdatedReviewText] = useState(review.review);
+  const [updatedOrderRating, setUpdatedOrderRating] = useState(review.order_rating);
+  const [updatedRestaurantRating, setUpdatedRestaurantRating] = useState(review.restaurant_rating);
 
   const handleDelete = () => {
     dispatch(deleteReviewThunk(review.id));
   };
 
+  const handleUpdate = () => {
+    setIsEditing(true); // Enable editing mode
+  };
+
+  const handleSave = () => {
+    const updatedReview = {
+      id: review.id,
+      review: updatedReviewText,
+      order_rating: updatedOrderRating,
+      restaurant_rating: updatedRestaurantRating,
+    };
+
+    dispatch(updateReviewThunk(updatedReview));
+    setIsEditing(false); // Exit editing mode after update
+  };
+
+  const getStarRating = (rating) => '★'.repeat(rating) + '☆'.repeat(5 - rating);
+
   return (
     <div className="review-item">
-      <p>{review.review}</p> {/* Ensure this matches the key `review` */}
-      <div className="rating-container">
-        <div className="rating-item">
-          <span>Order {getStarRating(review.order_rating)}</span>
+      {isEditing ? (
+        <div>
+          <textarea
+            value={updatedReviewText}
+            onChange={(e) => setUpdatedReviewText(e.target.value)}
+          />
+          <input
+            type="number"
+            value={updatedOrderRating}
+            onChange={(e) => setUpdatedOrderRating(Number(e.target.value))}
+            min="1"
+            max="5"
+          />
+          <input
+            type="number"
+            value={updatedRestaurantRating}
+            onChange={(e) => setUpdatedRestaurantRating(Number(e.target.value))}
+            min="1"
+            max="5"
+          />
+          <button onClick={handleSave}>Save</button>
+          <button onClick={() => setIsEditing(false)}>Cancel</button>
         </div>
-        <div className="rating-item">
-          <span>Restaurant {getStarRating(review.restaurant_rating)}</span>
+      ) : (
+        <div>
+          <p>{review.review}</p>
+          <div className="rating-container">
+            <div className="rating-item">
+              <span>Order {getStarRating(review.order_rating)}</span>
+            </div>
+            <div className="rating-item">
+              <span>Restaurant {getStarRating(review.restaurant_rating)}</span>
+            </div>
+          </div>
+          <div className="review-actions">
+            <button onClick={handleDelete}>Delete</button>
+            <button onClick={handleUpdate}>Update</button>
+          </div>
         </div>
-      </div>
-      <div className="review-actions">
-        <button onClick={handleDelete}>Delete</button>
-        <button>Update</button>
-      </div>
+      )}
     </div>
   );
 };
