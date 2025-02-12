@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, IntegerField
+from wtforms import StringField, IntegerField, FileField
 from wtforms.validators import Email
+from flask_wtf.file import FileAllowed
 
 
 class UserForm(FlaskForm):
@@ -13,6 +14,7 @@ class UserForm(FlaskForm):
     city = StringField("city")
     state = StringField("state")
     zip = IntegerField("zip")
+    profile_image = FileField('profile image', validators=[FileAllowed(['jpg', 'jpeg', 'png', 'webp'])])
 
 class FundsForm(FlaskForm):
     amount = IntegerField("amount")

@@ -26,7 +26,7 @@ def get_orders():
     formatted_orders = []
     for order in orders:
         # Get restaurant details
-        restaurant = order.restaurants
+        restaurant = order.restaurants # Actually just one restaurant but we made relationship in model plural
         restaurant_data = (
             {
                 "id": restaurant.id,
