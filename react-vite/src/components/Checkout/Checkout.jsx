@@ -57,19 +57,16 @@ export default function Checkout() {
 					<h3>Delivery options</h3>
 					<div className='option priority'>
 						<span>⚡ Priority</span>
-						<span className='extra-fee'>
-							+ ${orderDetails?.priorityFee || '0.00'}
-						</span>
+						<span>15-30 min • Delivered directly to you</span>
+						<span className='extra-fee'>+$1.49</span>
 					</div>
-					<div className='option selected'>
-						📦{' '}
-						{orderDetails?.standardDeliveryTime ||
-							'Standard Delivery (Time Unavailable)'}
+					<div className='option standard'>
+						<span>📦 Standard</span>
+						<span>20-35 min</span>
 					</div>
-					<div className='option'>
-						⏰{' '}
-						{orderDetails?.scheduledDeliveryTime ||
-							'Schedule Time Not Available'}
+					<div className='option schedule'>
+						<span>⏰ Schedule</span>
+						<span>Choose a time</span>
 					</div>
 				</div>
 
@@ -95,12 +92,15 @@ export default function Checkout() {
 				<h3>{orderDetails.restaurant?.name}</h3>
 
 				<div className='order-summary'>
-					<h4>Order Summary</h4>
+					<h4>Cart summary ({orderDetails?.orderItems?.length} item/s)</h4>
 					{orderDetails?.orderItems?.length ? (
 						orderDetails.orderItems.map((item) => (
 							<div key={item.id} className='summary-item'>
 								<p>
-									{item.name || item.menu_item_name || 'Unavailable Item'} x{item.quantity || 1}
+									{item.name ||
+										item.menu_item_name ||
+										'Unavailable Item'}{' '}
+									x{item.quantity || 1}
 								</p>
 								<p>${item.price ? item.price.toFixed(2) : '0.00'}</p>
 							</div>
