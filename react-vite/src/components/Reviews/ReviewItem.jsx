@@ -31,7 +31,16 @@ const ReviewItem = ({ review }) => {
     setIsEditing(false); // Exit editing mode after update
   };
 
-  const getStarRating = (rating) => '★'.repeat(rating) + '☆'.repeat(5 - rating);
+  // Updated getStarRating function: ensuring the correct rating value is passed
+  const getStarRating = (rating) => {
+    // Ensure the rating is within the valid range (1-5)
+    rating = Math.min(Math.max(rating, 1), 5); // Clamp rating to be between 1 and 5
+    return [1, 2, 3, 4, 5].map(star => (
+      <span key={star} className={star <= rating ? 'star selected' : 'star'}>
+        ★
+      </span>
+    ));
+  };
 
   return (
     <div className="review-item">

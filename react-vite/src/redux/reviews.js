@@ -98,33 +98,32 @@ export const createReviewThunk = (reviewData) => async (dispatch) => {
 };
 
 // THUNK: UPDATE A REVIEW
-export const updateReviewThunk = (reviewData) => async (dispatch) => {
-  try {
-    const { id, review, order_rating, restaurant_rating } = reviewData;
 
-    const res = await fetch(`/api/reviews/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        review,
-        order_rating,
-        restaurant_rating,
-      }),
+//react-vite/src/redux/reviews.js
+
+// THUNK: UPDATE A REVIEW
+export const updateReviewThunk = (updatedReview) => async (dispatch) => {
+  try {
+    const response = await fetch(`/api/reviews/${updatedReview.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updatedReview),
     });
 
-    if (!res.ok) {
-      const errors = await res.json();
-      throw errors;
+    if (response.ok) {
+      const data = await response.json();
+      dispatch(updateReview(data.data)); // Correctly dispatch the updated review
+      return data;
+    } else {
+      throw new Error("Failed to update review");
     }
-
-    const updatedReview = await res.json();
-    dispatch(updateReview(updatedReview.data));
-    return updatedReview;
   } catch (error) {
-    console.error('Error updating review:', error);
-    throw error;
+    console.error("Error updating review:", error);
   }
 };
+
+
+
 
 // THUNK: DELETE A REVIEW
 export const deleteReviewThunk = (reviewId) => async (dispatch) => {
