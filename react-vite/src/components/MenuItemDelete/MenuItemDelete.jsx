@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteMenuItem, getMenuItem } from '../../redux/menuItems';
 import { useParams, useNavigate } from 'react-router-dom';
-import './MenuItemDelete.css'
 
 const MenuItemDelete = () => {
   const { id } = useParams();
@@ -11,17 +10,12 @@ const MenuItemDelete = () => {
   const [menuItemName, setMenuItemName] = useState('');
   const menuItem = useSelector(state => state.menuItems.menuItem);
   const error = useSelector(state => state.menuItems.error);
-  const user = useSelector(state => state.session?.user || null);  // Check if user is logged in
 
   useEffect(() => {
-    if (!user) {
-      navigate('/login');  // Redirect to login if user is not logged in
-      return;
-    }
     if (id) {
       dispatch(getMenuItem(id));  // Fetch the menu item details
     }
-  }, [dispatch, id, navigate, user]); // Include navigate and user in dependencies
+  }, [dispatch, id]);
 
   // Update the menuItemName once the menuItem is fetched
   useEffect(() => {
@@ -31,7 +25,6 @@ const MenuItemDelete = () => {
   }, [menuItem]);
 
   const handleDelete = () => {
-    // Proceed with the delete action if user is logged in
     dispatch(deleteMenuItem(id));  // Dispatch delete action
     navigate('/menu-items');  // Redirect to the menu items list page after delete
   };
@@ -45,16 +38,16 @@ const MenuItemDelete = () => {
   }
 
   return (
-    <div className="delete-container">
+    <div>
       <h2>Are you sure you want to delete {menuItemName}?</h2>
-      <button onClick={handleDelete} className="delete-button">
+      <button onClick={handleDelete} style={{ backgroundColor: 'red', color: 'white' }}>
         Yes, Delete
       </button>
-      <button onClick={handleCancel} className="cancel-button">
+      <button onClick={handleCancel} style={{ marginLeft: '10px' }}>
         Cancel
       </button>
     </div>
   );
-  
-}
-export default MenuItemDelete
+};
+
+export default MenuItemDelete;
