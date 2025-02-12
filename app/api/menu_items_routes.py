@@ -36,7 +36,7 @@ def get_menu_items():
 
 ### Update a menu item # api/menu-items/id/update
 @menu_item_routes.route('/<int:id>', methods=['PUT'])
-@login_required
+# @login_required
 def update_menu_item(id):
     """
     Updates a menu item
@@ -47,7 +47,6 @@ def update_menu_item(id):
 
     form = MenuItemForm(meta={'csrf': False})  # Disable CSRF if needed for API requests
     data = request.get_json()  # Extract JSON body
-
 
     if not data:
         return jsonify({"error": "Invalid request, JSON data required"}), 400
@@ -74,7 +73,7 @@ def update_menu_item(id):
 
 ### Delete a menu item # api/menu-items/id/delete
 @menu_item_routes.route('/<int:id>', methods=['DELETE'])
-@login_required
+# @login_required
 def delete_menu_item(id):
     menu_item = MenuItem.query.get(id)
 
@@ -95,7 +94,7 @@ def delete_menu_item(id):
 
 ### Create a new menu item # api/menu-items/new
 @menu_item_routes.route('/', methods=['POST'])
-@login_required
+# @login_required
 def create_menu_item():
     """
     Creates a new menu item
