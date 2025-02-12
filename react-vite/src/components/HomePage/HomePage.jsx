@@ -75,11 +75,7 @@ function HomePage() {
                             >
                                 <span className="cuisine-icon">{cuisine.icon}</span>
                                 <span className="cuisine-name">{cuisine.name}</span>
-                                {isAvailable && (
-                                    <span className="restaurant-count">
-                                        {restaurants.filter(r => r.cuisineType === cuisine.name).length}
-                                    </span>
-                                )}
+                                {isAvailable}
                             </button>
                         );
                     })}

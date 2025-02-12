@@ -28,6 +28,7 @@ function Navigation() {
   console.log('DELIVERY TYPE:', deliveryType);
   console.log(user)
   return (
+	<div className='navContainer'>
 		<ul className='nav'>
 			<li>{user ? <DropdownMenu user={user} /> : <DropdownMenu />}</li>
 			<li>
@@ -89,6 +90,7 @@ function Navigation() {
 				)}
 			</li>
 		</ul>
+	</div>
   );
 }
 
