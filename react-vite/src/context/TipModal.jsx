@@ -34,7 +34,7 @@ export default function TipModal({ orderTotal, setTip }) {
 			<p>Your order is ${orderTotal?.toFixed(2) || '0.00'}</p>
 			<button
 				onClick={handleSaveTip}
-				disabled={!customTip || parseFloat(customTip) <= 0}
+				disabled={customTip === ''}
 				className={
 					!customTip || parseFloat(customTip) <= 0 ? 'disabled-button' : ''
 				}>
