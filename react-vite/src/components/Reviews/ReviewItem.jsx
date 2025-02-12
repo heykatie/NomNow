@@ -1,10 +1,11 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { deleteReviewThunk, updateReviewThunk } from '../../redux/reviews';
 import './Reviews.css';
 
 const ReviewItem = ({ review }) => {
   const dispatch = useDispatch();
+  const loggedInUserId = useSelector(state => state.session.user.id); // Get the logged-in user's ID from the Redux state
 
   const [isEditing, setIsEditing] = useState(false);
   const [updatedReviewText, setUpdatedReviewText] = useState(review.review);
@@ -76,13 +77,16 @@ const ReviewItem = ({ review }) => {
               <span>Restaurant {getStarRating(review.restaurant_rating)}</span>
             </div>
           </div>
-          <div className="review-actions">
-            <button onClick={handleDelete}>Delete</button>
-            <button onClick={handleUpdate}>Update</button>
-          </div>
+          {review.userId === loggedInUserId && ( // Only show delete and update buttons if the review belongs to the logged-in user
+            <div className="review-actions">
+              <button onClick={handleDelete}>Delete</button>
+              <button onClick={handleUpdate}>Update</button>
+            </div>
+          )}
         </div>
       )}
     </div>
   );
 };
+
 export default ReviewItem;
