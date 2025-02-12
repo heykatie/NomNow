@@ -9,6 +9,7 @@
     width: 100%;
     border-bottom: 2px solid gray;
     align-items: center;
+    gap: 2px;
 }
 .info-blocks button{
     justify-self: flex-end;
@@ -25,5 +26,9 @@
 .info-text{
     font-weight: bold;
     text-decoration: none;
+}
+
+.pfp:hover{
+    cursor: pointer;
 }
 

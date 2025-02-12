@@ -57,6 +57,7 @@ class User(db.Model, UserMixin):
             "city": self.city,
             "state": self.state,
             "zip": self.zip,
+            "profileImage": self.profile_image,
             "wallet": self.wallet,
             "restaurantOwner": self.restaurant_owner,
             "createdAt": self.created_at,
@@ -70,9 +71,7 @@ class User(db.Model, UserMixin):
     
     def update(self, values):
         for key, val in values.items():
-            print('\n USER KEY:', key)
-            print('VALUES GOING IN: ', val, '\n')
             if(hasattr(self, key) and val != None):
+                print(val, f' going into {self}.{key}')
                 setattr(self, key, val)
-            else: print(key, ': ', val, "didn't go it")
         db.session.commit()
