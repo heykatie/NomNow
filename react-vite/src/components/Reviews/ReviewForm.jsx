@@ -31,7 +31,7 @@ const ReviewForm = ({ restaurantId, orderId }) => {
     const newReview = {
       restaurant_id: restaurantId,
       order_id: orderId,
-      review: reviewText, // Updated key: `review` instead of `reviewText`
+      review: reviewText,
       order_rating: orderRating,
       restaurant_rating: restaurantRating,
     };

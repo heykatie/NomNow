@@ -16,7 +16,7 @@ const ReviewItem = ({ review }) => {
   };
 
   const handleUpdate = () => {
-    setIsEditing(true); // Enable editing mode
+    setIsEditing(true);
   };
 
   const handleSave = () => {
@@ -28,13 +28,11 @@ const ReviewItem = ({ review }) => {
     };
 
     dispatch(updateReviewThunk(updatedReview));
-    setIsEditing(false); // Exit editing mode after update
+    setIsEditing(false);
   };
 
-  // Updated getStarRating function: ensuring the correct rating value is passed
   const getStarRating = (rating) => {
-    // Ensure the rating is within the valid range (1-5)
-    rating = Math.min(Math.max(rating, 1), 5); // Clamp rating to be between 1 and 5
+    rating = Math.min(Math.max(rating, 1), 5);
     return [1, 2, 3, 4, 5].map(star => (
       <span key={star} className={star <= rating ? 'star selected' : 'star'}>
         ★
@@ -87,5 +85,4 @@ const ReviewItem = ({ review }) => {
     </div>
   );
 };
-
 export default ReviewItem;

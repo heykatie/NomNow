@@ -90,10 +90,15 @@ def get_review(id):
 
 
 # Update a review by its ID (Only the owner of the review can update it)
+
 @review_routes.route("/<int:id>", methods=["PUT"])
 @login_required
 def update_review(id):
     data = request.get_json()
+
+    # Check if at least one field is provided for update
+    if not any(key in data for key in ["review", "order_rating", "restaurant_rating"]):
+        return error_response("At least one field (review, order_rating, or restaurant_rating) is required for update", 400)
 
     review = Review.query.get(id)
     if not review:
@@ -119,10 +124,14 @@ def update_review(id):
 
     try:
         db.session.commit()
-        return success_response("Review updated successfully")
+        # Return the updated review object in the response
+        return success_response(
+            "Review updated successfully",
+            review.to_dict(),  # Include the full updated review object
+        )
     except Exception as e:
         db.session.rollback()
-        return error_response(str(e), 500)
+        return error_response(f"Failed to update review: {str(e)}", 500)
 """
 {
     "review": "Updated review: The food was even better the second time!",
@@ -164,3 +173,4 @@ def get_reviews_for_restaurant(restaurant_id):
         )
     else:
         return success_response("No reviews found for this restaurant", [])
+
