@@ -23,7 +23,7 @@ export default function Checkout() {
   const total = subtotal + deliveryFee + taxes + tip;
 
   const openTipModal = () => {
-    setModalContent(<TipModal orderTotal={orderTotal}/>);
+    setModalContent(<TipModal orderTotal={orderTotal} setTip={setTip} />);
   };
 
 	useEffect(() => {
@@ -118,50 +118,40 @@ export default function Checkout() {
 					)}
 				</div>
 
-				{/* Tip Selection */}
-				<div className='tip-section'>
-					<h4>Add a tip</h4>
-					<p>100% of your tip goes to your courier.</p>
-					<div className='tip-buttons'>
-						{[0.15, 0.2, 0.25, 0.3].map((percentage) => (
-							<button
-								key={percentage}
-								className={
-									tip === subtotal * percentage ? 'selected-tip' : ''
-								}
-								onClick={() => setTip(subtotal * percentage)}>
-								{`${percentage * 100}%`}
-							</button>
-						))}
-						<button className='other-tip-btn' onClick={openTipModal}>
-							Other
-						</button>
-					</div>
-				</div>
-
-				{/* Final Total */}
+				{/* Order Total Section including Tip */}
 				<div className='order-total'>
+					<h3>Order total</h3>
 					<p>Subtotal: ${subtotal.toFixed(2)}</p>
-					<p>
-						Delivery Fee: $
-						{orderDetails?.deliveryFee
-							? orderDetails.deliveryFee.toFixed(2)
-							: '0.00'}
-					</p>
-					<p>
-						Taxes & Fees: $
-						{orderDetails?.taxes ? orderDetails.taxes.toFixed(2) : '0.00'}
-					</p>
-					<p>Tip: ${tip.toFixed(2)}</p>
-					<h3>
-						Total: $
-						{(
-							subtotal +
-							(orderDetails?.deliveryFee || 0) +
-							(orderDetails?.taxes || 0) +
-							tip
-						).toFixed(2)}
-					</h3>
+					<p>Delivery Fee: ${deliveryFee.toFixed(2)}</p>
+					<p>Taxes & Other Fees: ${taxes.toFixed(2)}</p>
+
+					{/* Tip Selection - Moved Inside Order Total */}
+					<div className='tip-section'>
+						<h4>
+							Add a tip <span className='tooltip'>ℹ</span>
+						</h4>
+						<p>100% of your tip goes to your courier.</p>
+						<div className='tip-buttons'>
+							{[0.15, 0.2, 0.25, 0.3].map((percentage) => (
+								<button
+									key={percentage}
+									className={
+										tip === subtotal * percentage
+											? 'selected-tip'
+											: ''
+									}
+									onClick={() => setTip(subtotal * percentage)}>
+									{`${percentage * 100}%`}
+								</button>
+							))}
+							<button className='other-tip-btn' onClick={openTipModal}>
+								Other
+							</button>
+						</div>
+						<p>Tip: ${tip.toFixed(2)}</p>
+					</div>
+
+					<h3>Total: ${total.toFixed(2)}</h3>
 				</div>
 			</div>
 		</div>

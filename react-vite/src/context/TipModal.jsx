@@ -1,14 +1,14 @@
 import { useModal } from './Modal.jsx';
 import { useState } from 'react';
 
-export default function TipModal({ orderTotal }) {
+export default function TipModal({ orderTotal, setTip }) {
 	// Accept orderTotal as a prop
 	const { closeModal } = useModal();
 	const [customTip, setCustomTip] = useState('');
 
 	const handleSaveTip = () => {
 		const tipAmount = parseFloat(customTip) || 0;
-		console.log('Tip saved:', tipAmount);
+		setTip(tipAmount);
 		closeModal();
 	};
 
@@ -31,10 +31,7 @@ export default function TipModal({ orderTotal }) {
 					inputMode='decimal'
 				/>
 			</div>
-			<p>
-				Your order is{' '}
-				${orderTotal?.toFixed(2) || '0.00'}
-			</p>
+			<p>Your order is ${orderTotal?.toFixed(2) || '0.00'}</p>
 			<button
 				onClick={handleSaveTip}
 				disabled={!customTip || parseFloat(customTip) <= 0}
