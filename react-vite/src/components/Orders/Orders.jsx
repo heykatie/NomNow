@@ -9,7 +9,7 @@ export default function Orders() {
   const dispatch = useDispatch();
   const navigate = useNavigate(); // reviews hook
   const orders = useSelector((state) => state.orders.userOrders || []);
-  const error = useSelector((state) => state.errors.message);
+  const error = useSelector((state) => state.errors.message || '');
   const isLoading = !orders;
 
   useEffect(() => {
@@ -35,7 +35,7 @@ export default function Orders() {
 					<img
 						src={order.restaurant?.image || '/placeholder.jpg'}
 						alt={order.restaurant?.name || 'Unknown Restaurant'}
-						className='restaurant-image'
+						className='restaurant-img'
 					/>
 					<div className='order-header'>
 						<div className='order-restaurant'>
