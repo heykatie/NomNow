@@ -10,7 +10,7 @@ import reviewsReducer from "./reviews";
 import ordersReducer from './orders';
 import menuReducer from "./menuItems";
 import errorsReducer from './errors';
-
+import restaurantReducer from './restaurants';
 
 
 const rootReducer = combineReducers({
@@ -21,6 +21,7 @@ const rootReducer = combineReducers({
 	errors: errorsReducer,
   reviews: reviewsReducer,
   // import manageReducer from './manage';
+  restaurants: restaurantReducer,
 });
 
 let enhancer;
@@ -38,5 +39,3 @@ const configureStore = (preloadedState) => {
 };
 
 export default configureStore;
-
-console.log('Redux Environment Mode:', import.meta.env.MODE);

@@ -4,6 +4,7 @@ from app.models.restaurants import CuisineType, PriceLevel
 from sqlalchemy.sql import text
 
 
+
 def seed_restaurants():
     restaurants = [
         Restaurant(
@@ -85,6 +86,7 @@ def seed_restaurants():
             description="Authentic Thai curries and noodles with fresh herbs from our garden",
             price_level=PriceLevel.VERY_EXPENSIVE,
             delivery_time=35,
+       
         ),
         Restaurant(
             owner_id=4,
