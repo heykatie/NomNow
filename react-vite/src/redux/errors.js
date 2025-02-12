@@ -12,25 +12,28 @@ const clearError = () => ({
 
 export const handleApiError =
 	(actionThunk) =>
-	async (dispatch, ...args) => {
-		try {
-			await dispatch(actionThunk(...args));
-		} catch (error) {
-			const errorMessage = error.response
-				? await error.response.json()
-				: { message: 'An unexpected error occurred.' };
-			dispatch(setError(errorMessage));
+		async (dispatch, ...args) => {
+			try {
+				await dispatch(actionThunk(...args));
+			} catch (err) {
+			let error;
+			if (err.response) {
+				error = await err.response.json()
+			} else {
+				error = {message: 'An unexpected error occurred.'}
+			}
+			dispatch(setError(error));
 		}
 	};
 
-const initialState = { message: null };
+const initialState = {};
 
 export default function errorsReducer(state = initialState, action) {
 	switch (action.type) {
 		case SET_ERROR:
-			return { message: action.payload };
+			return { ...state, ...action.payload };
 		case CLEAR_ERROR:
-			return { message: null };
+			return { ...null };
 		default:
 			return state;
 	}
