@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createMenuItem } from '../../redux/menuItems'; // Ensure the path is correct
 import { useNavigate } from 'react-router-dom'; // Import useNavigate for navigation
+import './MenuItemCreate.css';
 
 const CreateMenuItem = () => {
   const dispatch = useDispatch();
@@ -47,11 +48,14 @@ const CreateMenuItem = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-       {/* Button to navigate back */}
-       <button onClick={() => navigate('/menu-items')} style={{ marginTop: '20px' }}>
+      {/* Button to navigate back */}
+      <button 
+        onClick={() => navigate('/menu-items')} 
+        className="back-button"  // Added class name
+      >
         Back to Menu Items List
       </button>
-      
+
       <h3>Create Menu Item</h3>
 
       {error && <div style={{ color: 'red' }}>{error}</div>}  {/* Display error message if any */}
@@ -104,7 +108,7 @@ const CreateMenuItem = () => {
         required 
       />
 
-      <button type="submit">Create Menu Item</button>
+      <button type="submit" className="submit-button">Create Menu Item</button> {/* Added class name */}
     </form>
   );
 };
