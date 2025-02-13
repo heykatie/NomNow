@@ -51,7 +51,7 @@ h3 {
   gap: 12px;
 }
 
-.option {
+/* .option {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -63,19 +63,19 @@ h3 {
   font-size: 16px;
   font-weight: 500;
   transition: all 0.2s ease-in-out;
-}
+} */
 
-.option span {
+.delivery-options span {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-.option:hover {
+.delivery-options:hover {
   background: #f9f9f9;
 }
 
-.option.selected {
+.delivery-options.selected {
   border: 2px solid black;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }

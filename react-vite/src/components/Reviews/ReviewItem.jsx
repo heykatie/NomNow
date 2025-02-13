@@ -56,56 +56,74 @@ const ReviewItem = ({ review }) => {
   );
 
   return (
-    <div className="review-item">
-      <p>{updatedReviewText}</p>
-      <div className="rating-container">
-        <div className="rating-item">
-          <span>Order ★ {updatedOrderRating}</span>
-        </div>
-        <div className="rating-item">
-          <span>Restaurant ★ {updatedRestaurantRating}</span>
-        </div>
-      </div>
-      {review.userId === loggedInUserId && (
-        <div className="review-actions">
-          <button onClick={() => dispatch(deleteReviewThunk(review.id))}>Delete</button>
-          <button onClick={() => setIsModalOpen(true)}>Update</button>
-        </div>
-      )}
+		<div className='review-item'>
+			<p>{updatedReviewText}</p>
+			<div className='rating-container'>
+				<div className='rating-item'>
+					<span>Order ★ {updatedOrderRating}</span>
+				</div>
+				<div className='rating-item'>
+					<span>Restaurant ★ {updatedRestaurantRating}</span>
+				</div>
+			</div>
+			{review.userId === loggedInUserId && (
+				<div className='review-actions'>
+					<button
+						className='review-button'
+						onClick={() => dispatch(deleteReviewThunk(review.id))}>
+						Delete
+					</button>
+					<button
+						className='review-button'
+						onClick={() => setIsModalOpen(true)}>
+						Update
+					</button>
+				</div>
+			)}
 
-      <Modal
-        isOpen={isModalOpen}
-        onRequestClose={() => setIsModalOpen(false)}
-        contentLabel="Update Review Modal"
-        className="modal"
-        overlayClassName="review-overlay"
-      >
-        <h2>Update Review</h2>
-        <form onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
-          <textarea
-            value={updatedReviewText}
-            onChange={(e) => setUpdatedReviewText(e.target.value)}
-            placeholder="Update your review..."
-            required
-          />
+			<Modal
+				isOpen={isModalOpen}
+				onRequestClose={() => setIsModalOpen(false)}
+				contentLabel='Update Review Modal'
+				className='modal'
+				overlayClassName='review-overlay'>
+				<h2>Update Review</h2>
+				<form
+					onSubmit={(e) => {
+						e.preventDefault();
+						handleSave();
+					}}>
+					<textarea
+						value={updatedReviewText}
+						onChange={(e) => setUpdatedReviewText(e.target.value)}
+						placeholder='Update your review...'
+						required
+					/>
 
-          <StarRating
-            rating={updatedOrderRating}
-            setRating={setUpdatedOrderRating}
-            label="Order:"
-          />
+					<StarRating
+						rating={updatedOrderRating}
+						setRating={setUpdatedOrderRating}
+						label='Order:'
+					/>
 
-          <StarRating
-            rating={updatedRestaurantRating}
-            setRating={setUpdatedRestaurantRating}
-            label="Restaurant:"
-          />
+					<StarRating
+						rating={updatedRestaurantRating}
+						setRating={setUpdatedRestaurantRating}
+						label='Restaurant:'
+					/>
 
-          <button type="submit">Save Changes</button>
-          <button type="button" onClick={() => setIsModalOpen(false)}>Cancel</button>
-        </form>
-      </Modal>
-    </div>
+					<button className='review-button' type='submit'>
+						Save Changes
+					</button>
+					<button
+						className='review-button'
+						type='button'
+						onClick={() => setIsModalOpen(false)}>
+						Cancel
+					</button>
+				</form>
+			</Modal>
+		</div>
   );
 };
 
