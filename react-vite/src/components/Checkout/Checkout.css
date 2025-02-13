@@ -8,14 +8,14 @@
 
 .checkout-left {
   flex: 2;
-  background: white;
+  background: f8f8f8;
   padding: 20px;
   border-radius: 10px;
 }
 
 .checkout-right {
   flex: 1;
-  background: white;
+  /* background: white; */
   padding: 20px;
   border-radius: 10px;
 }
@@ -23,8 +23,8 @@
 .delivery-section,
 .delivery-options,
 .payment-section,
+.restaurant-header,
 .order-summary,
-.tip-section,
 .order-total {
   margin-bottom: 20px;
   padding: 15px;
@@ -33,23 +33,61 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+.tip-section {
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  border-color: #f5f5f5;
+}
+
 h3 {
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 10px;
 }
 
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .option {
-  padding: 10px;
-  background: #f5f5f5;
-  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: #fff;
+  border-radius: 12px;
+  border: 2px solid transparent;
   cursor: pointer;
-  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.option span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.option:hover {
+  background: #f9f9f9;
 }
 
 .option.selected {
-  background: black;
-  color: white;
+  border: 2px solid black;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.credit-card span,
+.wallet span {
+  font-weight: bold;
+}
+
+.wallet {
+  display: flex;
+  justify-content: space-between;
 }
 
 .confirm-order-btn {
@@ -59,6 +97,7 @@ h3 {
   color: white;
   border: none;
   cursor: pointer;
+  border-radius: 8px;
 }
 
 .tip-buttons button {
@@ -66,7 +105,13 @@ h3 {
   border: none;
   padding: 8px 12px;
   cursor: pointer;
-  border-radius: 5px;
+  margin: .2rem;
+  border-radius: 25px;
+}
+
+.tip-buttons button:hover {
+  background: #eee;
+  border: 1px solid;
 }
 
 .tip-buttons button.selected-tip {
@@ -74,94 +119,110 @@ h3 {
   color: white;
 }
 
-.tip-modal {
+.delivery-options {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  padding: 25px;
+  gap: 12px;
 }
 
-.tip-modal h2 {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-.tip-modal button {
-  width: 100%;
-  background: black;
-  color: white;
-  padding: 14px;
-  border-radius: 8px;
-  font-size: 18px;
-  cursor: pointer;
-  margin-top: 15px;
-}
-
-.tip-modal input {
-  width: 100%;
-  padding: 12px;
-  font-size: 20px;
-  text-align: center;
-  border: 2px solid #ddd;
-  border-radius: 8px;
-  margin-bottom: 10px;
-}
-
-.tip-modal button {
-  width: 100%;
-  background: black;
-  color: white;
-  padding: 12px;
-  border-radius: 8px;
-  font-size: 18px;
-  cursor: pointer;
-}
-
-.tip-modal button:hover {
-  background: #333;
-}
-
-.input-container {
+.option {
   display: flex;
   align-items: center;
-  border: 1px solid #000;
-  border-radius: 8px;
-  padding: 10px;
-  font-size: 18px;
-  width: 100%;
-  gap: 5px;
+  justify-content: space-between;
+  padding: 16px;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid;
+  border-color: rgb(225, 225, 225);
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
 }
 
-.input-container .dollar-sign {
-  font-size: 22px;
-  font-weight: bold;
+.option span {
   display: flex;
   align-items: center;
-  justify-content: center;
-  width: 20px;
-  min-width: 20px;
+  gap: 8px;
 }
 
-.input-container input {
-  border: none;
-  font-size: 22px;
-  outline: none;
-  width: 100%;
-  text-align: left;
-  padding: 5px 0;
-}
-
-.dollar-sign {
-  font-size: 22px;
+.option .extra-fee {
   font-weight: bold;
-  margin-right: 5px;
+  color: black;
 }
 
-button:disabled,
-.disabled-button {
-  background: #e0e0e0;
-  color: #a0a0a0;
-  cursor: not-allowed;
-  border: none;
+.option:hover {
+  background: #f9f9f9;
+}
+
+.option.selected {
+  border: 1.8px solid black;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.priority {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: bold;
+}
+
+.priority .faster-badge {
+  background: #0c9b50;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 8px;
+  margin-left: 8px;
+}
+
+.standard,
+.schedule {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  padding: 16px;
+}
+
+.schedule span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.restaurant-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  padding: 10px 0;
+  font-weight: bold;
+}
+
+.restaurant-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.restaurant-info h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.restaurant-address {
+  font-size: 14px;
+  color: gray;
+  margin-top: 2px;
+}
+
+.restaurant-header .arrow {
+  font-size: 18px;
+  color: gray;
+  transition: transform 0.2s ease;
+}
+
+.restaurant-header:hover .arrow {
+  transform: translateX(5px);
+  color: black;
 }

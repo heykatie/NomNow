@@ -1,4 +1,4 @@
-import { useRef, useState, useContext, createContext } from 'react';
+import { useRef, useState, useContext, createContext, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import './Modal.css';
 
@@ -25,6 +25,17 @@ export function ModalProvider({ children }) {
 		setModalContent(content);
 		document.body.classList.add('no-scroll');
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        closeModal();
+      }
+    };
+
+  document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const contextValue = {
     modalRef, // reference to modal div

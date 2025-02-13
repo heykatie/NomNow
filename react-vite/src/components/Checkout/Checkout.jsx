@@ -1,39 +1,106 @@
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
 import TipModal from '../../context/TipModal';
+import ScheduleModal from '../../context/ScheduleModal';
+import { loadUserOrder, placeOrder, getUserOrders } from '../../redux/orders';
 import './Checkout.css';
 
 export default function Checkout() {
+	const dispatch = useDispatch();
 	const location = useLocation();
 	const navigate = useNavigate();
-  const user = useSelector((state) => state.session.user);
-  const { setModalContent } = useModal();
-	const [orderDetails, setOrderDetails] = useState(
-		location.state?.order || null
-	);
-  const [tip, setTip] = useState(0);
+	const user = useSelector((state) => state.session.user);
+	const { setModalContent } = useModal();
+	const currentOrder = useSelector((state) => state.orders.currentOrder);
+	const [tip, setTip] = useState(0);
+	const [customTipUsed, setCustomTipUsed] = useState(false);
+	const [deliveryOption, setDeliveryOption] = useState('standard');
+	const [scheduledTime, setScheduledTime] = useState(null);
+	const restaurantClosingTime =
+		currentOrder?.restaurant?.closingTime || '20:00';
+	const [paymentMethod, setPaymentMethod] = useState('credit-card');
 
-  const subtotal = orderDetails.totalCost || 0;
-  const deliveryFee = 6.49;
-  const taxes = subtotal * 0.1;
-  const orderTotal = subtotal + deliveryFee + taxes
-  const total = subtotal + deliveryFee + taxes + tip;
+	const subtotal = parseInt(currentOrder.totalCost) || 0;
+	const baseDeliveryFee = 6.49;
+	const priorityFee = 1.49;
+	const taxes = subtotal * 0.1;
+	const deliveryFee =
+		deliveryOption === 'priority'
+			? baseDeliveryFee + priorityFee
+			: baseDeliveryFee;
+	const orderTotal = subtotal + deliveryFee + taxes;
+	const total = subtotal + deliveryFee + taxes + tip;
 
-  const openTipModal = () => {
-    setModalContent(<TipModal orderTotal={orderTotal} setTip={setTip} />);
-  };
+	const openTipModal = () => {
+		setModalContent(
+			<TipModal
+				orderTotal={orderTotal}
+				setTip={setTip}
+				setCustomTipUsed={setCustomTipUsed}
+			/>
+		);
+	};
+
+	const openScheduleModal = () => {
+		setModalContent(
+			<ScheduleModal
+				setScheduledTime={setScheduledTime}
+				restaurantClosingTime={restaurantClosingTime}
+			/>
+		);
+	};
+
+	const handlePlaceOrder = async () => {
+		if (!currentOrder) {
+			console.error('❌ No current order found, cannot proceed.');
+			return;
+		}
+
+		if (currentOrder.status !== 'Active') {
+			console.error('❌ Order cannot be placed, it is already processed.');
+			return;
+		}
+
+		try {
+			await dispatch(placeOrder(currentOrder.id));
+
+			// Wait for Redux and localStorage updates
+			setTimeout(() => {
+				const updatedOrder = JSON.parse(
+					localStorage.getItem('currentOrder')
+				);
+				if (updatedOrder && updatedOrder.status === 'Submitted') {
+					navigate('/orders');
+				} else {
+					console.error(
+						'🚨 Order submission did not update `currentOrder`.'
+					);
+				}
+			}, 500); // Allow time for Redux to update
+		} catch (error) {
+			console.error('❌ Error placing order:', error);
+		}
+	};
 
 	useEffect(() => {
-		if (location.state?.order) {
-			setOrderDetails(location.state.order);
-		} else {
-			navigate('/home');
+		if (!currentOrder) {
+			const savedOrder = JSON.parse(localStorage.getItem('currentOrder'));
+			if (savedOrder) {
+				dispatch(loadUserOrder(savedOrder)); // Restore Redux state from localStorage
+			} else {
+				navigate('/orders'); // Redirect if no order is found
+			}
 		}
-  }, [location.state, navigate]);
+	}, [currentOrder, navigate, dispatch]);
 
+	if (!currentOrder) {
+		console.error('No current order found, redirecting to orders.');
+		navigate('/orders');
+		return null; // Prevents further rendering
+	}
 
 	return (
 		<div className='checkout-page'>
@@ -64,45 +131,98 @@ export default function Checkout() {
 				{/* Delivery Options */}
 				<div className='delivery-options'>
 					<h3>Delivery options</h3>
-					<div className='option priority'>
-						<span>⚡ Priority</span>
-						<span>15-30 min • Delivered directly to you</span>
-						<span className='extra-fee'>+$1.49</span>
+					<div
+						className={`option priority ${
+							deliveryOption === 'priority' ? 'selected' : ''
+						}`}
+						onClick={() => setDeliveryOption('priority')}>
+						<span>
+							⚡ Priority <span className='faster-badge'>Faster</span>
+						</span>
+						<span className='extra-fee'>+${priorityFee.toFixed(2)}</span>
+						<span>15-30 min</span>
 					</div>
-					<div className='option standard'>
+					<div
+						className={`option standard ${
+							deliveryOption === 'standard' ? 'selected' : ''
+						}`}
+						onClick={() => setDeliveryOption('standard')}>
 						<span>📦 Standard</span>
 						<span>20-35 min</span>
 					</div>
-					<div className='option schedule'>
+					<div
+						className={`option schedule ${
+							deliveryOption === 'schedule' ? 'selected' : ''
+						}`}
+						onClick={() => {
+							setDeliveryOption('schedule');
+							openScheduleModal();
+						}}>
 						<span>⏰ Schedule</span>
-						<span>Choose a time</span>
+						<span>{scheduledTime ? scheduledTime : 'Choose a time'}</span>
 					</div>
 				</div>
 
 				{/* Payment */}
 				<div className='payment-section'>
 					<h3>Payment</h3>
-					<div className='payment-method'>
-						<span>
-							💳{' '}
-							{orderDetails?.paymentMethod ||
-								'Payment Method Not Available'}
-						</span>
-						<button>Edit</button>
+					<div className='payment-options'>
+						<div
+							className={`option credit-card ${
+								paymentMethod === 'credit-card' ? 'selected' : ''
+							}`}
+							onClick={() => setPaymentMethod('credit-card')}>
+							<span>💳 Credit Card</span>
+							<span>
+								{currentOrder?.paymentMethod || '**** **** **** 1234'}
+							</span>
+						</div>
+						<div
+							className={`option wallet ${
+								paymentMethod === 'wallet' ? 'selected' : ''
+							}`}
+							onClick={() => setPaymentMethod('wallet')}>
+							<span>💰 Credits</span>
+							<span>
+								Balance: ${parseInt(user?.wallet)?.toFixed(2) || '0.00'}
+							</span>
+						</div>
 					</div>
 				</div>
 
 				{/* Place Order Button */}
-				<button className='confirm-order-btn'>Place order</button>
+				<button className='confirm-order-btn' onClick={handlePlaceOrder}>
+					Place order
+				</button>
 			</div>
 
 			{/* Right Sidebar - Order Summary */}
 			<div className='checkout-right'>
-				<h3>{orderDetails.restaurant?.name}</h3>
+				<div
+					className='restaurant-header'
+					onClick={() =>
+						navigate(`/restaurants/${currentOrder.restaurant.id}`)
+					}>
+					<div className='restaurant-info'>
+						<h3>
+							{currentOrder.restaurant?.name ||
+								'Restaurant Name Not Available'}
+						</h3>
+						<p className='restaurant-address'>
+							{currentOrder.restaurant?.address
+								? `${currentOrder.restaurant.address}, ${
+										currentOrder.restaurant.city || ''
+								}`
+								: 'Address Not Available'}
+						</p>
+					</div>
+					<span className='arrow'>➜</span>
+				</div>
 				<div className='order-summary'>
-					<h4>Cart summary ({orderDetails?.orderItems?.length} item/s)</h4>
-					{orderDetails?.orderItems?.length ? (
-						orderDetails.orderItems.map((item) => (
+					<h4>Cart summary ({currentOrder?.orderItems?.length} item/s)</h4>
+					{currentOrder?.orderItems &&
+					currentOrder.orderItems.length > 0 ? (
+						currentOrder.orderItems.map((item) => (
 							<div key={item.id} className='summary-item'>
 								<p>
 									{item.name ||
@@ -125,10 +245,10 @@ export default function Checkout() {
 					<p>Delivery Fee: ${deliveryFee.toFixed(2)}</p>
 					<p>Taxes & Other Fees: ${taxes.toFixed(2)}</p>
 
-					{/* Tip Selection - Moved Inside Order Total */}
+					{/* Tip Selection*/}
 					<div className='tip-section'>
 						<h4>
-							Add a tip <span className='tooltip'>ℹ</span>
+							Add a tip <span className='tooltip'></span>
 						</h4>
 						<p>100% of your tip goes to your courier.</p>
 						<div className='tip-buttons'>
@@ -140,11 +260,16 @@ export default function Checkout() {
 											? 'selected-tip'
 											: ''
 									}
-									onClick={() => setTip(subtotal * percentage)}>
+									onClick={() => {
+										setTip(subtotal * percentage);
+										setCustomTipUsed(false);
+									}}>
 									{`${percentage * 100}%`}
 								</button>
 							))}
-							<button className='other-tip-btn' onClick={openTipModal}>
+							<button
+								className={customTipUsed ? 'selected-tip' : ''}
+								onClick={openTipModal}>
 								Other
 							</button>
 						</div>

@@ -1,16 +1,28 @@
 import { useModal } from './Modal.jsx';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import './TipModal.css'
 
-export default function TipModal({ orderTotal, setTip }) {
-	// Accept orderTotal as a prop
+export default function TipModal({ orderTotal, setTip, setCustomTipUsed }) {
 	const { closeModal } = useModal();
 	const [customTip, setCustomTip] = useState('');
 
 	const handleSaveTip = () => {
 		const tipAmount = parseFloat(customTip) || 0;
 		setTip(tipAmount);
+		setCustomTipUsed(true);
 		closeModal();
 	};
+
+	useEffect(() => {
+		const handleKeyDown = (e) => {
+			if (e.key === 'Enter' && customTip !== '') {
+				handleSaveTip();
+			}
+		};
+
+		document.addEventListener('keydown', handleKeyDown);
+		return () => document.removeEventListener('keydown', handleKeyDown);
+	}, [customTip]);
 
 	return (
 		<div className='tip-modal'>
@@ -34,7 +46,7 @@ export default function TipModal({ orderTotal, setTip }) {
 			<p>Your order is ${orderTotal?.toFixed(2) || '0.00'}</p>
 			<button
 				onClick={handleSaveTip}
-				disabled={!customTip || parseFloat(customTip) <= 0}
+				disabled={customTip === ''}
 				className={
 					!customTip || parseFloat(customTip) <= 0 ? 'disabled-button' : ''
 				}>
