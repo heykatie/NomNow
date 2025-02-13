@@ -6,6 +6,7 @@ import TipModal from '../../context/TipModal';
 import ScheduleModal from '../../context/ScheduleModal';
 import { loadUserOrder, placeOrder } from '../../redux/orders';
 import { deductFundsThunk } from '../../redux/session';
+import OrderRestaurant from '../Orders/OrderRestaurant';
 import './Checkout.css';
 
 export default function Checkout() {
@@ -198,26 +199,7 @@ export default function Checkout() {
 
 			{/* Right Sidebar - Order Summary */}
 			<div className='checkout-right'>
-				<div
-					className='restaurant-header'
-					onClick={() =>
-						navigate(`/restaurants/${currentOrder.restaurant.id}`)
-					}>
-					<div className='restaurant-info'>
-						<h3>
-							{currentOrder.restaurant?.name ||
-								'Restaurant Name Not Available'}
-						</h3>
-						<p className='restaurant-address'>
-							{currentOrder.restaurant?.address
-								? `${currentOrder.restaurant.address}, ${
-										currentOrder.restaurant.city || ''
-								}`
-								: 'Address Not Available'}
-						</p>
-					</div>
-					<span className='arrow'>➜</span>
-				</div>
+				<OrderRestaurant/>
 				<div className='order-summary'>
 					<h4>Cart summary ({currentOrder?.orderItems?.length} item/s)</h4>
 					{currentOrder?.orderItems &&
