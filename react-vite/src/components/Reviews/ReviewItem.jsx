@@ -5,7 +5,7 @@ import './Reviews.css';
 
 const ReviewItem = ({ review }) => {
   const dispatch = useDispatch();
-  const loggedInUserId = useSelector(state => state.session.user.id); // Get the logged-in user's ID from the Redux state
+  const loggedInUserId = useSelector(state => state.session.user?.id);
 
   const [isEditing, setIsEditing] = useState(false);
   const [updatedReviewText, setUpdatedReviewText] = useState(review.review);
