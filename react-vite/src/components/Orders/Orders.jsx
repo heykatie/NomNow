@@ -7,7 +7,7 @@ import {
 	createOrder,
 	clearCurrentOrder,
 } from '../../redux/orders';
-import OrderItems from '../OrderItems';
+import OrderItems from './OrderItems';
 import './Orders.css';
 
 export default function Orders() {

@@ -153,6 +153,7 @@ export const deleteOrder = (orderId) => async (dispatch) => {
 		if (!response.ok) throw response;
 
 		dispatch(removeOrder(orderId));
+		localStorage.removeItem('currentOrder');
 	} catch (error) {
 		const errorMessage = await error.json();
 		dispatch(setError(errorMessage));

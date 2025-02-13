@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { useModal } from '../../context/Modal';
-import TipModal from '../../context/TipModal';
-import ScheduleModal from '../../context/ScheduleModal';
-import { loadUserOrder, placeOrder } from '../../redux/orders';
-import { deductFundsThunk } from '../../redux/session';
-import OrderRestaurant from '../OrderRestaurant';
+import { useModal } from '../../../context/Modal';
+import TipModal from '../../../context/TipModal';
+import ScheduleModal from '../../../context/ScheduleModal';
+import { loadUserOrder, placeOrder, deleteOrder } from '../../../redux/orders';
+import { deductFundsThunk } from '../../../redux/session';
+import OrderRestaurant from '../../Orders/OrderRestaurant';
 import CartItems from '../CartItems';
 import './Checkout.css';
 
@@ -87,6 +87,14 @@ export default function Checkout() {
 			}
 		}, 500);
 	};
+
+	useEffect(() => {
+		return () => {
+			if (currentOrder && currentOrder.status === 'Active') {
+				dispatch(deleteOrder(currentOrder.id));
+			}
+		};
+	}, [currentOrder, dispatch]);
 
 	useEffect(() => {
 		if (!currentOrder) {

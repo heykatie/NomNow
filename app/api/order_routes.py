@@ -1,8 +1,8 @@
 from flask import Blueprint, jsonify, request
 from flask_login import current_user, login_required
 from app.models.db import db
-from app.models import Order, OrderItem, MenuItem, User
-from datetime import datetime, timezone
+from app.models import Order, OrderItem, MenuItem
+from datetime import timezone
 
 order_routes = Blueprint("orders", __name__)
 
@@ -379,7 +379,7 @@ def complete_order(order_id):
     # ), 200
 
 
-# deletes order by trashing cart
+# deletes order
 @order_routes.route("/<int:order_id>", methods=["DELETE"])
 @login_required
 def delete_order(order_id):
