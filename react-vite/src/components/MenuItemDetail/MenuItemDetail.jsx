@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getMenuItem, toggleLike, getFavoriteItems } from '../../redux/menuItems'; // Import getFavoriteItems
+import { getMenuItem, toggleLike, getFavoriteItems } from '../../redux/menuItems';
 import { addToCart } from '../../redux/cart';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import './MenuItemDetail.css'; // Import the updated CSS
 
 const MenuItemDetail = () => {
   const { id } = useParams();
@@ -12,7 +13,7 @@ const MenuItemDetail = () => {
   const menuItem = useSelector(state => state.menuItems.menuItem);
   const likedItems = useSelector(state => state.menuItems.likedItems);
   const error = useSelector(state => state.menuItems.error);
-  const user = useSelector(state => state.session.user); // Get user state
+  const user = useSelector(state => state.session.user);
 
   const [quantity, setQuantity] = useState(1);
   const [message, setMessage] = useState('');
@@ -43,60 +44,62 @@ const MenuItemDetail = () => {
 
   const handleToggleLike = () => {
     dispatch(toggleLike(menuItem.id));
-    dispatch(getFavoriteItems()); // Dispatch getFavoriteItems after toggling like
+    dispatch(getFavoriteItems());
   };
 
   const isLiked = likedItems.includes(menuItem.id);
 
   return (
-    <div>
-      {/* Back button is ALWAYS visible */}
-      <button onClick={() => navigate('/menu-items')} style={{ marginTop: '20px' }}>
+    <div className="menu-item-detail-container">
+      <button className="back-button" onClick={() => navigate('/menu-items')}>
         Back to Menu Items List
       </button>
 
-      <h2>{menuItem.name}</h2>
-      <p>{menuItem.description}</p>
-      <p>Price: ${menuItem.price}</p>
-      <p>{menuItem.food_type}</p>
-      <img src={menuItem.food_image} alt={menuItem.name} style={{ width: '200px', height: '200px' }} />
-
-      {/* Only show these buttons if the user is logged in */}
-      {user && (
-        <>
-          {/* Quantity Selection */}
-          <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px' }}>
-            <button onClick={decreaseQuantity} style={{ padding: '5px 10px', fontSize: '20px' }}>-</button>
-            <span style={{ margin: '0 10px', fontSize: '18px' }}>{quantity}</span>
-            <button onClick={increaseQuantity} style={{ padding: '5px 10px', fontSize: '20px' }}>+</button>
+      <div className="menu-item-detail">
+        <div>
+          <img src={menuItem.food_image} alt={menuItem.name} />
+          <div className="heart-button-container">
+            <button
+              className={`like-button ${isLiked ? 'liked' : ''}`}
+              onClick={handleToggleLike}
+            >
+              {isLiked ? '❤️' : '🤍'}
+            </button>
           </div>
+        </div>
 
-          <button
-            onClick={handleAddToCart}
-            style={{ marginLeft: '10px', fontSize: '18px', padding: '8px 15px', marginTop: '10px' }}>
-            + Add {quantity} to Cart
-          </button>
+        <div className="menu-item-details">
+          <h2>{menuItem.name}</h2>
+          <p>Price: ${menuItem.price}</p>
+          <p>{menuItem.description}</p>
+          <p>Type: {menuItem.food_type}</p>
 
-          <button
-            onClick={handleToggleLike}
-            style={{ marginLeft: '10px', fontSize: '24px', padding: '8px 15px', marginTop: '10px', color: isLiked ? 'red' : 'gray' }}>
-            {isLiked ? '❤️' : '🤍'}
-          </button>
+          {user && (
+            <>
+              <div className="quantity-selector">
+                <button onClick={decreaseQuantity}>-</button>
+                <span>{quantity}</span>
+                <button onClick={increaseQuantity}>+</button>
+              </div>
 
-          {/* Confirmation Message */}
-          {message && <p style={{ color: 'green', marginTop: '10px' }}>{message}</p>}
+              <button className="add-to-cart-button" onClick={handleAddToCart}>
+                + Add {quantity} to Cart
+              </button>
 
-          <br /><br />
+              {message && <p className="confirmation-message">{message}</p>}
 
-          {/* Update & Delete buttons */}
-          <Link to={`/menu-items/${menuItem.id}/update`} style={{ marginRight: '10px' }}>
-            <button>Update</button>
-          </Link>
-          <Link to={`/menu-items/${menuItem.id}/delete`}>
-            <button>Delete</button>
-          </Link>
-        </>
-      )}
+              <div className="update-delete-buttons">
+                <Link to={`/menu-items/${menuItem.id}/update`}>
+                  <button>Update</button>
+                </Link>
+                <Link to={`/menu-items/${menuItem.id}/delete`}>
+                  <button>Delete</button>
+                </Link>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
     </div>
   );
 };
