@@ -213,7 +213,6 @@ def create_order():
                 menu_item_id=menu_item.id,
                 quantity=quantity,
                 price=menu_item.price,
-                restaurant_id=menu_item.restaurantId
             )
         )
 

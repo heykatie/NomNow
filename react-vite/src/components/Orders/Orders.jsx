@@ -6,30 +6,76 @@ import OrderItem from '../OrderItem';
 import './Orders.css';
 
 export default function Orders() {
-  const dispatch = useDispatch();
-  const navigate = useNavigate(); // reviews hook
-  const orders = useSelector((state) => state.orders.userOrders || []);
-  const error = useSelector((state) => state.errors.message || '');
-  const isLoading = !orders;
-	const currentOrder = useSelector((store) => store.orders.currentOrder || {});
+	const dispatch = useDispatch();
+	const navigate = useNavigate(); // reviews hook
+	const orders = useSelector((state) => state.orders.userOrders || []);
+	const error = useSelector((state) => state.errors.message || '');
+	const isLoading = !orders;
+	// const currentOrder = useSelector((store) => store.orders.currentOrder || {});
 
+	useEffect(() => {
+		dispatch(getUserOrders());
+	}, [dispatch]);
 
-  useEffect(() => {
-    dispatch(getUserOrders());
-  }, [dispatch]);
+	if (isLoading) return <div>Loading orders...</div>;
+	if (error) return <div className='error-message'>{error}</div>;
+	if (orders.length === 0) return <div>No past orders found.</div>;
 
-  if (isLoading) return <div>Loading orders...</div>;
-  if (error) return <div className='error-message'>{error}</div>;
-  if (orders.length === 0) return <div>No past orders found.</div>;
+	// Handle "Rate your order" button
+	const handleRateOrder = (orderId, restaurantId, restaurantName) => {
+		navigate(
+			`/reviews/restaurant/${restaurantId}?orderId=${orderId}&restaurantName=${encodeURIComponent(
+				restaurantName
+			)}`
+		);
+	};
 
-	// console.log('Orders from Redux:', orders);
+	const handleReorder = async (order) => {
+		if (!order || !order.orderItems || order.orderItems.length === 0) {
+			console.error('No past orders found.');
+			return;
+		}
 
-  // Handle "Rate your order" button
-  const handleRateOrder = (orderId, restaurantId, restaurantName) => {
-    navigate(`/reviews/restaurant/${restaurantId}?orderId=${orderId}&restaurantName=${encodeURIComponent(restaurantName)}`);
-  };
+		try {
+			// Extract restaurant ID
+			const restaurantId = order.restaurant?.id;
+			if (!restaurantId) {
+				console.error('Missing restaurant_id in order:', order);
+				return;
+			}
 
-  return (
+			// Format the items to match the API request
+			const items = order.orderItems.map((item) => ({
+				menu_item_id: item.id, // Ensure correct menu item ID
+				quantity: item.quantity,
+			}));
+
+			const reorderData = {
+				restaurant_id: restaurantId,
+				items,
+			};
+
+			// Send the request to create a new order
+			const response = await dispatch(createOrder(reorderData));
+
+			if (response?.payload) {
+				const newOrder = response.payload;
+
+				// Update Redux state and localStorage
+				dispatch(loadUserOrder(newOrder));
+				localStorage.setItem('currentOrder', JSON.stringify(newOrder));
+
+				// Navigate to checkout
+				navigate('/checkout');
+			} else {
+				console.error('Failed to create reorder.');
+			}
+		} catch (error) {
+			console.error('Error creating reorder:', error);
+		}
+	};
+
+	return (
 		<div className='orders-container'>
 			<h2>Past Orders</h2>
 			{orders.map((order) => (
@@ -81,59 +127,7 @@ export default function Orders() {
 
 					{/* Buttons */}
 					<div className='order-buttons'>
-						<button
-							className='reorder-btn'
-							onClick={async () => {
-
-								try {
-									// Clear previous currentOrder before creating a new one
-									dispatch(loadUserOrder(null));
-									localStorage.removeItem('currentOrder');
-
-									const reorderedOrder = {
-										restaurant_id: order.restaurant?.id,
-										items: order.orderItems.map((item) => ({
-											menu_item_id: item.id, // Ensure correct ID
-											restaurant_id: item.restaurant_id,
-											quantity: item.quantity,
-										})),
-									};
-
-									console.log(
-										'Sending reorder request:',
-										reorderedOrder
-									); // Debugging Log
-
-									// Create a new order with the same items
-									const response = await dispatch(
-										createOrder({
-											restaurant_id: order.restaurant.id,
-											items: order.orderItems.map((item) => ({
-												menu_item_id: item.id, // Ensure correct ID
-												quantity: item.quantity,
-											})),
-										})
-									);
-
-									if (response?.payload) {
-										const newOrder = response.payload;
-
-										// Set the new order as currentOrder in Redux
-										dispatch(loadUserOrder(newOrder));
-
-										// Save new order to localStorage to persist on refresh
-										localStorage.setItem(
-											'currentOrder',
-											JSON.stringify(newOrder)
-										);
-
-										// Navigate to checkout
-										navigate('/checkout');
-									}
-								} catch (error) {
-									console.error('Error creating reorder:', error);
-								}
-							}}>
+						<button className='reorder-btn' onClick={()=>handleReorder(order)}>
 							Reorder
 						</button>
 						<button
@@ -153,5 +147,5 @@ export default function Orders() {
 				</div>
 			))}
 		</div>
-  );
+	);
 }

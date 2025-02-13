@@ -161,7 +161,7 @@ export default function Checkout() {
 				<div
 					className='restaurant-header'
 					onClick={() =>
-						navigate(`/restaurants/${currentOrder.restaurant?.id}`)
+						navigate(`/restaurants/${currentOrder.restaurant.id}`)
 					}>
 					<div className='restaurant-info'>
 						<h3>

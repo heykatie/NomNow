@@ -73,14 +73,21 @@ export const createOrder = (orderData) => async (dispatch) => {
 			method: 'POST',
 			body: JSON.stringify({
 				...orderData,
-				status: 'Active', // Ensure the order is marked as "Active"
+				status: 'Active',
 			}),
 		});
 		if (!response.ok) throw response;
 
-		const data = await response.json();
-		dispatch(addOrder(data));
-		return { payload: data }; // Return newly created order
+		const newOrder = await response.json();
+
+		// Fetch full order details
+		const fullOrderResponse = await csrfFetch(`/api/orders/${newOrder.id}`);
+		if (!fullOrderResponse.ok) throw fullOrderResponse;
+
+		const fullOrder = await fullOrderResponse.json();
+
+		dispatch(addOrder(fullOrder));
+		return { payload: fullOrder }; // Return the full order details
 	} catch (error) {
 		const errorMessage = await error.json();
 		dispatch(setError(errorMessage));
@@ -149,7 +156,11 @@ export default function ordersReducer(state = initialState, action) {
 		case LOAD_USER_ORDERS_4_REST:
 			return { ...state, userOrdersForRestaurant: action.payload };
 		case ADD_ORDER:
-			return { ...state, userOrders: [...state.userOrders, action.payload] };
+			return {
+				...state,
+				userOrders: [...state.userOrders, action.payload],
+				currentOrder: action.payload,
+			};
 		case UPDATE_ORDER:
 			return {
 				...state,
