@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createReviewThunk, getReviewsForRestThunk } from '../../redux/reviews';
 import Modal from 'react-modal';
@@ -95,7 +95,7 @@ const ReviewForm = ({ restaurantId, orderId }) => {
       >
         <h2>Write a Review</h2>
         <p>Share your Taco Casa review with others.</p>
-        <p>Tell us below what you'd tell your friends - the more details, the better.</p>
+        <p>Tell us below what you'd tell your friends. The more details, the better.</p>
         <form onSubmit={handleSubmit}>
           <textarea
             value={reviewText}

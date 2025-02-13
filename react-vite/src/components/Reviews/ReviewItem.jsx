@@ -62,12 +62,10 @@ const ReviewItem = ({ review }) => {
           <p>{review.review}</p>
           <div className="rating-container">
             <div className="rating-item">
-              <span>Order Rating: {review.order_rating}</span>
-              <span className="star-icon">★</span> {/* Yellow star icon */}
+              <span>Order ★ {review.order_rating}</span>
             </div>
             <div className="rating-item">
-              <span>Restaurant Rating: {review.restaurant_rating}</span>
-              <span className="star-icon">★</span> {/* Yellow star icon */}
+              <span>Restaurant ★ {review.restaurant_rating}</span>
             </div>
           </div>
           {review.userId === loggedInUserId && (
