@@ -1,7 +1,10 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react'; // Import useEffect
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteReviewThunk, updateReviewThunk } from '../../redux/reviews';
+import Modal from 'react-modal';
 import './Reviews.css';
+
+Modal.setAppElement('#root');
 
 const ReviewItem = ({ review }) => {
   const dispatch = useDispatch();
@@ -11,14 +14,14 @@ const ReviewItem = ({ review }) => {
   const [updatedReviewText, setUpdatedReviewText] = useState(review.review);
   const [updatedOrderRating, setUpdatedOrderRating] = useState(review.order_rating);
   const [updatedRestaurantRating, setUpdatedRestaurantRating] = useState(review.restaurant_rating);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleDelete = () => {
-    dispatch(deleteReviewThunk(review.id));
-  };
-
-  const handleUpdate = () => {
-    setIsEditing(true);
-  };
+  // Use useEffect to sync local state with the review prop
+  useEffect(() => {
+    setUpdatedReviewText(review.review);
+    setUpdatedOrderRating(review.order_rating);
+    setUpdatedRestaurantRating(review.restaurant_rating);
+  }, [review]); // Run this effect whenever the review prop changes
 
   const handleSave = () => {
     const updatedReview = {
@@ -28,54 +31,81 @@ const ReviewItem = ({ review }) => {
       restaurant_rating: updatedRestaurantRating,
     };
 
-    dispatch(updateReviewThunk(updatedReview));
-    setIsEditing(false);
+    dispatch(updateReviewThunk(updatedReview)).then(() => {
+      setIsModalOpen(false);
+      // Update the local state to reflect the changes immediately
+      setUpdatedReviewText(updatedReview.review);
+      setUpdatedOrderRating(updatedReview.order_rating);
+      setUpdatedRestaurantRating(updatedReview.restaurant_rating);
+    });
   };
+
+  const StarRating = ({ rating, setRating, label }) => (
+    <div className="star-rating">
+      <label>{label}</label>
+      {[1, 2, 3, 4, 5].map((star) => (
+        <span
+          key={star}
+          className={star <= rating ? 'star selected' : 'star'}
+          onClick={() => setRating(star)}
+        >
+          ★
+        </span>
+      ))}
+      <span className="rating-value">{rating}</span> {/* Display the numeric rating */}
+    </div>
+  );
 
   return (
     <div className="review-item">
-      {isEditing ? (
-        <div>
+      <p>{updatedReviewText}</p>
+      <div className="rating-container">
+        <div className="rating-item">
+          <span>Order ★ {updatedOrderRating}</span>
+        </div>
+        <div className="rating-item">
+          <span>Restaurant ★ {updatedRestaurantRating}</span>
+        </div>
+      </div>
+      {review.userId === loggedInUserId && (
+        <div className="review-actions">
+          <button onClick={() => dispatch(deleteReviewThunk(review.id))}>Delete</button>
+          <button onClick={() => setIsModalOpen(true)}>Update</button>
+        </div>
+      )}
+
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={() => setIsModalOpen(false)}
+        contentLabel="Update Review Modal"
+        className="modal"
+        overlayClassName="review-overlay"
+      >
+        <h2>Update Review</h2>
+        <form onSubmit={(e) => { e.preventDefault(); handleSave(); }}>
           <textarea
             value={updatedReviewText}
             onChange={(e) => setUpdatedReviewText(e.target.value)}
+            placeholder="Update your review..."
+            required
           />
-          <input
-            type="number"
-            value={updatedOrderRating}
-            onChange={(e) => setUpdatedOrderRating(Number(e.target.value))}
-            min="1"
-            max="5"
+
+          <StarRating
+            rating={updatedOrderRating}
+            setRating={setUpdatedOrderRating}
+            label="Order:"
           />
-          <input
-            type="number"
-            value={updatedRestaurantRating}
-            onChange={(e) => setUpdatedRestaurantRating(Number(e.target.value))}
-            min="1"
-            max="5"
+
+          <StarRating
+            rating={updatedRestaurantRating}
+            setRating={setUpdatedRestaurantRating}
+            label="Restaurant:"
           />
-          <button onClick={handleSave}>Save</button>
-          <button onClick={() => setIsEditing(false)}>Cancel</button>
-        </div>
-      ) : (
-        <div>
-          <p>{review.review}</p>
-          <div className="rating-container">
-            <div className="rating-item">
-              <span>Order ★ {review.order_rating}</span>
-            </div>
-            <div className="rating-item">
-              <span>Restaurant ★ {review.restaurant_rating}</span>
-            </div>
-          </div>
-          {review.userId === loggedInUserId && (
-            <div className="review-actions">
-              <button onClick={handleDelete}>Delete</button>
-              <button onClick={handleUpdate}>Update</button>
-            </div>
-          )}
-        </div>
-      )}
+
+          <button type="submit">Save Changes</button>
+          <button type="button" onClick={() => setIsModalOpen(false)}>Cancel</button>
+        </form>
+      </Modal>
     </div>
   );
 };

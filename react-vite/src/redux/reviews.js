@@ -43,8 +43,6 @@ export const getReviewsForRestThunk = (restaurantId) => async (dispatch) => {
       throw errors;
     }
     const reviews = await res.json();
-    console.log('Fetched Reviews:', reviews.data);
-    // Adjust review structure if needed
     const adjustedReviews = reviews.data.map((review) => ({
       ...review,
       order_rating: review.orderRating,
@@ -97,7 +95,6 @@ export const createReviewThunk = (reviewData) => async (dispatch) => {
 
     const newReview = await res.json();
     dispatch(createReview(newReview.data));
-    // Dispatch an action to fetch updated reviews
     dispatch(getReviewsForRestThunk(restaurant_id));
     return newReview;
   } catch (error) {
@@ -118,7 +115,7 @@ export const updateReviewThunk = (updatedReview) => async (dispatch) => {
 
     if (response.ok) {
       const data = await response.json();
-      dispatch(updateReview(data.data)); // Correctly dispatch the updated review
+      dispatch(updateReview(data));  
       return data;
     } else {
       throw new Error("Failed to update review");
@@ -171,16 +168,16 @@ export default function reviewsReducer(state = initialState, action) {
         loading: false,
         error: null,
       };
-    case UPDATE_REVIEW:
-      return {
-        ...state,
-        allReviewsForRest: state.allReviewsForRest.map((rev) =>
-          rev.id === action.review.id ? action.review : rev
-        ),
-        loading: false,
-        error: null,
-      };
-    case DELETE_REVIEW:
+      case UPDATE_REVIEW:
+        return {
+          ...state,
+          allReviewsForRest: state.allReviewsForRest.map((rev) =>
+            rev.id === action.review.id ? { ...rev, ...action.review } : rev
+          ),
+          loading: false,
+          error: null,
+        };
+      case DELETE_REVIEW:
       return {
         ...state,
         allReviewsForRest: state.allReviewsForRest.filter(
