@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'; // Import useEffect
+import { useState, useEffect } from 'react'; // Import useEffect
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteReviewThunk, updateReviewThunk } from '../../redux/reviews';
 import Modal from 'react-modal';
@@ -10,7 +10,6 @@ const ReviewItem = ({ review }) => {
   const dispatch = useDispatch();
   const loggedInUserId = useSelector((state) => state.session.user?.id);
 
-  const [isEditing, setIsEditing] = useState(false);
   const [updatedReviewText, setUpdatedReviewText] = useState(review.review);
   const [updatedOrderRating, setUpdatedOrderRating] = useState(review.order_rating);
   const [updatedRestaurantRating, setUpdatedRestaurantRating] = useState(review.restaurant_rating);
