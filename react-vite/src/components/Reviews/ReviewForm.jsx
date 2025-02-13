@@ -1,7 +1,11 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createReviewThunk, getReviewsForRestThunk } from '../../redux/reviews';
+import Modal from 'react-modal';
 import './Reviews.css';
+
+// Make sure to bind modal to your appElement
+Modal.setAppElement('#root'); // Replace '#root' with your app's root element ID
 
 const ReviewForm = ({ restaurantId, orderId }) => {
   const [reviewText, setReviewText] = useState('');
@@ -9,6 +13,7 @@ const ReviewForm = ({ restaurantId, orderId }) => {
   const [restaurantRating, setRestaurantRating] = useState(0);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
   const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
@@ -50,6 +55,7 @@ const ReviewForm = ({ restaurantId, orderId }) => {
         setOrderRating(0);
         setRestaurantRating(0);
         dispatch(getReviewsForRestThunk(restaurantId));
+        setIsModalOpen(false); // Close the modal after successful submission
       } else {
         setErrorMessage(response.errors || 'Failed to submit review. Please try again.');
         setSuccessMessage(''); // Clear success message
@@ -77,30 +83,46 @@ const ReviewForm = ({ restaurantId, orderId }) => {
   );
 
   return (
-    <form onSubmit={handleSubmit}>
-      <textarea
-        value={reviewText}
-        onChange={(e) => setReviewText(e.target.value)}
-        placeholder="Write your review here"
-        required
-      />
+    <>
+      <button onClick={() => setIsModalOpen(true)}>Write a Review</button>
 
-      <StarRating
-        rating={orderRating}
-        setRating={setOrderRating}
-        label="Order Rating:"
-      />
+      <Modal
+        isOpen={isModalOpen}
+        onRequestClose={() => setIsModalOpen(false)}
+        contentLabel="Review Form Modal"
+        className="modal"
+        overlayClassName="overlay"
+      >
+        <h2>Write a Review</h2>
+        <p>Share your Taco Casa review with others.</p>
+        <p>Tell us below what you'd tell your friends - the more details, the better.</p>
+        <form onSubmit={handleSubmit}>
+          <textarea
+            value={reviewText}
+            onChange={(e) => setReviewText(e.target.value)}
+            placeholder="Some things to consider: items ordered, flavor, quality, and recommendations..."
+            required
+          />
 
-      <StarRating
-        rating={restaurantRating}
-        setRating={setRestaurantRating}
-        label="Restaurant Rating:"
-      />
+          <StarRating
+            rating={orderRating}
+            setRating={setOrderRating}
+            label="Order:"
+          />
 
-      {successMessage && <p className="success-message">{successMessage}</p>}
-      {errorMessage && <p className="error-message">{errorMessage}</p>}
-      <button type="submit">Submit Review</button>
-    </form>
+          <StarRating
+            rating={restaurantRating}
+            setRating={setRestaurantRating}
+            label="Restaurant:"
+          />
+
+          {successMessage && <p className="success-message">{successMessage}</p>}
+          {errorMessage && <p className="error-message">{errorMessage}</p>}
+          <button type="submit">Submit Review</button>
+          <button type="button" onClick={() => setIsModalOpen(false)}>Cancel</button>
+        </form>
+      </Modal>
+    </>
   );
 };
 

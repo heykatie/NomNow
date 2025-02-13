@@ -4,9 +4,6 @@ import { deleteReviewThunk, updateReviewThunk } from '../../redux/reviews';
 import './Reviews.css';
 
 const ReviewItem = ({ review }) => {
-  console.log('Order Rating:', review.order_rating); // This should now log correctly
-  console.log('Restaurant Rating:', review.restaurant_rating); // This should now log correctly
-
   const dispatch = useDispatch();
   const loggedInUserId = useSelector((state) => state.session.user?.id);
 
@@ -66,9 +63,11 @@ const ReviewItem = ({ review }) => {
           <div className="rating-container">
             <div className="rating-item">
               <span>Order Rating: {review.order_rating}</span>
+              <span className="star-icon">★</span> {/* Yellow star icon */}
             </div>
             <div className="rating-item">
               <span>Restaurant Rating: {review.restaurant_rating}</span>
+              <span className="star-icon">★</span> {/* Yellow star icon */}
             </div>
           </div>
           {review.userId === loggedInUserId && (
