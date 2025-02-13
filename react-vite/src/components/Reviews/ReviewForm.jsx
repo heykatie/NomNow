@@ -4,7 +4,8 @@ import { createReviewThunk, getReviewsForRestThunk } from '../../redux/reviews';
 import Modal from 'react-modal';
 import './Reviews.css';
 
-Modal.setAppElement('#root'); 
+// Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
+Modal.setAppElement('#root'); // Replace '#root' with your app's root element ID
 
 const ReviewForm = ({ restaurantId, orderId }) => {
   const [reviewText, setReviewText] = useState('');
@@ -12,28 +13,28 @@ const ReviewForm = ({ restaurantId, orderId }) => {
   const [restaurantRating, setRestaurantRating] = useState(0);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);  
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
   const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // For testing, hardcoding orderId
-    const hardcodedOrderId = orderId || 1;  
+    const hardcodedOrderId = orderId || 1; // Use this to avoid null value
 
     if (!hardcodedOrderId) {
       setErrorMessage('Order ID is missing. Please try again.');
-      setSuccessMessage(''); 
+      setSuccessMessage(''); // Clear success message
       return;
     }
     if (!reviewText.trim()) {
       setErrorMessage('Please write a review before submitting.');
-      setSuccessMessage(''); 
+      setSuccessMessage(''); // Clear success message
       return;
     }
     if (orderRating === 0 || restaurantRating === 0) {
       setErrorMessage('Please select a rating for both order and restaurant.');
-      setSuccessMessage(''); 
+      setSuccessMessage(''); // Clear success message
       return;
     }
 
@@ -49,19 +50,19 @@ const ReviewForm = ({ restaurantId, orderId }) => {
       const response = await dispatch(createReviewThunk(newReview));
       if (response && !response.errors) {
         setSuccessMessage('Review submitted successfully!');
-        setErrorMessage('');  
+        setErrorMessage(''); // Clear error message
         setReviewText('');
         setOrderRating(0);
         setRestaurantRating(0);
         dispatch(getReviewsForRestThunk(restaurantId));
-        setIsModalOpen(false);  
+        setIsModalOpen(false); // Close the modal after successful submission
       } else {
         setErrorMessage(response.errors || 'Failed to submit review. Please try again.');
-        setSuccessMessage(''); 
+        setSuccessMessage(''); // Clear success message
       }
     } catch (error) {
       setErrorMessage('An error occurred. Please try again.');
-      setSuccessMessage('');  
+      setSuccessMessage(''); // Clear success message
     }
   };
 
@@ -90,7 +91,7 @@ const ReviewForm = ({ restaurantId, orderId }) => {
         onRequestClose={() => setIsModalOpen(false)}
         contentLabel="Review Form Modal"
         className="modal"
-        overlayClassName="review-overlay"  
+        overlayClassName="review-overlay"
       >
         <h2>Write a Review</h2>
         <p>Share your Taco Casa review with others.</p>
