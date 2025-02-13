@@ -5,6 +5,7 @@
 :root {
   --font-primary: 'Nunito Sans', sans-serif;
 }
+/* maybe Montserrat or Inter? */
 
 body {
   font-family: var(--font-primary);
