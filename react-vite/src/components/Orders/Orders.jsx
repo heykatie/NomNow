@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // reviews hook
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserOrders } from '../../redux/orders';
+import { getUserOrders, getUserOrder } from '../../redux/orders';
 import OrderItem from '../OrderItem';
 import './Orders.css';
 
@@ -81,7 +81,10 @@ export default function Orders() {
           <div className='order-buttons'>
             <button className='reorder-btn'
 							onClick={() =>
-								navigate('/checkout', { state: { order } })
+							{
+								dispatch(getUserOrder(order.id));
+								navigate('/checkout', { state: { order } });
+							}
 							}>
               Reorder
             </button>
