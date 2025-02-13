@@ -6,7 +6,7 @@ import TipModal from '../../context/TipModal';
 import ScheduleModal from '../../context/ScheduleModal';
 import { loadUserOrder, placeOrder } from '../../redux/orders';
 import { deductFundsThunk } from '../../redux/session';
-import OrderRestaurant from '../Orders/OrderRestaurant';
+import OrderRestaurant from '../OrderRestaurant';
 import './Checkout.css';
 
 export default function Checkout() {

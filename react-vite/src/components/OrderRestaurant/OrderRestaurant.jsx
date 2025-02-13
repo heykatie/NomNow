@@ -10,6 +10,10 @@ export default function OrderRestaurant() {
 		<div
 			className='restaurant-header'
 			onClick={() => navigate(`/restaurants/${currentOrder.restaurant.id}`)}>
+			<img
+				src={currentOrder.restaurant?.image || '/images/cart.jpeg'}
+				alt={currentOrder.restaurant?.name || 'Unknown Restaurant'}
+				className='restaurant-img' ></img>
 			<div className='restaurant-info'>
 				<h3>
 					{currentOrder.restaurant?.name ||

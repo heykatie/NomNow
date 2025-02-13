@@ -7,7 +7,7 @@ import {
 	createOrder,
 	clearCurrentOrder,
 } from '../../redux/orders';
-import OrderItem from '../OrderItem';
+import OrderItems from '../OrderItems';
 import './Orders.css';
 
 export default function Orders() {
@@ -152,7 +152,7 @@ export default function Orders() {
 							<div className='order-items'>
 								{Array.isArray(order.orderItems) ? (
 									order.orderItems.map((item) => (
-										<OrderItem
+										<OrderItems
 											key={item.id}
 											item={item}
 										/>

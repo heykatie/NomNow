@@ -1,8 +1,8 @@
 import { useNavigate } from 'react-router-dom';
-import './OrderItem.css';
+import './OrderItems.css';
 
-export default function OrderItem({ item }) {
-	const navigate = useNavigate(); 
+export default function OrderItems({ item }) {
+	const navigate = useNavigate();
 	const handleMenuItemClick = (menuItemId) => {
 		if (menuItemId) {
 			navigate(`/menu-items/${menuItemId}`);
