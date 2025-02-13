@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useModal } from '../../../context/Modal';
 import TipModal from '../../../context/TipModal';
@@ -13,6 +13,7 @@ import './Checkout.css';
 export default function Checkout() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const location = useLocation();
 	const user = useSelector((state) => state.session.user);
 	const { setModalContent } = useModal();
 	const currentOrder = useSelector((state) => state.orders.currentOrder);
@@ -24,7 +25,7 @@ export default function Checkout() {
 		currentOrder?.restaurant?.closingTime || '20:00';
 	const [paymentMethod, setPaymentMethod] = useState('credit-card');
 
-	const subtotal = parseInt(currentOrder.totalCost) || 0;
+	const subtotal = parseInt(currentOrder?.totalCost) || 0;
 	const baseDeliveryFee = 6.49;
 	const priorityFee = 1.49;
 	const taxes = subtotal * 0.1;
@@ -55,15 +56,6 @@ export default function Checkout() {
 	};
 
 	const handlePlaceOrder = async () => {
-		// if (!currentOrder) {
-		// 	console.error('No current order found, cannot proceed.');
-		// 	return;
-		// }
-
-		// if (currentOrder.status !== 'Active') {
-		// 	console.error('Order cannot be placed, it is already processed.');
-		// 	return;
-		// }
 
 		if (paymentMethod === 'wallet') {
 			if (user.wallet < total) {
@@ -71,13 +63,11 @@ export default function Checkout() {
 				return;
 			}
 
-			// Deduct funds from wallet
 			await dispatch(deductFundsThunk({ id: user.id, amount: total }));
 		}
 
 		await dispatch(placeOrder(currentOrder.id));
 
-		// Wait for Redux and localStorage updates
 		setTimeout(() => {
 			const updatedOrder = JSON.parse(
 				localStorage.getItem('currentOrder')
@@ -89,27 +79,44 @@ export default function Checkout() {
 	};
 
 	useEffect(() => {
-		return () => {
-			if (currentOrder && currentOrder.status === 'Active') {
+		const handleNavigation = () => {
+			if (
+				location.pathname !== '/checkout' &&
+				currentOrder?.status === 'Active'
+			) {
 				dispatch(deleteOrder(currentOrder.id));
 			}
 		};
-	}, [currentOrder, dispatch]);
+
+		const handleBackButton = () => {
+			if (currentOrder?.status === 'Active') {
+				dispatch(deleteOrder(currentOrder.id));
+			}
+		};
+
+		window.addEventListener('popstate', handleBackButton);
+
+		return () => {
+			handleNavigation();
+			window.removeEventListener('popstate', handleBackButton);
+		};
+	}, [location.pathname, currentOrder, dispatch]);
+
 
 	useEffect(() => {
 		if (!currentOrder) {
 			const savedOrder = JSON.parse(localStorage.getItem('currentOrder'));
 			if (savedOrder) {
-				dispatch(loadUserOrder(savedOrder)); // Restore Redux state from localStorage
+				dispatch(loadUserOrder(savedOrder));
 			} else {
-				navigate('/orders'); // Redirect if no order is found
+				navigate('/orders');
 			}
 		}
-	}, [currentOrder, navigate, dispatch]);
+	}, [currentOrder, dispatch, navigate]);
 
 	if (!currentOrder) {
 		navigate('/orders');
-		return null; // Prevents further rendering
+		return null;
 	}
 
 	return (

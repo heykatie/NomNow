@@ -150,13 +150,19 @@ export const deleteOrder = (orderId) => async (dispatch) => {
 		const response = await csrfFetch(`/api/orders/${orderId}`, {
 			method: 'DELETE',
 		});
+
+		if (response.status === 404) {
+			console.warn(`Order ${orderId} not found.`);
+			return; // ✅ Don't dispatch anything if the order doesn't exist
+		}
+
 		if (!response.ok) throw response;
 
 		dispatch(removeOrder(orderId));
-		localStorage.removeItem('currentOrder');
+		dispatch(clearCurrentOrder()); 
 	} catch (error) {
-		const errorMessage = await error.json();
-		dispatch(setError(errorMessage));
+		console.error(`Error deleting order ${orderId}:`, error);
+		dispatch(setError(await error.json()));
 	}
 };
 
@@ -178,8 +184,11 @@ export default function ordersReducer(state = initialState, action) {
 				userOrders: Array.isArray(action.payload) ? action.payload : [],
 			};
 		case LOAD_USER_ORDER:
-			localStorage.setItem('currentOrder', JSON.stringify(action.payload)); // Save order
-			return { currentOrder: action.payload };
+			localStorage.setItem('currentOrder', JSON.stringify(action.payload));
+			return {
+				...state, // ✅ Preserve other state values
+				currentOrder: action.payload,
+			};
 		case LOAD_USER_ORDERS_4_REST:
 			return { ...state, userOrdersForRestaurant: action.payload };
 		case ADD_ORDER:
@@ -196,13 +205,7 @@ export default function ordersReducer(state = initialState, action) {
 				),
 			};
 		case SUBMIT_ORDER:
-			if (!action.payload) {
-				// console.error(
-				// 	'SUBMIT_ORDER payload is invalid:',
-				// 	action.payload
-				// );
-				return state;
-			}
+			if (!action.payload) return state; // Prevent invalid state
 
 			return {
 				...state,
@@ -211,17 +214,20 @@ export default function ordersReducer(state = initialState, action) {
 						order.id === action.payload.id
 							? { ...order, status: 'Submitted' }
 							: order
-					) || [], // Fallback to an empty array
-				currentOrder: action.payload, // Ensure currentOrder remains valid
+					) || [],
+				currentOrder: action.payload, // ✅ Update currentOrder
 			};
 		case REMOVE_ORDER:
-			localStorage.removeItem('currentOrder'); // Clear saved order
 			return {
 				...state,
-				userOrders: state.userOrders.filter(
-					(order) => order.id !== action.payload
-				),
-				currentOrder: null,
+				userOrders:
+					state.userOrders?.filter(
+						(order) => order.id !== action.payload
+					) || [],
+				currentOrder:
+					state.currentOrder?.id === action.payload
+						? null
+						: state.currentOrder,
 			};
 		default:
 			return state;
