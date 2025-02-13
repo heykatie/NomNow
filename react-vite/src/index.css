@@ -13,10 +13,8 @@ body {
   padding: 0;
   width: 100%;
   color: #222;
-  /* Adjust as needed */
 }
 
-/* Headings */
 h1,
 h2,
 h3,
@@ -27,7 +25,6 @@ h6 {
   font-weight: 600;
 }
 
-/* Buttons */
 button {
   font-family: var(--font-primary);
   font-weight: 500;
