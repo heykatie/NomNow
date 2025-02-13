@@ -12,7 +12,6 @@ const ReviewItem = ({ review }) => {
   const [updatedOrderRating, setUpdatedOrderRating] = useState(review.order_rating);
   const [updatedRestaurantRating, setUpdatedRestaurantRating] = useState(review.restaurant_rating);
 
-
   const handleSave = () => {
     const updatedReview = {
       id: review.id,
@@ -22,7 +21,11 @@ const ReviewItem = ({ review }) => {
     };
 
     dispatch(updateReviewThunk(updatedReview)).then(() => {
-      setIsEditing(false);  
+      setIsEditing(false);
+      // Update the local state to reflect the changes immediately
+      setUpdatedReviewText(updatedReview.review);
+      setUpdatedOrderRating(updatedReview.order_rating);
+      setUpdatedRestaurantRating(updatedReview.restaurant_rating);
     });
   };
 
@@ -53,13 +56,13 @@ const ReviewItem = ({ review }) => {
         </div>
       ) : (
         <div>
-          <p>{review.review}</p>
+          <p>{updatedReviewText}</p>
           <div className="rating-container">
             <div className="rating-item">
-              <span>Order ★ {review.order_rating}</span>
+              <span>Order ★ {updatedOrderRating}</span>
             </div>
             <div className="rating-item">
-              <span>Restaurant ★ {review.restaurant_rating}</span>
+              <span>Restaurant ★ {updatedRestaurantRating}</span>
             </div>
           </div>
           {review.userId === loggedInUserId && (
