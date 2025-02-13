@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMenuItems } from '../../redux/menuItems';  
 import { addToCart } from '../../redux/orders'; 
@@ -9,40 +9,15 @@ const MenuItemList = () => {
   const dispatch = useDispatch();
   const menuItems = useSelector(state => state.menuItems.menuItems);
   const error = useSelector(state => state.menuItems.error);
-
-  const [thumbsUpCounts, setThumbsUpCounts] = useState({});
-  const [thumbsStatus, setThumbsStatus] = useState({});  // To track thumbs up/down status
+  const user = useSelector(state => state.session.user); // Get user state
 
   useEffect(() => {
     dispatch(getMenuItems());
-
-    // Load thumbs-up counts and thumbs status from session storage
-    const savedThumbsUpCounts = sessionStorage.getItem('thumbsUpCounts');
-    const savedThumbsStatus = sessionStorage.getItem('thumbsStatus');
-    
-    if (savedThumbsUpCounts) {
-      setThumbsUpCounts(JSON.parse(savedThumbsUpCounts));
-    }
-    if (savedThumbsStatus) {
-      setThumbsStatus(JSON.parse(savedThumbsStatus));
-    }
   }, [dispatch]);
 
   if (error) {
     return <div>Error: {error}</div>;
   }
-
-  const getRestaurantLabel = (restaurantId) => {
-    const restaurantMap = {
-      1: 'Taco Casa',
-      2: 'El Mariachi',
-      3: 'Olive Grove',
-      4: 'Blue Mediterranean',
-      5: 'Thai Orchid',
-      6: 'Bangkok Kitchen',
-    };
-    return restaurantMap[restaurantId] || 'New Restaurant';
-  };
 
   const handleAddToCart = (item) => {
     const orderData = {
@@ -55,41 +30,18 @@ const MenuItemList = () => {
     dispatch(addToCart(orderData));
   };
 
-  const handleThumbsUp = (itemId) => {
-    if (!thumbsStatus[itemId]) {
-      // Increment thumbs up count if user hasn't already clicked
-      const updatedThumbsUpCounts = { ...thumbsUpCounts, [itemId]: (thumbsUpCounts[itemId] || 0) + 1 };
-      setThumbsUpCounts(updatedThumbsUpCounts);
-      setThumbsStatus({ ...thumbsStatus, [itemId]: 'thumbedUp' });
-
-      // Store updated thumbs-up counts and status in sessionStorage
-      sessionStorage.setItem('thumbsUpCounts', JSON.stringify(updatedThumbsUpCounts));
-      sessionStorage.setItem('thumbsStatus', JSON.stringify({ ...thumbsStatus, [itemId]: 'thumbedUp' }));
-    }
-  };
-
-  const handleThumbsDown = (itemId) => {
-    if (thumbsStatus[itemId] === 'thumbedUp') {
-      // Decrement thumbs up count if user had already thumbs up
-      const updatedThumbsUpCounts = { ...thumbsUpCounts, [itemId]: (thumbsUpCounts[itemId] || 0) - 1 };
-      setThumbsUpCounts(updatedThumbsUpCounts);
-      setThumbsStatus({ ...thumbsStatus, [itemId]: 'thumbedDown' });
-
-      // Store updated thumbs-up counts and status in sessionStorage
-      sessionStorage.setItem('thumbsUpCounts', JSON.stringify(updatedThumbsUpCounts));
-      sessionStorage.setItem('thumbsStatus', JSON.stringify({ ...thumbsStatus, [itemId]: 'thumbedDown' }));
-    }
-  };
-
   return (
     <div>
       <h2>Menu Items</h2>
 
-      <Link to="/menu-items/new">
-        <button className="create-button">
-          Create New Menu Item
-        </button>
-      </Link>
+      {/* Show "Create New Menu Item" button only if user is logged in */}
+      {user && (
+        <Link to="/menu-items/new">
+          <button className="create-button">
+            Create New Menu Item
+          </button>
+        </Link>
+      )}
 
       {menuItems.length === 0 ? (
         <p>No menu items available.</p>
@@ -99,7 +51,7 @@ const MenuItemList = () => {
             <div className="menu-item" key={item.id}>
               <h2>
                 <Link to={`/restaurants/${item.restaurantId}`}>
-                  {getRestaurantLabel(item.restaurantId)}
+                  {item.restaurant_name}
                 </Link>
               </h2>
 
@@ -111,30 +63,6 @@ const MenuItemList = () => {
 
               <p> ${item.price}</p>
               <img src={item.food_image} alt={item.name} />
-              
-              {/* Display Thumbs Up with persistent number */}
-              <p className="thumbs-up">
-                <span 
-                  role="img" 
-                  aria-label="thumbs-up" 
-                  style={{ cursor: 'pointer' }} 
-                  onClick={() => handleThumbsUp(item.id)}
-                >
-                  👍
-                </span> 
-                {thumbsUpCounts[item.id] || 0}
-                {thumbsStatus[item.id] === 'thumbedUp' && <span> (You liked it!)</span>}
-              </p>
-
-              {/* Thumbs Down Button */}
-              {thumbsStatus[item.id] === 'thumbedUp' && (
-                <button 
-                  onClick={() => handleThumbsDown(item.id)}
-                  style={{ cursor: 'pointer' }}
-                >
-                  👎 Undo
-                </button>
-              )}
 
               {/* The + button positioned at the bottom right */}
               <button

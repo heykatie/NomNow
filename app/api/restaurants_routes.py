@@ -186,3 +186,14 @@ def delete_restaurant(restaurant_id):
     except Exception:
         db.session.rollback()
         return {"message": "Unable to delete"}, 400
+
+
+@restaurant_routes.route("/current")
+@login_required
+def get_current_user_restaurants():
+    """
+    Get restaurants owned by the current user.
+    """
+    restaurants = Restaurant.query.filter(Restaurant.owner_id == current_user.id).all()
+    restaurant_list = [restaurant.to_dict() for restaurant in restaurants]
+    return {"restaurants": restaurant_list}

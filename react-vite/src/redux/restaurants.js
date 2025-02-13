@@ -7,7 +7,14 @@ const CREATE_RESTAURANT = 'CREATE_RESTAURANT';
 const UPDATE_RESTAURANT = 'UPDATE_RESTAURANT';
 const DELETE_RESTAURANT = 'DELETE_RESTAURANT';
 const RESTAURANT_ERROR = 'RESTAURANT_ERROR';
-
+// actions/restaurants.js
+export const fetchUserRestaurants = (userId) => async (dispatch) => {
+    const response = await fetch(`/api/restaurants/current`);
+    if (response.ok) {
+      const data = await response.json();
+      dispatch({ type: 'SET_USER_RESTAURANTS', payload: data.restaurants });
+    }
+  };
 // Get all restaurants (owned by current user)
 export const getUserRestaurants = () => async (dispatch) => {
     try {
@@ -120,8 +127,10 @@ const initialState = {
     restaurants: [],
     currentRestaurant: null,
     error: null,
-    isLoading: false
+    isLoading: false,
+    userRestaurants: [],
 };
+
 
 const restaurantReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -177,6 +186,8 @@ const restaurantReducer = (state = initialState, action) => {
                 ...state,
                 error: action.payload
             };
+        case 'SET_USER_RESTAURANTS':
+                return { ...state, userRestaurants: action.payload };
             
         default:
             return state;
