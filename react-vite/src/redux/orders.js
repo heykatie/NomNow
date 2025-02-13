@@ -120,13 +120,29 @@ export const placeOrder = (orderId) => async (dispatch) => {
 		const response = await csrfFetch(`/api/orders/${orderId}/submit`, {
 			method: 'PUT',
 		});
-		if (!response.ok) throw response;
+
+		if (!response.ok) {
+			const errorMessage = await response.json();
+			throw new Error(errorMessage.message);
+		}
 
 		const data = await response.json();
-		dispatch(submitOrder(data));
+		dispatch(submitOrder(data)); // ✅ Ensure Redux receives updated order
+
+		// Fetch the updated order directly
+		const orderResponse = await csrfFetch(`/api/orders/${orderId}`);
+		if (!orderResponse.ok) throw orderResponse;
+
+		const updatedOrder = await orderResponse.json();
+		dispatch(loadUserOrder(updatedOrder)); // ✅ Explicitly update `currentOrder`
+		localStorage.setItem('currentOrder', JSON.stringify(updatedOrder));
+
+		// Fetch all user orders again to refresh the list
+		await dispatch(getUserOrders());
 	} catch (error) {
-		const errorMessage = await error.json();
-		dispatch(setError(errorMessage));
+		console.error('❌ Failed to place order:', error);
+		const err = (await error.json()) || error.message;
+		dispatch(setError(err));
 	}
 };
 
@@ -157,7 +173,10 @@ export default function ordersReducer(state = initialState, action) {
 			localStorage.removeItem('currentOrder');
 			return { ...state, currentOrder: null };
 		case LOAD_USER_ORDERS:
-			return { ...state, userOrders: action.payload };
+			return {
+				...state,
+				userOrders: Array.isArray(action.payload) ? action.payload : [],
+			};
 		case LOAD_USER_ORDER:
 			localStorage.setItem('currentOrder', JSON.stringify(action.payload)); // Save order
 			return { currentOrder: action.payload };
@@ -177,13 +196,23 @@ export default function ordersReducer(state = initialState, action) {
 				),
 			};
 		case SUBMIT_ORDER:
+			if (!action.payload) {
+				console.error(
+					'❌ SUBMIT_ORDER payload is invalid:',
+					action.payload
+				);
+				return state;
+			}
+
 			return {
 				...state,
-				userOrders: state.userOrders.map((order) =>
-					order.id === action.payload.id
-						? { ...order, status: 'Submitted' }
-						: order
-				),
+				userOrders:
+					state.userOrders?.map((order) =>
+						order.id === action.payload.id
+							? { ...order, status: 'Submitted' }
+							: order
+					) || [], // Fallback to an empty array
+				currentOrder: action.payload, // Ensure currentOrder remains valid
 			};
 		case REMOVE_ORDER:
 			localStorage.removeItem('currentOrder'); // Clear saved order

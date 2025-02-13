@@ -19,14 +19,20 @@ order_routes = Blueprint("orders", __name__)
 @order_routes.route("/")
 @login_required
 def get_orders():
-    orders = Order.query.filter_by(user_id=current_user.id).all()
+    # Include orders with status 'Submitted' as well
+    orders = Order.query.filter(
+        Order.user_id == current_user.id,
+        Order.status.in_(
+            ["Active", "Submitted"]
+        ),  # Ensure "Submitted" orders are included
+    ).all()
+
     if not orders:
-        return jsonify({"message": "No orders found"}), 404
+        return jsonify({"orders": []}), 200  # Return empty list instead of 404
 
     formatted_orders = []
     for order in orders:
-        # Get restaurant details
-        restaurant = order.restaurants # Actually just one restaurant but we made relationship in model plural
+        restaurant = order.restaurants
         restaurant_data = (
             {
                 "id": restaurant.id,
@@ -45,31 +51,18 @@ def get_orders():
             }
         )
 
-        # Get order items with menu item names
-        order_items = [
-            {
-                "id": item.id,
-                "menu_item_id": item.menu_item_id,  # Include menu_item_id
-                "menu_item_name": item.menu_items.name,
-                "quantity": item.quantity,
-                "price": float(item.price),
-                "restaurant_id": order.restaurant_id,
-            }
-            for item in order.order_items
-        ]
-
         formatted_orders.append(
             {
                 "id": order.id,
                 "createdAt": order.created_at,
                 "updatedAt": order.updated_at,
                 "status": order.status,
-                "totalCost": float(order.total_cost),  # Ensure it's a float
+                "totalCost": float(order.total_cost),
                 "restaurant": restaurant_data,
                 "orderItems": [
                     {
                         "id": item.id,
-                        "menu_item_id": item.menu_item_id,  # Ensure menu_item_id is included
+                        "menu_item_id": item.menu_item_id,
                         "menu_item_name": item.menu_items.name,
                         "quantity": item.quantity,
                         "price": float(item.price),
@@ -209,6 +202,9 @@ def create_order():
         for menu_item, item in zip(menu_items, items)
     )
 
+    if not total_cost:
+        return jsonify({"message": "Order must have a valid total cost."}), 400
+
     new_order = Order(
         user_id=current_user.id,
         restaurant_id=restaurant_id,
@@ -330,23 +326,47 @@ def update_order_items(order_id):
 def complete_order(order_id):
     order = Order.query.get(order_id)
     if not order:
-        return {"message": "Order not found"}, 404
+        return jsonify({"message": "Order not found"}), 404
     if order.user_id != current_user.id:
-        return {"message": "Unauthorized"}, 403
-    if order.status != "Active":
-        return {
-            "message": "Order cannot be completed. Already processed or canceled."
-        }, 403
+        return jsonify({"message": "Unauthorized"}), 403
 
-    # Ensure order has items before completing
-    order_items = OrderItem.query.filter_by(order_id=order.id).all()
-    if not order_items:
-        return {"message": "Cannot complete an empty order. Add items first."}, 400
+    if order.status != "Active":
+        return jsonify(
+            {"message": "Order cannot be completed. Already processed or canceled."}
+        ), 403
 
     order.status = "Submitted"
     db.session.commit()
 
-    return jsonify(order.to_dict()), 200
+    # Fetch the updated order from the database again
+    updated_order = Order.query.get(order_id)
+    return jsonify(updated_order.to_dict()), 200  # ✅ Return the updated order object
+
+    # return jsonify(
+    #     {
+    #         "id": order.id,
+    #         "status": order.status,
+    #         "totalCost": float(order.total_cost),
+    #         "restaurant": {
+    #             "id": order.restaurants.id,
+    #             "name": order.restaurants.name,
+    #             "address": order.restaurants.address,
+    #             "city": order.restaurants.city,
+    #             "image": order.restaurants.store_image,
+    #         },
+    #         "orderItems": [
+    #             {
+    #                 "id": item.id,
+    #                 "menu_item_id": item.menu_item_id,
+    #                 "menu_item_name": item.menu_items.name,
+    #                 "quantity": item.quantity,
+    #                 "price": float(item.price),
+    #                 "restaurant_id": item.menu_items.restaurants.id,
+    #             }
+    #             for item in order.order_items
+    #         ],
+    #     }
+    # ), 200
 
 
 # deletes order by trashing cart

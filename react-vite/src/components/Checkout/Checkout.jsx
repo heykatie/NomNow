@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
 import TipModal from '../../context/TipModal';
 import ScheduleModal from '../../context/ScheduleModal';
-import { loadUserOrder } from '../../redux/orders';
+import { loadUserOrder, placeOrder, getUserOrders } from '../../redux/orders';
 import './Checkout.css';
 
 export default function Checkout() {
@@ -23,7 +23,7 @@ export default function Checkout() {
 		currentOrder?.restaurant?.closingTime || '20:00';
 	const [paymentMethod, setPaymentMethod] = useState('credit-card');
 
-	const subtotal = currentOrder.totalCost || 0;
+	const subtotal = parseInt(currentOrder.totalCost) || 0;
 	const baseDeliveryFee = 6.49;
 	const priorityFee = 1.49;
 	const taxes = subtotal * 0.1;
@@ -53,6 +53,38 @@ export default function Checkout() {
 		);
 	};
 
+	const handlePlaceOrder = async () => {
+		if (!currentOrder) {
+			console.error('❌ No current order found, cannot proceed.');
+			return;
+		}
+
+		if (currentOrder.status !== 'Active') {
+			console.error('❌ Order cannot be placed, it is already processed.');
+			return;
+		}
+
+		try {
+			await dispatch(placeOrder(currentOrder.id));
+
+			// Wait for Redux and localStorage updates
+			setTimeout(() => {
+				const updatedOrder = JSON.parse(
+					localStorage.getItem('currentOrder')
+				);
+				if (updatedOrder && updatedOrder.status === 'Submitted') {
+					navigate('/orders');
+				} else {
+					console.error(
+						'🚨 Order submission did not update `currentOrder`.'
+					);
+				}
+			}, 500); // Allow time for Redux to update
+		} catch (error) {
+			console.error('❌ Error placing order:', error);
+		}
+	};
+
 	useEffect(() => {
 		if (!currentOrder) {
 			const savedOrder = JSON.parse(localStorage.getItem('currentOrder'));
@@ -63,6 +95,12 @@ export default function Checkout() {
 			}
 		}
 	}, [currentOrder, navigate, dispatch]);
+
+	if (!currentOrder) {
+		console.error('No current order found, redirecting to orders.');
+		navigate('/orders');
+		return null; // Prevents further rendering
+	}
 
 	return (
 		<div className='checkout-page'>
@@ -153,7 +191,9 @@ export default function Checkout() {
 				</div>
 
 				{/* Place Order Button */}
-				<button className='confirm-order-btn'>Place order</button>
+				<button className='confirm-order-btn' onClick={handlePlaceOrder}>
+					Place order
+				</button>
 			</div>
 
 			{/* Right Sidebar - Order Summary */}
@@ -180,7 +220,8 @@ export default function Checkout() {
 				</div>
 				<div className='order-summary'>
 					<h4>Cart summary ({currentOrder?.orderItems?.length} item/s)</h4>
-					{currentOrder?.orderItems?.length ? (
+					{currentOrder?.orderItems &&
+					currentOrder.orderItems.length > 0 ? (
 						currentOrder.orderItems.map((item) => (
 							<div key={item.id} className='summary-item'>
 								<p>

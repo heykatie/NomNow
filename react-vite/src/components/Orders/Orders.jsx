@@ -13,10 +13,10 @@ import './Orders.css';
 export default function Orders() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate(); // reviews hook
-	const orders = useSelector((state) => state.orders.userOrders || []);
 	const error = useSelector((state) => state.errors.message || '');
-	const isLoading = !orders;
 	// const currentOrder = useSelector((store) => store.orders.currentOrder || {});
+	const orders = useSelector((state) => state.orders.userOrders || []);
+	const isLoading = !orders || orders.length === 0;
 
 	useEffect(() => {
 		dispatch(getUserOrders());
@@ -24,7 +24,7 @@ export default function Orders() {
 
 	if (isLoading) return <div>Loading orders...</div>;
 	if (error) return <div className='error-message'>{error}</div>;
-	if (orders.length === 0) return <div>No past orders found.</div>;
+	if (!orders.length) return <div>No past orders found.</div>;
 
 	// Handle "Rate your order" button
 	const handleRateOrder = (orderId, restaurantId, restaurantName) => {
