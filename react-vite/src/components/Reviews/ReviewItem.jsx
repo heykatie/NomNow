@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react'; // Import useEffect
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteReviewThunk, updateReviewThunk } from '../../redux/reviews';
 import Modal from 'react-modal';
 import './Reviews.css';
 
-Modal.setAppElement('#root'); 
+Modal.setAppElement('#root');
 
 const ReviewItem = ({ review }) => {
   const dispatch = useDispatch();
@@ -15,6 +15,13 @@ const ReviewItem = ({ review }) => {
   const [updatedOrderRating, setUpdatedOrderRating] = useState(review.order_rating);
   const [updatedRestaurantRating, setUpdatedRestaurantRating] = useState(review.restaurant_rating);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Use useEffect to sync local state with the review prop
+  useEffect(() => {
+    setUpdatedReviewText(review.review);
+    setUpdatedOrderRating(review.order_rating);
+    setUpdatedRestaurantRating(review.restaurant_rating);
+  }, [review]); // Run this effect whenever the review prop changes
 
   const handleSave = () => {
     const updatedReview = {
