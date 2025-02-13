@@ -10,7 +10,6 @@ const MenuItemList = () => {
 	const menuItems = useSelector((state) => state.menuItems.menuItems);
 	const error = useSelector((state) => state.menuItems.error);
 	const isLoading = useSelector((state) => state.menuItems.isLoading);
-	const user = useSelector((state) => state.session?.user || null); // Retrieve user from session state
 	const user = useSelector((state) => state.session.user); // Get user state
 
 	useEffect(() => {
