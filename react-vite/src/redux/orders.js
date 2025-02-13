@@ -39,7 +39,6 @@ export const getUserOrders = () => async (dispatch) => {
 		const data = await response.json();
 		dispatch(loadUserOrders(data.orders));
 	} catch (error) {
-		console.error('Error fetching orders:', error);
 		const errorMessage = await error.json();
 		dispatch(setError(errorMessage.errors));
 	}
@@ -141,7 +140,6 @@ export const placeOrder = (orderId) => async (dispatch) => {
 		// Fetch all user orders again to refresh the list
 		await dispatch(getUserOrders());
 	} catch (error) {
-		console.error('❌ Failed to place order:', error);
 		const err = (await error.json()) || error.message;
 		dispatch(setError(err));
 	}
@@ -198,10 +196,10 @@ export default function ordersReducer(state = initialState, action) {
 			};
 		case SUBMIT_ORDER:
 			if (!action.payload) {
-				console.error(
-					'❌ SUBMIT_ORDER payload is invalid:',
-					action.payload
-				);
+				// console.error(
+				// 	'SUBMIT_ORDER payload is invalid:',
+				// 	action.payload
+				// );
 				return state;
 			}
 

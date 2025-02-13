@@ -37,48 +37,40 @@ export default function Orders() {
 
 	const handleReorder = async (order) => {
 		if (!order || !order.orderItems || order.orderItems.length === 0) {
-			console.error('No past orders found.');
 			return;
 		}
 
-		try {
-			dispatch(clearCurrentOrder());
-			// Extract restaurant ID
-			const restaurantId = order.restaurant?.id;
-			if (!restaurantId) {
-				console.error('Missing restaurant_id in order:', order);
-				return;
-			}
+		dispatch(clearCurrentOrder());
+		// Extract restaurant ID
+		const restaurantId = order.restaurant?.id;
+		if (!restaurantId) {
+			return;
+		}
 
-			// Format the items to match the API request
-			const items = order.orderItems.map((item) => ({
-				menu_item_id: item.menu_item_id, // Ensure correct menu item ID
-				quantity: item.quantity,
-				restaurant_id: item.restaurant_id,
-			}));
+		// Format the items to match the API request
+		const items = order.orderItems.map((item) => ({
+			menu_item_id: item.menu_item_id, // Ensure correct menu item ID
+			quantity: item.quantity,
+			restaurant_id: item.restaurant_id,
+		}));
 
-			const reorderData = {
-				restaurant_id: restaurantId,
-				items,
-			};
+		const reorderData = {
+			restaurant_id: restaurantId,
+			items,
+		};
 
-			// Send the request to create a new order
-			const response = await dispatch(createOrder(reorderData));
+		// Send the request to create a new order
+		const response = await dispatch(createOrder(reorderData));
 
-			if (response?.payload) {
-				const newOrder = response.payload;
+		if (response?.payload) {
+			const newOrder = response.payload;
 
-				// Update Redux state and localStorage
-				dispatch(loadUserOrder(newOrder));
-				localStorage.setItem('currentOrder', JSON.stringify(newOrder));
+			// Update Redux state and localStorage
+			dispatch(loadUserOrder(newOrder));
+			localStorage.setItem('currentOrder', JSON.stringify(newOrder));
 
-				// Navigate to checkout
-				navigate('/checkout');
-			} else {
-				console.error('Failed to create reorder.');
-			}
-		} catch (error) {
-			console.error('Error creating reorder:', error);
+			// Navigate to checkout
+			navigate('/checkout');
 		}
 	};
 

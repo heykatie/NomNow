@@ -53,46 +53,37 @@ export default function Checkout() {
 	};
 
 	const handlePlaceOrder = async () => {
-		if (!currentOrder) {
-			console.error('❌ No current order found, cannot proceed.');
-			return;
-		}
+		// if (!currentOrder) {
+		// 	console.error('No current order found, cannot proceed.');
+		// 	return;
+		// }
 
-		if (currentOrder.status !== 'Active') {
-			console.error('❌ Order cannot be placed, it is already processed.');
-			return;
-		}
+		// if (currentOrder.status !== 'Active') {
+		// 	console.error('Order cannot be placed, it is already processed.');
+		// 	return;
+		// }
 
-		try {
-			if (paymentMethod === 'wallet') {
-				if (user.wallet < total) {
-					console.error('❌ Insufficient funds in wallet.');
-					alert('Insufficient funds in your wallet.');
-					return;
-				}
-
-				// Deduct funds from wallet
-				await dispatch(deductFundsThunk({ id: user.id, amount: total }));
+		if (paymentMethod === 'wallet') {
+			if (user.wallet < total) {
+				alert('Insufficient funds in your wallet.');
+				return;
 			}
 
-			await dispatch(placeOrder(currentOrder.id));
-
-			// Wait for Redux and localStorage updates
-			setTimeout(() => {
-				const updatedOrder = JSON.parse(
-					localStorage.getItem('currentOrder')
-				);
-				if (updatedOrder && updatedOrder.status === 'Submitted') {
-					navigate('/orders');
-				} else {
-					console.error(
-						'🚨 Order submission did not update `currentOrder`.'
-					);
-				}
-			}, 500); // Allow time for Redux to update
-		} catch (error) {
-			console.error('❌ Error placing order:', error);
+			// Deduct funds from wallet
+			await dispatch(deductFundsThunk({ id: user.id, amount: total }));
 		}
+
+		await dispatch(placeOrder(currentOrder.id));
+
+		// Wait for Redux and localStorage updates
+		setTimeout(() => {
+			const updatedOrder = JSON.parse(
+				localStorage.getItem('currentOrder')
+			);
+			if (updatedOrder && updatedOrder.status === 'Submitted') {
+				navigate('/orders');
+			}
+		}, 500);
 	};
 
 	useEffect(() => {
@@ -107,7 +98,6 @@ export default function Checkout() {
 	}, [currentOrder, navigate, dispatch]);
 
 	if (!currentOrder) {
-		console.error('No current order found, redirecting to orders.');
 		navigate('/orders');
 		return null; // Prevents further rendering
 	}
