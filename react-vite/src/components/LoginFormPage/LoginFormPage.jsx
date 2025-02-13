@@ -133,7 +133,7 @@ function LoginFormPage({isLogin, isSignup}) {
           
           <div>
              <div>
-              <div className="overlay">or</div>
+              <div className="review-overlay">or</div>
             </div>
             <button onClick={(e)=>{
               setCredential('b@user.io')

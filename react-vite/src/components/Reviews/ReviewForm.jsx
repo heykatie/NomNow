@@ -156,7 +156,7 @@ export default ReviewForm;
 		onRequestClose={() => setIsModalOpen(false)}
 		contentLabel='Review Form Modal'
 		className='modal'
-		overlayClassName='overlay'>
+		overlayClassName='review-overlay'>
 		<h2>Write a Review</h2>
 		<p>Share your Taco Casa review with others.</p>
 		<p>
