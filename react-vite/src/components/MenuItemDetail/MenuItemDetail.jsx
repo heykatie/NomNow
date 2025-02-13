@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getMenuItem, toggleLike } from '../../redux/menuItems';
+import { getMenuItem, toggleLike, getFavoriteItems } from '../../redux/menuItems'; // Import getFavoriteItems
 import { addToCart } from '../../redux/cart';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 
@@ -41,7 +41,11 @@ const MenuItemDetail = () => {
     setTimeout(() => setMessage(''), 2000);
   };
 
-  const handleToggleLike = () => dispatch(toggleLike(menuItem.id));
+  const handleToggleLike = () => {
+    dispatch(toggleLike(menuItem.id));
+    dispatch(getFavoriteItems()); // Dispatch getFavoriteItems after toggling like
+  };
+
   const isLiked = likedItems.includes(menuItem.id);
 
   return (
