@@ -1,3 +1,4 @@
+/* Reviews Container */
 .reviews-container {
   padding: 20px;
   display: flex;
@@ -6,12 +7,14 @@
   justify-content: center; /* Center vertically (optional) */
 }
 
+/* Review List */
 .review-list {
   margin-top: 20px;
   width: 100%; /* Ensure it takes full width */
   max-width: 800px; /* Optional: Set a max-width for better readability */
 }
 
+/* Review Item */
 .review-item {
   border: 1px solid #ccc;
   padding: 10px;
@@ -19,17 +22,19 @@
   width: 100%; /* Ensure it takes full width of its container */
 }
 
+/* Rating Container */
 .rating-container {
   margin-top: 10px;
 }
 
+/* Rating Item */
 .rating-item {
   margin-bottom: 5px;
   display: flex;
   align-items: center; /* Align text and star icon vertically */
 }
 
-
+/* Review Actions */
 .review-actions {
   margin-top: 10px;
 }
@@ -37,13 +42,13 @@
 /* Button styles for all buttons */
 button {
   margin-right: 10px;
-  padding: 9px 10px; /* Slightly bigger */
+  padding: 10px 20px; /* Consistent padding */
   background-color: black; /* Black background */
   color: white; /* White text */
   border: 1px solid #ccc;
   border-radius: 6px; /* Rounder corners */
   cursor: pointer;
-  font-size: 14px; /* Slightly bigger font size */
+  font-size: 14px; /* Consistent font size */
   transition: background-color 0.2s, color 0.2s;
 }
 
@@ -83,6 +88,7 @@ button:hover {
   margin-left: 10px;
 }
 
+/* Modal Styles */
 .modal {
   position: absolute;
   top: 50%;
@@ -96,32 +102,18 @@ button:hover {
   border-radius: 8px;
   max-width: 500px;
   width: 100%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8); /* Black shadow border */
+  border: 1px solid rgba(0, 0, 0, 0.2); /* Optional: subtle border */
 }
 
+/* Review Overlay Styles */
 .review-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.75);
-}
-
-/* Additional styles for modal buttons */
-.modal button {
-  background-color: black; /* Black background */
-  color: white; /* White text */
-  border: 1px solid #ccc;
-  padding: 10px 20px; /* Slightly bigger */
-  font-size: 16px; /* Slightly bigger font size */
-  border-radius: 8px; /* Rounder corners */
-  cursor: pointer;
-  transition: background-color 0.2s, color 0.2s;
-}
-
-.modal button:hover {
-  background-color: #333; /* Darker black on hover */
-  color: white;
+  background-color: rgba(0, 0, 0, 0.75); /* Dark overlay */
 }
 
 /* Reviews.css */
@@ -151,16 +143,20 @@ button:hover {
   margin-top: 10px;
 }
 
+/* Ensure review-actions buttons match the global button style */
 .review-actions button {
   margin-right: 10px;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 3px;
-  background-color: #00ff0d8f;
-  color: white;
+  padding: 10px 20px; /* Consistent padding */
+  background-color: black; /* Black background */
+  color: white; /* White text */
+  border: 1px solid #ccc;
+  border-radius: 6px; /* Rounder corners */
   cursor: pointer;
+  font-size: 14px; /* Consistent font size */
+  transition: background-color 0.2s, color 0.2s;
 }
 
 .review-actions button:hover {
-  background-color: #00b309;
+  background-color: #333; /* Darker black on hover */
+  color: white;
 }
