@@ -1,5 +1,5 @@
 import { useModal } from './Modal.jsx';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function TipModal({ orderTotal, setTip, setCustomTipUsed }) {
 	const { closeModal } = useModal();
@@ -11,6 +11,17 @@ export default function TipModal({ orderTotal, setTip, setCustomTipUsed }) {
 		setCustomTipUsed(true);
 		closeModal();
 	};
+
+	useEffect(() => {
+		const handleKeyDown = (e) => {
+			if (e.key === 'Enter' && customTip !== '') {
+				handleSaveTip();
+			}
+		};
+
+		document.addEventListener('keydown', handleKeyDown);
+		return () => document.removeEventListener('keydown', handleKeyDown);
+	}, [customTip]);
 
 	return (
 		<div className='tip-modal'>
