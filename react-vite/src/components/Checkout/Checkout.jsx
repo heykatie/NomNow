@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useModal } from '../../context/Modal';
 import TipModal from '../../context/TipModal';
+import ScheduleModal from '../../context/ScheduleModal';
 import './Checkout.css';
 
 export default function Checkout() {
