@@ -69,9 +69,10 @@ def get_orders():
                 "orderItems": [
                     {
                         "id": item.id,
+                        "menu_item_id": item.menu_item_id,  # Ensure menu_item_id is included
                         "menu_item_name": item.menu_items.name,
                         "quantity": item.quantity,
-                        "price": float(item.price),  # Ensure price is a float
+                        "price": float(item.price),
                         "restaurant_id": item.menu_items.restaurants.id,
                     }
                     for item in order.order_items
@@ -144,7 +145,17 @@ def get_order(order_id):
             "status": order.status,
             "totalCost": float(order.total_cost),
             "restaurant": restaurant_data,
-            "orderItems": order_items,
+            "orderItems": [
+                {
+                    "id": item.id,
+                    "menu_item_id": item.menu_item_id,  # Ensure menu_item_id is included
+                    "menu_item_name": item.menu_items.name,
+                    "quantity": item.quantity,
+                    "price": float(item.price),
+                    "restaurant_id": item.menu_items.restaurants.id,
+                }
+                for item in order.order_items
+            ],
         }
     ), 200
 
