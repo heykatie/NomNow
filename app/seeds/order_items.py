@@ -1,41 +1,31 @@
-from app.models import db, OrderItem, environment, SCHEMA, MenuItem
+from app.models import db, OrderItem, environment, SCHEMA, MenuItem, Order
 from sqlalchemy.sql import text
 import random
 
 
 def seed_order_items():
     order_items = []
-    restaurant_menu_items = {}
+    orders = Order.query.all()
+    menu_items_by_restaurant = {item.restaurant_id: [] for item in MenuItem.query.all()}
 
-    # Group menu items by restaurant
-    menu_items = MenuItem.query.all()
-    for item in menu_items:
-        if item.restaurant_id not in restaurant_menu_items:
-            restaurant_menu_items[item.restaurant_id] = []
-        restaurant_menu_items[item.restaurant_id].append(item.id)
+    for item in MenuItem.query.all():
+        menu_items_by_restaurant[item.restaurant_id].append(item.id)
 
-    for order_id in range(1, 31):  # Loop through 30 orders
-        if not restaurant_menu_items:
+    for order in orders:
+        if order.restaurant_id not in menu_items_by_restaurant:
             continue
 
-        # Pick a random restaurant for this order
-        restaurant_id = random.choice(list(restaurant_menu_items.keys()))
-        menu_items_for_restaurant = restaurant_menu_items[restaurant_id]
-
-        num_items = min(
-            len(menu_items_for_restaurant), random.randint(1, 3)
-        )  # Ensure we don't exceed available items
+        available_menu_items = menu_items_by_restaurant[order.restaurant_id]
+        num_items = min(len(available_menu_items), random.randint(1, 3))
 
         for _ in range(num_items):
-            menu_item_id = random.choice(
-                menu_items_for_restaurant
-            )  # ✅ Ensures items come from the same restaurant
+            menu_item_id = random.choice(available_menu_items)
             quantity = random.randint(1, 3)
             price = MenuItem.query.get(menu_item_id).price
 
             order_items.append(
                 OrderItem(
-                    order_id=order_id,
+                    order_id=order.id,
                     menu_item_id=menu_item_id,
                     quantity=quantity,
                     price=price,

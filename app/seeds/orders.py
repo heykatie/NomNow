@@ -1,24 +1,30 @@
-from app.models import db, Order, environment, SCHEMA
+from app.models import db, Order, environment, SCHEMA, MenuItem
 from sqlalchemy.sql import text
-
+import random
 
 def seed_orders():
-    orders = [
-        Order(
-            restaurant_id=(i % 6) + 1,
-            user_id=((i % 5) + 1),
-            total_cost=round(15 + (i * 2.5), 2),
-            status="Submitted"
-            if i % 2 == 0
-            else "Completed"
-            if i % 3 == 0
-            else "Active"
-            if i % 4 == 0
-            else "Canceled",
-            promo="APP10" if i % 5 == 0 else None,
-        )
-        for i in range(30)
-    ]
+    orders = []
+    restaurant_menu_items = {}
+
+    # Group menu items by restaurant
+    menu_items = MenuItem.query.all()
+    for item in menu_items:
+        if item.restaurant_id not in restaurant_menu_items:
+            restaurant_menu_items[item.restaurant_id] = []
+        restaurant_menu_items[item.restaurant_id].append(item.id)
+
+    for restaurant_id, menu_item_ids in restaurant_menu_items.items():
+        num_orders = random.randint(3, 6)  # Create 3-6 orders per restaurant
+
+        for _ in range(num_orders):
+            order = Order(
+                restaurant_id=restaurant_id,
+                user_id=random.randint(1, 5),
+                total_cost=round(random.uniform(15, 100), 2),
+                status=random.choice(["Submitted", "Completed", "Active", "Canceled"]),
+                promo=random.choice(["APP10", None]),
+            )
+            orders.append(order)
 
     db.session.add_all(orders)
     db.session.commit()
