@@ -155,7 +155,26 @@ export default function Checkout() {
 
 			{/* Right Sidebar - Order Summary */}
 			<div className='checkout-right'>
-				<h3>{orderDetails.restaurant?.name}</h3>
+				<div
+					className='restaurant-header'
+					onClick={() =>
+						navigate(`/restaurants/${orderDetails.restaurant?.id}`)
+					}>
+					<div className='restaurant-info'>
+						<h3>
+							{orderDetails.restaurant?.name ||
+								'Restaurant Name Not Available'}
+						</h3>
+						<p className='restaurant-address'>
+							{orderDetails.restaurant?.address
+								? `${orderDetails.restaurant.address}, ${
+										orderDetails.restaurant.city || ''
+								}`
+								: 'Address Not Available'}
+						</p>
+					</div>
+					<span className='arrow'>➜</span>
+				</div>
 				<div className='order-summary'>
 					<h4>Cart summary ({orderDetails?.orderItems?.length} item/s)</h4>
 					{orderDetails?.orderItems?.length ? (

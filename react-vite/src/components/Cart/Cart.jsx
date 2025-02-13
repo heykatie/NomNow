@@ -5,7 +5,8 @@ import { useNavigate } from 'react-router-dom'; // Import for navigation
 import './Cart.css';
 
 export default function Cart() {
-	const cartItems = useSelector((store) => store.orders.currentOrder);
+	const currentOrder = useSelector((store) => store.orders.currentOrder);
+	const cartItems = currentOrder?.orderItems || [];
 	const [isOpen, setIsOpen] = useState(false);
 	const navigate = useNavigate(); // React Router navigation
 
@@ -49,10 +50,10 @@ export default function Cart() {
 						</p>
 						<button
 							className='start-shopping-btn'
-              onClick={() => {
-                setIsOpen(false);
-                navigate('/home')
-              }}>
+							onClick={() => {
+								setIsOpen(false);
+								navigate('/home');
+							}}>
 							Start shopping
 						</button>
 					</div>
@@ -60,10 +61,10 @@ export default function Cart() {
 					<>
 						{/* Cart Items */}
 						<div className='cart-items'>
-							{cartItems.map((item) => (
+							{cartItems?.map((item) => (
 								<div key={item.id} className='cart-item'>
 									<img
-										src={item.image || '/placeholder.jpg'}
+										src={item.image || '/images/cart.jpeg'}
 										alt={item.name}
 									/>
 									<div className='cart-item-details'>

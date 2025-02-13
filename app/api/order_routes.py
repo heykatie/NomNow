@@ -32,9 +32,17 @@ def get_orders():
                 "id": restaurant.id,
                 "name": restaurant.name,
                 "image": restaurant.store_image,
+                "address": restaurant.address,
+                "city": restaurant.city,
             }
             if restaurant
-            else {"id": None, "name": "Unknown", "image": None}
+            else {
+                "id": None,
+                "name": "Unknown",
+                "address": "Unknown Address",
+                "city": "Unknown City",
+                "image": None,
+            }
         )
 
         # Get order items with menu item names
@@ -71,16 +79,69 @@ def get_orders():
     return jsonify({"orders": formatted_orders}), 200
 
 # Get details of a specific order made by the user
+# @order_routes.route("/<int:order_id>")
+# @login_required
+# def get_order(order_id):
+#     order = Order.query.get(order_id)
+#     if not order:
+#         return {"message": "Order not found"}, 404
+#     if order.user_id != current_user.id:
+#         return {"message": "Unauthorized"}, 403
+
+#     return jsonify(order.to_dict()), 200
+
 @order_routes.route("/<int:order_id>")
 @login_required
 def get_order(order_id):
     order = Order.query.get(order_id)
     if not order:
-        return {"message": "Order not found"}, 404
+        return jsonify({"message": "Order not found"}), 404
     if order.user_id != current_user.id:
-        return {"message": "Unauthorized"}, 403
+        return jsonify({"message": "Unauthorized"}), 403
 
-    return jsonify(order.to_dict()), 200
+    # Get restaurant details
+    restaurant = order.restaurants  # Assuming a one-to-one relationship
+    restaurant_data = (
+        {
+            "id": restaurant.id,
+            "name": restaurant.name,
+            "address": restaurant.address,
+            "city": restaurant.city,
+            "image": restaurant.store_image,
+        }
+        if restaurant
+        else {
+            "id": None,
+            "name": "Unknown",
+            "address": "Unknown Address",
+            "city": "Unknown City",
+            "image": None,
+        }
+    )
+
+    # Get order items with menu item names
+    order_items = [
+        {
+            "id": item.id,
+            "menu_item_name": item.menu_items.name,  # Assuming relationship is set
+            "quantity": item.quantity,
+            "price": float(item.price),  # Ensure price is a float
+        }
+        for item in order.order_items
+    ]
+
+    # Return full order details
+    return jsonify(
+        {
+            "id": order.id,
+            "createdAt": order.created_at,
+            "updatedAt": order.updated_at,
+            "status": order.status,
+            "totalCost": float(order.total_cost),
+            "restaurant": restaurant_data,
+            "orderItems": order_items,
+        }
+    ), 200
 
 
 # Get all orders for the current user at a specific restaurant

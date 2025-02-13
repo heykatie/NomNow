@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // reviews hook
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserOrders, getUserOrder } from '../../redux/orders';
+import {getUserOrders, getUserOrder} from '../../redux/orders';
 import OrderItem from '../OrderItem';
 import './Orders.css';
 
@@ -11,6 +11,8 @@ export default function Orders() {
   const orders = useSelector((state) => state.orders.userOrders || []);
   const error = useSelector((state) => state.errors.message || '');
   const isLoading = !orders;
+	const currentOrder = useSelector((store) => store.orders.currentOrder || {});
+
 
   useEffect(() => {
     dispatch(getUserOrders());
@@ -28,12 +30,12 @@ export default function Orders() {
   };
 
   return (
-    <div className='orders-container'>
-      <h2>Past Orders</h2>
-      {orders.map((order) => (
+		<div className='orders-container'>
+			<h2>Past Orders</h2>
+			{orders.map((order) => (
 				<div key={order.id} className='order-card'>
 					<img
-						src={order.restaurant?.image || '/placeholder.jpg'}
+						src={order.restaurant?.image || '/images/cart.jpeg'}
 						alt={order.restaurant?.name || 'Unknown Restaurant'}
 						className='restaurant-img'
 					/>
@@ -65,41 +67,51 @@ export default function Orders() {
 								</a>
 							</div>
 						</div>
-					{/* Order Items */}
-					<div className='order-items'>
-						{Array.isArray(order.orderItems) ? (
-							order.orderItems.map((item) => (
-								<OrderItem key={item.id} item={item} />
-							))
-						) : (
-							<p>No items found</p>
-						)}
-					</div>
+						{/* Order Items */}
+						<div className='order-items'>
+							{Array.isArray(order.orderItems) ? (
+								order.orderItems.map((item) => (
+									<OrderItem key={item.id} item={item} />
+								))
+							) : (
+								<p>No items found</p>
+							)}
+						</div>
 					</div>
 
-          {/* Buttons */}
-          <div className='order-buttons'>
-            <button className='reorder-btn'
-							onClick={() =>
-							{
+					{/* Buttons */}
+					<div className='order-buttons'>
+						<button
+							className='reorder-btn'
+							onClick={() => {
+								const reorderedOrder = {
+									restaurant_id: order.restaurant?.id,
+									items: order?.orderItems?.map((item) => ({
+										menu_item_id: item.id,
+										quantity: item.quantity,
+									})),
+								};
 								dispatch(getUserOrder(order.id));
-								navigate('/checkout', { state: { order } });
-							}
+								navigate('/checkout'); // Redirect to checkout page
+							}}>
+							Reorder
+						</button>
+						<button
+							className='rate-btn'
+							disabled={order.status !== 'Completed'} // Make sure order is completed to rate
+							onClick={
+								() =>
+									handleRateOrder(
+										order.id,
+										order.restaurant?.id,
+										order.restaurant?.name
+									) // Pass restaurant name
 							}>
-              Reorder
-            </button>
-            <button
-              className='rate-btn'
-              disabled={order.status !== 'Completed'} // Make sure order is completed to rate
-              onClick={() =>
-                handleRateOrder(order.id, order.restaurant?.id, order.restaurant?.name) // Pass restaurant name
-              }
-            >
-              Rate your order
-            </button>
-          </div>
-        </div>
-      ))}
-    </div>
+							Rate your order
+						</button>
+					</div>
+				</div>
+			))}
+		</div>
   );
 }

@@ -1,18 +1,33 @@
-from app.models import db, OrderItem, environment, SCHEMA
+from app.models import db, OrderItem, environment, SCHEMA, MenuItem
 from sqlalchemy.sql import text
 import random
 
 
 def seed_order_items():
     order_items = []
+    restaurant_menu_items = {}
+
+    # Group menu items by restaurant
+    menu_items = MenuItem.query.all()
+    for item in menu_items:
+        if item.restaurant_id not in restaurant_menu_items:
+            restaurant_menu_items[item.restaurant_id] = []
+        restaurant_menu_items[item.restaurant_id].append(item.id)
 
     for order_id in range(1, 31):  # Loop through 30 orders
+        if not restaurant_menu_items:
+            continue
+
+        # Pick a random restaurant for this order
+        restaurant_id = random.choice(list(restaurant_menu_items.keys()))
+        menu_items_for_restaurant = restaurant_menu_items[restaurant_id]
+
         num_items = random.randint(1, 3)  # Each order gets 1 to 3 items
 
         for _ in range(num_items):
-            menu_item_id = random.randint(1, 48)  # Assuming 10 menu items exist
+            menu_item_id = random.choice(menu_items_for_restaurant)
             quantity = random.randint(1, 3)  # Random quantity per item
-            price = round(random.uniform(5.00, 20.00), 2)  # Random price
+            price = MenuItem.query.get(menu_item_id).price  # Get price from DB
 
             order_items.append(
                 OrderItem(

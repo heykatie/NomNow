@@ -23,6 +23,7 @@
 .delivery-section,
 .delivery-options,
 .payment-section,
+.restaurant-header,
 .order-summary,
 .order-total {
   margin-bottom: 20px;
@@ -190,3 +191,38 @@ h3 {
   gap: 8px;
 }
 
+.restaurant-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  padding: 10px 0;
+  font-weight: bold;
+}
+
+.restaurant-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.restaurant-info h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.restaurant-address {
+  font-size: 14px;
+  color: gray;
+  margin-top: 2px;
+}
+
+.restaurant-header .arrow {
+  font-size: 18px;
+  color: gray;
+  transition: transform 0.2s ease;
+}
+
+.restaurant-header:hover .arrow {
+  transform: translateX(5px);
+  color: black;
+}

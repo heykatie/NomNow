@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getMenuItems } from '../../redux/menuItems';  
-import { addToCart } from '../../redux/orders'; 
-import { Link } from 'react-router-dom';  
-import './MenuItemList.css';  
+import { getMenuItems } from '../../redux/menuItems';
+import { addToCart } from '../../redux/cart';
+import { Link } from 'react-router-dom';
+import './MenuItemList.css';
 
 const MenuItemList = () => {
   const dispatch = useDispatch();
 
   const menuItems = useSelector(state => state.menuItems.menuItems);
   const error = useSelector(state => state.menuItems.error);
-  const isLoading = useSelector(state => state.menuItems.isLoading); 
+  const isLoading = useSelector(state => state.menuItems.isLoading);
   const user = useSelector(state => state.session?.user || null); // Retrieve user from session state
 
   useEffect(() => {
@@ -86,7 +86,7 @@ const MenuItemList = () => {
                 <Link to={`/menu-items/${item.id}`}>
                   {item.name}
                 </Link>
-              </h3> 
+              </h3>
 
               <p> ${item.price}</p>
               <img src={item.food_image} alt={item.name} />

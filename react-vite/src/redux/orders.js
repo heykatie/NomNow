@@ -6,7 +6,7 @@ const LOAD_USER_ORDER = 'orders/loadUserOrder';
 const LOAD_USER_ORDERS_4_REST = 'orders/loadUserOrders4Rest';
 
 const ADD_ORDER = 'orders/addOrder';
-const EDIT_ORDER = 'orders/editOrder';
+const UPDATE_ORDER = 'orders/updateOrder';
 const SUBMIT_ORDER = 'orders/submitOrder';
 const REMOVE_ORDER = 'orders/removeOrder';
 
@@ -21,7 +21,7 @@ const loadUserOrders4Rest = (orders) => ({
 	payload: orders,
 });
 const addOrder = (order) => ({ type: ADD_ORDER, payload: order });
-const editOrder = (order) => ({ type: EDIT_ORDER, payload: order });
+const updateOrder = (order) => ({ type: UPDATE_ORDER, payload: order });
 const submitOrder = (order) => ({ type: SUBMIT_ORDER, payload: order });
 const removeOrder = (orderId) => ({ type: REMOVE_ORDER, payload: orderId });
 
@@ -67,11 +67,14 @@ export const getUserOrders4Rest = (restaurantId) => async (dispatch) => {
 	}
 };
 
-export const addToCart = (orderData) => async (dispatch) => {
+export const createOrder = (orderData) => async (dispatch) => {
 	try {
 		const response = await csrfFetch('/api/orders/', {
 			method: 'POST',
-			body: JSON.stringify(orderData),
+			body: JSON.stringify({
+				...orderData,
+				status: 'Active', // Ensure the order is marked as "Active"
+			}),
 		});
 		if (!response.ok) throw response;
 
@@ -83,7 +86,7 @@ export const addToCart = (orderData) => async (dispatch) => {
 	}
 };
 
-export const editCart = (orderId, orderData) => async (dispatch) => {
+export const editOrder = (orderId, orderData) => async (dispatch) => {
 	try {
 		const response = await csrfFetch(`/api/orders/${orderId}`, {
 			method: 'PUT',
@@ -92,14 +95,14 @@ export const editCart = (orderId, orderData) => async (dispatch) => {
 		if (!response.ok) throw response;
 
 		const data = await response.json();
-		dispatch(editOrder(data));
+		dispatch(updateOrder(data));
 	} catch (error) {
 		const errorMessage = await error.json();
 		dispatch(setError(errorMessage));
 	}
 };
 
-export const checkoutCart = (orderId) => async (dispatch) => {
+export const placeOrder = (orderId) => async (dispatch) => {
 	try {
 		const response = await csrfFetch(`/api/orders/${orderId}/submit`, {
 			method: 'PUT',
@@ -114,7 +117,7 @@ export const checkoutCart = (orderId) => async (dispatch) => {
 	}
 };
 
-export const clearCart = (orderId) => async (dispatch) => {
+export const deleteOrder = (orderId) => async (dispatch) => {
 	try {
 		const response = await csrfFetch(`/api/orders/${orderId}`, {
 			method: 'DELETE',
@@ -131,7 +134,7 @@ export const clearCart = (orderId) => async (dispatch) => {
 
 const initialState = {
 	userOrders: [],
-	currentOrder: null,
+	currentOrder: JSON.parse(localStorage.getItem('currentOrder')) || null,
 	userOrdersForRestaurant: [],
 };
 
@@ -140,12 +143,13 @@ export default function ordersReducer(state = initialState, action) {
 		case LOAD_USER_ORDERS:
 			return { ...state, userOrders: action.payload };
 		case LOAD_USER_ORDER:
+			localStorage.setItem('currentOrder', JSON.stringify(action.payload)); // Save order
 			return { ...state, currentOrder: action.payload };
 		case LOAD_USER_ORDERS_4_REST:
 			return { ...state, userOrdersForRestaurant: action.payload };
 		case ADD_ORDER:
 			return { ...state, userOrders: [...state.userOrders, action.payload] };
-		case EDIT_ORDER:
+		case UPDATE_ORDER:
 			return {
 				...state,
 				userOrders: state.userOrders.map((order) =>
@@ -162,11 +166,13 @@ export default function ordersReducer(state = initialState, action) {
 				),
 			};
 		case REMOVE_ORDER:
+			localStorage.removeItem('currentOrder'); // Clear saved order
 			return {
 				...state,
 				userOrders: state.userOrders.filter(
 					(order) => order.id !== action.payload
 				),
+				currentOrder: null,
 			};
 		default:
 			return state;

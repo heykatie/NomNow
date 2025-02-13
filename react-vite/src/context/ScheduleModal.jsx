@@ -102,7 +102,7 @@ export default function ScheduleModal({
 			)?.fullDate;
 			if (selectedFullDate) generateTimeSlots(selectedFullDate);
 		}
-	}, [selectedDate, dates, restaurantClosingTime]);
+	}, [selectedDate, dates, restaurantClosingTime, generateTimeSlots]);
 
 	useEffect(() => {
 		if (dates.length > 0) {

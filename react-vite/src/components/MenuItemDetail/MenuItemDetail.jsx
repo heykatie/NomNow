@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMenuItem, toggleLike } from '../../redux/menuItems';
-import { addToCart } from '../../redux/orders';
+import { addToCart } from '../../redux/cart';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 
 const MenuItemDetail = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
+
   const menuItem = useSelector(state => state.menuItems.menuItem);
   const likedItems = useSelector(state => state.menuItems.likedItems);
   const error = useSelector(state => state.menuItems.error);
@@ -64,7 +64,7 @@ const MenuItemDetail = () => {
       <button onClick={() => navigate('/menu-items')} style={{ marginTop: '20px' }}>
         Back to Menu Items List
       </button>
-      
+
       <h2>{menuItem.name}</h2>
       <p>{menuItem.description}</p>
       <p>Price: ${menuItem.price}</p>
@@ -80,14 +80,14 @@ const MenuItemDetail = () => {
             <button onClick={increaseQuantity} style={{ padding: '5px 10px', fontSize: '20px' }}>+</button>
           </div>
 
-          <button 
-            onClick={handleAddToCart} 
+          <button
+            onClick={handleAddToCart}
             style={{ marginLeft: '10px', fontSize: '18px', padding: '8px 15px', marginTop: '10px' }}>
             + Add {quantity} to Cart
           </button>
 
-          <button 
-            onClick={handleToggleLike} 
+          <button
+            onClick={handleToggleLike}
             style={{ marginLeft: '10px', fontSize: '24px', padding: '8px 15px', marginTop: '10px', color: isLiked ? 'red' : 'gray' }}>
             {isLiked ? '❤️' : '🤍'}
           </button>
