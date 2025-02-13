@@ -15,7 +15,7 @@ const loadUserOrders = (orders) => ({
 	type: LOAD_USER_ORDERS,
 	payload: orders,
 });
-const loadUserOrder = (order) => ({ type: LOAD_USER_ORDER, payload: order });
+export const loadUserOrder = (order) => ({ type: LOAD_USER_ORDER, payload: order });
 const loadUserOrders4Rest = (orders) => ({
 	type: LOAD_USER_ORDERS_4_REST,
 	payload: orders,
@@ -80,6 +80,7 @@ export const createOrder = (orderData) => async (dispatch) => {
 
 		const data = await response.json();
 		dispatch(addOrder(data));
+		return { payload: data }; // Return newly created order
 	} catch (error) {
 		const errorMessage = await error.json();
 		dispatch(setError(errorMessage));
@@ -144,7 +145,7 @@ export default function ordersReducer(state = initialState, action) {
 			return { ...state, userOrders: action.payload };
 		case LOAD_USER_ORDER:
 			localStorage.setItem('currentOrder', JSON.stringify(action.payload)); // Save order
-			return { ...state, currentOrder: action.payload };
+			return { currentOrder: action.payload };
 		case LOAD_USER_ORDERS_4_REST:
 			return { ...state, userOrdersForRestaurant: action.payload };
 		case ADD_ORDER:

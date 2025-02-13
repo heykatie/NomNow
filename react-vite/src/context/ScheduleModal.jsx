@@ -1,5 +1,6 @@
 import { useModal } from './Modal.jsx';
 import { useState, useRef, useEffect } from 'react';
+import { useCallback } from 'react';
 import './ScheduleModal.css';
 
 export default function ScheduleModal({
@@ -41,55 +42,58 @@ export default function ScheduleModal({
 	};
 
 	// Generate time slots dynamically based on restaurant's closing time
-	const generateTimeSlots = (selectedFullDate) => {
-		const newTimeSlots = [];
-		const now = new Date();
-		const selectedDate = new Date(selectedFullDate);
-		let startHour = 17; // Default start time (5 PM)
-		let endHour = restaurantClosingTime
-			? parseInt(restaurantClosingTime.split(':')[0])
-			: 22; // Use restaurant closing time
+	const generateTimeSlots = useCallback(
+		(selectedFullDate) => {
+			const newTimeSlots = [];
+			const now = new Date();
+			const selectedDate = new Date(selectedFullDate);
+			let startHour = 17; // Default start time (5 PM)
+			let endHour = restaurantClosingTime
+				? parseInt(restaurantClosingTime.split(':')[0])
+				: 22; // Use restaurant closing time
 
-		// Adjust start hour if today is selected
-		if (selectedDate.toDateString() === now.toDateString()) {
-			startHour = Math.max(now.getHours() + 1, startHour); // Ensure at least 1 hour from now
-		}
+			// Adjust start hour if today is selected
+			if (selectedDate.toDateString() === now.toDateString()) {
+				startHour = Math.max(now.getHours() + 1, startHour); // Ensure at least 1 hour from now
+			}
 
-		// Prevent startHour from exceeding endHour
-		if (startHour >= endHour) {
-			setTimeSlots([]);
-			return;
-		}
+			// Prevent startHour from exceeding endHour
+			if (startHour >= endHour) {
+				setTimeSlots([]);
+				return;
+			}
 
-		for (let hour = startHour; hour < endHour; hour++) {
-			for (let minute of [0, 30]) {
-				// 30-minute increments
-				const timeSlot = new Date(selectedDate);
-				timeSlot.setHours(hour, minute, 0);
+			for (let hour = startHour; hour < endHour; hour++) {
+				for (let minute of [0, 30]) {
+					// 30-minute increments
+					const timeSlot = new Date(selectedDate);
+					timeSlot.setHours(hour, minute, 0);
 
-				if (
-					timeSlot > now ||
-					selectedDate.toDateString() !== now.toDateString()
-				) {
-					newTimeSlots.push(
-						timeSlot.toLocaleTimeString('en-US', {
-							hour: 'numeric',
-							minute: '2-digit',
-						}) +
-							' - ' +
-							new Date(
-								timeSlot.getTime() + 30 * 60000
-							).toLocaleTimeString('en-US', {
+					if (
+						timeSlot > now ||
+						selectedDate.toDateString() !== now.toDateString()
+					) {
+						newTimeSlots.push(
+							timeSlot.toLocaleTimeString('en-US', {
 								hour: 'numeric',
 								minute: '2-digit',
-							})
-					);
+							}) +
+								' - ' +
+								new Date(
+									timeSlot.getTime() + 30 * 60000
+								).toLocaleTimeString('en-US', {
+									hour: 'numeric',
+									minute: '2-digit',
+								})
+						);
+					}
 				}
 			}
-		}
 
-		setTimeSlots(newTimeSlots);
-	};
+			setTimeSlots(newTimeSlots);
+		},
+		[restaurantClosingTime]
+	);
 
 	useEffect(() => {
 		generateDates();
@@ -102,7 +106,7 @@ export default function ScheduleModal({
 			)?.fullDate;
 			if (selectedFullDate) generateTimeSlots(selectedFullDate);
 		}
-	}, [selectedDate, dates, restaurantClosingTime, generateTimeSlots]);
+	}, [selectedDate, dates, generateTimeSlots]);
 
 	useEffect(() => {
 		if (dates.length > 0) {

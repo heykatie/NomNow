@@ -1,29 +1,29 @@
 import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
 import TipModal from '../../context/TipModal';
 import ScheduleModal from '../../context/ScheduleModal';
+import { loadUserOrder } from '../../redux/orders';
 import './Checkout.css';
 
 export default function Checkout() {
+	const dispatch = useDispatch();
 	const location = useLocation();
 	const navigate = useNavigate();
 	const user = useSelector((state) => state.session.user);
 	const { setModalContent } = useModal();
-	const [orderDetails, setOrderDetails] = useState(
-		location.state?.order || null
-	);
+	const currentOrder = useSelector((state) => state.orders.currentOrder);
 	const [tip, setTip] = useState(0);
 	const [customTipUsed, setCustomTipUsed] = useState(false);
 	const [deliveryOption, setDeliveryOption] = useState('standard');
 	const [scheduledTime, setScheduledTime] = useState(null);
 	const restaurantClosingTime =
-		orderDetails?.restaurant?.closingTime || '20:00';
+		currentOrder?.restaurant?.closingTime || '20:00';
 	const [paymentMethod, setPaymentMethod] = useState('credit-card');
 
-	const subtotal = orderDetails.totalCost || 0;
+	const subtotal = currentOrder.totalCost || 0;
 	const baseDeliveryFee = 6.49;
 	const priorityFee = 1.49;
 	const taxes = subtotal * 0.1;
@@ -54,12 +54,15 @@ export default function Checkout() {
 	};
 
 	useEffect(() => {
-		if (location.state?.order) {
-			setOrderDetails(location.state.order);
-		} else {
-			navigate('/home');
+		if (!currentOrder) {
+			const savedOrder = JSON.parse(localStorage.getItem('currentOrder'));
+			if (savedOrder) {
+				dispatch(loadUserOrder(savedOrder)); // Restore Redux state from localStorage
+			} else {
+				navigate('/orders'); // Redirect if no order is found
+			}
 		}
-	}, [location.state, navigate]);
+	}, [currentOrder, navigate, dispatch]);
 
 	return (
 		<div className='checkout-page'>
@@ -133,7 +136,7 @@ export default function Checkout() {
 							onClick={() => setPaymentMethod('credit-card')}>
 							<span>💳 Credit Card</span>
 							<span>
-								{orderDetails?.paymentMethod || '**** **** **** 1234'}
+								{currentOrder?.paymentMethod || '**** **** **** 1234'}
 							</span>
 						</div>
 						<div
@@ -158,17 +161,17 @@ export default function Checkout() {
 				<div
 					className='restaurant-header'
 					onClick={() =>
-						navigate(`/restaurants/${orderDetails.restaurant?.id}`)
+						navigate(`/restaurants/${currentOrder.restaurant?.id}`)
 					}>
 					<div className='restaurant-info'>
 						<h3>
-							{orderDetails.restaurant?.name ||
+							{currentOrder.restaurant?.name ||
 								'Restaurant Name Not Available'}
 						</h3>
 						<p className='restaurant-address'>
-							{orderDetails.restaurant?.address
-								? `${orderDetails.restaurant.address}, ${
-										orderDetails.restaurant.city || ''
+							{currentOrder.restaurant?.address
+								? `${currentOrder.restaurant.address}, ${
+										currentOrder.restaurant.city || ''
 								}`
 								: 'Address Not Available'}
 						</p>
@@ -176,9 +179,9 @@ export default function Checkout() {
 					<span className='arrow'>➜</span>
 				</div>
 				<div className='order-summary'>
-					<h4>Cart summary ({orderDetails?.orderItems?.length} item/s)</h4>
-					{orderDetails?.orderItems?.length ? (
-						orderDetails.orderItems.map((item) => (
+					<h4>Cart summary ({currentOrder?.orderItems?.length} item/s)</h4>
+					{currentOrder?.orderItems?.length ? (
+						currentOrder.orderItems.map((item) => (
 							<div key={item.id} className='summary-item'>
 								<p>
 									{item.name ||

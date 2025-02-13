@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // reviews hook
 import { useDispatch, useSelector } from 'react-redux';
-import {getUserOrders, getUserOrder} from '../../redux/orders';
+import { getUserOrders, loadUserOrder, createOrder } from '../../redux/orders';
 import OrderItem from '../OrderItem';
 import './Orders.css';
 
@@ -83,16 +83,45 @@ export default function Orders() {
 					<div className='order-buttons'>
 						<button
 							className='reorder-btn'
-							onClick={() => {
-								const reorderedOrder = {
-									restaurant_id: order.restaurant?.id,
-									items: order?.orderItems?.map((item) => ({
-										menu_item_id: item.id,
-										quantity: item.quantity,
-									})),
-								};
-								dispatch(getUserOrder(order.id));
-								navigate('/checkout'); // Redirect to checkout page
+							onClick={async () => {
+								try {
+									// Ensure the correct restaurant_id is used
+									const restaurantId = order.restaurant?.id;
+									const filteredItems = order.orderItems.filter(
+										(item) => item.restaurant_id === restaurantId
+									);
+
+									const reorderedOrder = {
+										restaurant_id: restaurantId,
+										items: filteredItems.map((item) => ({
+											menu_item_id: item.id,
+											quantity: item.quantity,
+										})),
+									};
+
+									// Send request to create a new order
+									const response = await dispatch(
+										createOrder(reorderedOrder)
+									);
+
+									if (response?.payload) {
+										const newOrder = response.payload;
+
+										// Set the new order as currentOrder in Redux
+										dispatch(loadUserOrder(newOrder));
+
+										// Save new order to localStorage to persist on refresh
+										localStorage.setItem(
+											'currentOrder',
+											JSON.stringify(newOrder)
+										);
+
+										// Navigate to checkout
+										navigate('/checkout');
+									}
+								} catch (error) {
+									console.error('Error creating reorder:', error);
+								}
 							}}>
 							Reorder
 						</button>
