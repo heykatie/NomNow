@@ -17,12 +17,12 @@ order_routes = Blueprint("orders", __name__)
 
 #     return jsonify({"orders": [order.to_dict() for order in orders]}), 200
 
+
 @order_routes.route("/")
 @login_required
 def get_orders():
     # Include orders with status 'Submitted' as well
-    orders = Order.query.filter(
-        Order.user_id == current_user.id).all()
+    orders = Order.query.filter(Order.user_id == current_user.id).all()
 
     if not orders:
         return jsonify({"orders": []}), 200  # Return empty list instead of 404
@@ -76,6 +76,7 @@ def get_orders():
 
     return jsonify({"orders": formatted_orders}), 200
 
+
 # Get details of a specific order made by the user
 # @order_routes.route("/<int:order_id>")
 # @login_required
@@ -87,6 +88,7 @@ def get_orders():
 #         return {"message": "Unauthorized"}, 403
 
 #     return jsonify(order.to_dict()), 200
+
 
 @order_routes.route("/<int:order_id>")
 @login_required
@@ -241,6 +243,7 @@ def create_order():
 
     return jsonify(new_order.to_dict()), 201
 
+
 """
 example request body: {
     "restaurant_id": "1",
@@ -309,6 +312,8 @@ def update_order_items(order_id):
     db.session.commit()
 
     return jsonify(order.to_dict()), 200
+
+
 """
 {
     "items": [

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // reviews hook
+import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
 	getUserOrders,
@@ -12,7 +12,7 @@ import './Orders.css';
 
 export default function Orders() {
 	const dispatch = useDispatch();
-	const navigate = useNavigate(); // reviews hook
+	const navigate = useNavigate();
 	const error = useSelector((state) => state.errors.message || '');
 	// const currentOrder = useSelector((store) => store.orders.currentOrder || {});
 	const orders = useSelector((state) => state.orders.userOrders || []);
@@ -29,6 +29,12 @@ export default function Orders() {
 	const handleRestaurantClick = (restaurantId) => {
 		if (restaurantId) {
 			navigate(`/restaurants/${restaurantId}`);
+		}
+	};
+
+	const handleMenuItemClick = (menuItemId) => {
+		if (menuItemId) {
+			navigate(`/menu-items/${menuItemId}`);
 		}
 	};
 
@@ -89,8 +95,7 @@ export default function Orders() {
 					<div
 						key={order.id}
 						className='order-card'
-						onClick={() => handleRestaurantClick(order.restaurant?.id)}
-						style={{ cursor: 'pointer' }} // Change cursor to indicate clickability
+						// onClick={() => handleRestaurantClick(order.restaurant?.id)}
 					>
 						<img
 							src={order.restaurant?.image || '/images/cart.jpeg'}
@@ -99,6 +104,9 @@ export default function Orders() {
 							onClick={(e) => {
 								e.stopPropagation(); // Prevent parent click event
 								handleRestaurantClick(order.restaurant?.id);
+							}}
+							style={{
+								cursor: 'pointer',
 							}}
 						/>
 						<div className='order-header'>
@@ -110,7 +118,6 @@ export default function Orders() {
 									}}
 									style={{
 										cursor: 'pointer',
-										textDecoration: 'underline',
 									}}>
 									{order.restaurant?.name || 'Unknown Restaurant'}
 								</h3>
@@ -145,7 +152,10 @@ export default function Orders() {
 							<div className='order-items'>
 								{Array.isArray(order.orderItems) ? (
 									order.orderItems.map((item) => (
-										<OrderItem key={item.id} item={item} />
+										<OrderItem
+											key={item.id}
+											item={item}
+										/>
 									))
 								) : (
 									<p>No items found</p>
