@@ -1,58 +1,59 @@
 .menu-container {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 20px;
-    padding: 20px;
-  }
-  
-  .menu-item {
-    border: 1px solid #ddd;
-    padding: 15px;
-    border-radius: 8px;
-    text-align: center;
-    background-color: #fff;
-    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .menu-item img {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 8px;
-  }
-  
-  .menu-item h3 {
-    margin: 10px 0;
-  }
-  
-  .create-button {
-    margin-bottom: 20px;
-    padding: 10px 20px;
-    background-color: green;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .create-button:hover {
-    background-color: darkgreen;
-  }
-  
-  /* MenuItemList.css */
-
-/* Ensure the container of the menu item has a relative positioning */
-.menu-item {
-  position: relative;
-  margin-bottom: 20px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  padding: 20px;
 }
 
-/* Position the button at the bottom right corner of the image */
+.menu-item {
+  border: 1px solid #ddd;
+  padding: 15px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.menu-item img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.menu-item h3, .menu-item p {
+  font-size: 14px;
+  text-align: left;
+  margin: 5px 0;
+}
+
+.menu-item h3 {
+  font-weight: bold;
+}
+.menu-item h2 a,
+.menu-item h3 a {
+  color: black; /* Set the text color to black */
+  text-decoration: none; /* Remove the underline */
+}
+
+.menu-item h2 a:hover,
+.menu-item h3 a:hover {
+  text-decoration: underline; /* Optional: Add underline on hover if desired */
+}
+.price {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  position: absolute;
+  bottom: 10px;
+  left: 10px;
+}
+
 .add-to-cart-btn {
   position: absolute;
   bottom: 10px;
   right: 10px;
-  background-color: green;
+  background-color: black;
   color: white;
   border: none;
   font-size: 24px;
@@ -63,18 +64,20 @@
 }
 
 .add-to-cart-btn:hover {
-  background-color: darkgreen;
+  background-color: gray;
 }
 
 .add-to-cart-btn:focus {
   outline: none;
 }
 
-/* MenuItemList.css */
-
-/* Styling for the review count text */
-.review-count {
+.likes {
   font-size: 14px;
   color: gray;
   margin-top: 5px;
+}
+
+.menu-item-link, .menu-item-link:visited, .menu-item-link:hover, .menu-item-link:active {
+  text-decoration: none;
+  color: black;
 }

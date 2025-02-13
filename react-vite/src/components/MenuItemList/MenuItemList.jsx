@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMenuItems } from '../../redux/menuItems';
 import { addToCart } from '../../redux/cart';
 import { Link } from 'react-router-dom';
+import { FaThumbsUp } from 'react-icons/fa';
 import './MenuItemList.css';
 
 const MenuItemList = () => {
@@ -12,9 +13,25 @@ const MenuItemList = () => {
 	const isLoading = useSelector((state) => state.menuItems.isLoading);
 	const user = useSelector((state) => state.session.user); // Get user state
 
+	const [likes, setLikes] = useState({});
+
 	useEffect(() => {
 		dispatch(getMenuItems());
 	}, [dispatch]);
+
+	useEffect(() => {
+		const storedLikes = JSON.parse(sessionStorage.getItem('menuItemLikes')) || {};
+		const updatedLikes = { ...storedLikes };
+	
+		menuItems.forEach((item) => {
+			if (!(item.id in storedLikes)) {
+				updatedLikes[item.id] = Math.floor(Math.random() * 100);
+			}
+		});
+	
+		setLikes(updatedLikes);
+		sessionStorage.setItem('menuItemLikes', JSON.stringify(updatedLikes));
+	}, [menuItems]);
 
 	if (error) {
 		return <div>Error: {error}</div>;
@@ -59,6 +76,9 @@ const MenuItemList = () => {
 							</h3>
 
 							<p> ${item.price}</p>
+							<p className='likes'>
+								<FaThumbsUp /> {likes[item.id]}
+							</p>
 							<img src={item.food_image} alt={item.name} />
 
 							{/* The + button positioned at the bottom right */}
