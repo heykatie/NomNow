@@ -26,6 +26,12 @@ export default function Orders() {
 	if (error) return <div className='error-message'>{error}</div>;
 	if (!orders.length) return <div>No past orders found.</div>;
 
+	const handleRestaurantClick = (restaurantId) => {
+		if (restaurantId) {
+			navigate(`/restaurants/${restaurantId}`);
+		}
+	};
+
 	// Handle "Rate your order" button
 	const handleRateOrder = (orderId, restaurantId, restaurantName) => {
 		navigate(
@@ -80,15 +86,32 @@ export default function Orders() {
 			{orders
 				.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 				.map((order) => (
-					<div key={order.id} className='order-card'>
+					<div
+						key={order.id}
+						className='order-card'
+						onClick={() => handleRestaurantClick(order.restaurant?.id)}
+						style={{ cursor: 'pointer' }} // Change cursor to indicate clickability
+					>
 						<img
 							src={order.restaurant?.image || '/images/cart.jpeg'}
 							alt={order.restaurant?.name || 'Unknown Restaurant'}
 							className='restaurant-img'
+							onClick={(e) => {
+								e.stopPropagation(); // Prevent parent click event
+								handleRestaurantClick(order.restaurant?.id);
+							}}
 						/>
 						<div className='order-header'>
 							<div className='order-restaurant'>
-								<h3>
+								<h3
+									onClick={(e) => {
+										e.stopPropagation(); // Prevent parent click event
+										handleRestaurantClick(order.restaurant?.id);
+									}}
+									style={{
+										cursor: 'pointer',
+										textDecoration: 'underline',
+									}}>
 									{order.restaurant?.name || 'Unknown Restaurant'}
 								</h3>
 							</div>
@@ -134,20 +157,23 @@ export default function Orders() {
 						<div className='order-buttons'>
 							<button
 								className='reorder-btn'
-								onClick={() => handleReorder(order)}>
+								onClick={(e) => {
+									e.stopPropagation();
+									handleReorder(order);
+								}}>
 								Reorder
 							</button>
 							<button
 								className='rate-btn'
-								disabled={order.status !== 'Completed'} // Make sure order is completed to rate
-								onClick={
-									() =>
-										handleRateOrder(
-											order.id,
-											order.restaurant?.id,
-											order.restaurant?.name
-										) // Pass restaurant name
-								}>
+								disabled={order.status !== 'Completed'}
+								onClick={(e) => {
+									e.stopPropagation();
+									handleRateOrder(
+										order.id,
+										order.restaurant?.id,
+										order.restaurant?.name
+									);
+								}}>
 								Rate your order
 							</button>
 						</div>
