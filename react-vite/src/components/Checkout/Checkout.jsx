@@ -1,16 +1,14 @@
-import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
 import TipModal from '../../context/TipModal';
 import ScheduleModal from '../../context/ScheduleModal';
-import { loadUserOrder, placeOrder, getUserOrders } from '../../redux/orders';
+import { loadUserOrder, placeOrder } from '../../redux/orders';
 import './Checkout.css';
 
 export default function Checkout() {
 	const dispatch = useDispatch();
-	const location = useLocation();
 	const navigate = useNavigate();
 	const user = useSelector((state) => state.session.user);
 	const { setModalContent } = useModal();

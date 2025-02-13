@@ -52,7 +52,7 @@ export function ModalProvider({ children }) {
 
 		document.addEventListener('keydown', handleKeyDown);
 		return () => document.removeEventListener('keydown', handleKeyDown);
-	}, []);
+	}, [closeModal]);
 
 	const contextValue = {
 		modalRef, // reference to modal div
