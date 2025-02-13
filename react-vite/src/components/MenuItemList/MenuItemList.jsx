@@ -9,6 +9,7 @@ const MenuItemList = () => {
   const dispatch = useDispatch();
   const menuItems = useSelector(state => state.menuItems.menuItems);
   const error = useSelector(state => state.menuItems.error);
+  const user = useSelector(state => state.session.user); // Get user state
 
   useEffect(() => {
     dispatch(getMenuItems());
@@ -17,18 +18,6 @@ const MenuItemList = () => {
   if (error) {
     return <div>Error: {error}</div>;
   }
-
-  // const getRestaurantLabel = (restaurantId) => {
-  //   const restaurantMap = {
-  //     1: 'Taco Casa',
-  //     2: 'El Mariachi',
-  //     3: 'Olive Grove',
-  //     4: 'Blue Mediterranean',
-  //     5: 'Thai Orchid',
-  //     6: 'Bangkok Kitchen',
-  //   };
-  //   return restaurantMap[restaurantId] || 'New Restaurant';
-  // };
 
   const handleAddToCart = (item) => {
     const orderData = {
@@ -45,11 +34,14 @@ const MenuItemList = () => {
     <div>
       <h2>Menu Items</h2>
 
-      <Link to="/menu-items/new">
-        <button className="create-button">
-          Create New Menu Item
-        </button>
-      </Link>
+      {/* Show "Create New Menu Item" button only if user is logged in */}
+      {user && (
+        <Link to="/menu-items/new">
+          <button className="create-button">
+            Create New Menu Item
+          </button>
+        </Link>
+      )}
 
       {menuItems.length === 0 ? (
         <p>No menu items available.</p>
@@ -59,7 +51,7 @@ const MenuItemList = () => {
             <div className="menu-item" key={item.id}>
               <h2>
                 <Link to={`/restaurants/${item.restaurantId}`}>
-                  {(item.restaurant_name)}
+                  {item.restaurant_name}
                 </Link>
               </h2>
 

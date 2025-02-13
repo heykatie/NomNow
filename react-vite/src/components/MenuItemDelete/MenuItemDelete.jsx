@@ -8,33 +8,52 @@ const MenuItemDelete = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [menuItemName, setMenuItemName] = useState('');
-  const menuItem = useSelector(state => state.menuItems.menuItem);
-  const error = useSelector(state => state.menuItems.error);
+  const [isAuthorized, setIsAuthorized] = useState(false); // Track authorization
+  const menuItem = useSelector((state) => state.menuItems.menuItem);
+  const error = useSelector((state) => state.menuItems.error);
+  const user = useSelector((state) => state.session.user); // Logged-in user
 
+  // Fetch the menu item details when the component mounts or the ID changes
   useEffect(() => {
     if (id) {
-      dispatch(getMenuItem(id));  // Fetch the menu item details
+      dispatch(getMenuItem(id));
     }
   }, [dispatch, id]);
 
-  // Update the menuItemName once the menuItem is fetched
+  // Check if the user owns the restaurant associated with the menu item
   useEffect(() => {
-    if (menuItem) {
-      setMenuItemName(menuItem.name);
+    if (menuItem && user) {
+      const restaurantOwnerId = menuItem.restaurant_owner_id; // Ensure this field is included in the API response
+      if (user.id === restaurantOwnerId) {
+        setIsAuthorized(true); // User is authorized
+        setMenuItemName(menuItem.name); // Set the menu item name
+      } else {
+        alert('You are not authorized to delete this menu item.');
+        navigate('/menu-items'); // Redirect to the menu items list
+      }
     }
-  }, [menuItem]);
+  }, [menuItem, user, navigate]);
 
+  // Handle delete action
   const handleDelete = () => {
-    dispatch(deleteMenuItem(id));  // Dispatch delete action
-    navigate('/menu-items');  // Redirect to the menu items list page after delete
+    dispatch(deleteMenuItem(id)).then(() => {
+      navigate('/menu-items'); // Redirect to the menu items list page after delete
+    });
   };
 
+  // Handle cancel action
   const handleCancel = () => {
-    navigate(`/menu-items/${id}`);  // Redirect back to the original menu item detail page
+    navigate(`/menu-items/${id}`); // Redirect back to the menu item detail page
   };
 
+  // Display error if any
   if (error) {
     return <div>Error: {error}</div>;
+  }
+
+  // Only render the delete confirmation if the user is authorized
+  if (!isAuthorized) {
+    return null; // Do not render the delete confirmation page
   }
 
   return (

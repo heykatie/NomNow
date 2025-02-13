@@ -3,6 +3,7 @@ from ..models.menu_items import MenuItem
 from ..models import db
 from ..forms.menu_item_form import MenuItemForm
 from .. models.restaurants import Restaurant
+from ..models.user import User
 from flask_login import login_required,current_user
 from datetime import datetime
 from flask import jsonify
@@ -12,13 +13,15 @@ menu_item_routes = Blueprint('menu_items', __name__)
 # api/menu-items/
 
 
-### Get a menu item by id   # api/menu-items/id
 @menu_item_routes.route('/<int:id>', methods=['GET'])
 def get_menu_item(id):
     menu_item = MenuItem.query.get(id)
-
     if menu_item:
-        return jsonify(menu_item.to_dict()), 200
+        restaurant = Restaurant.query.get(menu_item.restaurant_id)
+        return jsonify({
+            **menu_item.to_dict(),
+            "restaurant_owner_id": restaurant.owner_id,  # Include restaurant owner ID
+        }), 200
     else:
         return jsonify({"error": "Menu item not found"}), 404
     
@@ -42,69 +45,76 @@ def get_menu_items():
     
 
 
-### Update a menu item # api/menu-items/id/update
 @menu_item_routes.route('/<int:id>', methods=['PUT'])
-# @login_required
+@login_required
 def update_menu_item(id):
     """
-    Updates a menu item
+    Updates a menu item and returns the updated item.
     """
-    item_to_update = MenuItem.query.get(id)
-    if not item_to_update:
+    menu_item = MenuItem.query.get(id)
+    if not menu_item:
         return jsonify({"error": "Menu item not found"}), 404
 
-    form = MenuItemForm(meta={'csrf': False})  # Disable CSRF if needed for API requests
-    data = request.get_json()  # Extract JSON body
+    # Check if the logged-in user owns the restaurant
+    restaurant = Restaurant.query.get(menu_item.restaurant_id)
+    if restaurant.owner_id != current_user.id:
+        return jsonify({"error": "Unauthorized: You do not own this restaurant"}), 403
 
+    data = request.get_json()
     if not data:
         return jsonify({"error": "Invalid request, JSON data required"}), 400
 
-    if form.validate_on_submit():
-        item_to_update.name = data.get("name", item_to_update.name)
-        item_to_update.food_type = data.get("food_type", item_to_update.food_type)
-        item_to_update.description = data.get("description", item_to_update.description)
-        item_to_update.price = data.get("price", item_to_update.price)
-        item_to_update.food_image = data.get("food_image", item_to_update.food_image)
-        item_to_update.updated_at = datetime.now()
+    # Update the menu item fields
+    menu_item.name = data.get("name", menu_item.name)
+    menu_item.description = data.get("description", menu_item.description)
+    menu_item.price = data.get("price", menu_item.price)
+    menu_item.food_image = data.get("food_image", menu_item.food_image)
+    menu_item.food_type = data.get("food_type", menu_item.food_type)
+    menu_item.updated_at = datetime.now()
 
-        try:
-            db.session.commit()
-            return jsonify(item_to_update.to_dict()), 200
-        except Exception as e:
-            db.session.rollback()
-            return jsonify({"error": f"Database error: {str(e)}"}), 500
-
-    return jsonify({"errors": form.errors}), 400
+    try:
+        db.session.commit()
+        return jsonify(menu_item.to_dict()), 200  # Return the updated menu item
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": f"Database error: {str(e)}"}), 500
 
 
 
 
-### Delete a menu item # api/menu-items/id/delete
 @menu_item_routes.route('/<int:id>', methods=['DELETE'])
-# @login_required
+@login_required
 def delete_menu_item(id):
+    """
+    Delete a menu item if the logged-in user owns the restaurant.
+    """
     menu_item = MenuItem.query.get(id)
 
-    if menu_item:
-        try:
-            db.session.delete(menu_item)
-            db.session.commit()
-            return jsonify({"message": "Menu item deleted successfully"}), 200
-        except Exception as e:
-            db.session.rollback()  # Rollback the transaction in case of error
-            return jsonify({"error": f"An error occurred: {str(e)}"}), 500
-    else:
+    if not menu_item:
         return jsonify({"error": "Menu item not found"}), 404
 
+    # Fetch the restaurant associated with the menu item
+    restaurant = Restaurant.query.get(menu_item.restaurant_id)
 
+    # Check if the logged-in user owns the restaurant
+    if restaurant.owner_id != current_user.id:
+        return jsonify({"error": "Unauthorized: You do not own this restaurant"}), 403
+
+    try:
+        db.session.delete(menu_item)
+        db.session.commit()
+        return jsonify({"message": "Menu item deleted successfully"}), 200
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": f"An error occurred: {str(e)}"}), 500
 
 
 
 @menu_item_routes.route('/', methods=['POST'])
-# @login_required
+@login_required
 def create_menu_item():
     """
-    Creates a new menu item using restaurant name instead of ID.
+    Creates a new menu item for the logged-in user's restaurant.
     """
     form = MenuItemForm(meta={'csrf': False})  # Disable CSRF for API
     data = request.get_json()  # Extract JSON body
@@ -120,6 +130,10 @@ def create_menu_item():
     restaurant = Restaurant.query.filter_by(name=restaurant_name).first()
     if not restaurant:
         return jsonify({"error": "Restaurant not found"}), 404
+
+    # Check if the logged-in user is the owner of the restaurant
+    if restaurant.owner_id != current_user.id:
+        return jsonify({"error": "Unauthorized: You are not the owner of this restaurant"}), 403
 
     if form.validate_on_submit():
         new_item = MenuItem(
