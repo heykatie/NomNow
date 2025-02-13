@@ -85,7 +85,7 @@ export default function Orders() {
 	return (
 		<div className='orders-container'>
 			<h2>Past Orders</h2>
-			{orders.map((order) => (
+			{orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((order) => (
 				<div key={order.id} className='order-card'>
 					<img
 						src={order.restaurant?.image || '/images/cart.jpeg'}
