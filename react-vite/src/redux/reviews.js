@@ -40,13 +40,20 @@ export const getReviewsForRestThunk = (restaurantId) => async (dispatch) => {
     const res = await fetch(`/api/reviews/restaurant/${restaurantId}`);
     if (!res.ok) {
       const errors = await res.json();
-      throw errors; // Throw errors to be handled by the caller
+      throw errors;
     }
     const reviews = await res.json();
-    dispatch(getReviewsForRest(reviews.data));
+    console.log('Fetched Reviews:', reviews.data);
+    // Adjust review structure if needed
+    const adjustedReviews = reviews.data.map((review) => ({
+      ...review,
+      order_rating: review.orderRating,
+      restaurant_rating: review.restaurantRating,
+    }));
+    dispatch(getReviewsForRest(adjustedReviews));
   } catch (error) {
     console.error('Error fetching reviews:', error);
-    throw error; // Re-throw the error for the caller to handle
+    throw error;
   }
 };
 
@@ -90,6 +97,8 @@ export const createReviewThunk = (reviewData) => async (dispatch) => {
 
     const newReview = await res.json();
     dispatch(createReview(newReview.data));
+    // Dispatch an action to fetch updated reviews
+    dispatch(getReviewsForRestThunk(restaurant_id));
     return newReview;
   } catch (error) {
     console.error('Error creating review:', error);
@@ -97,9 +106,6 @@ export const createReviewThunk = (reviewData) => async (dispatch) => {
   }
 };
 
-// THUNK: UPDATE A REVIEW
-
-//react-vite/src/redux/reviews.js
 
 // THUNK: UPDATE A REVIEW
 export const updateReviewThunk = (updatedReview) => async (dispatch) => {
@@ -121,9 +127,6 @@ export const updateReviewThunk = (updatedReview) => async (dispatch) => {
     console.error("Error updating review:", error);
   }
 };
-
-
-
 
 // THUNK: DELETE A REVIEW
 export const deleteReviewThunk = (reviewId) => async (dispatch) => {
