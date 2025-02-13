@@ -69,7 +69,10 @@ function DropdownMenu({ user }) {
 						Orders
 					</NavLink>
 				</li>
-				<li>Favorites</li>
+				<li>
+        <NavLink to={`/favorites`} onClick={closeModal}>
+        Favorites
+					</NavLink></li>
 				<li>
 					<NavLink to={`/wallet`} onClick={closeModal}>
 						Wallet

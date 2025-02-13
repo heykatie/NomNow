@@ -7,6 +7,7 @@ import Reviews from '../components/Reviews';
 import WalletPage from '../components/WalletPage/WalletPage';
 import Orders from '../components/Orders';
 import MenuItemList from '../components/MenuItemList/MenuItemList';
+import Favorites from '../components/MenuItemsFavorite/MenuItemsFavorite';
 import MenuItemDetail from '../components/MenuItemDetail/MenuItemDetail';
 import MenuItemCreate from '../components/MenuItemCreate';
 import UpdateMenuItem from '../components/MenuItemUpdate/MenuItemUpdate';
@@ -69,6 +70,10 @@ export const router = createBrowserRouter([
       {
         path: 'menu-items',
         element: <MenuItemList />,
+      },
+      {
+        path: 'favorites',
+        element: <Favorites />
       },
       {
         path: 'menu-items/:id',

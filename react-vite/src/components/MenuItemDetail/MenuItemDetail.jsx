@@ -86,13 +86,10 @@ const MenuItemDetail = () => {
 
           {/* Update & Delete buttons */}
           <Link to={`/menu-items/${menuItem.id}/update`} style={{ marginRight: '10px' }}>
-            <button>Update Menu Item</button>
+            <button>Update</button>
           </Link>
-
           <Link to={`/menu-items/${menuItem.id}/delete`}>
-            <button style={{ backgroundColor: 'red', color: 'white' }}>
-              Delete Menu Item
-            </button>
+            <button>Delete</button>
           </Link>
         </>
       )}
