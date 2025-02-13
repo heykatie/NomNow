@@ -10,36 +10,48 @@ import './Checkout.css';
 export default function Checkout() {
 	const location = useLocation();
 	const navigate = useNavigate();
-  const user = useSelector((state) => state.session.user);
-  const { setModalContent } = useModal();
+	const user = useSelector((state) => state.session.user);
+	const { setModalContent } = useModal();
 	const [orderDetails, setOrderDetails] = useState(
 		location.state?.order || null
 	);
 	const [tip, setTip] = useState(0);
 	const [customTipUsed, setCustomTipUsed] = useState(false);
 	const [deliveryOption, setDeliveryOption] = useState('standard');
+	const [scheduledTime, setScheduledTime] = useState(null);
+	const restaurantClosingTime =
+		orderDetails?.restaurant?.closingTime || '20:00';
 	const [paymentMethod, setPaymentMethod] = useState('credit-card');
 
-  const subtotal = orderDetails.totalCost || 0;
+	const subtotal = orderDetails.totalCost || 0;
 	const baseDeliveryFee = 6.49;
 	const priorityFee = 1.49;
-  const taxes = subtotal * 0.1;
-  const deliveryFee =
-	deliveryOption === 'priority'
-	? baseDeliveryFee + priorityFee
-	: baseDeliveryFee;
-  const orderTotal = subtotal + deliveryFee + taxes;
-  const total = subtotal + deliveryFee + taxes + tip;
+	const taxes = subtotal * 0.1;
+	const deliveryFee =
+		deliveryOption === 'priority'
+			? baseDeliveryFee + priorityFee
+			: baseDeliveryFee;
+	const orderTotal = subtotal + deliveryFee + taxes;
+	const total = subtotal + deliveryFee + taxes + tip;
 
-  const openTipModal = () => {
-    setModalContent(
+	const openTipModal = () => {
+		setModalContent(
 			<TipModal
 				orderTotal={orderTotal}
 				setTip={setTip}
 				setCustomTipUsed={setCustomTipUsed}
 			/>
 		);
-  };
+	};
+
+	const openScheduleModal = () => {
+		setModalContent(
+			<ScheduleModal
+				setScheduledTime={setScheduledTime}
+				restaurantClosingTime={restaurantClosingTime}
+			/>
+		);
+	};
 
 	useEffect(() => {
 		if (location.state?.order) {
@@ -47,8 +59,7 @@ export default function Checkout() {
 		} else {
 			navigate('/home');
 		}
-  }, [location.state, navigate]);
-
+	}, [location.state, navigate]);
 
 	return (
 		<div className='checkout-page'>
@@ -102,9 +113,12 @@ export default function Checkout() {
 						className={`option schedule ${
 							deliveryOption === 'schedule' ? 'selected' : ''
 						}`}
-						onClick={() => setDeliveryOption('schedule')}>
+						onClick={() => {
+							setDeliveryOption('schedule');
+							openScheduleModal();
+						}}>
 						<span>⏰ Schedule</span>
-						<span>Choose a time</span>
+						<span>{scheduledTime ? scheduledTime : 'Choose a time'}</span>
 					</div>
 				</div>
 
@@ -128,7 +142,9 @@ export default function Checkout() {
 							}`}
 							onClick={() => setPaymentMethod('wallet')}>
 							<span>💰 Credits</span>
-							<span>Balance: ${parseInt(user?.wallet)?.toFixed(2) || '0.00'}</span>
+							<span>
+								Balance: ${parseInt(user?.wallet)?.toFixed(2) || '0.00'}
+							</span>
 						</div>
 					</div>
 				</div>
