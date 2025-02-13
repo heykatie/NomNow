@@ -88,20 +88,19 @@ export default function Checkout() {
 			}
 		};
 
-		const handleBackButton = () => {
-			if (currentOrder?.status === 'Active') {
-				dispatch(deleteOrder(currentOrder.id));
-			}
+		const handlePopstate = () => {
+			setTimeout(() => {
+				handleNavigation();
+			}, 100); 
 		};
 
-		window.addEventListener('popstate', handleBackButton);
+		window.addEventListener('popstate', handlePopstate);
 
 		return () => {
+			window.removeEventListener('popstate', handlePopstate);
 			handleNavigation();
-			window.removeEventListener('popstate', handleBackButton);
 		};
 	}, [location.pathname, currentOrder, dispatch]);
-
 
 	useEffect(() => {
 		if (!currentOrder) {

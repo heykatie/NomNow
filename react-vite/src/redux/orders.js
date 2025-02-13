@@ -11,13 +11,15 @@ const UPDATE_ORDER = 'orders/updateOrder';
 const SUBMIT_ORDER = 'orders/submitOrder';
 const REMOVE_ORDER = 'orders/removeOrder';
 
-
 const loadUserOrders = (orders) => ({
 	type: LOAD_USER_ORDERS,
 	payload: orders,
 });
 
-export const loadUserOrder = (order) => ({ type: LOAD_USER_ORDER, payload: order });
+export const loadUserOrder = (order) => ({
+	type: LOAD_USER_ORDER,
+	payload: order,
+});
 const loadUserOrders4Rest = (orders) => ({
 	type: LOAD_USER_ORDERS_4_REST,
 	payload: orders,
@@ -29,7 +31,6 @@ const addOrder = (order) => ({ type: ADD_ORDER, payload: order });
 const updateOrder = (order) => ({ type: UPDATE_ORDER, payload: order });
 const submitOrder = (order) => ({ type: SUBMIT_ORDER, payload: order });
 const removeOrder = (orderId) => ({ type: REMOVE_ORDER, payload: orderId });
-
 
 export const getUserOrders = () => async (dispatch) => {
 	try {
@@ -159,13 +160,12 @@ export const deleteOrder = (orderId) => async (dispatch) => {
 		if (!response.ok) throw response;
 
 		dispatch(removeOrder(orderId));
-		dispatch(clearCurrentOrder()); 
+		dispatch(clearCurrentOrder());
 	} catch (error) {
 		console.error(`Error deleting order ${orderId}:`, error);
 		dispatch(setError(await error.json()));
 	}
 };
-
 
 const initialState = {
 	userOrders: [],
@@ -181,7 +181,11 @@ export default function ordersReducer(state = initialState, action) {
 		case LOAD_USER_ORDERS:
 			return {
 				...state,
-				userOrders: Array.isArray(action.payload) ? action.payload : [],
+				userOrders: Array.isArray(action.payload)
+					? action.payload.sort(
+							(a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+					)
+					: [],
 			};
 		case LOAD_USER_ORDER:
 			localStorage.setItem('currentOrder', JSON.stringify(action.payload));
@@ -194,7 +198,9 @@ export default function ordersReducer(state = initialState, action) {
 		case ADD_ORDER:
 			return {
 				...state,
-				userOrders: [...state.userOrders, action.payload],
+				userOrders: [action.payload, ...state.userOrders].sort(
+					(a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+				),
 				currentOrder: action.payload,
 			};
 		case UPDATE_ORDER:
@@ -205,30 +211,33 @@ export default function ordersReducer(state = initialState, action) {
 				),
 			};
 		case SUBMIT_ORDER:
-			if (!action.payload) return state; // Prevent invalid state
+			if (!action.payload) return state;
 
 			return {
 				...state,
-				userOrders:
-					state.userOrders?.map((order) =>
+				userOrders: state.userOrders
+					.map((order) =>
 						order.id === action.payload.id
 							? { ...order, status: 'Submitted' }
 							: order
-					) || [],
-				currentOrder: action.payload, // ✅ Update currentOrder
+					)
+					.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
+				currentOrder: action.payload,
 			};
-		case REMOVE_ORDER:
+		case REMOVE_ORDER: {
+			const updatedUserOrders = state.userOrders.filter(
+				(order) => order.id !== action.payload
+			);
+
 			return {
 				...state,
-				userOrders:
-					state.userOrders?.filter(
-						(order) => order.id !== action.payload
-					) || [],
+				userOrders: updatedUserOrders,
 				currentOrder:
 					state.currentOrder?.id === action.payload
 						? null
 						: state.currentOrder,
 			};
+		}
 		default:
 			return state;
 	}
