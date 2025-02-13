@@ -5,7 +5,7 @@ import './Reviews.css';
 
 const ReviewItem = ({ review }) => {
   const dispatch = useDispatch();
-  const loggedInUserId = useSelector(state => state.session.user.id); // Get the logged-in user's ID from the Redux state
+  const loggedInUserId = useSelector((state) => state.session.user?.id);
 
   const [isEditing, setIsEditing] = useState(false);
   const [updatedReviewText, setUpdatedReviewText] = useState(review.review);
@@ -30,15 +30,6 @@ const ReviewItem = ({ review }) => {
 
     dispatch(updateReviewThunk(updatedReview));
     setIsEditing(false);
-  };
-
-  const getStarRating = (rating) => {
-    rating = Math.min(Math.max(rating, 1), 5);
-    return [1, 2, 3, 4, 5].map(star => (
-      <span key={star} className={star <= rating ? 'star selected' : 'star'}>
-        ★
-      </span>
-    ));
   };
 
   return (
@@ -71,13 +62,13 @@ const ReviewItem = ({ review }) => {
           <p>{review.review}</p>
           <div className="rating-container">
             <div className="rating-item">
-              <span>Order {getStarRating(review.order_rating)}</span>
+              <span>Order ★ {review.order_rating}</span>
             </div>
             <div className="rating-item">
-              <span>Restaurant {getStarRating(review.restaurant_rating)}</span>
+              <span>Restaurant ★ {review.restaurant_rating}</span>
             </div>
           </div>
-          {review.userId === loggedInUserId && ( // Only show delete and update buttons if the review belongs to the logged-in user
+          {review.userId === loggedInUserId && (
             <div className="review-actions">
               <button onClick={handleDelete}>Delete</button>
               <button onClick={handleUpdate}>Update</button>

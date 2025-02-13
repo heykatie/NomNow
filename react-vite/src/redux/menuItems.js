@@ -107,11 +107,36 @@ export const toggleLike = (itemId) => {
   };
 };
 
+export const getFavoriteItems = () => async (dispatch, getState) => {
+  const likedItemIds = getState().menuItems.likedItems; // Get liked item IDs from Redux state
+
+  if (likedItemIds.length === 0) {
+    dispatch({ type: 'SET_FAVORITE_ITEMS', payload: [] });
+    return;
+  }
+
+  try {
+    const requests = likedItemIds.map(id =>
+      fetch(`/api/menu-items/${id}`).then(response => response.json()) // Fetch each liked item
+    );
+
+    const favoriteItems = await Promise.all(requests); // Wait for all requests to complete
+
+    // console.log('Favorite items:', favoriteItems); // Check if favorites are fetched correctly
+
+    dispatch({ type: 'SET_FAVORITE_ITEMS', payload: favoriteItems }); // Save in Redux
+  } catch (error) {
+    console.error('Error fetching favorite items:', error);
+    dispatch({ type: 'MENU_ERROR', payload: error.message });
+  }
+};
+
 const initialState = {
   menuItems: [],
   menuItem: null,
   error: null,
   likedItems: JSON.parse(localStorage.getItem('likedItems')) || [], // Load from localStorage
+  favoriteItems: [], // Store full favorite items
 };
 
 const menuReducer = (state = initialState, action) => {
@@ -146,14 +171,20 @@ const menuReducer = (state = initialState, action) => {
         error: null,
       };
 
+      case 'SET_FAVORITE_ITEMS':
+        return { ...state, favoriteItems: action.payload, error: null };
+
     case TOGGLE_LIKE:
       const itemId = action.payload;
-      const likedItems = state.likedItems.includes(itemId)
-        ? state.likedItems.filter((id) => id !== itemId) // Remove if already liked
+      const isAlreadyLiked = state.likedItems.includes(itemId);
+      
+      const updatedLikedItems = isAlreadyLiked
+        ? state.likedItems.filter(id => id !== itemId) // Remove if already liked
         : [...state.likedItems, itemId]; // Add if not liked
-
-      localStorage.setItem('likedItems', JSON.stringify(likedItems)); // Save to localStorage
-      return { ...state, likedItems };
+      
+      localStorage.setItem('likedItems', JSON.stringify(updatedLikedItems)); // Save to localStorage
+      
+      return { ...state, likedItems: updatedLikedItems };
 
     case MENU_ERROR:
       return { ...state, error: action.payload };

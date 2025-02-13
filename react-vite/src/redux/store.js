@@ -12,6 +12,7 @@ import ordersReducer from './orders';
 import menuReducer from "./menuItems";
 import errorsReducer from './errors';
 import restaurantReducer from './restaurants';
+import cartReducer from './cart';
 
 
 const rootReducer = combineReducers({
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   reviews: reviewsReducer,
   // import manageReducer from './manage';
   restaurants: restaurantReducer,
+  cart: cartReducer
 });
 
 let enhancer;

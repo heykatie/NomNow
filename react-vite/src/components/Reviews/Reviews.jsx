@@ -1,6 +1,4 @@
-//react-vite/src/components/Reviews/Reviews.jsx
-
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useLocation } from 'react-router-dom';
 import { getReviewsForRestThunk } from '../../redux/reviews';
@@ -9,25 +7,37 @@ import ReviewForm from './ReviewForm';
 import './Reviews.css';
 
 const Reviews = () => {
-  const { restaurantId } = useParams(); // Extract restaurantId from the URL
+  const { restaurantId } = useParams();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const orderId = queryParams.get('orderId'); // Extract orderId from query params
-  const restaurantName = queryParams.get('restaurantName'); // Extract restaurantName from query params
+  const orderId = queryParams.get('orderId');
+  const initialRestaurantName = queryParams.get('restaurantName');
 
   const dispatch = useDispatch();
   const reviews = useSelector((state) => state.reviews.allReviewsForRest);
 
+  const [restaurantName, setRestaurantName] = useState(initialRestaurantName);
+
+  useEffect(() => {
+    if (!restaurantName && restaurantId) {
+      fetch(`/api/restaurants/${restaurantId}`)
+        .then(response => response.json())
+        .then(data => setRestaurantName(data.restaurant.name)) 
+        .catch(error => console.error('Error fetching restaurant name:', error));
+    }
+  }, [restaurantId, restaurantName]);
+
   useEffect(() => {
     if (restaurantId) {
-      dispatch(getReviewsForRestThunk(restaurantId)); // Fetch reviews for the restaurant
+      dispatch(getReviewsForRestThunk(restaurantId));
     }
   }, [dispatch, restaurantId]);
 
   return (
     <div className="reviews-container">
-      <h2>Reviews for {restaurantName || `Restaurant ${restaurantId}`}</h2> {/* Display restaurant name */}
-      <ReviewForm restaurantId={restaurantId} orderId={orderId} /> {/* Pass orderId to the form */}
+      <h2>Reviews for {restaurantName || `Restaurant ${restaurantId}`}</h2>
+
+      <ReviewForm restaurantId={restaurantId} orderId={orderId || 1} />
       <ReviewList reviews={reviews} />
     </div>
   );

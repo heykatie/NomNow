@@ -1,47 +1,75 @@
-import { useRef, useState, useContext, createContext } from 'react';
+import {
+	useRef,
+	useState,
+	useContext,
+	createContext,
+	useEffect,
+	useCallback,
+} from 'react';
 import ReactDOM from 'react-dom';
 import './Modal.css';
 
 const ModalContext = createContext();
 
 export function ModalProvider({ children }) {
-  const modalRef = useRef();
-  const [modalContent, setModalContent] = useState(null);
-  // callback function that will be called when modal is closing
-  const [onModalClose, setOnModalClose] = useState(null);
+	const modalRef = useRef();
+	const [modalContent, setModalContent] = useState(null);
+	// callback function that will be called when modal is closing
+	const [onModalClose, setOnModalClose] = useState(null);
 
-  const closeModal = () => {
-    setModalContent(null); // clear the modal contents
-    // If callback function is truthy, call the callback function and reset it
-    // to null:
-    document.body.classList.remove('no-scroll');
-    if (typeof onModalClose === 'function') {
-      setOnModalClose(null);
-      onModalClose();
-    }
-  };
+	const closeModal = useCallback(() => {
+		setModalContent(null);
+		document.body.classList.remove('no-scroll');
 
-  const openModal = (content) => {
+		if (typeof onModalClose === 'function') {
+			setOnModalClose(null);
+			onModalClose();
+		}
+	}, [onModalClose]);
+
+	useEffect(() => {
+		const handleKeyDown = (e) => {
+			if (e.key === 'Escape') {
+				closeModal();
+			}
+		};
+
+		document.addEventListener('keydown', handleKeyDown);
+		return () => document.removeEventListener('keydown', handleKeyDown);
+	}, [closeModal]);
+
+	const openModal = (content) => {
 		setModalContent(content);
 		document.body.classList.add('no-scroll');
-  };
+	};
 
-  const contextValue = {
-    modalRef, // reference to modal div
-    modalContent, // React component to render inside modal
-    setModalContent: openModal, // function to set the React component to render inside modal
-    setOnModalClose, // function to set the callback function called when modal is closing
-    closeModal // function to close the modal
-  };
+	useEffect(() => {
+		const handleKeyDown = (e) => {
+			if (e.key === 'Escape') {
+				closeModal();
+			}
+		};
 
-  return (
-    <>
-      <ModalContext.Provider value={contextValue}>
-        {children}
-      </ModalContext.Provider>
-      <div ref={modalRef} />
-    </>
-  );
+		document.addEventListener('keydown', handleKeyDown);
+		return () => document.removeEventListener('keydown', handleKeyDown);
+	}, [closeModal]);
+
+	const contextValue = {
+		modalRef, // reference to modal div
+		modalContent, // React component to render inside modal
+		setModalContent: openModal, // function to set the React component to render inside modal
+		setOnModalClose, // function to set the callback function called when modal is closing
+		closeModal, // function to close the modal
+	};
+
+	return (
+		<>
+			<ModalContext.Provider value={contextValue}>
+				{children}
+			</ModalContext.Provider>
+			<div ref={modalRef} />
+		</>
+	);
 }
 
 export function Modal() {

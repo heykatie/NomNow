@@ -91,6 +91,26 @@ export const addFundsThunk = (fundsObject) => async (dispatch) => {
       return {server: 'Something went wrong. Please try again'}
     }
 }
+
+export const deductFundsThunk = (fundsObject) => async (dispatch) => {
+	const { id, amount } = fundsObject;
+
+	const response = await csrfFetch(`/api/users/wallet/deduct/${id}`, {
+		method: 'PUT',
+		body: JSON.stringify({ amount }),
+	});
+
+	if (response.ok) {
+		const data = await response.json();
+		dispatch(editUser(data)); // Update user state in Redux
+	} else if (response.status < 500) {
+		const errorMessages = await response.json();
+		return errorMessages;
+	} else {
+		return { server: 'Something went wrong. Please try again' };
+	}
+};
+
 export const editUserThunk = (updateObj) => async (dispatch) => {
     const {id} = updateObj
     const response = await csrfFetch(`/api/users/${id}`, {

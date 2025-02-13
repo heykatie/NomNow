@@ -40,6 +40,20 @@ def add_funds(id):
     # user.update(form.json)
     # return user.to_dict()
 
+@user_routes.route("/wallet/deduct/<int:id>", methods=["PUT", "PATCH"])
+@login_required
+def deduct_funds(id):
+    form = FundsForm()
+    amount_to_deduct = form.data["amount"]
+
+    user = User.query.get(id)
+
+    if user.wallet < amount_to_deduct:
+        return jsonify({"error": "Insufficient funds"}), 400
+
+    user.wallet -= amount_to_deduct
+    return user.to_dict()
+
 @user_routes.route('/<int:id>', methods=['PUT', 'PATCH'])
 @login_required
 def update_user(id):

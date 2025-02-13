@@ -31,38 +31,34 @@
   border-radius: 12px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   width: 90%;
-  max-width: 400px;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
   text-align: center;
-}
-
-#modal-content .close-button {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  background: #f2f2f2;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 18px;
-  border: none;
-  cursor: pointer;
   transition: background 0.2s ease;
   z-index: 10;
 }
 
+/* Global Close Button */
+#modal-content .close-button {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: white;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  z-index: 100;
+}
+
 #modal-content .close-button:hover {
-  background: #e0e0e0;
-}
-
-input[type="number"] {
-  -moz-appearance: textfield;
-}
-
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
+  background: #f2f2f2;
 }

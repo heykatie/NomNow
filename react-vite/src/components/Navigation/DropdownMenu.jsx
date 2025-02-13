@@ -10,7 +10,7 @@ import "./Navigation.css";
 function DropdownMenu({ user }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const ulRef = React.useRef(null); 
+  const ulRef = React.useRef(null);
   const location = useLocation();
   const {closeModal} = useModal();
 
@@ -25,20 +25,20 @@ function DropdownMenu({ user }) {
   const handleRestaurantClick = () => {
     if (!user) {
       navigate('/login');
-    } else if (user.restaurantOwner) { 
+    } else if (user.restaurantOwner) {
       navigate('/restaurants/manage');
     } else {
       navigate('/restaurants/new');
     }
     closeModal();
   };
-  
+
   const getButtonText = () => {
     if (!user) return "Add your restaurant";
     if (user.restaurantOwner) return "Manage your restaurants";
     return "Add your restaurant";
   };
-  
+
   let content = (
       <div className='menu-dropdown' ref={ulRef}>
           <li><NavLink to='/login' onClick={closeModal}>Log in</NavLink></li>
@@ -52,7 +52,7 @@ function DropdownMenu({ user }) {
 				<li>
 					<div className='profile'>
 						<img
-							src='../../public/icons/user.png'
+							src='/icons/user.png'
 							alt=''
 							className='icon'
 						/>
@@ -69,7 +69,10 @@ function DropdownMenu({ user }) {
 						Orders
 					</NavLink>
 				</li>
-				<li>Favorites</li>
+				<li>
+        <NavLink to={`/favorites`} onClick={closeModal}>
+        Favorites
+					</NavLink></li>
 				<li>
 					<NavLink to={`/wallet`} onClick={closeModal}>
 						Wallet
