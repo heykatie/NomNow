@@ -4,8 +4,7 @@ import { createReviewThunk, getReviewsForRestThunk } from '../../redux/reviews';
 import Modal from 'react-modal';
 import './Reviews.css';
 
-// Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
-Modal.setAppElement('#root'); // Replace '#root' with your app's root element ID
+Modal.setAppElement('#root'); 
 
 const ReviewForm = ({ restaurantId, orderId }) => {
   const [reviewText, setReviewText] = useState('');
@@ -13,28 +12,28 @@ const ReviewForm = ({ restaurantId, orderId }) => {
   const [restaurantRating, setRestaurantRating] = useState(0);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
+  const [isModalOpen, setIsModalOpen] = useState(false);  
   const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // For testing, hardcoding orderId
-    const hardcodedOrderId = orderId || 1; // Use this to avoid null value
+    const hardcodedOrderId = orderId || 1; 
 
     if (!hardcodedOrderId) {
       setErrorMessage('Order ID is missing. Please try again.');
-      setSuccessMessage(''); // Clear success message
+      setSuccessMessage(''); 
       return;
     }
     if (!reviewText.trim()) {
       setErrorMessage('Please write a review before submitting.');
-      setSuccessMessage(''); // Clear success message
+      setSuccessMessage('');
       return;
     }
     if (orderRating === 0 || restaurantRating === 0) {
       setErrorMessage('Please select a rating for both order and restaurant.');
-      setSuccessMessage(''); // Clear success message
+      setSuccessMessage('');  
       return;
     }
 
@@ -50,19 +49,19 @@ const ReviewForm = ({ restaurantId, orderId }) => {
       const response = await dispatch(createReviewThunk(newReview));
       if (response && !response.errors) {
         setSuccessMessage('Review submitted successfully!');
-        setErrorMessage(''); // Clear error message
+        setErrorMessage('');  
         setReviewText('');
         setOrderRating(0);
         setRestaurantRating(0);
         dispatch(getReviewsForRestThunk(restaurantId));
-        setIsModalOpen(false); // Close the modal after successful submission
+        setIsModalOpen(false);  
       } else {
         setErrorMessage(response.errors || 'Failed to submit review. Please try again.');
-        setSuccessMessage(''); // Clear success message
+        setSuccessMessage('');  
       }
     } catch (error) {
       setErrorMessage('An error occurred. Please try again.');
-      setSuccessMessage(''); // Clear success message
+      setSuccessMessage(''); 
     }
   };
 

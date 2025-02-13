@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteReviewThunk, updateReviewThunk } from '../../redux/reviews';
 import './Reviews.css';
@@ -12,13 +12,6 @@ const ReviewItem = ({ review }) => {
   const [updatedOrderRating, setUpdatedOrderRating] = useState(review.order_rating);
   const [updatedRestaurantRating, setUpdatedRestaurantRating] = useState(review.restaurant_rating);
 
-  const handleDelete = () => {
-    dispatch(deleteReviewThunk(review.id));
-  };
-
-  const handleUpdate = () => {
-    setIsEditing(true);
-  };
 
   const handleSave = () => {
     const updatedReview = {
@@ -28,8 +21,9 @@ const ReviewItem = ({ review }) => {
       restaurant_rating: updatedRestaurantRating,
     };
 
-    dispatch(updateReviewThunk(updatedReview));
-    setIsEditing(false);
+    dispatch(updateReviewThunk(updatedReview)).then(() => {
+      setIsEditing(false);  
+    });
   };
 
   return (
@@ -70,8 +64,8 @@ const ReviewItem = ({ review }) => {
           </div>
           {review.userId === loggedInUserId && (
             <div className="review-actions">
-              <button onClick={handleDelete}>Delete</button>
-              <button onClick={handleUpdate}>Update</button>
+              <button onClick={() => dispatch(deleteReviewThunk(review.id))}>Delete</button>
+              <button onClick={() => setIsEditing(true)}>Update</button>
             </div>
           )}
         </div>
