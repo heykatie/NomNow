@@ -48,10 +48,10 @@ const UpdateMenuItem = () => {
       hasCheckedAuth.current = true; // Mark as checked
       if (menuItem.restaurant_owner_id !== user.id) {
         alert('You are not authorized to update this menu item.');
-        navigate('/menu-items');
+        navigate(`/menu-items/${id}`); // Redirect to the menu item page
       }
     }
-  }, [menuItem, user, navigate]);
+  }, [menuItem, user, navigate, id]);
 
   // Handle input changes
   const handleChange = (e) => {
