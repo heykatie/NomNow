@@ -30,8 +30,8 @@ function Navigation() {
 		);
 	}
 
-  console.log('DELIVERY TYPE:', deliveryType);
-  console.log(user)
+  // console.log('DELIVERY TYPE:', deliveryType);
+  // console.log(user)
   return (
 	<div className='navContainer'>
 		<ul className='nav'>
