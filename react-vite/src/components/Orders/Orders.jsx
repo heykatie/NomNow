@@ -77,74 +77,82 @@ export default function Orders() {
 	return (
 		<div className='orders-container'>
 			<h2>Past Orders</h2>
-			{orders.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).map((order) => (
-				<div key={order.id} className='order-card'>
-					<img
-						src={order.restaurant?.image || '/images/cart.jpeg'}
-						alt={order.restaurant?.name || 'Unknown Restaurant'}
-						className='restaurant-img'
-					/>
-					<div className='order-header'>
-						<div className='order-restaurant'>
-							<h3>{order.restaurant?.name || 'Unknown Restaurant'}</h3>
-						</div>
-						<div className='order-details'>
-							<p>
-								{Array.isArray(order.orderItems)
-									? order.orderItems.length
-									: 0}{' '}
-								item
-								{order.orderItems?.length > 1 ? 's' : ''} for $
-								{Number(order.totalCost).toFixed(2) || '0.00'}{' '}
-							</p>
-							•
-							<p>
-								{order.createdAt
-									? new Date(order.createdAt).toLocaleString()
-									: 'No Date Available'}
-							</p>
-							•{/* Order Actions */}
-							<div className='order-actions'>
-								<a href={`/orders/${order.id}/receipt`}>View receipt</a>
+			{orders
+				.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+				.map((order) => (
+					<div key={order.id} className='order-card'>
+						<img
+							src={order.restaurant?.image || '/images/cart.jpeg'}
+							alt={order.restaurant?.name || 'Unknown Restaurant'}
+							className='restaurant-img'
+						/>
+						<div className='order-header'>
+							<div className='order-restaurant'>
+								<h3>
+									{order.restaurant?.name || 'Unknown Restaurant'}
+								</h3>
+							</div>
+							<div className='order-details'>
+								<p>
+									{Array.isArray(order.orderItems)
+										? order.orderItems.length
+										: 0}{' '}
+									item
+									{order.orderItems?.length > 1 ? 's' : ''} for $
+									{Number(order.totalCost).toFixed(2) || '0.00'}{' '}
+								</p>
 								•
-								<a href={`/orders/${order.id}/invoice`}>
-									Request Invoice
-								</a>
+								<p>
+									{order.createdAt
+										? new Date(order.createdAt).toLocaleString()
+										: 'No Date Available'}
+								</p>
+								•{/* Order Actions */}
+								<div className='order-actions'>
+									<a href={`/orders/${order.id}/receipt`}>
+										View receipt
+									</a>
+									•
+									<a href={`/orders/${order.id}/invoice`}>
+										Request Invoice
+									</a>
+								</div>
+							</div>
+							{/* Order Items */}
+							<div className='order-items'>
+								{Array.isArray(order.orderItems) ? (
+									order.orderItems.map((item) => (
+										<OrderItem key={item.id} item={item} />
+									))
+								) : (
+									<p>No items found</p>
+								)}
 							</div>
 						</div>
-						{/* Order Items */}
-						<div className='order-items'>
-							{Array.isArray(order.orderItems) ? (
-								order.orderItems.map((item) => (
-									<OrderItem key={item.id} item={item} />
-								))
-							) : (
-								<p>No items found</p>
-							)}
+
+						{/* Buttons */}
+						<div className='order-buttons'>
+							<button
+								className='reorder-btn'
+								onClick={() => handleReorder(order)}>
+								Reorder
+							</button>
+							<button
+								className='rate-btn'
+								disabled={order.status !== 'Completed'} // Make sure order is completed to rate
+								onClick={
+									() =>
+										handleRateOrder(
+											order.id,
+											order.restaurant?.id,
+											order.restaurant?.name
+										) // Pass restaurant name
+								}>
+								Rate your order
+							</button>
 						</div>
 					</div>
-
-					{/* Buttons */}
-					<div className='order-buttons'>
-						<button className='reorder-btn' onClick={()=>handleReorder(order)}>
-							Reorder
-						</button>
-						<button
-							className='rate-btn'
-							disabled={order.status !== 'Completed'} // Make sure order is completed to rate
-							onClick={
-								() =>
-									handleRateOrder(
-										order.id,
-										order.restaurant?.id,
-										order.restaurant?.name
-									) // Pass restaurant name
-							}>
-							Rate your order
-						</button>
-					</div>
-				</div>
-			))}
+				))}
 		</div>
 	);
 }

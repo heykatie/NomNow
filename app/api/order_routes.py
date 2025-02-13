@@ -2,6 +2,7 @@ from flask import Blueprint, jsonify, request
 from flask_login import current_user, login_required
 from app.models.db import db
 from app.models import Order, OrderItem, MenuItem, User
+from datetime import datetime, timezone
 
 order_routes = Blueprint("orders", __name__)
 
@@ -50,8 +51,12 @@ def get_orders():
         formatted_orders.append(
             {
                 "id": order.id,
-                "createdAt": order.created_at,
-                "updatedAt": order.updated_at,
+                "createdAt": order.created_at.astimezone(timezone.utc).isoformat()
+                if order.created_at
+                else None,
+                "updatedAt": order.updated_at.astimezone(timezone.utc).isoformat()
+                if order.updated_at
+                else None,
                 "status": order.status,
                 "totalCost": float(order.total_cost),
                 "restaurant": restaurant_data,
@@ -129,8 +134,12 @@ def get_order(order_id):
     return jsonify(
         {
             "id": order.id,
-            "createdAt": order.created_at,
-            "updatedAt": order.updated_at,
+            "createdAt": order.created_at.astimezone(timezone.utc).isoformat()
+            if order.created_at
+            else None,
+            "updatedAt": order.updated_at.astimezone(timezone.utc).isoformat()
+            if order.updated_at
+            else None,
             "status": order.status,
             "totalCost": float(order.total_cost),
             "restaurant": restaurant_data,
