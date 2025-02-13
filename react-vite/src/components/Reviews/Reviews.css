@@ -68,3 +68,16 @@
 .star-rating .star:hover {
   color: #ffcc00; /* Yellow color on hover */
 }
+
+/* react-vite/src/components/Reviews/Reviews.css */
+
+.star-rating-display {
+  display: flex;
+  align-items: center;
+}
+
+.rating-number {
+  margin-left: 5px;
+  font-size: 16px;
+  color: #333;
+}
