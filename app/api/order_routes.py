@@ -21,11 +21,7 @@ order_routes = Blueprint("orders", __name__)
 def get_orders():
     # Include orders with status 'Submitted' as well
     orders = Order.query.filter(
-        Order.user_id == current_user.id,
-        Order.status.in_(
-            ["Active", "Submitted"]
-        ),  # Ensure "Submitted" orders are included
-    ).all()
+        Order.user_id == current_user.id).all()
 
     if not orders:
         return jsonify({"orders": []}), 200  # Return empty list instead of 404

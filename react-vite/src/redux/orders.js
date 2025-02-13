@@ -39,6 +39,7 @@ export const getUserOrders = () => async (dispatch) => {
 		const data = await response.json();
 		dispatch(loadUserOrders(data.orders));
 	} catch (error) {
+		console.error('Error fetching orders:', error);
 		const errorMessage = await error.json();
 		dispatch(setError(errorMessage.errors));
 	}
