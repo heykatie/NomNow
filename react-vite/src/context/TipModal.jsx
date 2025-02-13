@@ -1,4 +1,4 @@
-import { useModal } from './Modal.jsx';
+import { useModal, useCallback } from './Modal.jsx';
 import { useState, useEffect } from 'react';
 import './TipModal.css'
 
@@ -6,12 +6,12 @@ export default function TipModal({ orderTotal, setTip, setCustomTipUsed }) {
 	const { closeModal } = useModal();
 	const [customTip, setCustomTip] = useState('');
 
-	const handleSaveTip = () => {
+	const handleSaveTip = useCallback(() => {
 		const tipAmount = parseFloat(customTip) || 0;
 		setTip(tipAmount);
 		setCustomTipUsed(true);
 		closeModal();
-	};
+	}, [customTip, setTip, setCustomTipUsed, closeModal]);
 
 	useEffect(() => {
 		const handleKeyDown = (e) => {
@@ -22,7 +22,7 @@ export default function TipModal({ orderTotal, setTip, setCustomTipUsed }) {
 
 		document.addEventListener('keydown', handleKeyDown);
 		return () => document.removeEventListener('keydown', handleKeyDown);
-	}, [customTip]);
+	}, [customTip, handleSaveTip]);
 
 	return (
 		<div className='tip-modal'>
