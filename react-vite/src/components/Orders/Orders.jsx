@@ -84,24 +84,35 @@ export default function Orders() {
 						<button
 							className='reorder-btn'
 							onClick={async () => {
+
 								try {
-									// Ensure the correct restaurant_id is used
-									const restaurantId = order.restaurant?.id;
-									const filteredItems = order.orderItems.filter(
-										(item) => item.restaurant_id === restaurantId
-									);
+									// Clear previous currentOrder before creating a new one
+									dispatch(loadUserOrder(null));
+									localStorage.removeItem('currentOrder');
 
 									const reorderedOrder = {
-										restaurant_id: restaurantId,
-										items: filteredItems.map((item) => ({
-											menu_item_id: item.id,
+										restaurant_id: order.restaurant?.id,
+										items: order.orderItems.map((item) => ({
+											menu_item_id: item.id, // Ensure correct ID
+											restaurant_id: item.restaurant_id,
 											quantity: item.quantity,
 										})),
 									};
 
-									// Send request to create a new order
+									console.log(
+										'Sending reorder request:',
+										reorderedOrder
+									); // Debugging Log
+
+									// Create a new order with the same items
 									const response = await dispatch(
-										createOrder(reorderedOrder)
+										createOrder({
+											restaurant_id: order.restaurant.id,
+											items: order.orderItems.map((item) => ({
+												menu_item_id: item.id, // Ensure correct ID
+												quantity: item.quantity,
+											})),
+										})
 									);
 
 									if (response?.payload) {

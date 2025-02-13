@@ -22,12 +22,16 @@ def seed_order_items():
         restaurant_id = random.choice(list(restaurant_menu_items.keys()))
         menu_items_for_restaurant = restaurant_menu_items[restaurant_id]
 
-        num_items = random.randint(1, 3)  # Each order gets 1 to 3 items
+        num_items = min(
+            len(menu_items_for_restaurant), random.randint(1, 3)
+        )  # Ensure we don't exceed available items
 
         for _ in range(num_items):
-            menu_item_id = random.choice(menu_items_for_restaurant)
-            quantity = random.randint(1, 3)  # Random quantity per item
-            price = MenuItem.query.get(menu_item_id).price  # Get price from DB
+            menu_item_id = random.choice(
+                menu_items_for_restaurant
+            )  # ✅ Ensures items come from the same restaurant
+            quantity = random.randint(1, 3)
+            price = MenuItem.query.get(menu_item_id).price
 
             order_items.append(
                 OrderItem(

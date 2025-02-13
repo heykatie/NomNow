@@ -51,7 +51,8 @@ def get_orders():
                 "id": item.id,
                 "menu_item_name": item.menu_items.name,  # Assuming relationship is set
                 "quantity": item.quantity,
-                "price": item.price, #item.menu_item.price
+                "price": item.price,  # item.menu_item.price
+                "restaurant_id": order.restaurant_id,
             }
             for item in order.order_items
         ]
@@ -70,6 +71,7 @@ def get_orders():
                         "menu_item_name": item.menu_items.name,
                         "quantity": item.quantity,
                         "price": float(item.price),  # Ensure price is a float
+                        "restaurant_id": item.menu_items.restaurants.id,
                     }
                     for item in order.order_items
                 ],
@@ -126,6 +128,7 @@ def get_order(order_id):
             "menu_item_name": item.menu_items.name,  # Assuming relationship is set
             "quantity": item.quantity,
             "price": float(item.price),  # Ensure price is a float
+            "restaurant_id": order.restaurant_id,
         }
         for item in order.order_items
     ]
@@ -179,7 +182,7 @@ def create_order():
 
     # Verify that all items are from the same restaurant
     for menu_item in menu_items:
-        if int(menu_item.restaurant_id) != int(restaurant_id):
+        if int(menu_item.restaurants.id) != int(restaurant_id):
             return {"message": "All items must be from the same restaurant."}, 400
 
     total_cost = sum(
@@ -210,6 +213,7 @@ def create_order():
                 menu_item_id=menu_item.id,
                 quantity=quantity,
                 price=menu_item.price,
+                restaurant_id=menu_item.restaurantId
             )
         )
 
