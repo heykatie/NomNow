@@ -4,7 +4,7 @@ import { createReviewThunk, getReviewsForRestThunk } from '../../redux/reviews';
 import Modal from 'react-modal';
 import './Reviews.css';
 
-Modal.setAppElement('#root'); 
+Modal.setAppElement('#root');
 
 const ReviewForm = ({ restaurantId, orderId }) => {
   const [reviewText, setReviewText] = useState('');
@@ -12,18 +12,18 @@ const ReviewForm = ({ restaurantId, orderId }) => {
   const [restaurantRating, setRestaurantRating] = useState(0);
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false);  
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const dispatch = useDispatch();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     // For testing, hardcoding orderId
-    const hardcodedOrderId = orderId || 1; 
+    const hardcodedOrderId = orderId || 1;
 
     if (!hardcodedOrderId) {
       setErrorMessage('Order ID is missing. Please try again.');
-      setSuccessMessage(''); 
+      setSuccessMessage('');
       return;
     }
     if (!reviewText.trim()) {
@@ -33,7 +33,7 @@ const ReviewForm = ({ restaurantId, orderId }) => {
     }
     if (orderRating === 0 || restaurantRating === 0) {
       setErrorMessage('Please select a rating for both order and restaurant.');
-      setSuccessMessage('');  
+      setSuccessMessage('');
       return;
     }
 
@@ -49,19 +49,19 @@ const ReviewForm = ({ restaurantId, orderId }) => {
       const response = await dispatch(createReviewThunk(newReview));
       if (response && !response.errors) {
         setSuccessMessage('Review submitted successfully!');
-        setErrorMessage('');  
+        setErrorMessage('');
         setReviewText('');
         setOrderRating(0);
         setRestaurantRating(0);
         dispatch(getReviewsForRestThunk(restaurantId));
-        setIsModalOpen(false);  
+        setIsModalOpen(false);
       } else {
         setErrorMessage(response.errors || 'Failed to submit review. Please try again.');
-        setSuccessMessage('');  
+        setSuccessMessage('');
       }
     } catch (error) {
       setErrorMessage('An error occurred. Please try again.');
-      setSuccessMessage(''); 
+      setSuccessMessage('');
     }
   };
 
@@ -82,46 +82,59 @@ const ReviewForm = ({ restaurantId, orderId }) => {
   );
 
   return (
-    <>
-      <button onClick={() => setIsModalOpen(true)}>Write a Review</button>
+		<>
+			<button className='review-button' onClick={() => setIsModalOpen(true)}>
+				Write a Review
+			</button>
 
-      <Modal
-        isOpen={isModalOpen}
-        onRequestClose={() => setIsModalOpen(false)}
-        contentLabel="Review Form Modal"
-        className="modal"
-        overlayClassName="review-overlay"
-      >
-        <h2>Write a Review</h2>
-        <p>Share your Taco Casa review with others.</p>
-        <p>Tell us below what you would tell your friends - the more details, the better.</p>
-        <form onSubmit={handleSubmit}>
-          <textarea
-            value={reviewText}
-            onChange={(e) => setReviewText(e.target.value)}
-            placeholder="Some things to consider: items ordered, flavor, quality, and recommendations..."
-            required
-          />
+			<Modal
+				isOpen={isModalOpen}
+				onRequestClose={() => setIsModalOpen(false)}
+				contentLabel='Review Form Modal'
+				className='modal'
+				overlayClassName='review-overlay'>
+				<h2>Write a Review</h2>
+				<p>Share your Taco Casa review with others.</p>
+				<p>
+					Tell us below what you would tell your friends - the more
+					details, the better.
+				</p>
+				<form onSubmit={handleSubmit}>
+					<textarea
+						value={reviewText}
+						onChange={(e) => setReviewText(e.target.value)}
+						placeholder='Some things to consider: items ordered, flavor, quality, and recommendations...'
+						required
+					/>
 
-          <StarRating
-            rating={orderRating}
-            setRating={setOrderRating}
-            label="Order:"
-          />
+					<StarRating
+						rating={orderRating}
+						setRating={setOrderRating}
+						label='Order:'
+					/>
 
-          <StarRating
-            rating={restaurantRating}
-            setRating={setRestaurantRating}
-            label="Restaurant:"
-          />
+					<StarRating
+						rating={restaurantRating}
+						setRating={setRestaurantRating}
+						label='Restaurant:'
+					/>
 
-          {successMessage && <p className="success-message">{successMessage}</p>}
-          {errorMessage && <p className="error-message">{errorMessage}</p>}
-          <button type="submit">Submit Review</button>
-          <button type="button" onClick={() => setIsModalOpen(false)}>Cancel</button>
-        </form>
-      </Modal>
-    </>
+					{successMessage && (
+						<p className='success-message'>{successMessage}</p>
+					)}
+					{errorMessage && <p className='error-message'>{errorMessage}</p>}
+					<button className='review-button' type='submit'>
+						Submit Review
+					</button>
+					<button
+						className='review-button'
+						type='button'
+						onClick={() => setIsModalOpen(false)}>
+						Cancel
+					</button>
+				</form>
+			</Modal>
+		</>
   );
 };
 

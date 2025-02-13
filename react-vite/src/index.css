@@ -1,7 +1,39 @@
 /* TODO: Add sitewide styles */
- body {
-    overflow-x: hidden;
-    margin: 0;
-    padding: 0;
-    width: 100%;
-  }
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --font-primary: 'Nunito Sans', sans-serif;
+}
+
+body {
+  font-family: var(--font-primary);
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  color: #222;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-primary);
+  font-weight: 600;
+}
+
+button {
+  font-family: var(--font-primary);
+  font-weight: 500;
+}
+
+body {
+  overflow-x: hidden;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
