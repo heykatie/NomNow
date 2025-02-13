@@ -11,7 +11,8 @@ export default function ScheduleModal({
 	const [selectedTime, setSelectedTime] = useState(null);
 	const [dates, setDates] = useState([]);
 	const [timeSlots, setTimeSlots] = useState([]);
-	const dateScrollRef = useRef(null);
+  const dateScrollRef = useRef(null);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
 
 	// Generate the next 7 days dynamically
 	const generateDates = () => {
@@ -114,7 +115,26 @@ export default function ScheduleModal({
 			setScheduledTime(`${selectedDate} at ${selectedTime}`);
 			closeModal();
 		}
-	};
+  };
+
+  const handleScroll = () => {
+		if (dateScrollRef.current) {
+			setShowLeftArrow(dateScrollRef.current.scrollLeft > 0);
+		}
+  };
+
+  useEffect(() => {
+		const scrollContainer = dateScrollRef.current;
+		if (scrollContainer) {
+			scrollContainer.addEventListener('scroll', handleScroll);
+			handleScroll(); // Set initial state
+		}
+		return () => {
+			if (scrollContainer) {
+				scrollContainer.removeEventListener('scroll', handleScroll);
+			}
+		};
+  }, []);
 
 	return (
 		<div className='schedule-modal'>
@@ -122,23 +142,25 @@ export default function ScheduleModal({
 
 			{/* Scrollable Date Selection */}
 			<div className='date-selection-container'>
-				<button
-					className='scroll-arrow left'
-					onClick={() =>
-						dateScrollRef.current.scrollBy({
-							left: -100,
-							behavior: 'smooth',
-						})
-					}>
-					←
-				</button>
+				{showLeftArrow && (
+					<button
+						className='scroll-arrow left'
+						onClick={() =>
+							dateScrollRef.current.scrollBy({
+								left: -100,
+								behavior: 'smooth',
+							})
+						}>
+						←
+					</button>
+				)}
 				<div className='date-selection' ref={dateScrollRef}>
 					{dates.map(({ day, date }) => (
 						<button
 							key={date}
 							className={selectedDate === date ? 'selected' : ''}
 							onClick={() => setSelectedDate(date)}>
-							<span>{day}</span>
+							<span>{day}, </span>
 							<span>{date}</span>
 						</button>
 					))}

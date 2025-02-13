@@ -2,7 +2,25 @@
   display: flex;
   flex-direction: column;
   padding: 20px;
-  width: 100%;
+  width: 90%;
+  max-width: 500px;
+  max-height: 90vh;
+  overflow-y: auto;
+  background: white;
+  border-radius: 12px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+#modal-content:has(.schedule-modal) .close-button {
+  display: none !important;
+}
+
+.schedule-modal::-webkit-scrollbar {
+  display: none;
 }
 
 .schedule-modal h2 {
@@ -12,12 +30,12 @@
   margin-bottom: 15px;
 }
 
-/* Scrollable Date Selection */
 .date-selection-container {
   display: flex;
   align-items: center;
   gap: 10px;
   margin-bottom: 15px;
+  overflow: hidden;
 }
 
 .date-selection {
@@ -27,6 +45,7 @@
   white-space: nowrap;
   padding: 10px 0;
   scroll-behavior: smooth;
+  max-width: 90%;
 }
 
 .date-selection::-webkit-scrollbar {
@@ -56,7 +75,6 @@
   padding: 5px;
 }
 
-/* Time Selection with Radio Buttons */
 .time-selection {
   display: flex;
   flex-direction: column;
