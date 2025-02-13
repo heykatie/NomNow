@@ -42,8 +42,8 @@
 /* Button styles for all buttons */
 button {
   margin-right: 10px;
-  padding: 10px 20px; /* Consistent padding */
-  background-color: black; /* Black background */
+  padding: 10px 15px; /* Consistent padding */
+  background-color: rgb(0, 0, 0); /* Black background */
   color: white; /* White text */
   border: 1px solid #ccc;
   border-radius: 6px; /* Rounder corners */
@@ -53,7 +53,7 @@ button {
 }
 
 button:hover {
-  background-color: #333; /* Darker black on hover */
+  background-color: #333333d0; /* Darker black on hover */
   color: white;
 }
 
@@ -146,18 +146,18 @@ button:hover {
 /* Ensure review-actions buttons match the global button style */
 .review-actions button {
   margin-right: 10px;
-  padding: 10px 20px; /* Consistent padding */
-  background-color: black; /* Black background */
+  padding: 8px 15px; /* Consistent padding */
+  background-color: rgba(5, 146, 0, 0.884); /* Black background */
   color: white; /* White text */
   border: 1px solid #ccc;
   border-radius: 6px; /* Rounder corners */
   cursor: pointer;
-  font-size: 14px; /* Consistent font size */
+  font-size: 13px; /* Consistent font size */
   transition: background-color 0.2s, color 0.2s;
 }
 
 .review-actions button:hover {
-  background-color: #333; /* Darker black on hover */
+  background-color: rgba(5, 146, 0, 0.534); /* Darker black on hover */
   color: white;
 }
 
