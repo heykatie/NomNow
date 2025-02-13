@@ -183,35 +183,24 @@ def create_order():
     items = data.get("items", [])  # List of {"menu_item_id": X, "quantity": Y}
     promo = data.get("promo", None)
 
-    print("🔹 Incoming Order Request:", data)
-
     if not restaurant_id:
         return {"message": "Restaurant ID is required"}, 400
 
     # Validate that all menu items belong to the same restaurant
     menu_item_ids = [int(item["menu_item_id"]) for item in items]
 
-    print("🔹 Menu Item IDs in Request:", menu_item_ids)
-
     menu_items = MenuItem.query.filter(MenuItem.id.in_(menu_item_ids)).all()
 
-    print("🔹 Menu Items Found in DB:", [m.id for m in menu_items])
-
     if not menu_items:
-        print("❌ No menu items found in the database!")
         return {"message": "Invalid menu items provided."}, 400
 
     # Ensure all items belong to the same restaurant
     restaurant_ids = {menu_item.restaurant_id for menu_item in menu_items}
     if len(restaurant_ids) > 1 or restaurant_id not in restaurant_ids:
-        print(
-            f"❌ Mismatched restaurant_id! Expected: {restaurant_id}, Found: {restaurant_ids}"
-        )
         return {"message": "All items must be from the same restaurant."}, 400
 
     # Verify that all items are from the same restaurant
     for menu_item in menu_items:
-        print('KATIE', menu_item.restaurants.id, restaurant_id)
         if int(menu_item.restaurants.id) != int(restaurant_id):
             return {"message": "All items must be from the same restaurant."}, 400
 

@@ -62,8 +62,6 @@ export default function Orders() {
 				items,
 			};
 
-			console.log('katie', reorderData)
-
 			// Send the request to create a new order
 			const response = await dispatch(createOrder(reorderData));
 
