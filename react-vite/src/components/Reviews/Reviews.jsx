@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, useLocation } from 'react-router-dom';
 import { getReviewsForRestThunk } from '../../redux/reviews';
@@ -11,25 +11,32 @@ const Reviews = () => {
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const orderId = queryParams.get('orderId');
-  const restaurantName = queryParams.get('restaurantName');
+  const initialRestaurantName = queryParams.get('restaurantName');
 
   const dispatch = useDispatch();
   const reviews = useSelector((state) => state.reviews.allReviewsForRest);
 
+  const [restaurantName, setRestaurantName] = useState(initialRestaurantName);
+
+  useEffect(() => {
+    if (!restaurantName && restaurantId) {
+      fetch(`/api/restaurants/${restaurantId}`)
+        .then(response => response.json())
+        .then(data => setRestaurantName(data.restaurant.name)) // ensure 'restaurant' key is used
+        .catch(error => console.error('Error fetching restaurant name:', error));
+    }
+  }, [restaurantId, restaurantName]);
+
   useEffect(() => {
     if (restaurantId) {
-      console.log('Fetching reviews for restaurant:', restaurantId);
       dispatch(getReviewsForRestThunk(restaurantId));
     }
   }, [dispatch, restaurantId]);
 
-  console.log('Reviews in Reviews component:', reviews); // Logging to check data
-  console.log('Order ID:', orderId); // Check if orderId is being received
-
   return (
     <div className="reviews-container">
       <h2>Reviews for {restaurantName || `Restaurant ${restaurantId}`}</h2>
-      <ReviewForm restaurantId={restaurantId} orderId={orderId || 1} /> {/* Pass orderId to the form */}
+      <ReviewForm restaurantId={restaurantId} orderId={orderId || 1} />
       <ReviewList reviews={reviews} />
     </div>
   );
