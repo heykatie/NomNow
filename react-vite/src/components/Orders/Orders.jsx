@@ -1,7 +1,12 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom'; // reviews hook
 import { useDispatch, useSelector } from 'react-redux';
-import { getUserOrders, loadUserOrder, createOrder } from '../../redux/orders';
+import {
+	getUserOrders,
+	loadUserOrder,
+	createOrder,
+	clearCurrentOrder,
+} from '../../redux/orders';
 import OrderItem from '../OrderItem';
 import './Orders.css';
 
@@ -37,6 +42,7 @@ export default function Orders() {
 		}
 
 		try {
+			dispatch(clearCurrentOrder());
 			// Extract restaurant ID
 			const restaurantId = order.restaurant?.id;
 			if (!restaurantId) {
@@ -46,14 +52,17 @@ export default function Orders() {
 
 			// Format the items to match the API request
 			const items = order.orderItems.map((item) => ({
-				menu_item_id: item.id, // Ensure correct menu item ID
+				menu_item_id: item.menu_item_id, // Ensure correct menu item ID
 				quantity: item.quantity,
+				restaurant_id: item.restaurant_id,
 			}));
 
 			const reorderData = {
 				restaurant_id: restaurantId,
 				items,
 			};
+
+			console.log('katie', reorderData)
 
 			// Send the request to create a new order
 			const response = await dispatch(createOrder(reorderData));
@@ -149,3 +158,39 @@ export default function Orders() {
 		</div>
 	);
 }
+
+
+// const handleReorder = async (order) => {
+// 	console.log('Reordering order:', order);
+
+// 	if (!order || !order.orderItems) {
+// 		console.error('Invalid order data');
+// 		return;
+// 	}
+
+// 	const uniqueRestaurantIds = new Set(
+// 		order.orderItems.map((item) => item.restaurant_id)
+// 	);
+// 	if (uniqueRestaurantIds.size > 1) {
+// 		console.error('All items must be from the same restaurant.');
+// 		return;
+// 	}
+
+// 	try {
+// 		const response = await fetch('/api/orders/reorder', {
+// 			method: 'POST',
+// 			headers: { 'Content-Type': 'application/json' },
+// 			body: JSON.stringify({ orderId: order.id }),
+// 		});
+
+// 		if (!response.ok) {
+// 			throw new Error('Failed to reorder');
+// 		}
+
+// 		const newOrder = await response.json();
+// 		dispatch(setCurrentOrder(newOrder));
+// 		navigate('/checkout');
+// 	} catch (error) {
+// 		console.error('Error creating reorder:', error);
+// 	}
+// };

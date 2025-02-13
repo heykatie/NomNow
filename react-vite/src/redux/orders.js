@@ -4,6 +4,7 @@ import { setError } from './errors';
 const LOAD_USER_ORDERS = 'orders/loadUserOrders';
 const LOAD_USER_ORDER = 'orders/loadUserOrder';
 const LOAD_USER_ORDERS_4_REST = 'orders/loadUserOrders4Rest';
+const CLEAR_CURRENT_ORDER = 'orders/clearCurrentOrder';
 
 const ADD_ORDER = 'orders/addOrder';
 const UPDATE_ORDER = 'orders/updateOrder';
@@ -15,11 +16,15 @@ const loadUserOrders = (orders) => ({
 	type: LOAD_USER_ORDERS,
 	payload: orders,
 });
+
 export const loadUserOrder = (order) => ({ type: LOAD_USER_ORDER, payload: order });
 const loadUserOrders4Rest = (orders) => ({
 	type: LOAD_USER_ORDERS_4_REST,
 	payload: orders,
 });
+
+export const clearCurrentOrder = () => ({ type: CLEAR_CURRENT_ORDER });
+
 const addOrder = (order) => ({ type: ADD_ORDER, payload: order });
 const updateOrder = (order) => ({ type: UPDATE_ORDER, payload: order });
 const submitOrder = (order) => ({ type: SUBMIT_ORDER, payload: order });
@@ -148,6 +153,9 @@ const initialState = {
 
 export default function ordersReducer(state = initialState, action) {
 	switch (action.type) {
+		case CLEAR_CURRENT_ORDER:
+			localStorage.removeItem('currentOrder');
+			return { ...state, currentOrder: null };
 		case LOAD_USER_ORDERS:
 			return { ...state, userOrders: action.payload };
 		case LOAD_USER_ORDER:
