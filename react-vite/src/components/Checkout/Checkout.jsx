@@ -5,6 +5,7 @@ import { useModal } from '../../context/Modal';
 import TipModal from '../../context/TipModal';
 import ScheduleModal from '../../context/ScheduleModal';
 import { loadUserOrder, placeOrder } from '../../redux/orders';
+import { deductFundsThunk } from '../../redux/session';
 import './Checkout.css';
 
 export default function Checkout() {
@@ -63,6 +64,17 @@ export default function Checkout() {
 		}
 
 		try {
+			if (paymentMethod === 'wallet') {
+				if (user.wallet < total) {
+					console.error('❌ Insufficient funds in wallet.');
+					alert('Insufficient funds in your wallet.');
+					return;
+				}
+
+				// Deduct funds from wallet
+				await dispatch(deductFundsThunk({ id: user.id, amount: total }));
+			}
+
 			await dispatch(placeOrder(currentOrder.id));
 
 			// Wait for Redux and localStorage updates
