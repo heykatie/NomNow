@@ -7,6 +7,7 @@ import ScheduleModal from '../../context/ScheduleModal';
 import { loadUserOrder, placeOrder } from '../../redux/orders';
 import { deductFundsThunk } from '../../redux/session';
 import OrderRestaurant from '../OrderRestaurant';
+import CartItems from '../CartItems';
 import './Checkout.css';
 
 export default function Checkout() {
@@ -199,25 +200,10 @@ export default function Checkout() {
 
 			{/* Right Sidebar - Order Summary */}
 			<div className='checkout-right'>
-				<OrderRestaurant/>
+				<OrderRestaurant />
 				<div className='order-summary'>
 					<h4>Cart summary ({currentOrder?.orderItems?.length} item/s)</h4>
-					{currentOrder?.orderItems &&
-					currentOrder.orderItems.length > 0 ? (
-						currentOrder.orderItems.map((item) => (
-							<div key={item.id} className='summary-item'>
-								<p>
-									{item.name ||
-										item.menu_item_name ||
-										'Unavailable Item'}{' '}
-									x{item.quantity || 1}
-								</p>
-								<p>${item.price ? item.price.toFixed(2) : '0.00'}</p>
-							</div>
-						))
-					) : (
-						<p>No items found.</p>
-					)}
+					<CartItems />
 				</div>
 
 				{/* Order Total Section including Tip */}
