@@ -9,8 +9,8 @@ const ReviewItem = ({ review }) => {
 
   const [isEditing, setIsEditing] = useState(false);
   const [updatedReviewText, setUpdatedReviewText] = useState(review.review);
-  const [updatedOrderRating, setUpdatedOrderRating] = useState(review.orderRating); // Updated key
-  const [updatedRestaurantRating, setUpdatedRestaurantRating] = useState(review.restaurantRating); // Updated key
+  const [updatedOrderRating, setUpdatedOrderRating] = useState(review.order_rating);
+  const [updatedRestaurantRating, setUpdatedRestaurantRating] = useState(review.restaurant_rating);
 
   const handleDelete = () => {
     dispatch(deleteReviewThunk(review.id));
@@ -24,8 +24,8 @@ const ReviewItem = ({ review }) => {
     const updatedReview = {
       id: review.id,
       review: updatedReviewText,
-      orderRating: updatedOrderRating, // Updated key
-      restaurantRating: updatedRestaurantRating, // Updated key
+      order_rating: updatedOrderRating,
+      restaurant_rating: updatedRestaurantRating,
     };
 
     dispatch(updateReviewThunk(updatedReview));
@@ -34,16 +34,11 @@ const ReviewItem = ({ review }) => {
 
   const getStarRating = (rating) => {
     rating = Math.min(Math.max(rating, 1), 5);
-    return (
-      <div className="star-rating-display">
-        {[1, 2, 3, 4, 5].map(star => (
-          <span key={star} className={star <= rating ? 'star selected' : 'star'}>
-            ★
-          </span>
-        ))}
-        <span className="rating-number">({rating})</span>
-      </div>
-    );
+    return [1, 2, 3, 4, 5].map(star => (
+      <span key={star} className={star <= rating ? 'star selected' : 'star'}>
+        ★
+      </span>
+    ));
   };
 
   return (
@@ -76,10 +71,10 @@ const ReviewItem = ({ review }) => {
           <p>{review.review}</p>
           <div className="rating-container">
             <div className="rating-item">
-              <span>Order {getStarRating(review.orderRating)}</span> {/* Updated key */}
+              <span>Order {getStarRating(review.order_rating)}</span>
             </div>
             <div className="rating-item">
-              <span>Restaurant {getStarRating(review.restaurantRating)}</span> {/* Updated key */}
+              <span>Restaurant {getStarRating(review.restaurant_rating)}</span>
             </div>
           </div>
           {review.userId === loggedInUserId && ( // Only show delete and update buttons if the review belongs to the logged-in user

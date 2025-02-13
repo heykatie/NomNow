@@ -69,17 +69,17 @@ export const getSingleReviewThunk = (reviewId) => async (dispatch) => {
 // THUNK: CREATE A REVIEW
 export const createReviewThunk = (reviewData) => async (dispatch) => {
   try {
-    const { restaurantId, orderId, review, orderRating, restaurantRating } = reviewData;
+    const { restaurant_id, order_id, review, order_rating, restaurant_rating } = reviewData;
 
     const res = await fetch(`/api/reviews/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        restaurant_id: restaurantId,
-        order_id: orderId,
+        restaurant_id,
+        order_id,
         review,
-        order_rating: orderRating,
-        restaurant_rating: restaurantRating,
+        order_rating,
+        restaurant_rating,
       }),
     });
 
@@ -98,21 +98,21 @@ export const createReviewThunk = (reviewData) => async (dispatch) => {
 };
 
 // THUNK: UPDATE A REVIEW
+
+//react-vite/src/redux/reviews.js
+
+// THUNK: UPDATE A REVIEW
 export const updateReviewThunk = (updatedReview) => async (dispatch) => {
   try {
     const response = await fetch(`/api/reviews/${updatedReview.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        review: updatedReview.review,
-        order_rating: updatedReview.orderRating,
-        restaurant_rating: updatedReview.restaurantRating,
-      }),
+      body: JSON.stringify(updatedReview),
     });
 
     if (response.ok) {
       const data = await response.json();
-      dispatch(updateReview(data.data));
+      dispatch(updateReview(data.data)); // Correctly dispatch the updated review
       return data;
     } else {
       throw new Error("Failed to update review");
@@ -121,8 +121,6 @@ export const updateReviewThunk = (updatedReview) => async (dispatch) => {
     console.error("Error updating review:", error);
   }
 };
-
-
 
 
 
@@ -159,6 +157,10 @@ const initialState = {
 
 export default function reviewsReducer(state = initialState, action) {
   switch (action.type) {
+    case GET_REVIEWS_FOR_REST:
+      return { ...state, allReviewsForRest: action.reviews, loading: false, error: null };
+    case GET_SINGLE_REVIEW:
+      return { ...state, singleReview: action.review, loading: false, error: null };
     case CREATE_REVIEW:
       return {
         ...state,
@@ -171,6 +173,15 @@ export default function reviewsReducer(state = initialState, action) {
         ...state,
         allReviewsForRest: state.allReviewsForRest.map((rev) =>
           rev.id === action.review.id ? action.review : rev
+        ),
+        loading: false,
+        error: null,
+      };
+    case DELETE_REVIEW:
+      return {
+        ...state,
+        allReviewsForRest: state.allReviewsForRest.filter(
+          (rev) => rev.id !== action.reviewId
         ),
         loading: false,
         error: null,

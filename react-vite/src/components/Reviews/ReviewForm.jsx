@@ -1,3 +1,4 @@
+//react-vite/src/components/Reviews/ReviewForm.jsx
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createReviewThunk } from '../../redux/reviews';
@@ -28,11 +29,11 @@ const ReviewForm = ({ restaurantId, orderId }) => {
     }
 
     const newReview = {
-      restaurantId, // Updated key
-      orderId, // Updated key
+      restaurant_id: restaurantId,
+      order_id: orderId,
       review: reviewText,
-      orderRating, // Updated key
-      restaurantRating, // Updated key
+      order_rating: orderRating,
+      restaurant_rating: restaurantRating,
     };
 
     try {
