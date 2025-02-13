@@ -81,20 +81,20 @@ const ReviewForm = ({ restaurantId, orderId }) => {
       <textarea
         value={reviewText}
         onChange={(e) => setReviewText(e.target.value)}
-        placeholder="Write your review here"
+        placeholder="Some things to consider: items ordered, flavor, quality, and recommendations..."
         required
       />
 
       <StarRating
         rating={orderRating}
         setRating={setOrderRating}
-        label="Order Rating:"
+        label="Order:"
       />
 
       <StarRating
         rating={restaurantRating}
         setRating={setRestaurantRating}
-        label="Restaurant Rating:"
+        label="Restaurant:"
       />
 
       {successMessage && <p className="success-message">{successMessage}</p>}

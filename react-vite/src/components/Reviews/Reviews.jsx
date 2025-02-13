@@ -36,6 +36,9 @@ const Reviews = () => {
   return (
     <div className="reviews-container">
       <h2>Reviews for {restaurantName || `Restaurant ${restaurantId}`}</h2>
+      <h3>Share your {restaurantName || `Restaurant ${restaurantId}`} review with others.</h3>
+      <h4>Tell us below what you'd tell your friends - the more details, the better.</h4>
+
       <ReviewForm restaurantId={restaurantId} orderId={orderId || 1} />
       <ReviewList reviews={reviews} />
     </div>
