@@ -1,5 +1,5 @@
-import { useModal, useCallback } from './Modal.jsx';
-import { useState, useEffect } from 'react';
+import { useModal } from './Modal.jsx';
+import { useState, useEffect, useCallback } from 'react';
 import './TipModal.css'
 
 export default function TipModal({ orderTotal, setTip, setCustomTipUsed }) {
