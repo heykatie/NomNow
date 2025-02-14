@@ -63,9 +63,9 @@
   padding: 6px 10px;
 }
 
-.quantity-btn button {
+.quantity-btn {
   background: none;
-  border: none;
+  border: none !important;
   cursor: pointer;
   font-size: 16px;
   display: flex;
@@ -73,10 +73,15 @@
   justify-content: center;
   width: 24px;
   height: 24px;
-  /* background-color: #f8f8f8 !important; */
-  /* color: #f8f8f8 !important; */
+  background-color: #f8f8f8 !important;
+  color: #f8f8f8 !important;
+}
+
+.quantity-btn svg:hover {
+  fill: grey !important;
 }
 
 .quantity-btn svg {
   fill: black !important;
+  border: none !important;
 }
