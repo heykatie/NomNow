@@ -143,7 +143,7 @@ export default function Checkout() {
 				<div className='delivery-options'>
 					<h3>Delivery options</h3>
 					<div
-						className={`option priority ${
+						className={`d-option priority ${
 							deliveryOption === 'priority' ? 'selected' : ''
 						}`}
 						onClick={() => setDeliveryOption('priority')}>
@@ -154,7 +154,7 @@ export default function Checkout() {
 						<span>15-30 min</span>
 					</div>
 					<div
-						className={`option standard ${
+						className={`d-option standard ${
 							deliveryOption === 'standard' ? 'selected' : ''
 						}`}
 						onClick={() => setDeliveryOption('standard')}>
@@ -162,7 +162,7 @@ export default function Checkout() {
 						<span>20-35 min</span>
 					</div>
 					<div
-						className={`option schedule ${
+						className={`d-option schedule ${
 							deliveryOption === 'schedule' ? 'selected' : ''
 						}`}
 						onClick={() => {
@@ -179,7 +179,7 @@ export default function Checkout() {
 					<h3>Payment</h3>
 					<div className='payment-options'>
 						<div
-							className={`option credit-card ${
+							className={`d-option credit-card ${
 								paymentMethod === 'credit-card' ? 'selected' : ''
 							}`}
 							onClick={() => setPaymentMethod('credit-card')}>
@@ -189,7 +189,7 @@ export default function Checkout() {
 							</span>
 						</div>
 						<div
-							className={`option wallet ${
+							className={`d-option wallet ${
 								paymentMethod === 'wallet' ? 'selected' : ''
 							}`}
 							onClick={() => setPaymentMethod('wallet')}>
