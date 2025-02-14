@@ -25,7 +25,7 @@ def get_orders():
     orders = Order.query.filter(Order.user_id == current_user.id).all()
 
     if not orders:
-        return jsonify({"orders": []}), 200  # Return empty list instead of 404
+        return jsonify({"orders": [], "message": "No orders found"}), 200  # Return empty list instead of 404
 
     formatted_orders = []
     for order in orders:
