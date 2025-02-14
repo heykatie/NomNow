@@ -2,13 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { createMenuItem } from '../../redux/menuItems';
-import { fetchUserRestaurants } from '../../redux/restaurants'; // Add this action
+import { fetchUserRestaurants } from '../../redux/restaurants';
+import './MenuItemCreate.css'; // Import the updated CSS
 
 const CreateMenuItem = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector((state) => state.session.user); // Get the logged-in user
-  const userRestaurants = useSelector((state) => state.restaurants.userRestaurants); // Get user's restaurants
+  const user = useSelector((state) => state.session.user);
+  const userRestaurants = useSelector((state) => state.restaurants.userRestaurants);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -88,110 +89,119 @@ const CreateMenuItem = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <button onClick={() => navigate('/menu-items')} style={{ marginTop: '20px' }}>
+    <div className="create-menu-item-container">
+      <button className="back-button" onClick={() => navigate('/menu-items')}>
         Back to Menu Items List
       </button>
 
-      <h3>Create Menu Item</h3>
+      <form className="create-menu-item-form" onSubmit={handleSubmit}>
+        <h3>Create Menu Item</h3>
 
-      {error && <div style={{ color: 'red' }}>{error}</div>}
+        {error && <div className="error-message">{error}</div>}
 
-      {/* Restaurant Name Dropdown */}
-      <div>
-        <label>Restaurant:</label>
-        <select
-          name="restaurant_name"
-          value={formData.restaurant_name}
-          onChange={handleChange}
-          required
-        >
-          <option value="">Select a restaurant</option>
-          {userRestaurants.map((restaurant) => (
-            <option key={restaurant.id} value={restaurant.name}>
-              {restaurant.name}
-            </option>
-          ))}
-        </select>
-        {validationErrors.restaurant_name && (
-          <div style={{ color: 'red' }}>{validationErrors.restaurant_name}</div>
-        )}
-      </div>
+        {/* Restaurant Name Dropdown */}
+        <div>
+          <label>Restaurant:</label>
+          <select
+            name="restaurant_name"
+            value={formData.restaurant_name}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select a restaurant</option>
+            {userRestaurants.map((restaurant) => (
+              <option key={restaurant.id} value={restaurant.name}>
+                {restaurant.name}
+              </option>
+            ))}
+          </select>
+          {validationErrors.restaurant_name && (
+            <div className="error-message">{validationErrors.restaurant_name}</div>
+          )}
+        </div>
 
-      {/* Other form fields */}
-      <div>
-        <label>Name:</label>
-        <input
-          type="text"
-          name="name"
-          value={formData.name}
-          onChange={handleChange}
-          placeholder="Name"
-          required
-        />
-      </div>
+        {/* Name Field */}
+        <div>
+          <label>Name:</label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="Name"
+            required
+          />
+        </div>
 
-      <div>
-        <label>Description:</label>
-        <textarea
-          name="description"
-          value={formData.description}
-          onChange={handleChange}
-          placeholder="Description"
-          required
-        />
-        {validationErrors.description && (
-          <div style={{ color: 'red' }}>{validationErrors.description}</div>
-        )}
-      </div>
+        {/* Description Field */}
+        <div>
+          <label>Description:</label>
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            placeholder="Description"
+            required
+          />
+          {validationErrors.description && (
+            <div className="error-message">{validationErrors.description}</div>
+          )}
+        </div>
 
-      <div>
-        <label>Price:</label>
-        <input
-          type="number"
-          name="price"
-          value={formData.price}
-          onChange={handleChange}
-          placeholder="Price"
-          required
-        />
-        {validationErrors.price && (
-          <div style={{ color: 'red' }}>{validationErrors.price}</div>
-        )}
-      </div>
+        {/* Price Field */}
+        <div>
+          <label>Price:</label>
+          <input
+            type="number"
+            name="price"
+            value={formData.price}
+            onChange={handleChange}
+            placeholder="Price"
+            required
+          />
+          {validationErrors.price && (
+            <div className="error-message">{validationErrors.price}</div>
+          )}
+        </div>
 
-      <div>
-        <label>Food Image URL:</label>
-        <input
-          type="text"
-          name="food_image"
-          value={formData.food_image}
-          onChange={handleChange}
-          placeholder="Food Image URL"
-          required
-        />
-        {validationErrors.food_image && (
-          <div style={{ color: 'red' }}>{validationErrors.food_image}</div>
-        )}
-      </div>
+        {/* Food Image URL Field */}
+        <div>
+          <label>Food Image URL:</label>
+          <input
+            type="text"
+            name="food_image"
+            value={formData.food_image}
+            onChange={handleChange}
+            placeholder="Food Image URL"
+            required
+          />
+          {validationErrors.food_image && (
+            <div className="error-message">{validationErrors.food_image}</div>
+          )}
+        </div>
 
-      <div>
-        <label>Food Type:</label>
-        <select
-          name="food_type"
-          value={formData.food_type}
-          onChange={handleChange}
-          required
-        >
-          <option value="appetizer">Appetizer</option>
-          <option value="entree">Entree</option>
-          <option value="dessert">Dessert</option>
-          <option value="beverage">Beverage</option>
-        </select>
-      </div>
+        {/* Food Type Dropdown */}
+        <div>
+          <label>Food Type:</label>
+          <select
+            name="food_type"
+            value={formData.food_type}
+            onChange={handleChange}
+            required
+          >
+            <option value="appetizer">Appetizer</option>
+            <option value="entree">Entree</option>
+            <option value="dessert">Dessert</option>
+            <option value="beverage">Beverage</option>
+          </select>
+        </div>
 
-      <button type="submit">Create Menu Item</button>
-    </form>
+        {/* Submit Button */}
+        <button type="submit" className="submit-button">
+          Create Menu Item
+        </button>
+      </form>
+    </div>
   );
 };
 
