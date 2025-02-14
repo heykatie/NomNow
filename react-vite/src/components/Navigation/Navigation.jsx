@@ -35,7 +35,7 @@ function Navigation() {
 	}
 	const setGuest = async (e) => {
 		e.preventDefault();
-		return alert('Feature Coming Soon')
+		
 
 		const split = address.split(',')
 		if(split.length !== 4){
@@ -55,7 +55,7 @@ function Navigation() {
 			addressObj.id = user.id
 			server = await dispatch(editUserThunk(addressObj))
 		}else{
-			server = await dispatch(guestLogin(addressObj))
+			return alert('Must login to add address')
 		}
 		
 		if(server){
