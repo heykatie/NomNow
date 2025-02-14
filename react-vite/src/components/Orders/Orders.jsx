@@ -39,7 +39,6 @@ export default function Orders() {
 		}
 	};
 
-	// Handle "Rate your order" button
 	const handleRateOrder = (orderId, restaurantId, restaurantName) => {
 		navigate(
 			`/reviews/restaurant/${restaurantId}?orderId=${orderId}&restaurantName=${encodeURIComponent(
@@ -100,7 +99,7 @@ export default function Orders() {
 							alt={order.restaurant?.name || 'Unknown Restaurant'}
 							className='restaurant-img'
 							onClick={(e) => {
-								e.stopPropagation(); // Prevent parent click event
+								e.stopPropagation();
 								handleRestaurantClick(order.restaurant?.id);
 							}}
 							style={{
@@ -111,7 +110,7 @@ export default function Orders() {
 							<div className='order-restaurant'>
 								<h3
 									onClick={(e) => {
-										e.stopPropagation(); // Prevent parent click event
+										e.stopPropagation();
 										handleRestaurantClick(order.restaurant?.id);
 									}}
 									style={{

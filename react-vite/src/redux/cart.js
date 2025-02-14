@@ -2,14 +2,12 @@ import { csrfFetch } from './csrf';
 import { setError } from './errors';
 import { createOrder } from './orders';
 
-// Action Types
 const ADD_TO_CART = 'cart/addToCart';
 const REMOVE_FROM_CART = 'cart/removeFromCart';
 const UPDATE_CART_ITEM = 'cart/updateCartItem';
 const CLEAR_CART = 'cart/clearCart';
 
 
-// Action Creators
 
 const addCartItem = (item) => ({
 	type: ADD_TO_CART,
@@ -29,8 +27,6 @@ const updateCartItem = (itemId, quantity) => ({
 const clearCartItems = () => ({
 	type: CLEAR_CART,
 });
-
-// Thunks
 
 export const getCart = (state) => state.cart.cartItems;
 
@@ -104,12 +100,10 @@ export const clearCart = () => async (dispatch) => {
 	}
 };
 
-// Initial State
 const initialState = {
 	cartItems: [],
 };
 
-// Reducer
 export default function cartReducer(state = initialState, action) {
 	switch (action.type) {
 		case ADD_TO_CART:

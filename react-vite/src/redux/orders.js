@@ -132,7 +132,6 @@ export const placeOrder = (orderId) => async (dispatch) => {
 		const data = await response.json();
 		dispatch(submitOrder(data));
 
-		// Fetch the updated order directly
 		const orderResponse = await csrfFetch(`/api/orders/${orderId}`);
 		if (!orderResponse.ok) throw orderResponse;
 

@@ -15,6 +15,7 @@ export default function Cart() {
 
 	const handleCheckout = () => {
 		dispatch(checkoutCart());
+		navigate('/checkout')
 	};
 
 	useEffect(() => {
