@@ -58,9 +58,10 @@ const MenuItemDetail = () => {
 
   return (
     <div className="menu-item-detail-container">
-     <button className="back-button" onClick={() => navigate('/menu-items')}>
-  <span className="back-arrow">←</span> Back to Item List
+    <button className="back-button" onClick={() => navigate(`/restaurants/${menuItem.restaurantId}`)}>
+  <span className="back-arrow">←</span> Back to Restaurant
 </button>
+
 
       <div className="menu-item-detail">
         <div>

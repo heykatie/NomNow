@@ -48,11 +48,15 @@ function RestaurantDetail() {
     };
 
     return (
+        
         <div className="restaurant-detail">
             {/* Header Image */}
             <div className="restaurant-hero">
                 <img src={restaurant.storeImage} alt={restaurant.name} />
             </div>
+            <button className="back-button" onClick={() => navigate(`/`)}>
+  <span className="back-arrow">←</span> Back to Restaurants
+</button>
     
             {/* Restaurant Name and Search Section */}
             <div className="restaurant-info-section">
