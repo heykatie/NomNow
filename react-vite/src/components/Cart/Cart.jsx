@@ -80,7 +80,7 @@ export default function Cart() {
 				if (menuOpen) {
 					setMenuOpen(false);
 				} else {
-					setIsOpen(false); 
+					setIsOpen(false);
 				}
 			}
 		};
@@ -127,15 +127,15 @@ export default function Cart() {
 					<button className='close-btn' onClick={() => setIsOpen(false)}>
 						<FaTimes />
 					</button>
-					<div className='menu-container'>
+					<div className='cart-menu-container'>
 						<button
 							ref={menuRef}
-							className='menu-btn'
+							className='cart-menu-btn'
 							onClick={() => setMenuOpen(!menuOpen)}>
 							<FaEllipsisV />
 						</button>
 						{menuOpen && (
-							<div className='menu-dropdown'>
+							<div className='cart-menu-dropdown'>
 								<button
 									onClick={handleClearCart}
 									className='clear-cart-btn'>
