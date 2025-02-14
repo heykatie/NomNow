@@ -18,44 +18,44 @@ function FooterButton({ dev }) {
   if(dev && cDev){
     content = (
       <div className="dev-info">
-  
+
         <label className='github'>
           Git-Hub:
           <button onClick={()=> {
             navigator.clipboard.writeText(cDev.github)
               .then(()=> alert('Git-Hub URL copied to clipboard!'))
-              .catch((err)=> console.error('Faled to copy text: ', err))
+              .catch((err)=> console.error('Failed to copy text: ', err))
           }}>
             {cDev.github}
           </button>
         </label>
-  
+
         <label className='linkedIn'>
           LinkedIn
           <button onClick={()=> {
             navigator.clipboard.writeText(cDev.linkedIn)
               .then(()=> alert('LinkedIn URL copied to clipboard!'))
-              .catch((err)=> console.error('Faled to copy text: ', err))
+              .catch((err)=> console.error('Failed to copy text: ', err))
           }}>
             {cDev.linkedIn}
           </button>
         </label>
-  
+
         <label className='discord'>
           Discord Tag
           <button onClick={()=> {
             navigator.clipboard.writeText(cDev.discord)
               .then(()=> alert('Discord Tag copied to clipboard!'))
-              .catch((err)=> console.error('Faled to copy text: ', err))
+              .catch((err)=> console.error('Failed to copy text: ', err))
           }}>
             {cDev.discord}
           </button>
         </label>
-        
+
       </div>
-    ) 
+    )
   }
-  
+
 
   return (
     <OpenModalButton
