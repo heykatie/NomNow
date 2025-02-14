@@ -13,6 +13,7 @@ import './Orders.css';
 export default function Orders() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const user = useSelector((state) => state.session.user || null);
 	const error = useSelector((state) => state.errors.message || '');
 	// const currentOrder = useSelector((store) => store.orders.currentOrder || {});
 	const orders = useSelector((state) => state.orders.userOrders || []);
@@ -21,6 +22,10 @@ export default function Orders() {
 	useEffect(() => {
 		dispatch(getUserOrders());
 	}, [dispatch]);
+
+	useEffect(() => {
+		if (!user) navigate('/login');
+	}, [user]);
 
 	useEffect(() => {
 		if (!orders || orders.length === 0) {
