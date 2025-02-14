@@ -37,25 +37,27 @@ function HomePage() {
         dispatch(getAllRestaurants());
     }, [dispatch]);
 
-    // Get available cuisine types from current restaurants
-    const availableCuisines = new Set(
-        restaurants.map(restaurant => restaurant.cuisineType)
-    );
+
 
     
     const handleRestaurantClick = (restaurantId) => {
         navigate(`/restaurants/${restaurantId}`);
     };
 
+    const availableCuisines = new Set(
+        restaurants.map(restaurant => restaurant.cuisineType.toLowerCase())
+    );
+
     const handleCuisineClick = (cuisineName) => {
         // Only allow selection if cuisine type has restaurants
-        if (availableCuisines.has(cuisineName)) {
+        if (availableCuisines.has(cuisineName.toLowerCase())) {
             setSelectedCuisine(cuisineName === selectedCuisine ? null : cuisineName);
         }
     };
 
     const filteredRestaurants = selectedCuisine
-        ? restaurants.filter(restaurant => restaurant.cuisineType === selectedCuisine)
+        ? restaurants.filter(restaurant => 
+            restaurant.cuisineType.toLowerCase() === selectedCuisine.toLowerCase())
         : restaurants;
 
     return (
@@ -64,7 +66,7 @@ function HomePage() {
                 {/* Cuisine Type Scroll Bar */}
                 <div className='cuisine-scroll-bar'>
                     {CUISINE_TYPES.map((cuisine) => {
-                        const isAvailable = availableCuisines.has(cuisine.name);
+                        const isAvailable = availableCuisines.has(cuisine.name.toLowerCase());
                         return (
                             <button
                                 key={cuisine.name}
@@ -75,7 +77,6 @@ function HomePage() {
                             >
                                 <span className="cuisine-icon">{cuisine.icon}</span>
                                 <span className="cuisine-name">{cuisine.name}</span>
-                                {isAvailable}
                             </button>
                         );
                     })}

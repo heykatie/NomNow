@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { getUserRestaurants, deleteRestaurant, updateRestaurant, reactivateRestaurant } from '../../redux/restaurants';
+import './ManageRestaurants.css';
 
 function ManageRestaurants() {
     const dispatch = useDispatch();
@@ -26,7 +27,6 @@ function ManageRestaurants() {
         );
     
         if (choice) {
-            // Proceed with soft delete
             try {
                 await dispatch(deleteRestaurant(id, 'soft'));
                 dispatch(getUserRestaurants());
@@ -34,7 +34,6 @@ function ManageRestaurants() {
                 alert(error.message || 'Failed to deactivate restaurant');
             }
         } else {
-            // Ask about hard delete
             const confirmHard = window.confirm(
                 'WARNING: This will permanently delete the restaurant and ALL related data including orders and menu items.\n\n' +
                 'This action cannot be undone. Are you sure you want to proceed?'
@@ -56,13 +55,13 @@ function ManageRestaurants() {
     const handleReactivate = async (restaurant) => {
         try {
             await dispatch(reactivateRestaurant(restaurant.id));
-            // Refresh the list after reactivation
             dispatch(getUserRestaurants());
             alert('Restaurant successfully reactivated!');
         } catch (error) {
             alert(error.message || 'Failed to reactivate restaurant');
         }
     };
+
     const handleUpdate = (id) => {
         navigate(`/restaurants/${id}/update`);
     };
@@ -71,33 +70,54 @@ function ManageRestaurants() {
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div>
+        <div className="manage-restaurants">
             <h1>My Restaurants</h1>
             {restaurants && restaurants.length > 0 ? (
-                restaurants.map(restaurant => (
-                    <div key={restaurant.id}>
-                        <h2>{restaurant.name}</h2>
-                        <p>Status: {restaurant.servicing ? 'Active' : 'Inactive'}</p>
-                        {restaurant.servicing ? (
-                            <button  className ="auth-buttons" onClick={() => handleDelete(restaurant.id)}>
-                                Deactivate/Delete Restaurant
-                            </button>
-                        ) : (
-                            <button className ="auth-buttons" onClick={() => handleReactivate(restaurant)}>
-                                Reactivate Restaurant
-                            </button>
-                        )}
-                        <button className ="auth-buttons" onClick={() => handleUpdate(restaurant.id)}>
-                            Update Info
-                        </button>
-                        <button className ="auth-buttons" onClick={() => navigate(`/restaurants/${restaurant.id}/menu`)}>
-                            Update Menu
-                        </button>
-                    </div>
-                ))
+                <div className="restaurants-grid">
+                    {restaurants.map(restaurant => (
+                        <div key={restaurant.id} className="restaurant-card">
+                            <div className="restaurant-image">
+                                <img 
+                                    src={restaurant.storeImage || '/placeholder.jpg'} 
+                                    alt={restaurant.name} 
+                                />
+                            </div>
+                            <div className="restaurant-info">
+                                <h2>{restaurant.name}</h2>
+                                <div className={`status-badge ${restaurant.servicing ? 'active' : 'inactive'}`}>
+                                    {restaurant.servicing ? 'Active' : 'Inactive'}
+                                </div>
+                                <div className="button-group">
+                                  
+                                    <button className="auth-buttons" onClick={() => handleUpdate(restaurant.id)}>
+                                        Update Info
+                                    </button>
+                                    <button className="auth-buttons" onClick={() => navigate(`/restaurants/${restaurant.id}/menu`)}>
+                                        Update Menu
+                                    </button>
+                                    {restaurant.servicing ? (
+                                        <button className="auth-buttons" onClick={() => handleDelete(restaurant.id)}>
+                                            Deactivate/Delete
+                                        </button>
+                                    ) : (
+                                        <button className="auth-buttons" onClick={() => handleReactivate(restaurant)}>
+                                            Reactivate
+                                        </button>
+                                    )}
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             ) : (
                 <p>No restaurants found</p>
             )}
+            <button 
+                className="auth-buttons add-restaurant-button"
+                onClick={() => navigate('/restaurants/new')}
+            >
+                Add New Restaurant
+            </button>
         </div>
     );
 }

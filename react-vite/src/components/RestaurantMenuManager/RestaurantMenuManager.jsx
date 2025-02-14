@@ -43,11 +43,14 @@ const RestaurantMenuManager = () => {
 
     return (
         <div>
-            <h2>Menu Items</h2>
-            
-            <NavLink to="/menu-items/new" element={<MenuItemCreate />}>
-                <button className="create-button">Create New Menu Item</button>
-            </NavLink>
+            <div className="header-container">
+                <div className="create-button-position">
+                    <NavLink to="/menu-items/new" element={<MenuItemCreate />}>
+                        <button className="auth-buttons">Create New Menu Item</button>
+                    </NavLink>
+                </div>
+                <h1>Manage Menu</h1>
+            </div>
 
             {menuItems.length === 0 ? (
                 <p>No menu items available.</p>
@@ -66,7 +69,7 @@ const RestaurantMenuManager = () => {
                                 <NavLink 
                                     to={`/menu-items/${item.id}/update`}
                                     element={<UpdateMenuItem />}
-                                    className="edit-button"
+                                    className="auth-buttons"
                                 >
                                     Edit
                                 </NavLink>
