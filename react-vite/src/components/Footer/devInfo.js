@@ -21,7 +21,9 @@ const devInfo = {
     },
     Sama: {
         github: 'https://github.com/SamaAlt',
-        linkedIn: 'http://linkedin.com/in/SamaAlt'
+        linkedIn: 'http://linkedin.com/in/SamaAlt',
+        discord: 'https://discord.com/users/1243195365922967594'
+
     },
 }
 
