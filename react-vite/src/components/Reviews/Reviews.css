@@ -1,54 +1,59 @@
+/* Reviews Container */
 .reviews-container {
   padding: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center; /* Center horizontally */
-  justify-content: center; /* Center vertically (optional) */
+  align-items: center;
+  justify-content: center;
 }
 
+/* Review List */
 .review-list {
   margin-top: 20px;
-  width: 100%; /* Ensure it takes full width */
-  max-width: 800px; /* Optional: Set a max-width for better readability */
+  width: 100%;
+  max-width: 800px;
 }
 
+/* Review Item */
 .review-item {
   border: 1px solid #ccc;
   padding: 10px;
   margin-bottom: 10px;
-  width: 100%; /* Ensure it takes full width of its container */
+  width: 100%;
 }
 
+/* Rating Container */
 .rating-container {
   margin-top: 10px;
 }
 
+/* Rating Item */
 .rating-item {
   margin-bottom: 5px;
   display: flex;
-  align-items: center; /* Align text and star icon vertically */
+  align-items: center;
 }
 
-
+/* Review Actions */
 .review-actions {
   margin-top: 10px;
 }
 
 /* Button styles for all buttons */
-button {
+:where(button) {
   margin-right: 10px;
-  padding: 9px 10px; /* Slightly bigger */
-  background-color: black; /* Black background */
-  color: white; /* White text */
+  padding: 10px 15px;
+  background-color: rgb(0, 0, 0);
+  color: white;
   border: 1px solid #ccc;
-  border-radius: 6px; /* Rounder corners */
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 14px; /* Slightly bigger font size */
+  font-size: 14px;
   transition: background-color 0.2s, color 0.2s;
 }
 
-button:hover {
-  background-color: #333; /* Darker black on hover */
+:where(button):hover {
+  background-color: #333333d0;
   color: white;
 }
 
@@ -71,11 +76,11 @@ button:hover {
 }
 
 .star-rating .star.selected {
-  color: #ffcc00; /* Yellow color for selected stars */
+  color: #ffcc00;
 }
 
 .star-rating .star:hover {
-  color: #ffcc00; /* Yellow color on hover */
+  color: #ffcc00;
 }
 
 .rating-value {
@@ -83,6 +88,7 @@ button:hover {
   margin-left: 10px;
 }
 
+/* Modal Styles */
 .modal {
   position: absolute;
   top: 50%;
@@ -96,8 +102,11 @@ button:hover {
   border-radius: 8px;
   max-width: 500px;
   width: 100%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
+/* Review Overlay Styles */
 .review-overlay {
   position: fixed;
   top: 0;
@@ -105,23 +114,6 @@ button:hover {
   right: 0;
   bottom: 0;
   background-color: rgba(0, 0, 0, 0.75);
-}
-
-/* Additional styles for modal buttons */
-.modal button {
-  background-color: black; /* Black background */
-  color: white; /* White text */
-  border: 1px solid #ccc;
-  padding: 10px 20px; /* Slightly bigger */
-  font-size: 16px; /* Slightly bigger font size */
-  border-radius: 8px; /* Rounder corners */
-  cursor: pointer;
-  transition: background-color 0.2s, color 0.2s;
-}
-
-.modal button:hover {
-  background-color: #333; /* Darker black on hover */
-  color: white;
 }
 
 /* Reviews.css */
@@ -140,27 +132,55 @@ button:hover {
 }
 
 .rating-item {
-  font-size: 0.9em; /* Smaller font size for the rating text */
+  font-size: 0.9em;
 }
 
 .rating-item span {
-  color: #ffcc00; /* Yellow color for the ★ icons */
+  color: #ffcc00;
 }
 
 .review-actions {
   margin-top: 10px;
 }
 
+/* Ensure review-actions buttons match the global button style */
 .review-actions button {
   margin-right: 10px;
-  padding: 5px 10px;
-  border: none;
-  border-radius: 3px;
-  background-color: #00ff0d8f;
+  padding: 8px 15px;
+  background-color: rgba(5, 146, 0, 0.884);
   color: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
   cursor: pointer;
+  font-size: 13px;
+  transition: background-color 0.2s, color 0.2s;
 }
 
 .review-actions button:hover {
-  background-color: #00b309;
+  background-color: rgba(5, 146, 0, 0.534);
+  color: white;
+}
+
+/* Textarea Styling for Review Form */
+textarea {
+  width: 95%;
+  height: fit-content;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #444;
+  border-radius: 6px;
+  background-color: #e6dddd;
+  color: #000000;
+  resize: vertical;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+textarea:focus {
+  border-color: #666;
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
+  outline: none;
+}
+
+textarea::placeholder {
+  color: #aaa;
 }

@@ -22,7 +22,7 @@ const Reviews = () => {
     if (!restaurantName && restaurantId) {
       fetch(`/api/restaurants/${restaurantId}`)
         .then(response => response.json())
-        .then(data => setRestaurantName(data.restaurant.name)) // ensure 'restaurant' key is used
+        .then(data => setRestaurantName(data.restaurant.name)) 
         .catch(error => console.error('Error fetching restaurant name:', error));
     }
   }, [restaurantId, restaurantName]);
@@ -36,8 +36,6 @@ const Reviews = () => {
   return (
     <div className="reviews-container">
       <h2>Reviews for {restaurantName || `Restaurant ${restaurantId}`}</h2>
-      <h3>Share your {restaurantName || `Restaurant ${restaurantId}`} review with others.</h3>
-      <h4>Tell us below what you would tell your friends - the more details, the better.</h4>
 
       <ReviewForm restaurantId={restaurantId} orderId={orderId || 1} />
       <ReviewList reviews={reviews} />

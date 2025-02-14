@@ -41,22 +41,22 @@
 
 /* Global Close Button */
 #modal-content .close-button {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  background: white;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 20px;
-  font-weight: bold;
-  border: none;
-  cursor: pointer;
-  transition: background 0.2s ease;
-  z-index: 100;
+  position: absolute !important;
+  top: 12px !important;
+  left: 12px !important;
+  background: white !important;
+  border-radius: 50% !important;
+  width: 36px !important;
+  height: 36px !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  font-size: 20px !important;
+  font-weight: bold !important;
+  border: none !important;
+  cursor: pointer !important;
+  transition: background 0.2s ease !important;
+  z-index: 100 !important;
 }
 
 #modal-content .close-button:hover {

@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteMenuItem, getMenuItem } from '../../redux/menuItems';
 import { useParams, useNavigate } from 'react-router-dom';
+import './MenuItemDelete.css'; // Import the updated CSS
 
 const MenuItemDelete = () => {
   const { id } = useParams();
@@ -12,6 +13,7 @@ const MenuItemDelete = () => {
   const menuItem = useSelector((state) => state.menuItems.menuItem);
   const error = useSelector((state) => state.menuItems.error);
   const user = useSelector((state) => state.session.user); // Logged-in user
+  const alertShown = useRef(false); // Track if the alert has been shown
 
   // Fetch the menu item details when the component mounts or the ID changes
   useEffect(() => {
@@ -28,11 +30,17 @@ const MenuItemDelete = () => {
         setIsAuthorized(true); // User is authorized
         setMenuItemName(menuItem.name); // Set the menu item name
       } else {
-        alert('You are not authorized to delete this menu item.');
-        navigate('/menu-items'); // Redirect to the menu items list
+        if (!alertShown.current) {
+          alertShown.current = true; // Mark that the alert has been shown
+          alert('You are not authorized to delete this menu item.');
+          // Redirect to the item detail page after the alert
+          setTimeout(() => {
+            navigate(`/menu-items/${id}`);
+          }, 1000); // Wait 1 second before redirecting
+        }
       }
     }
-  }, [menuItem, user, navigate]);
+  }, [menuItem, user, navigate, id]);
 
   // Handle delete action
   const handleDelete = () => {
@@ -48,7 +56,7 @@ const MenuItemDelete = () => {
 
   // Display error if any
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div className="error-message">Error: {error}</div>;
   }
 
   // Only render the delete confirmation if the user is authorized
@@ -57,12 +65,12 @@ const MenuItemDelete = () => {
   }
 
   return (
-    <div>
+    <div className="menu-item-delete-container">
       <h2>Are you sure you want to delete {menuItemName}?</h2>
-      <button onClick={handleDelete} style={{ backgroundColor: 'red', color: 'white' }}>
+      <button className="delete-button" onClick={handleDelete}>
         Yes, Delete
       </button>
-      <button onClick={handleCancel} style={{ marginLeft: '10px' }}>
+      <button className="cancel-button" onClick={handleCancel}>
         Cancel
       </button>
     </div>

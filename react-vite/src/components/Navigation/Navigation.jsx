@@ -20,13 +20,18 @@ function Navigation() {
 				<button className='back-to-store' onClick={() => navigate(-1)}>
 					← Back to store
 				</button>
-				<h1 className='checkout-title'>NomNow</h1>
+				<h1
+					className='checkout-title'
+					onClick={() => navigate('/home')}
+					style={{ cursor: 'pointer' }}>
+					NomNow
+				</h1>
 			</div>
 		);
 	}
-	
-  console.log('DELIVERY TYPE:', deliveryType);
-  console.log(user)
+
+  // console.log('DELIVERY TYPE:', deliveryType);
+  // console.log(user)
   return (
 	<div className='navContainer'>
 		<ul className='nav'>

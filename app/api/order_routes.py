@@ -1,7 +1,8 @@
 from flask import Blueprint, jsonify, request
 from flask_login import current_user, login_required
 from app.models.db import db
-from app.models import Order, OrderItem, MenuItem, User
+from app.models import Order, OrderItem, MenuItem
+from datetime import timezone
 
 order_routes = Blueprint("orders", __name__)
 
@@ -16,12 +17,12 @@ order_routes = Blueprint("orders", __name__)
 
 #     return jsonify({"orders": [order.to_dict() for order in orders]}), 200
 
+
 @order_routes.route("/")
 @login_required
 def get_orders():
     # Include orders with status 'Submitted' as well
-    orders = Order.query.filter(
-        Order.user_id == current_user.id).all()
+    orders = Order.query.filter(Order.user_id == current_user.id).all()
 
     if not orders:
         return jsonify({"orders": []}), 200  # Return empty list instead of 404
@@ -50,8 +51,12 @@ def get_orders():
         formatted_orders.append(
             {
                 "id": order.id,
-                "createdAt": order.created_at,
-                "updatedAt": order.updated_at,
+                "createdAt": order.created_at.astimezone(timezone.utc).isoformat()
+                if order.created_at
+                else None,
+                "updatedAt": order.updated_at.astimezone(timezone.utc).isoformat()
+                if order.updated_at
+                else None,
                 "status": order.status,
                 "totalCost": float(order.total_cost),
                 "restaurant": restaurant_data,
@@ -63,6 +68,7 @@ def get_orders():
                         "quantity": item.quantity,
                         "price": float(item.price),
                         "restaurant_id": item.menu_items.restaurants.id,
+                        "food_image": item.menu_items.food_image,
                     }
                     for item in order.order_items
                 ],
@@ -70,6 +76,7 @@ def get_orders():
         )
 
     return jsonify({"orders": formatted_orders}), 200
+
 
 # Get details of a specific order made by the user
 # @order_routes.route("/<int:order_id>")
@@ -82,6 +89,7 @@ def get_orders():
 #         return {"message": "Unauthorized"}, 403
 
 #     return jsonify(order.to_dict()), 200
+
 
 @order_routes.route("/<int:order_id>")
 @login_required
@@ -121,6 +129,7 @@ def get_order(order_id):
             "quantity": item.quantity,
             "price": float(item.price),
             "restaurant_id": order.restaurant_id,
+            "food_image": item.menu_items.food_image,
         }
         for item in order.order_items
     ]
@@ -129,8 +138,12 @@ def get_order(order_id):
     return jsonify(
         {
             "id": order.id,
-            "createdAt": order.created_at,
-            "updatedAt": order.updated_at,
+            "createdAt": order.created_at.astimezone(timezone.utc).isoformat()
+            if order.created_at
+            else None,
+            "updatedAt": order.updated_at.astimezone(timezone.utc).isoformat()
+            if order.updated_at
+            else None,
             "status": order.status,
             "totalCost": float(order.total_cost),
             "restaurant": restaurant_data,
@@ -142,6 +155,7 @@ def get_order(order_id):
                     "quantity": item.quantity,
                     "price": float(item.price),
                     "restaurant_id": item.menu_items.restaurants.id,
+                    "food_image": item.menu_items.food_image,
                 }
                 for item in order.order_items
             ],
@@ -232,6 +246,7 @@ def create_order():
 
     return jsonify(new_order.to_dict()), 201
 
+
 """
 example request body: {
     "restaurant_id": "1",
@@ -300,6 +315,8 @@ def update_order_items(order_id):
     db.session.commit()
 
     return jsonify(order.to_dict()), 200
+
+
 """
 {
     "items": [
@@ -365,7 +382,7 @@ def complete_order(order_id):
     # ), 200
 
 
-# deletes order by trashing cart
+# deletes order
 @order_routes.route("/<int:order_id>", methods=["DELETE"])
 @login_required
 def delete_order(order_id):

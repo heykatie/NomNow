@@ -1,16 +1,19 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { useModal } from '../../context/Modal';
-import TipModal from '../../context/TipModal';
-import ScheduleModal from '../../context/ScheduleModal';
-import { loadUserOrder, placeOrder } from '../../redux/orders';
-import { deductFundsThunk } from '../../redux/session';
+import { useModal } from '../../../context/Modal';
+import TipModal from '../../../context/TipModal';
+import ScheduleModal from '../../../context/ScheduleModal';
+import { placeOrder, deleteOrder } from '../../../redux/orders';
+import { deductFundsThunk } from '../../../redux/session';
+import OrderRestaurant from '../../Orders/OrderRestaurant';
+import CartItems from '../CartItems';
 import './Checkout.css';
 
 export default function Checkout() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const location = useLocation();
 	const user = useSelector((state) => state.session.user);
 	const { setModalContent } = useModal();
 	const currentOrder = useSelector((state) => state.orders.currentOrder);
@@ -22,7 +25,7 @@ export default function Checkout() {
 		currentOrder?.restaurant?.closingTime || '20:00';
 	const [paymentMethod, setPaymentMethod] = useState('credit-card');
 
-	const subtotal = parseInt(currentOrder.totalCost) || 0;
+	const subtotal = parseInt(currentOrder?.totalCost) || 0;
 	const baseDeliveryFee = 6.49;
 	const priorityFee = 1.49;
 	const taxes = subtotal * 0.1;
@@ -53,59 +56,67 @@ export default function Checkout() {
 	};
 
 	const handlePlaceOrder = async () => {
-		// if (!currentOrder) {
-		// 	console.error('No current order found, cannot proceed.');
-		// 	return;
-		// }
-
-		// if (currentOrder.status !== 'Active') {
-		// 	console.error('Order cannot be placed, it is already processed.');
-		// 	return;
-		// }
-
 		if (paymentMethod === 'wallet') {
 			if (user.wallet < total) {
 				alert('Insufficient funds in your wallet.');
 				return;
 			}
 
-			// Deduct funds from wallet
 			await dispatch(deductFundsThunk({ id: user.id, amount: total }));
 		}
 
 		await dispatch(placeOrder(currentOrder.id));
 
-		// Wait for Redux and localStorage updates
 		setTimeout(() => {
-			const updatedOrder = JSON.parse(
-				localStorage.getItem('currentOrder')
-			);
+			const updatedOrder = JSON.parse(localStorage.getItem('currentOrder'));
 			if (updatedOrder && updatedOrder.status === 'Submitted') {
 				navigate('/orders');
 			}
 		}, 500);
 	};
 
-	useEffect(() => {
-		if (!currentOrder) {
-			const savedOrder = JSON.parse(localStorage.getItem('currentOrder'));
-			if (savedOrder) {
-				dispatch(loadUserOrder(savedOrder)); // Restore Redux state from localStorage
-			} else {
-				navigate('/orders'); // Redirect if no order is found
-			}
+	const handleOrderDeletion = async () => {
+		if (currentOrder?.status === 'Active') {
+			await dispatch(deleteOrder(currentOrder.id));
+			localStorage.removeItem('currentOrder');
 		}
-	}, [currentOrder, navigate, dispatch]);
+	};
+	useEffect(() => {
+		const handleBeforeUnload = () => handleOrderDeletion();
+
+		window.addEventListener('beforeunload', handleBeforeUnload);
+
+		return () => {
+			window.removeEventListener('beforeunload', handleBeforeUnload);
+			handleOrderDeletion();
+		};
+	}, []);
+
+	useEffect(() => {
+		if (location.pathname !== '/checkout') {
+			handleOrderDeletion();
+		}
+	}, [location.key]);
+
+	useEffect(() => {
+		const savedOrder = JSON.parse(localStorage.getItem('currentOrder'));
+
+		if (!currentOrder && savedOrder) {
+
+			localStorage.removeItem('currentOrder');
+			navigate('/orders');
+		}
+	}, [currentOrder, dispatch, navigate]);
 
 	if (!currentOrder) {
 		navigate('/orders');
-		return null; // Prevents further rendering
+		return null;
 	}
 
 	return (
 		<div className='checkout-page'>
 			<div className='checkout-left'>
-				{/* Delivery Details */}
+
 				<div className='delivery-section'>
 					<h3>Delivery details</h3>
 					<div className='address'>
@@ -128,11 +139,11 @@ export default function Checkout() {
 					</div>
 				</div>
 
-				{/* Delivery Options */}
+
 				<div className='delivery-options'>
 					<h3>Delivery options</h3>
 					<div
-						className={`option priority ${
+						className={`d-option priority ${
 							deliveryOption === 'priority' ? 'selected' : ''
 						}`}
 						onClick={() => setDeliveryOption('priority')}>
@@ -143,7 +154,7 @@ export default function Checkout() {
 						<span>15-30 min</span>
 					</div>
 					<div
-						className={`option standard ${
+						className={`d-option standard ${
 							deliveryOption === 'standard' ? 'selected' : ''
 						}`}
 						onClick={() => setDeliveryOption('standard')}>
@@ -151,7 +162,7 @@ export default function Checkout() {
 						<span>20-35 min</span>
 					</div>
 					<div
-						className={`option schedule ${
+						className={`d-option schedule ${
 							deliveryOption === 'schedule' ? 'selected' : ''
 						}`}
 						onClick={() => {
@@ -163,12 +174,12 @@ export default function Checkout() {
 					</div>
 				</div>
 
-				{/* Payment */}
+
 				<div className='payment-section'>
 					<h3>Payment</h3>
 					<div className='payment-options'>
 						<div
-							className={`option credit-card ${
+							className={`d-option credit-card ${
 								paymentMethod === 'credit-card' ? 'selected' : ''
 							}`}
 							onClick={() => setPaymentMethod('credit-card')}>
@@ -178,7 +189,7 @@ export default function Checkout() {
 							</span>
 						</div>
 						<div
-							className={`option wallet ${
+							className={`d-option wallet ${
 								paymentMethod === 'wallet' ? 'selected' : ''
 							}`}
 							onClick={() => setPaymentMethod('wallet')}>
@@ -190,62 +201,28 @@ export default function Checkout() {
 					</div>
 				</div>
 
-				{/* Place Order Button */}
+
 				<button className='confirm-order-btn' onClick={handlePlaceOrder}>
 					Place order
 				</button>
 			</div>
 
-			{/* Right Sidebar - Order Summary */}
+
 			<div className='checkout-right'>
-				<div
-					className='restaurant-header'
-					onClick={() =>
-						navigate(`/restaurants/${currentOrder.restaurant.id}`)
-					}>
-					<div className='restaurant-info'>
-						<h3>
-							{currentOrder.restaurant?.name ||
-								'Restaurant Name Not Available'}
-						</h3>
-						<p className='restaurant-address'>
-							{currentOrder.restaurant?.address
-								? `${currentOrder.restaurant.address}, ${
-										currentOrder.restaurant.city || ''
-								}`
-								: 'Address Not Available'}
-						</p>
-					</div>
-					<span className='arrow'>➜</span>
-				</div>
+				<OrderRestaurant restaurant={currentOrder.restaurant} />
 				<div className='order-summary'>
 					<h4>Cart summary ({currentOrder?.orderItems?.length} item/s)</h4>
-					{currentOrder?.orderItems &&
-					currentOrder.orderItems.length > 0 ? (
-						currentOrder.orderItems.map((item) => (
-							<div key={item.id} className='summary-item'>
-								<p>
-									{item.name ||
-										item.menu_item_name ||
-										'Unavailable Item'}{' '}
-									x{item.quantity || 1}
-								</p>
-								<p>${item.price ? item.price.toFixed(2) : '0.00'}</p>
-							</div>
-						))
-					) : (
-						<p>No items found.</p>
-					)}
+					<CartItems items={currentOrder?.orderItems} />
 				</div>
 
-				{/* Order Total Section including Tip */}
+
 				<div className='order-total'>
 					<h3>Order total</h3>
 					<p>Subtotal: ${subtotal.toFixed(2)}</p>
 					<p>Delivery Fee: ${deliveryFee.toFixed(2)}</p>
 					<p>Taxes & Other Fees: ${taxes.toFixed(2)}</p>
 
-					{/* Tip Selection*/}
+
 					<div className='tip-section'>
 						<h4>
 							Add a tip <span className='tooltip'></span>

@@ -13,7 +13,7 @@ import MenuItemCreate from '../components/MenuItemCreate';
 import UpdateMenuItem from '../components/MenuItemUpdate/MenuItemUpdate';
 import DeleteMenuItem from '../components/MenuItemDelete';
 import ManageRestaurants from '../components/ManageRestaurants/ManageRestaurants';
-import Checkout from '../components/Checkout';
+import Checkout from '../components/Cart/Checkout';
 import { AccountFormPage, NameFormPage, PhoneNumberPage, EmailPage } from '../components/AccountFormPage';
 import HomePage from '../components/HomePage';
 import RestaurantDetail from '../components/RestaurantDetail';

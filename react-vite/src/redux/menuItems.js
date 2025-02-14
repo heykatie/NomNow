@@ -108,7 +108,7 @@ export const toggleLike = (itemId) => {
 };
 
 export const getFavoriteItems = () => async (dispatch, getState) => {
-  const likedItemIds = getState().menuItems.likedItems; // Get liked item IDs from Redux state
+  const likedItemIds = getState().menuItems.likedItems;
 
   if (likedItemIds.length === 0) {
     dispatch({ type: 'SET_FAVORITE_ITEMS', payload: [] });
@@ -116,21 +116,27 @@ export const getFavoriteItems = () => async (dispatch, getState) => {
   }
 
   try {
-    const requests = likedItemIds.map(id =>
-      fetch(`/api/menu-items/${id}`).then(response => response.json()) // Fetch each liked item
-    );
+    const favoriteItems = [];
+    for (const id of likedItemIds) {
+      try {
+        const response = await fetch(`/api/menu-items/${id}`);
+        if (!response.ok) {
+          console.error(`Failed to fetch menu item ${id}: ${response.statusText}`);
+          continue; // Skip this item and continue with the next one
+        }
+        const item = await response.json();
+        favoriteItems.push(item);
+      } catch (error) {
+        console.error(`Error fetching menu item ${id}:`, error);
+      }
+    }
 
-    const favoriteItems = await Promise.all(requests); // Wait for all requests to complete
-
-    // console.log('Favorite items:', favoriteItems); // Check if favorites are fetched correctly
-
-    dispatch({ type: 'SET_FAVORITE_ITEMS', payload: favoriteItems }); // Save in Redux
+    dispatch({ type: 'SET_FAVORITE_ITEMS', payload: favoriteItems });
   } catch (error) {
     console.error('Error fetching favorite items:', error);
     dispatch({ type: 'MENU_ERROR', payload: error.message });
   }
 };
-
 const initialState = {
   menuItems: [],
   menuItem: null,
@@ -154,7 +160,7 @@ const menuReducer = (state = initialState, action) => {
         error: null,
       };
 
-      case 'UPDATE_MENU_ITEM':
+      case UPDATE_MENU_ITEM:
         return {
           ...state,
           menuItems: state.menuItems.map((item) =>

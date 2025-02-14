@@ -1,5 +1,6 @@
 import { csrfFetch } from './csrf';
 import { setError } from './errors';
+import {clearCart} from './cart';
 
 const LOAD_USER_ORDERS = 'orders/loadUserOrders';
 const LOAD_USER_ORDER = 'orders/loadUserOrder';
@@ -11,13 +12,15 @@ const UPDATE_ORDER = 'orders/updateOrder';
 const SUBMIT_ORDER = 'orders/submitOrder';
 const REMOVE_ORDER = 'orders/removeOrder';
 
-
 const loadUserOrders = (orders) => ({
 	type: LOAD_USER_ORDERS,
 	payload: orders,
 });
 
-export const loadUserOrder = (order) => ({ type: LOAD_USER_ORDER, payload: order });
+export const loadUserOrder = (order) => ({
+	type: LOAD_USER_ORDER,
+	payload: order,
+});
 const loadUserOrders4Rest = (orders) => ({
 	type: LOAD_USER_ORDERS_4_REST,
 	payload: orders,
@@ -30,13 +33,13 @@ const updateOrder = (order) => ({ type: UPDATE_ORDER, payload: order });
 const submitOrder = (order) => ({ type: SUBMIT_ORDER, payload: order });
 const removeOrder = (orderId) => ({ type: REMOVE_ORDER, payload: orderId });
 
-
 export const getUserOrders = () => async (dispatch) => {
 	try {
 		const response = await csrfFetch('/api/orders/');
 		if (!response.ok) throw response;
 
 		const data = await response.json();
+
 		dispatch(loadUserOrders(data.orders));
 	} catch (error) {
 		const errorMessage = await error.json();
@@ -85,14 +88,13 @@ export const createOrder = (orderData) => async (dispatch) => {
 
 		const newOrder = await response.json();
 
-		// Fetch full order details
 		const fullOrderResponse = await csrfFetch(`/api/orders/${newOrder.id}`);
 		if (!fullOrderResponse.ok) throw fullOrderResponse;
 
 		const fullOrder = await fullOrderResponse.json();
 
 		dispatch(addOrder(fullOrder));
-		return { payload: fullOrder }; // Return the full order details
+		return { payload: fullOrder };
 	} catch (error) {
 		const errorMessage = await error.json();
 		dispatch(setError(errorMessage));
@@ -127,17 +129,17 @@ export const placeOrder = (orderId) => async (dispatch) => {
 		}
 
 		const data = await response.json();
-		dispatch(submitOrder(data)); // ✅ Ensure Redux receives updated order
+		dispatch(submitOrder(data));
 
-		// Fetch the updated order directly
 		const orderResponse = await csrfFetch(`/api/orders/${orderId}`);
 		if (!orderResponse.ok) throw orderResponse;
 
 		const updatedOrder = await orderResponse.json();
-		dispatch(loadUserOrder(updatedOrder)); // ✅ Explicitly update `currentOrder`
+		dispatch(loadUserOrder(updatedOrder));
 		localStorage.setItem('currentOrder', JSON.stringify(updatedOrder));
 
-		// Fetch all user orders again to refresh the list
+
+		dispatch(clearCart());
 		await dispatch(getUserOrders());
 	} catch (error) {
 		const err = (await error.json()) || error.message;
@@ -145,20 +147,31 @@ export const placeOrder = (orderId) => async (dispatch) => {
 	}
 };
 
-export const deleteOrder = (orderId) => async (dispatch) => {
+export const deleteOrder = (orderId) => async (dispatch, getState) => {
 	try {
+		// console.log(`Attempting to delete order ${orderId}`);
 		const response = await csrfFetch(`/api/orders/${orderId}`, {
 			method: 'DELETE',
 		});
+
 		if (!response.ok) throw response;
 
+		// console.log(`Order ${orderId} deleted successfully`);
 		dispatch(removeOrder(orderId));
+		localStorage.removeItem('currentOrder');
+
+		const { orders } = getState();
+		if (orders.currentOrder?.id === orderId) {
+			// console.log(`Clearing currentOrder for ${orderId}`);
+			dispatch(clearCurrentOrder());
+		}
+
+		await dispatch(getUserOrders());
 	} catch (error) {
-		const errorMessage = await error.json();
-		dispatch(setError(errorMessage));
+		// console.error(`Error deleting order ${orderId}:`, error);
+		dispatch(setError(await error.json()));
 	}
 };
-
 
 const initialState = {
 	userOrders: [],
@@ -174,17 +187,26 @@ export default function ordersReducer(state = initialState, action) {
 		case LOAD_USER_ORDERS:
 			return {
 				...state,
-				userOrders: Array.isArray(action.payload) ? action.payload : [],
+				userOrders: Array.isArray(action.payload)
+					? action.payload.sort(
+							(a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+					)
+					: [],
 			};
 		case LOAD_USER_ORDER:
-			localStorage.setItem('currentOrder', JSON.stringify(action.payload)); // Save order
-			return { currentOrder: action.payload };
+			localStorage.setItem('currentOrder', JSON.stringify(action.payload));
+			return {
+				...state,
+				currentOrder: action.payload,
+			};
 		case LOAD_USER_ORDERS_4_REST:
 			return { ...state, userOrdersForRestaurant: action.payload };
 		case ADD_ORDER:
 			return {
 				...state,
-				userOrders: [...state.userOrders, action.payload],
+				userOrders: [action.payload, ...state.userOrders].sort(
+					(a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+				),
 				currentOrder: action.payload,
 			};
 		case UPDATE_ORDER:
@@ -195,33 +217,41 @@ export default function ordersReducer(state = initialState, action) {
 				),
 			};
 		case SUBMIT_ORDER:
-			if (!action.payload) {
-				// console.error(
-				// 	'SUBMIT_ORDER payload is invalid:',
-				// 	action.payload
-				// );
-				return state;
+			if (!action.payload) return state;
+
+			return {
+				...state,
+				userOrders: state.userOrders
+					.map((order) =>
+						order.id === action.payload.id
+							? { ...order, status: 'Submitted' }
+							: order
+					)
+					.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
+				currentOrder: action.payload,
+			};
+		case REMOVE_ORDER: {
+			// console.log(`Removing order ${action.payload} from Redux state`);
+
+			const updatedUserOrders = state.userOrders.filter(
+				(order) => order.id !== action.payload
+			);
+
+			const updatedCurrentOrder =
+				state.currentOrder?.id === action.payload
+					? null
+					: state.currentOrder;
+
+			if (updatedCurrentOrder === null) {
+				localStorage.removeItem('currentOrder');
 			}
 
 			return {
 				...state,
-				userOrders:
-					state.userOrders?.map((order) =>
-						order.id === action.payload.id
-							? { ...order, status: 'Submitted' }
-							: order
-					) || [], // Fallback to an empty array
-				currentOrder: action.payload, // Ensure currentOrder remains valid
+				userOrders: updatedUserOrders,
+				currentOrder: updatedCurrentOrder,
 			};
-		case REMOVE_ORDER:
-			localStorage.removeItem('currentOrder'); // Clear saved order
-			return {
-				...state,
-				userOrders: state.userOrders.filter(
-					(order) => order.id !== action.payload
-				),
-				currentOrder: null,
-			};
+		}
 		default:
 			return state;
 	}

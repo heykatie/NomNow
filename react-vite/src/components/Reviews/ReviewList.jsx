@@ -5,8 +5,6 @@ import './Reviews.css';
 const ReviewList = () => {
   const reviews = useSelector((state) => state.reviews.allReviewsForRest);
 
-  console.log('Reviews in ReviewList:', reviews); // Logging to check data
-
   if (!reviews || reviews.length === 0) {
     return <p>No reviews yet!</p>;
   }
