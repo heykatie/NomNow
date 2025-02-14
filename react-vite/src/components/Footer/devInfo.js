@@ -20,9 +20,8 @@ const devInfo = {
         discord: " "
     },
     Sama: {
-        github: ' ',
-        linkedIn: ' ',
-        discord: " "
+        github: 'https://github.com/SamaAlt',
+        linkedIn: 'http://linkedin.com/in/SamaAlt'
     },
 }
 
