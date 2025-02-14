@@ -82,8 +82,6 @@ export const checkoutCart = () => async (dispatch, getState) => {
 	}));
 
 	await dispatch(createOrder({ restaurant_id: restaurantId, items }));
-
-	dispatch(clearCart());
 };
 
 export const clearCart = () => async (dispatch) => {

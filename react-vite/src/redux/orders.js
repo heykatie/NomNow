@@ -1,5 +1,6 @@
 import { csrfFetch } from './csrf';
 import { setError } from './errors';
+import {clearCart} from './cart';
 
 const LOAD_USER_ORDERS = 'orders/loadUserOrders';
 const LOAD_USER_ORDER = 'orders/loadUserOrder';
@@ -140,6 +141,7 @@ export const placeOrder = (orderId) => async (dispatch) => {
 		localStorage.setItem('currentOrder', JSON.stringify(updatedOrder));
 
 
+		dispatch(clearCart());
 		await dispatch(getUserOrders());
 	} catch (error) {
 		const err = (await error.json()) || error.message;
