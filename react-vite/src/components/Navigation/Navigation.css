@@ -1,23 +1,51 @@
 .menu-dropdown {
   position: fixed;
   top: 0;
-  left: 0;
-  height: 100%;
+  left: -300px;
+  width: 300px;
+  height: 100vh;
   width: 300px;
   background-color: #FFFFFF;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
   display: grid;
-
+  transition: left 0.6s ease-in-out;
+  z-index: 1000;
+  text-align: center;
 }
+
+.menu-dropdown.open {
+  transition: left 0.6s ease-in-out;
+  left: 0;
+}
+
+.menu-dropdown text {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  font-size: 18px;
+}
+
 .menu-button{
   display: flex;
   align-items: center;
   justify-content: center;
   justify-self: flex-start;
   margin-right: auto;
+  color: black;
+  background: white;
+  border: none;
+  cursor: pointer;
 }
+
+.profile img {
+  cursor: pointer
+}
+
 .hidden{
   display: none;
 }
+
 li{
   list-style: none;
 }
@@ -32,7 +60,7 @@ li{
 }
 .nav{
   display: flex;
-
+  max-height: 15px;
   max-width: 100%;
   z-index: 1000;
   align-items: center;

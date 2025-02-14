@@ -33,6 +33,23 @@ export default function Cart() {
 		}
 	}, [isOpen]);
 
+	useEffect(() => {
+		const handleEscape = (event) => {
+			if (event.key === 'Escape') {
+				setIsOpen(false);
+			}
+		};
+
+		if (isOpen) {
+			document.addEventListener('keydown', handleEscape);
+		}
+
+		return () => {
+			document.removeEventListener('keydown', handleEscape);
+		};
+	}, [isOpen]);
+
+
 	return (
 		<>
 			<button className='cart-container' onClick={() => setIsOpen(true)}>
