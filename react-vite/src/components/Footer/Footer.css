@@ -4,71 +4,77 @@
     border-bottom: 0.5px solid #cecece;
     padding: 30px 20px;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column; /* Stack the elements vertically */
     align-items: center;
-}
-
-#footer-logo-text {
-    font-size: 20px;
+    justify-content: center;
+  }
+  
+  #footer-logo {
+    text-align: center;
+    margin-bottom: 30px; /* Space between logo and contact section */
+  }
+  
+  #footer-logo-text {
+    font-size: 80px;
     font-weight: 300;
-    margin-right: 20px;
-}
-
-#footerModal button {
-    background: none;
     color: black;
-    border: none;
-    font-size: 14px;
-    cursor: pointer;
-    font-weight: 300;
-}
-
-#footer-col-1 {
-    display: flex;
-    gap: 30px;
-}
-
-.footer-right {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 40px;
-}
-
-.footer-right-header {
-    font-size: 14px;
-    color: darkgray;
-    padding-bottom: 10px;
-}
-
-.footer-col {
+  }
+  
+  .footer-right {
     display: flex;
     flex-direction: column;
+    align-items: center;
     gap: 20px;
-}
-
-.footer-list {
+  }
+  
+  .footer-contact {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 30px; /* Space between each contact */
+  }
+  
+  .footer-name {
     display: flex;
     flex-direction: column;
+    align-items: center;
+    text-align: center;
     gap: 10px;
-    font-weight: lighter;
-}
-
-.footer-name {
-    display: flex;
-    justify-content: space-between;
-}
-
-.footer-links {
+  }
+  
+  .footer-name div {
+    font-size: 14px;
+    font-weight: bold;
+    color: black;
+  }
+  
+  .footer-links {
     font-size: 12px;
     display: flex;
     gap: 10px;
-    margin-left: 20px;
-}
-
-#footer-copyright {
-    color: #828282;
+  }
+  
+  #footer-copyright {
+    color: black;
     display: flex;
-    justify-content: end;
+    justify-content: center;
     padding: 15px 20px;
     font-size: 11px;
-}
+    width: 100%;
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  a {
+    color: black;
+    text-decoration: none; /* Remove underline from links */
+  }
+  
+  a:hover {
+    color: #333; /* Darker color when hovering */
+  }
+  
+  .footer-links i {
+    font-size: 20px;
+  }
+  
