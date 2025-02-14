@@ -36,6 +36,7 @@ const MenuItemDetail = () => {
       name: menuItem.name,
       price: menuItem.price,
       restaurantId: menuItem.restaurantId,
+      food_image: menuItem.food_image,
       quantity,
     }));
     setQuantity(1);
