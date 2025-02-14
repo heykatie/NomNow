@@ -8,7 +8,7 @@
   background-color: #FFFFFF;
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
   display: grid;
-  transition: left 0.6s ease-in-out;
+  transition: left 0.3s ease-in-out;
   z-index: 1000;
   text-align: center;
 }

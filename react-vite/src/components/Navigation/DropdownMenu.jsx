@@ -265,81 +265,78 @@ function DropdownMenu({ user }) {
 			<button onClick={toggleMenu} className='menu-button'>
 				<img src='../../icons/menu.png' alt='Menu' className='icon' />
 			</button>
-
 			{/* Dropdown Menu */}
-			{menuOpen && (
-				<div className={`menu-dropdown ${menuOpen ? 'open' : ''}`}>
-					{user ? (
-						<>
-							<li>
-								<div className='profile'>
-									<img
-										src='/icons/user.png'
-										alt='User'
-										className='icon'
-									/>
-									<div className='profile-info'>
-										<h4>
-											{user.firstName} {user.lastName}
-										</h4>
-										<a href='/account'>Manage account</a>
-									</div>
+			<div className={`menu-dropdown ${menuOpen ? 'open' : 'closed'}`}>
+				{user ? (
+					<>
+						<li>
+							<div className='profile'>
+								<img
+									src='/icons/user.png'
+									alt='User'
+									className='icon'
+								/>
+								<div className='profile-info'>
+									<h4>
+										{user.firstName} {user.lastName}
+									</h4>
+									<a href='/account'>Manage account</a>
 								</div>
-							</li>
-							<li>
-								<NavLink to='/orders' onClick={closeMenu}>
-									Orders
-								</NavLink>
-							</li>
-							<li>
-								<NavLink to='/favorites' onClick={closeMenu}>
-									Favorites
-								</NavLink>
-							</li>
-							<li>
-								<NavLink to='/wallet' onClick={closeMenu}>
-									Wallet
-								</NavLink>
-							</li>
-							<li>
-								<NavLink to='/menu-items' onClick={closeMenu}>
-									Menu Items
-								</NavLink>
-							</li>
-							<li>
-								<button className='auth-buttons' onClick={logout}>
-									Sign out
-								</button>
-							</li>
-							<li>
-								<button
-									className='auth-buttons'
-									onClick={handleRestaurantClick}>
-									{getButtonText()}
-								</button>
-							</li>
-						</>
-					) : (
-						<>
-							<li>
-								<NavLink to='/login' onClick={closeMenu}>
-									Log in
-								</NavLink>
-							</li>
-							<li>
-								<NavLink to='/signup' onClick={closeMenu}>
-									Sign up
-								</NavLink>
-							</li>
-							<li>
-								<button onClick={handleRestaurantClick}>
-									{getButtonText()}
-								</button>
-							</li>
-						</>
-					)}
-				</div>
-			)}
+							</div>
+						</li>
+						<li>
+							<NavLink to='/orders' onClick={closeMenu}>
+								Orders
+							</NavLink>
+						</li>
+						<li>
+							<NavLink to='/favorites' onClick={closeMenu}>
+								Favorites
+							</NavLink>
+						</li>
+						<li>
+							<NavLink to='/wallet' onClick={closeMenu}>
+								Wallet
+							</NavLink>
+						</li>
+						<li>
+							<NavLink to='/menu-items' onClick={closeMenu}>
+								Menu Items
+							</NavLink>
+						</li>
+						<li>
+							<button className='auth-buttons' onClick={logout}>
+								Sign out
+							</button>
+						</li>
+						<li>
+							<button
+								className='auth-buttons'
+								onClick={handleRestaurantClick}>
+								{getButtonText()}
+							</button>
+						</li>
+					</>
+				) : (
+					<>
+						<li>
+							<NavLink to='/login' onClick={closeMenu}>
+								Log in
+							</NavLink>
+						</li>
+						<li>
+							<NavLink to='/signup' onClick={closeMenu}>
+								Sign up
+							</NavLink>
+						</li>
+						<li>
+							<button onClick={handleRestaurantClick}>
+								{getButtonText()}
+							</button>
+						</li>
+					</>
+				)}
+			</div>
 		</div>
 	);
 }
