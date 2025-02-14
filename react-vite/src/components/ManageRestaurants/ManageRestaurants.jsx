@@ -24,32 +24,35 @@ function ManageRestaurants() {
             await dispatch(deleteRestaurant(id));
         }
     };
-    
-       const handleUpdate = async (id) => { 
+
+       const handleUpdate = async (id) => {
             await dispatch(updateRestaurant(id));
-    
+
     };
     if (!user) return null; // Security
 
     if (error) return <div>Error: {error}</div>;
 
     return (
-        <div>
-            <h1>My Restaurants</h1>
-            {restaurants.map(restaurant => (
-                <div key={restaurant.id}>
-                    <h2>{restaurant.name}</h2>
-                    <button onClick={() => handleDelete(restaurant.id)}>
-                        Delete
-                    </button>
-                    <button onClick={() => handleUpdate(restaurant.id)}>
-                        Update
-                    </button>
-
-                </div>
-            ))}
-        </div>
-    );
+			<div>
+				<h1>My Restaurants</h1>
+				{restaurants.map((restaurant) => (
+					<div key={restaurant.id}>
+						<h2>{restaurant.name}</h2>
+						<button
+							className='auth-buttons'
+							onClick={() => handleDelete(restaurant.id)}>
+							Delete
+						</button>
+						<button
+							className='auth-buttons'
+							onClick={() => handleUpdate(restaurant.id)}>
+							Update
+						</button>
+					</div>
+				))}
+			</div>
+		);
 }
 
 export default ManageRestaurants;

@@ -25,7 +25,7 @@ function PhoneNumberPage(){
             phoneNo = phoneNumber.split('-').join('')
         } else phoneNo = phoneNumber
         console.log(phoneNo)
-        
+
         if(isNaN(Number(phoneNo))){
             return setErrors({phone: "Phone number must have only numbers in it"})
         }
@@ -38,7 +38,7 @@ function PhoneNumberPage(){
         //     PhoneNumber: Number(phoneNo)
         // })
 
-        
+
         const server = await dispatch(editUserThunk({phone_number: phoneNo, id: user.id}))
         if(server){
             console.log(server)
@@ -49,18 +49,20 @@ function PhoneNumberPage(){
     }
 
     return (
-        <div>
-            <h1>Phone Number</h1>
-            {"You'll use this number sign in"}
-            <input 
-                type="text"
-                value={phoneNumber}
-                onChange={(e)=> setPhoneNumber(e.target.value)}
-            />
-            {errors && <p>{errors.phone}</p>}
-            <button onClick={(e)=>handleSubmit(e)}>Update</button>
-        </div>
-    )
+			<div>
+				<h1>Phone Number</h1>
+				{"You'll use this number sign in"}
+				<input
+					type='text'
+					value={phoneNumber}
+					onChange={(e) => setPhoneNumber(e.target.value)}
+				/>
+				{errors && <p>{errors.phone}</p>}
+				<button className='auth-buttons' onClick={(e) => handleSubmit(e)}>
+					Update
+				</button>
+			</div>
+		);
 }
 
 

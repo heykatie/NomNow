@@ -19,12 +19,12 @@ function EmailPage(){
 
         if(!email.includes('@')){
             return setErrors({email: "Email must include @"})
-        } 
+        }
         else if (!email.split('@')[1].includes('.')){
             return setErrors({email: 'Email must include an "."'})
         }
 
-        
+
         const server = await dispatch(editUserThunk({email, id: user.id}))
         if(server){
             return setErrors({email: server})
@@ -34,18 +34,20 @@ function EmailPage(){
     }
 
     return (
-        <div>
-            <h1>Email</h1>
-            {"You'll use this number sign in"}
-            <input 
-                type="text"
-                value={email}
-                onChange={(e)=> setEmail(e.target.value)}
-            />
-            {errors && <p>{errors.email}</p>}
-            <button onClick={(e)=>handleSubmit(e)}>Update</button>
-        </div>
-    )
+			<div>
+				<h1>Email</h1>
+				{"You'll use this number sign in"}
+				<input
+					type='text'
+					value={email}
+					onChange={(e) => setEmail(e.target.value)}
+				/>
+				{errors && <p>{errors.email}</p>}
+				<button className='auth-buttons' onClick={(e) => handleSubmit(e)}>
+					Update
+				</button>
+			</div>
+		);
 
 }
 
