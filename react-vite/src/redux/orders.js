@@ -40,6 +40,11 @@ export const getUserOrders = () => async (dispatch) => {
 
 		const data = await response.json();
 
+		if (data.orders.length === 0) {
+			dispatch(loadUserOrders([]));
+			return;
+		}
+
 		dispatch(loadUserOrders(data.orders));
 	} catch (error) {
 		const errorMessage = await error.json();
