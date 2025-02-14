@@ -172,6 +172,7 @@
   border: none !important;
   border-radius: 25px !important;
   cursor: pointer !important;
+  color: white;
 }
 
 .start-shopping-btn:hover {
