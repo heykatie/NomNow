@@ -54,47 +54,42 @@ export const getAllRestaurants = () => async (dispatch) => {
 };
 
 // Create a new restaurant
-export const createRestaurant = (formData) => async (dispatch) => {
+export const createRestaurant = (restaurantData) => async (dispatch) => {
     try {
         const response = await fetch('/api/restaurants/', {
             method: 'POST',
-            body: formData  // Using FormData finstead of JSON so user can upload images.
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(restaurantData)
         });
 
         const data = await response.json();
 
         if (!response.ok) {
-            throw new Error(data.errors);
+            throw new Error(data.errors || 'Failed to create restaurant');
         }
 
         dispatch({ type: CREATE_RESTAURANT, payload: data.restaurant });
-        return data.restaurant;  // Return for successful navigation
+        return data.restaurant;
     } catch (error) {
+        console.error('Create restaurant error:', error);
         dispatch({ type: RESTAURANT_ERROR, payload: error.message });
         throw error;
     }
 };
 
 // Update an existing restaurant
-export const updateRestaurant = (id, formData) => async (dispatch) => {
+export const updateRestaurant = (id, restaurantData) => async (dispatch) => {
     try {
-        // Ensure price_level is in the correct format
-        const priceLevel = formData.get('price_level');
-        if (priceLevel) {
-            formData.set('price_level', priceLevel); // Keep the $ signs
-        }
-
-        // Ensure cuisine_type is in uppercase
-        const cuisineType = formData.get('cuisine_type');
-        if (cuisineType) {
-            formData.set('cuisine_type', cuisineType.toUpperCase());
-        }
-
         const response = await fetch(`/api/manage/${id}`, {
             method: 'PUT',
-            body: formData
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(restaurantData)
         });
-        
+
         if (!response.ok) {
             const data = await response.json();
             throw new Error(data.message || data.errors?.[0] || 'Failed to update restaurant');
