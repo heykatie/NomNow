@@ -1,4 +1,5 @@
 //react-vite/src/router/index.jsx
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import { createBrowserRouter } from 'react-router-dom';
 import LoginFormPage from '../components/LoginFormPage';
 import LandingPage from '../components/LandingPage/LandingPage';

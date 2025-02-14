@@ -1,7 +1,7 @@
 
-const restrictedLinks = [
-    '/home',
-    '/add-address-to-remove-footer'
-]
+// const restrictedLinks = [
+//     '/home',
+//     '/add-address-to-remove-footer'
+// ]
 
-export default restrictedLinks
+// export default restrictedLinks

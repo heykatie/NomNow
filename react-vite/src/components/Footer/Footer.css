@@ -1,13 +1,74 @@
-.footer{
+#footer {
+    margin-top: 50px;
+    border-top: 1px solid #dadada;
+    border-bottom: 0.5px solid #cecece;
+    padding: 30px 20px;
     display: flex;
     justify-content: space-between;
-    position: fixed;
-    width: 98%;
-    left: 0;
-    bottom: 0;
-    background-color: lightgreen;
-    padding-left: 1%;
-    padding-right: 1%;
-    padding-top: 5px;
-    padding-bottom: 5px;
+    align-items: center;
+}
+
+#footer-logo-text {
+    font-size: 20px;
+    font-weight: 300;
+    margin-right: 20px;
+}
+
+#footerModal button {
+    background: none;
+    color: black;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: 300;
+}
+
+#footer-col-1 {
+    display: flex;
+    gap: 30px;
+}
+
+.footer-right {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 40px;
+}
+
+.footer-right-header {
+    font-size: 14px;
+    color: darkgray;
+    padding-bottom: 10px;
+}
+
+.footer-col {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.footer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-weight: lighter;
+}
+
+.footer-name {
+    display: flex;
+    justify-content: space-between;
+}
+
+.footer-links {
+    font-size: 12px;
+    display: flex;
+    gap: 10px;
+    margin-left: 20px;
+}
+
+#footer-copyright {
+    color: #828282;
+    display: flex;
+    justify-content: end;
+    padding: 15px 20px;
+    font-size: 11px;
 }
