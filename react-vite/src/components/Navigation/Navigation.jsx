@@ -33,69 +33,69 @@ function Navigation() {
   // console.log('DELIVERY TYPE:', deliveryType);
   // console.log(user)
   return (
-	<div className='navContainer'>
-		<ul className='nav'>
-			<li>{user ? <DropdownMenu user={user} /> : <DropdownMenu />}</li>
-			<li>
-				<NavLink to='/'>Nom Now</NavLink>
-			</li>
-			{user && user.address && user.city && user.state && user.zip ? (
-				<li className='delivery-type'>
-					{deliveryType === 'delivery' ? (
-						<button className='selected'>Delivery</button>
-					) : (
-						<button
-							onClick={(e) => {
-								e.preventDefault();
-								setDeliveryType('delivery');
-							}}>
-							Delivery
-						</button>
-					)}
+		<div className='navContainer'>
+			<ul className='nav'>
+				<li>{user ? <DropdownMenu user={user} /> : <DropdownMenu />}</li>
+				<li>
+					<NavLink to='/'>NomNow</NavLink>
+				</li>
+				{user && user.address && user.city && user.state && user.zip ? (
+					<li className='delivery-type'>
+						{deliveryType === 'delivery' ? (
+							<button className='selected'>Delivery</button>
+						) : (
+							<button
+								onClick={(e) => {
+									e.preventDefault();
+									setDeliveryType('delivery');
+								}}>
+								Delivery
+							</button>
+						)}
 
-					{deliveryType === 'pickup' ? (
-						<button className='selected'>Pickup</button>
-					) : (
-						<button
-							onClick={(e) => {
-								e.preventDefault();
-								setDeliveryType('pickup');
-							}}>
-							Pickup
-						</button>
+						{deliveryType === 'pickup' ? (
+							<button className='selected'>Pickup</button>
+						) : (
+							<button
+								onClick={(e) => {
+									e.preventDefault();
+									setDeliveryType('pickup');
+								}}>
+								Pickup
+							</button>
+						)}
+					</li>
+				) : (
+					<li className='delivery-type'>Enter delivery address</li>
+				)}
+
+				<li>
+					<input
+						type='search'
+						placeholder='Search NomNow'
+						value={search}
+						onChange={(e) => setSearch(e.target.value)}
+					/>
+				</li>
+				<li className='user-actions'>
+					{user?.address && (
+						<li className='cart-nav'>
+							<Cart />
+						</li>
+					)}
+					{!user && (
+						<li>
+							<NavLink to='/login'>
+								<button className='auth-buttons'>Log in</button>
+							</NavLink>
+							<NavLink to='/signup'>
+								<button className='auth-buttons'>Sign up</button>
+							</NavLink>
+						</li>
 					)}
 				</li>
-			) : (
-				<li className='delivery-type'>Enter delivery address</li>
-			)}
-
-			<li>
-				<input
-					type='search'
-					placeholder='Search Nom Now'
-					value={search}
-					onChange={(e) => setSearch(e.target.value)}
-				/>
-			</li>
-			<li className='user-actions'>
-        {user?.address && (
-          <li className='cart-nav'>
-            <Cart />
-          </li>
-        )}
-				{!user && (
-					<li>
-						<NavLink to='/login'>
-							<button>Log in</button>
-						</NavLink>
-						<NavLink to='/signup'>
-							<button>Sign up</button>
-						</NavLink>
-					</li>
-				)}
-			</li>
-		</ul>
-	</div>
+			</ul>
+		</div>
   );
 }
 

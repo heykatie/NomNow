@@ -32,7 +32,7 @@ function LandingPage() {
 						<option value='Schedule Later'>Schedule for later</option>
 					</select>
 
-					<button type='submit'>Search here</button>
+					<button className='auth-buttons' type='submit'>Search here</button>
 				</form>
 				<a href='/login'>Or Sign In</a>
 			</div>

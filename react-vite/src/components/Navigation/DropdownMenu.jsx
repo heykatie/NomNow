@@ -40,22 +40,30 @@ function DropdownMenu({ user }) {
   };
 
   let content = (
-      <div className='menu-dropdown' ref={ulRef}>
-          <li><NavLink to='/login' onClick={closeModal}>Log in</NavLink></li>
-          <li><NavLink to='/signup' onClick={closeModal}>Sign up</NavLink></li>
-          <li><button onClick={handleRestaurantClick}>{getButtonText()}</button></li>
-      </div>
-  )
+		<div className='menu-dropdown' ref={ulRef}>
+			<li>
+				<NavLink to='/login' onClick={closeModal}>
+					Log in
+				</NavLink>
+			</li>
+			<li>
+				<NavLink to='/signup' onClick={closeModal}>
+					Sign up
+				</NavLink>
+			</li>
+			<li>
+				<button className='auth-buttons' onClick={handleRestaurantClick}>
+					{getButtonText()}
+				</button>
+			</li>
+		</div>
+  );
   if (user) {
     content = (
 			<div className='menu-dropdown' ref={ulRef}>
 				<li>
 					<div className='profile'>
-						<img
-							src='/icons/user.png'
-							alt=''
-							className='icon'
-						/>
+						<img src='/icons/user.png' alt='' className='icon' />
 						<div className='profile-info'>
 							<h4>
 								{user.firstName} {user.lastName}
@@ -70,15 +78,16 @@ function DropdownMenu({ user }) {
 					</NavLink>
 				</li>
 				<li>
-        <NavLink to={`/favorites`} onClick={closeModal}>
-        Favorites
-					</NavLink></li>
+					<NavLink to={`/favorites`} onClick={closeModal}>
+						Favorites
+					</NavLink>
+				</li>
 				<li>
 					<NavLink to={`/wallet`} onClick={closeModal}>
 						Wallet
 					</NavLink>
 				</li>
-        <li>
+				<li>
 					<NavLink to={`/menu-items`} onClick={closeModal}>
 						Menu Items
 					</NavLink>
@@ -88,20 +97,21 @@ function DropdownMenu({ user }) {
 				<li>Promotions</li>
 				<li>Invite a friend</li>
 				<li>
-					<button onClick={logout}>Sign out</button>
+					<button className='auth-buttons' onClick={logout}>Sign out</button>
 				</li>
 				<li>
-        <button
-         onClick={handleRestaurantClick}
-         className="link-button">
-          {getButtonText()}</button>
+					<button onClick={handleRestaurantClick} className='link-button auth-buttons'>
+						{getButtonText()}
+					</button>
 				</li>
-        {/* Show Add New Restaurant button only on manage restaurants page */}
-        {location.pathname === '/restaurants/manage' && (
-          <li>
-            <NavLink to={'/restaurants/new'} onClick={closeModal}>Add New Restaurant</NavLink>
-          </li>
-        )}
+				{/* Show Add New Restaurant button only on manage restaurants page */}
+				{location.pathname === '/restaurants/manage' && (
+					<li>
+						<NavLink to={'/restaurants/new'} onClick={closeModal}>
+							Add New Restaurant
+						</NavLink>
+					</li>
+				)}
 			</div>
 		);
   }

@@ -46,3 +46,20 @@ img {
   max-width: 25rem;
   max-height: 25rem;
 }
+
+.auth-buttons {
+  margin-right: 10px;
+  padding: 8px 12px;
+  background-color: rgb(0, 0, 0) ;
+  color: white;
+  border: 1px solid #ccc;
+  border-radius: 9px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.auth-buttons:hover {
+  background-color: #333333d0;
+  color: white;
+}
