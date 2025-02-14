@@ -14,10 +14,28 @@ export default function Cart() {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
-	const handleCheckout = () => {
-		dispatch(checkoutCart());
-		navigate('/checkout')
+	const handleCheckout = async () => {
+		if (cartItems.length === 0) return;
+
+		const { payload } = await dispatch(checkoutCart());
+
+		if (payload) {
+			localStorage.setItem('currentOrder', JSON.stringify(payload)); 
+			navigate('/checkout');
+		}
 	};
+
+	// useEffect(() => {
+	// 	const savedOrder = JSON.parse(localStorage.getItem('currentOrder'));
+
+	// 	if (!currentOrder) {
+	// 		if (savedOrder && savedOrder.id) {
+	// 			dispatch(loadUserOrder(savedOrder));
+	// 		} else {
+	// 			navigate('/orders');
+	// 		}
+	// 	}
+	// }, [currentOrder, dispatch, navigate]);
 
 	useEffect(() => {
 		if (!cartItems) {

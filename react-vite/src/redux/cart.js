@@ -7,6 +7,7 @@ const UPDATE_CART_ITEM = 'cart/updateCartItem';
 const CLEAR_CART = 'cart/clearCart';
 const CART_STORAGE_KEY = 'cartItems';
 
+
 const loadCartFromStorage = () => {
 	const storedCart = localStorage.getItem(CART_STORAGE_KEY);
 	return storedCart ? JSON.parse(storedCart) : [];
@@ -70,13 +71,13 @@ export const updateItemQuantity =
 		}
 	};
 
-export const checkoutCart = () => (dispatch, getState) => {
+export const checkoutCart = () => async (dispatch, getState) => {
 	const state = getState();
 	const cartItems = state.cart.cartItems;
 
 	if (cartItems.length === 0) {
 		console.warn('Cart is empty, cannot proceed to checkout.');
-		return;
+		return { payload: null };
 	}
 
 	const restaurantId = cartItems[0]?.restaurant_id;
@@ -85,9 +86,21 @@ export const checkoutCart = () => (dispatch, getState) => {
 		quantity: item.quantity,
 	}));
 
-	dispatch(createOrder({ restaurant_id: restaurantId, items }));
-	// dispatch(clearCartItems()); // Clear cart after checkout
+	const { payload } = await dispatch(
+		createOrder({ restaurant_id: restaurantId, items })
+	);
+
+	if (payload) {
+		localStorage.setItem('currentOrder', JSON.stringify(payload)); // Save order
+	}
+
+	return { payload };
 };
+
+export const confirmOrderPlacement = () => (dispatch) => {
+	dispatch(clearCartItems());
+};
+	// dispatch(clearCartItems()); // Clear cart after checkout
 
 export const clearCart = () => (dispatch) => {
 	dispatch(clearCartItems());
