@@ -1,16 +1,19 @@
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useState} from "react";
 import DropdownMenu from "./DropdownMenu";
 import "./Navigation.css";
 import Cart from '../Cart';
 
 function Navigation() {
-  const user = useSelector((store) => store.session.user);
+  	const user = useSelector((store) => store.session.user);
 	const [deliveryType, setDeliveryType] = useState('delivery');
-  const [search, setSearch] = useState('');
+  	const [search, setSearch] = useState('');
+	const [address, setAddress] = useState('');
+	const [errors, setErrors] = useState({})
 	const location = useLocation();
 	const navigate = useNavigate();
+	const dispatch = useDispatch()
 	const isCheckoutPage = location.pathname === '/checkout';
   // const location = useLocation().pathname.split('/');
 
@@ -28,6 +31,23 @@ function Navigation() {
 				</h1>
 			</div>
 		);
+	}
+	const setGuest = async (e) => {
+		e.preventDefault();
+		const split = address.split(',')
+		if(split.length !== 4){
+			return setErrors({
+				address: "Address must by ADDRESS, CITY, STATE, ZIP, seperated by commas"
+			})
+		}
+		const addressObj = {
+			address: split[0],
+			city: split[1],
+			state: split[2],
+			zip: split[3]
+		}
+
+		await dispatch(guestLogin(addressObj))
 	}
 
   // console.log('DELIVERY TYPE:', deliveryType);
@@ -68,7 +88,22 @@ function Navigation() {
 						)}
 					</li>
 				) : (
-					<li className='delivery-type'>Enter delivery address</li>
+					<>
+					<li className='delivery-type'>
+						<input 
+							type="text" 
+							placeholder='Enter delivery address'
+							value={address}
+							onChange={(e) => setAddress(e.target.value)}
+						/>
+						{address && (
+							<button onClick={(e)=> setGuest(e)}>
+								Add address
+							</button>
+						)}
+					</li>
+					{errors.address && <p>{errors.address}</p>}
+					</>
 				)}
 
 				<li>

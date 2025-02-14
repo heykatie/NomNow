@@ -46,6 +46,7 @@ function LandingPage() {
 						value={address}
 						onChange={(e) => setAddress(e.target.value)}
 					/>
+					{errors.address && <p>{errors.address}</p>}
 
 					<select
 						value={delivery_time}
