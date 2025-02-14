@@ -54,7 +54,7 @@
 }
 
 .close-btn {
-  background: #f5f5f5 !important;
+  background: white !important;
   border: none !important;
   width: 40px !important;
   height: 40px !important;
@@ -65,6 +65,17 @@
   cursor: pointer !important;
   font-size: 18px !important;
   transition: background 0.3s ease-in-out !important;
+  color: black;
+}
+
+.close-btn:hover {
+  background: rgb(245, 245, 245) !important;
+  color: black;
+}
+
+.cart-container:hover {
+  background: white;
+  color: rgb(64, 64, 64);
 }
 
 .cart-items {
