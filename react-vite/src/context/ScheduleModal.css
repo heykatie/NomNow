@@ -93,7 +93,7 @@
 }
 
 .radio-option input {
-  display: none;
+  display: none !important;
 }
 
 .radio-circle {
@@ -108,16 +108,16 @@
 }
 
 .radio-option input:checked+.radio-circle {
-  border-color: black;
-  background: black;
+  border-color: black !important;
+  background: black !important;
 }
 
 .radio-option input:checked+.radio-circle::after {
-  content: "";
-  width: 10px;
-  height: 10px;
-  background: white;
-  border-radius: 50%;
+  content: "" !important;
+  width: 10px !important;
+  height: 10px !important;
+  background: white !important;
+  border-radius: 50% !important;
 }
 
 /* Modal Actions */
