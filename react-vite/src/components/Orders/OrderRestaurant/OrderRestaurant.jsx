@@ -1,28 +1,29 @@
 import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+// import { useSelector } from 'react-redux';
+import './OrderRestaurant.css';
 
 
-export default function OrderRestaurant() {
+export default function OrderRestaurant({restaurant}) {
 	const navigate = useNavigate();
-  const currentOrder = useSelector((state) => state.orders.currentOrder);
+  // const  = useSelector((state) => state.orders.);
 
 	return (
 		<div
 			className='restaurant-header'
-			onClick={() => navigate(`/restaurants/${currentOrder.restaurant.id}`)}>
+			onClick={() => navigate(`/restaurants/${restaurant.id}`)}>
 			<img
-				src={currentOrder.restaurant?.image || '/images/cart.jpeg'}
-				alt={currentOrder.restaurant?.name || 'Unknown Restaurant'}
+				src={restaurant?.image || '/images/cart.jpeg'}
+				alt={restaurant?.name || 'Unknown Restaurant'}
 				className='restaurant-img' ></img>
 			<div className='restaurant-info'>
 				<h3>
-					{currentOrder.restaurant?.name ||
+					{restaurant?.name ||
 						'Restaurant Name Not Available'}
 				</h3>
 				<p className='restaurant-address'>
-					{currentOrder.restaurant?.address
-						? `${currentOrder.restaurant.address}, ${
-								currentOrder.restaurant.city || ''
+					{restaurant?.address
+						? `${restaurant.address}, ${
+								restaurant.city || ''
 						}`
 						: 'Address Not Available'}
 				</p>

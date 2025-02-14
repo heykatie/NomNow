@@ -15,7 +15,6 @@ export default function ScheduleModal({
   const dateScrollRef = useRef(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
 
-	// Generate the next 7 days dynamically
 	const generateDates = () => {
 		const newDates = [];
 		const today = new Date();
@@ -41,7 +40,6 @@ export default function ScheduleModal({
 		setDates(newDates);
 	};
 
-	// Generate time slots dynamically based on restaurant's closing time
 	const generateTimeSlots = useCallback(
 		(selectedFullDate) => {
 			const newTimeSlots = [];
@@ -131,7 +129,7 @@ export default function ScheduleModal({
 		const scrollContainer = dateScrollRef.current;
 		if (scrollContainer) {
 			scrollContainer.addEventListener('scroll', handleScroll);
-			handleScroll(); // Set initial state
+			handleScroll();
 		}
 		return () => {
 			if (scrollContainer) {
@@ -144,7 +142,6 @@ export default function ScheduleModal({
 		<div className='schedule-modal'>
 			<h2>Schedule delivery</h2>
 
-			{/* Scrollable Date Selection */}
 			<div className='date-selection-container'>
 				{showLeftArrow && (
 					<button
@@ -181,7 +178,6 @@ export default function ScheduleModal({
 				</button>
 			</div>
 
-			{/* Time Selection */}
 			<div className='time-selection'>
 				{timeSlots.length > 0 ? (
 					timeSlots.map((time) => (
@@ -202,7 +198,6 @@ export default function ScheduleModal({
 				)}
 			</div>
 
-			{/* Action Buttons */}
 			<div className='modal-actions'>
 				<button
 					onClick={handleSchedule}

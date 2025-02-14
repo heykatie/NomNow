@@ -4,7 +4,7 @@ import { createBrowserRouter } from 'react-router-dom';
 import LoginFormPage from '../components/LoginFormPage';
 import LandingPage from '../components/LandingPage/LandingPage';
 import Layout from './Layout';
-// import Reviews from '../components/Reviews';
+import Reviews from '../components/Reviews';
 import WalletPage from '../components/WalletPage/WalletPage';
 import Orders from '../components/Orders';
 import MenuItemList from '../components/MenuItemList/MenuItemList';
@@ -62,7 +62,7 @@ export const router = createBrowserRouter([
       },
       {
         path: 'reviews/restaurant/:restaurantId', // Updated path from 627f183
-        // element: <Reviews />,
+        element: <Reviews />,
       },
       {
         path: '*',

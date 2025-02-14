@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useModal } from '../../../context/Modal';
 import TipModal from '../../../context/TipModal';
 import ScheduleModal from '../../../context/ScheduleModal';
-import { loadUserOrder, placeOrder, deleteOrder } from '../../../redux/orders';
+import { placeOrder, deleteOrder } from '../../../redux/orders';
 import { deductFundsThunk } from '../../../redux/session';
 import OrderRestaurant from '../../Orders/OrderRestaurant';
 import CartItems from '../CartItems';
@@ -56,7 +56,6 @@ export default function Checkout() {
 	};
 
 	const handlePlaceOrder = async () => {
-
 		if (paymentMethod === 'wallet') {
 			if (user.wallet < total) {
 				alert('Insufficient funds in your wallet.');
@@ -69,48 +68,43 @@ export default function Checkout() {
 		await dispatch(placeOrder(currentOrder.id));
 
 		setTimeout(() => {
-			const updatedOrder = JSON.parse(
-				localStorage.getItem('currentOrder')
-			);
+			const updatedOrder = JSON.parse(localStorage.getItem('currentOrder'));
 			if (updatedOrder && updatedOrder.status === 'Submitted') {
 				navigate('/orders');
 			}
 		}, 500);
 	};
 
+	const handleOrderDeletion = async () => {
+		if (currentOrder?.status === 'Active') {
+			await dispatch(deleteOrder(currentOrder.id));
+			localStorage.removeItem('currentOrder');
+		}
+	};
 	useEffect(() => {
-		const handleNavigation = () => {
-			if (
-				location.pathname !== '/checkout' &&
-				currentOrder?.status === 'Active'
-			) {
-				dispatch(deleteOrder(currentOrder.id));
-			}
-		};
+		const handleBeforeUnload = () => handleOrderDeletion();
 
-		const handleBackButton = () => {
-			if (currentOrder?.status === 'Active') {
-				dispatch(deleteOrder(currentOrder.id));
-			}
-		};
-
-		window.addEventListener('popstate', handleBackButton);
+		window.addEventListener('beforeunload', handleBeforeUnload);
 
 		return () => {
-			handleNavigation();
-			window.removeEventListener('popstate', handleBackButton);
+			window.removeEventListener('beforeunload', handleBeforeUnload);
+			handleOrderDeletion();
 		};
-	}, [location.pathname, currentOrder, dispatch]);
-
+	}, []);
 
 	useEffect(() => {
-		if (!currentOrder) {
-			const savedOrder = JSON.parse(localStorage.getItem('currentOrder'));
-			if (savedOrder) {
-				dispatch(loadUserOrder(savedOrder));
-			} else {
-				navigate('/orders');
-			}
+		if (location.pathname !== '/checkout') {
+			handleOrderDeletion();
+		}
+	}, [location.key]);
+
+	useEffect(() => {
+		const savedOrder = JSON.parse(localStorage.getItem('currentOrder'));
+
+		if (!currentOrder && savedOrder) {
+
+			localStorage.removeItem('currentOrder');
+			navigate('/orders');
 		}
 	}, [currentOrder, dispatch, navigate]);
 
@@ -122,7 +116,7 @@ export default function Checkout() {
 	return (
 		<div className='checkout-page'>
 			<div className='checkout-left'>
-				{/* Delivery Details */}
+
 				<div className='delivery-section'>
 					<h3>Delivery details</h3>
 					<div className='address'>
@@ -145,11 +139,11 @@ export default function Checkout() {
 					</div>
 				</div>
 
-				{/* Delivery Options */}
+
 				<div className='delivery-options'>
 					<h3>Delivery options</h3>
 					<div
-						className={`option priority ${
+						className={`d-option priority ${
 							deliveryOption === 'priority' ? 'selected' : ''
 						}`}
 						onClick={() => setDeliveryOption('priority')}>
@@ -160,7 +154,7 @@ export default function Checkout() {
 						<span>15-30 min</span>
 					</div>
 					<div
-						className={`option standard ${
+						className={`d-option standard ${
 							deliveryOption === 'standard' ? 'selected' : ''
 						}`}
 						onClick={() => setDeliveryOption('standard')}>
@@ -168,7 +162,7 @@ export default function Checkout() {
 						<span>20-35 min</span>
 					</div>
 					<div
-						className={`option schedule ${
+						className={`d-option schedule ${
 							deliveryOption === 'schedule' ? 'selected' : ''
 						}`}
 						onClick={() => {
@@ -180,12 +174,12 @@ export default function Checkout() {
 					</div>
 				</div>
 
-				{/* Payment */}
+
 				<div className='payment-section'>
 					<h3>Payment</h3>
 					<div className='payment-options'>
 						<div
-							className={`option credit-card ${
+							className={`d-option credit-card ${
 								paymentMethod === 'credit-card' ? 'selected' : ''
 							}`}
 							onClick={() => setPaymentMethod('credit-card')}>
@@ -195,7 +189,7 @@ export default function Checkout() {
 							</span>
 						</div>
 						<div
-							className={`option wallet ${
+							className={`d-option wallet ${
 								paymentMethod === 'wallet' ? 'selected' : ''
 							}`}
 							onClick={() => setPaymentMethod('wallet')}>
@@ -207,28 +201,28 @@ export default function Checkout() {
 					</div>
 				</div>
 
-				{/* Place Order Button */}
+
 				<button className='confirm-order-btn' onClick={handlePlaceOrder}>
 					Place order
 				</button>
 			</div>
 
-			{/* Right Sidebar - Order Summary */}
+
 			<div className='checkout-right'>
-				<OrderRestaurant />
+				<OrderRestaurant restaurant={currentOrder.restaurant} />
 				<div className='order-summary'>
 					<h4>Cart summary ({currentOrder?.orderItems?.length} item/s)</h4>
-					<CartItems />
+					<CartItems items={currentOrder?.orderItems} />
 				</div>
 
-				{/* Order Total Section including Tip */}
+
 				<div className='order-total'>
 					<h3>Order total</h3>
 					<p>Subtotal: ${subtotal.toFixed(2)}</p>
 					<p>Delivery Fee: ${deliveryFee.toFixed(2)}</p>
 					<p>Taxes & Other Fees: ${taxes.toFixed(2)}</p>
 
-					{/* Tip Selection*/}
+
 					<div className='tip-section'>
 						<h4>
 							Add a tip <span className='tooltip'></span>

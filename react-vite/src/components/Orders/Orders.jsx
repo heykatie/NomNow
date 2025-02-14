@@ -13,6 +13,7 @@ import './Orders.css';
 export default function Orders() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
+	const user = useSelector((state) => state.session.user || null);
 	const error = useSelector((state) => state.errors.message || '');
 	// const currentOrder = useSelector((store) => store.orders.currentOrder || {});
 	const orders = useSelector((state) => state.orders.userOrders || []);
@@ -22,9 +23,19 @@ export default function Orders() {
 		dispatch(getUserOrders());
 	}, [dispatch]);
 
+	useEffect(() => {
+		if (!user) navigate('/login');
+	}, [user]);
+
+	useEffect(() => {
+		if (!orders || orders.length === 0) {
+			dispatch(getUserOrders());
+		}
+	}, [dispatch, orders]);
+
 	if (isLoading) return <div>Loading orders...</div>;
 	if (error) return <div className='error-message'>{error}</div>;
-	if (!orders.length) return <div>No past orders found.</div>;
+	// if (!orders.length) return <div>No past orders found.</div>;
 
 	const handleRestaurantClick = (restaurantId) => {
 		if (restaurantId) {
@@ -32,13 +43,6 @@ export default function Orders() {
 		}
 	};
 
-	const handleMenuItemClick = (menuItemId) => {
-		if (menuItemId) {
-			navigate(`/menu-items/${menuItemId}`);
-		}
-	};
-
-	// Handle "Rate your order" button
 	const handleRateOrder = (orderId, restaurantId, restaurantName) => {
 		navigate(
 			`/reviews/restaurant/${restaurantId}?orderId=${orderId}&restaurantName=${encodeURIComponent(
@@ -53,15 +57,13 @@ export default function Orders() {
 		}
 
 		dispatch(clearCurrentOrder());
-		// Extract restaurant ID
 		const restaurantId = order.restaurant?.id;
 		if (!restaurantId) {
 			return;
 		}
 
-		// Format the items to match the API request
 		const items = order.orderItems.map((item) => ({
-			menu_item_id: item.menu_item_id, // Ensure correct menu item ID
+			menu_item_id: item.menu_item_id,
 			quantity: item.quantity,
 			restaurant_id: item.restaurant_id,
 		}));
@@ -71,20 +73,19 @@ export default function Orders() {
 			items,
 		};
 
-		// Send the request to create a new order
 		const response = await dispatch(createOrder(reorderData));
 
 		if (response?.payload) {
 			const newOrder = response.payload;
 
-			// Update Redux state and localStorage
 			dispatch(loadUserOrder(newOrder));
 			localStorage.setItem('currentOrder', JSON.stringify(newOrder));
 
-			// Navigate to checkout
 			navigate('/checkout');
 		}
 	};
+
+
 
 	return (
 		<div className='orders-container'>
@@ -102,7 +103,7 @@ export default function Orders() {
 							alt={order.restaurant?.name || 'Unknown Restaurant'}
 							className='restaurant-img'
 							onClick={(e) => {
-								e.stopPropagation(); // Prevent parent click event
+								e.stopPropagation();
 								handleRestaurantClick(order.restaurant?.id);
 							}}
 							style={{
@@ -113,7 +114,7 @@ export default function Orders() {
 							<div className='order-restaurant'>
 								<h3
 									onClick={(e) => {
-										e.stopPropagation(); // Prevent parent click event
+										e.stopPropagation();
 										handleRestaurantClick(order.restaurant?.id);
 									}}
 									style={{
@@ -137,7 +138,7 @@ export default function Orders() {
 										? new Date(order.createdAt).toLocaleString()
 										: 'No Date Available'}
 								</p>
-								•{/* Order Actions */}
+
 								<div className='order-actions'>
 									<a href={`/orders/${order.id}/receipt`}>
 										View receipt
@@ -148,7 +149,7 @@ export default function Orders() {
 									</a>
 								</div>
 							</div>
-							{/* Order Items */}
+
 							<div className='order-items'>
 								{Array.isArray(order.orderItems) ? (
 									order.orderItems.map((item) => (
@@ -163,7 +164,7 @@ export default function Orders() {
 							</div>
 						</div>
 
-						{/* Buttons */}
+
 						<div className='order-buttons'>
 							<button
 								className='reorder-btn'
