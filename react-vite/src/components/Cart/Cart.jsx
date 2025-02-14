@@ -2,13 +2,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { FaShoppingCart, FaTimes } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import { checkoutCart } from '../../redux/cart';
+import {getCart, checkoutCart } from '../../redux/cart';
 import Order from '../Orders/Order';
 import './Cart.css';
 
 export default function Cart() {
 	// const currentOrder = useSelector((store) => store.orders.currentOrder);
-	const cartItems = useSelector((store) => store.cart.cartItems) || [];
+	const cart = useSelector((store) => store.cart) || {};
+	const cartItems = cart?.cartItems || [];
 	const [isOpen, setIsOpen] = useState(false);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
@@ -17,6 +18,12 @@ export default function Cart() {
 		dispatch(checkoutCart());
 		navigate('/checkout')
 	};
+
+	useEffect(() => {
+		if (!cartItems) {
+			dispatch(getCart());
+		}
+	}, [dispatch, cartItems]);
 
 	useEffect(() => {
 		if (isOpen) {
@@ -30,7 +37,11 @@ export default function Cart() {
 		<>
 			<button className='cart-container' onClick={() => setIsOpen(true)}>
 				<FaShoppingCart className='cart-icon' />
-				<span className='cart-badge'>{cartItems?.length || 0}</span>
+				{/* <span className='cart-badge'>{cartItems?.length || 0}</span>
+				 */}
+				<span className='cart-badge'>
+					{cartItems.reduce((total, item) => total + item.quantity, 0)}
+				</span>
 			</button>
 
 			<div className={`cart-panel ${isOpen ? 'open' : ''}`}>
@@ -41,7 +52,7 @@ export default function Cart() {
 				</div>
 
 				{cartItems.length > 0 ? (
-					<Order items={cartItems } />
+					<Order items={cartItems} />
 				) : (
 					<div className='empty-cart'>
 						<img

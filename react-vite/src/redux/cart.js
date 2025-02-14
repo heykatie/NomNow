@@ -5,6 +5,12 @@ const ADD_TO_CART = 'cart/addToCart';
 const REMOVE_FROM_CART = 'cart/removeFromCart';
 const UPDATE_CART_ITEM = 'cart/updateCartItem';
 const CLEAR_CART = 'cart/clearCart';
+const CART_STORAGE_KEY = 'cartItems';
+
+const loadCartFromStorage = () => {
+	const storedCart = localStorage.getItem(CART_STORAGE_KEY);
+	return storedCart ? JSON.parse(storedCart) : [];
+};
 
 const addCartItem = (item) => ({
 	type: ADD_TO_CART,
@@ -21,11 +27,15 @@ const updateCartItem = (itemId, quantity) => ({
 	payload: { itemId, quantity },
 });
 
+const saveCartToStorage = (cartItems) => {
+	localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
+};
+
 const clearCartItems = () => ({
 	type: CLEAR_CART,
 });
 
-export const getCart = (state) => state.cart.cartItems;
+export const getCart = (state) => state.cart?.cartItems || [];
 
 export const addToCart =
 	(menuItem, quantity = 1) =>
@@ -83,34 +93,37 @@ export const clearCart = () => (dispatch) => {
 	dispatch(clearCartItems());
 };
 
+
 const initialState = {
-	cartItems: [],
+	cartItems: loadCartFromStorage() || [],
 };
 
 export default function cartReducer(state = initialState, action) {
+	let updatedCart;
 	switch (action.type) {
 		case ADD_TO_CART:
-			return { ...state, cartItems: [...state.cartItems, action.payload] };
+			updatedCart = [...state.cartItems, action.payload];
+			saveCartToStorage(updatedCart);
+			return { ...state, cartItems: updatedCart };
 
 		case REMOVE_FROM_CART:
-			return {
-				...state,
-				cartItems: state.cartItems.filter(
-					(item) => item.id !== action.payload
-				),
-			};
+			updatedCart = state.cartItems.filter(
+				(item) => item.id !== action.payload
+			);
+			saveCartToStorage(updatedCart);
+			return { ...state, cartItems: updatedCart };
 
 		case UPDATE_CART_ITEM:
-			return {
-				...state,
-				cartItems: state.cartItems.map((item) =>
-					item.id === action.payload.itemId
-						? { ...item, quantity: action.payload.quantity }
-						: item
-				),
-			};
+			updatedCart = state.cartItems.map((item) =>
+				item.id === action.payload.itemId
+					? { ...item, quantity: action.payload.quantity }
+					: item
+			);
+			saveCartToStorage(updatedCart);
+			return { ...state, cartItems: updatedCart };
 
 		case CLEAR_CART:
+			saveCartToStorage([]);
 			return { ...state, cartItems: [] };
 
 		default:
