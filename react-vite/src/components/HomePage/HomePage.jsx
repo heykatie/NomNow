@@ -30,6 +30,7 @@ const CUISINE_TYPES = [
 function HomePage() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const user = useSelector((store) => store.session.user);
     const restaurants = useSelector(state => state.restaurants.restaurants);
     const [selectedCuisine, setSelectedCuisine] = useState(null);
 
@@ -37,7 +38,11 @@ function HomePage() {
         dispatch(getAllRestaurants());
     }, [dispatch]);
 
-
+    useEffect(() => {
+		if (!user) {
+			navigate('/');
+		}
+	}, [user, navigate]);
 
     
     const handleRestaurantClick = (restaurantId) => {
