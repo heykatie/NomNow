@@ -50,7 +50,7 @@ const MenuItemList = () => {
 
 	return (
 		<div>
-			<h2>Menu Items</h2>
+			{/* <h2>Menu Items</h2> */}
 
 			{/* Show "Create New Menu Item" button only if user is logged in */}
 			{user && (

@@ -63,6 +63,17 @@
   transition: background-color 0.3s ease;
 }
 
+.create-button {
+  background-color: #000000; /* Black background */
+  border: none;
+  color: #ffffff; /* White text */
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
 .add-to-cart-btn:hover {
   background-color: gray;
 }

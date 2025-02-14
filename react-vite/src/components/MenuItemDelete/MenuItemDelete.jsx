@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteMenuItem, getMenuItem } from '../../redux/menuItems';
 import { useParams, useNavigate } from 'react-router-dom';
+import './MenuItemDelete.css'; // Import the updated CSS
 
 const MenuItemDelete = () => {
   const { id } = useParams();
@@ -55,7 +56,7 @@ const MenuItemDelete = () => {
 
   // Display error if any
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div className="error-message">Error: {error}</div>;
   }
 
   // Only render the delete confirmation if the user is authorized
@@ -64,12 +65,12 @@ const MenuItemDelete = () => {
   }
 
   return (
-    <div>
+    <div className="menu-item-delete-container">
       <h2>Are you sure you want to delete {menuItemName}?</h2>
-      <button onClick={handleDelete} style={{ backgroundColor: 'red', color: 'white' }}>
+      <button className="delete-button" onClick={handleDelete}>
         Yes, Delete
       </button>
-      <button onClick={handleCancel} style={{ marginLeft: '10px' }}>
+      <button className="cancel-button" onClick={handleCancel}>
         Cancel
       </button>
     </div>

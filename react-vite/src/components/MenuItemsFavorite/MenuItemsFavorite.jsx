@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux'; // To access Redux state
+import { useDispatch, useSelector } from 'react-redux';
 import { getFavoriteItems } from '../../redux/menuItems';
 import { Link } from 'react-router-dom';
+import './MenuItemsFavorite.css'; // Import the updated CSS
 
 const Favorites = () => {
   const dispatch = useDispatch();
-  const menuItems = useSelector(state => state.menuItems.menuItems);
   const favoriteItems = useSelector(state => state.menuItems.favoriteItems); // Get favorite items from Redux store
 
   useEffect(() => {
@@ -13,25 +13,34 @@ const Favorites = () => {
   }, [dispatch]);
 
   if (!favoriteItems.length) {
-    return <h2>No favorite items yet!</h2>;
+    return (
+      <div className="favorites-container">
+        <h2 className="no-favorites-message">No favorite items yet!</h2>
+      </div>
+    );
   }
 
+  
+
   return (
-    <div>
+    <div className="favorites-container">
       <h2>Your Favorites</h2>
-      <ul>
+      <ul className="favorites-list">
         {favoriteItems.map(item => (
-          <li key={item.id} style={{ marginBottom: '20px' }}>
+          <li key={item.id}>
             <Link to={`/menu-items/${item.id}`}>
-              <h3>{item.name}</h3>
-              <p>{item.description}</p>
-              <img src={item.food_image} alt={item.name} style={{ width: '100px', height: '100px' }} />
+              <img src={item.food_image} alt={item.name} />
+              <div>
+                <h3>{item.name}</h3>
+                <p>${item.price}</p>
+              </div>
             </Link>
           </li>
         ))}
       </ul>
     </div>
   );
+ 
 };
 
 export default Favorites;

@@ -273,9 +273,9 @@
 }
 
 .quantity-selector button {
-  background-color: #000000; /* Black background */
+  background-color: white; /* Black background */
   border: none;
-  color: #ffffff; /* White text */
+  color: black; /* White text */
   font-size: 20px;
   padding: 10px 15px;
   border-radius: 8px;
@@ -297,9 +297,9 @@
 
 /* Add to cart button */
 .add-to-cart-button {
-  background-color: #000000; /* Black background */
+  background-color: black; /* Black background */
   border: none;
-  color: #ffffff; /* White text */
+  color: white; /* White text */
   font-size: 18px;
   padding: 12px 24px;
   border-radius: 8px;

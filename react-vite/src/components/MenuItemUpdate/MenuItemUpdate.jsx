@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateMenuItem, getMenuItem } from '../../redux/menuItems';
 import { useNavigate, useParams } from 'react-router-dom';
+import './MenuItemUpdate.css'; // Import the updated CSS
 
 const UpdateMenuItem = () => {
   const { id } = useParams();
@@ -83,26 +84,81 @@ const UpdateMenuItem = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
-      <button type="button" onClick={() => navigate(`/menu-items/${id}`)} style={{ marginTop: '20px' }}>
+    <div className="update-menu-item-container">
+      <button className="back-button" type="button" onClick={() => navigate(`/menu-items/${id}`)}>
         Back to Menu Items List
       </button>
 
-      <h3>Update Menu Item</h3>
+      <form className="update-menu-item-form" onSubmit={handleSubmit}>
+        <h3>Update Menu Item</h3>
 
-      <input type="text" name="name" value={formData.name} onChange={handleChange} placeholder="Name" required />
-      <textarea name="description" value={formData.description} onChange={handleChange} placeholder="Description" required />
-      <input type="number" name="price" value={formData.price} onChange={handleChange} placeholder="Price" required />
-      <input type="text" name="food_image" value={formData.food_image} onChange={handleChange} placeholder="Food Image URL" required />
-      <select name="food_type" value={formData.food_type} onChange={handleChange} required>
-        <option value="appetizer">Appetizer</option>
-        <option value="entree">Entree</option>
-        <option value="dessert">Dessert</option>
-        <option value="beverage">Beverage</option>
-      </select>
+        <div>
+          <label>Name:</label>
+          <input
+            type="text"
+            name="name"
+            value={formData.name}
+            onChange={handleChange}
+            placeholder="Name"
+            required
+          />
+        </div>
 
-      <button type="submit">Update Menu Item</button>
-    </form>
+        <div>
+          <label>Description:</label>
+          <textarea
+            name="description"
+            value={formData.description}
+            onChange={handleChange}
+            placeholder="Description"
+            required
+          />
+        </div>
+
+        <div>
+          <label>Price:</label>
+          <input
+            type="number"
+            name="price"
+            value={formData.price}
+            onChange={handleChange}
+            placeholder="Price"
+            required
+          />
+        </div>
+
+        <div>
+          <label>Food Image URL:</label>
+          <input
+            type="text"
+            name="food_image"
+            value={formData.food_image}
+            onChange={handleChange}
+            placeholder="Food Image URL"
+            required
+          />
+        </div>
+
+        <div>
+          <label>Food Type:</label>
+          <select
+            name="food_type"
+            value={formData.food_type}
+            onChange={handleChange}
+            required
+          >
+            <option value="appetizer">Appetizer</option>
+            <option value="entree">Entree</option>
+            <option value="dessert">Dessert</option>
+            <option value="beverage">Beverage</option>
+          </select>
+        </div>
+
+        <button type="submit" className="submit-button">
+          Update Menu Item
+        </button>
+      </form>
+    </div>
   );
 };
 

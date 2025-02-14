@@ -70,9 +70,9 @@ const MenuItemDetail = () => {
 
         <div className="menu-item-details">
           <h2>{menuItem.name}</h2>
-          <p>Price: ${menuItem.price}</p>
+          <p> ${menuItem.price}</p>
           <p>{menuItem.description}</p>
-          <p>Type: {menuItem.food_type}</p>
+          <p>{menuItem.food_type}</p>
 
           {user && (
             <>
