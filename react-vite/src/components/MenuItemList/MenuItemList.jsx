@@ -22,13 +22,13 @@ const MenuItemList = () => {
 	useEffect(() => {
 		const storedLikes = JSON.parse(sessionStorage.getItem('menuItemLikes')) || {};
 		const updatedLikes = { ...storedLikes };
-	
+
 		menuItems.forEach((item) => {
 			if (!(item.id in storedLikes)) {
 				updatedLikes[item.id] = Math.floor(Math.random() * 100);
 			}
 		});
-	
+
 		setLikes(updatedLikes);
 		sessionStorage.setItem('menuItemLikes', JSON.stringify(updatedLikes));
 	}, [menuItems]);
@@ -39,9 +39,11 @@ const MenuItemList = () => {
 
 	const handleAddToCart = (item) => {
 		const orderData = {
-			menuItemId: item.id,
+			id: item.id,
 			name: item.name,
 			price: item.price,
+			restaurantId: item.restaurantId,
+			food_image: item.food_image,
 			quantity: 1, // default quantity is 1
 		};
 

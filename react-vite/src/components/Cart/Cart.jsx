@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
-import { FaShoppingCart, FaTimes } from 'react-icons/fa';
+import { FaShoppingCart, FaTimes, } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import {getCart, checkoutCart } from '../../redux/cart';
 import Order from '../Orders/Order';
