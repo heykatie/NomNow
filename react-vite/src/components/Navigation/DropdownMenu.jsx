@@ -260,7 +260,7 @@ function DropdownMenu({ user }) {
 	// );
 
 	return (
-		<div className='menu-container' ref={menuRef}>
+		<div className='burger-container' ref={menuRef}>
 			{/* Burger Icon */}
 			<button onClick={toggleMenu} className='menu-button'>
 				<img src='../../icons/menu.png' alt='Menu' className='icon' />
