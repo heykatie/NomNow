@@ -22,19 +22,20 @@ export default function Orders() {
 		dispatch(getUserOrders());
 	}, [dispatch]);
 
+	useEffect(() => {
+		if (!orders || orders.length === 0) {
+			console.log('🔄 Orders missing, refetching...');
+			dispatch(getUserOrders());
+		}
+	}, [dispatch, orders]);
+
 	if (isLoading) return <div>Loading orders...</div>;
 	if (error) return <div className='error-message'>{error}</div>;
-	if (!orders.length) return <div>No past orders found.</div>;
+	// if (!orders.length) return <div>No past orders found.</div>;
 
 	const handleRestaurantClick = (restaurantId) => {
 		if (restaurantId) {
 			navigate(`/restaurants/${restaurantId}`);
-		}
-	};
-
-	const handleMenuItemClick = (menuItemId) => {
-		if (menuItemId) {
-			navigate(`/menu-items/${menuItemId}`);
 		}
 	};
 
@@ -53,15 +54,13 @@ export default function Orders() {
 		}
 
 		dispatch(clearCurrentOrder());
-		// Extract restaurant ID
 		const restaurantId = order.restaurant?.id;
 		if (!restaurantId) {
 			return;
 		}
 
-		// Format the items to match the API request
 		const items = order.orderItems.map((item) => ({
-			menu_item_id: item.menu_item_id, // Ensure correct menu item ID
+			menu_item_id: item.menu_item_id,
 			quantity: item.quantity,
 			restaurant_id: item.restaurant_id,
 		}));
@@ -71,20 +70,19 @@ export default function Orders() {
 			items,
 		};
 
-		// Send the request to create a new order
 		const response = await dispatch(createOrder(reorderData));
 
 		if (response?.payload) {
 			const newOrder = response.payload;
 
-			// Update Redux state and localStorage
 			dispatch(loadUserOrder(newOrder));
 			localStorage.setItem('currentOrder', JSON.stringify(newOrder));
 
-			// Navigate to checkout
 			navigate('/checkout');
 		}
 	};
+
+
 
 	return (
 		<div className='orders-container'>

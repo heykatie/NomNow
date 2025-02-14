@@ -56,7 +56,6 @@ export default function Checkout() {
 	};
 
 	const handlePlaceOrder = async () => {
-
 		if (paymentMethod === 'wallet') {
 			if (user.wallet < total) {
 				alert('Insufficient funds in your wallet.');
@@ -69,48 +68,44 @@ export default function Checkout() {
 		await dispatch(placeOrder(currentOrder.id));
 
 		setTimeout(() => {
-			const updatedOrder = JSON.parse(
-				localStorage.getItem('currentOrder')
-			);
+			const updatedOrder = JSON.parse(localStorage.getItem('currentOrder'));
 			if (updatedOrder && updatedOrder.status === 'Submitted') {
 				navigate('/orders');
 			}
 		}, 500);
 	};
 
+	const handleOrderDeletion = async () => {
+		if (currentOrder?.status === 'Active') {
+			console.log(`Deleting order ${currentOrder.id}...`);
+			await dispatch(deleteOrder(currentOrder.id));
+			localStorage.removeItem('currentOrder');
+		}
+	};
 	useEffect(() => {
-		const handleNavigation = () => {
-			if (
-				location.pathname !== '/checkout' &&
-				currentOrder?.status === 'Active'
-			) {
-				dispatch(deleteOrder(currentOrder.id));
-			}
-		};
+		const handleBeforeUnload = () => handleOrderDeletion();
 
-		const handleBackButton = () => {
-			if (currentOrder?.status === 'Active') {
-				dispatch(deleteOrder(currentOrder.id));
-			}
-		};
-
-		window.addEventListener('popstate', handleBackButton);
+		window.addEventListener('beforeunload', handleBeforeUnload);
 
 		return () => {
-			handleNavigation();
-			window.removeEventListener('popstate', handleBackButton);
+			window.removeEventListener('beforeunload', handleBeforeUnload);
+			handleOrderDeletion();
 		};
-	}, [location.pathname, currentOrder, dispatch]);
-
+	}, []);
 
 	useEffect(() => {
-		if (!currentOrder) {
-			const savedOrder = JSON.parse(localStorage.getItem('currentOrder'));
-			if (savedOrder) {
-				dispatch(loadUserOrder(savedOrder));
-			} else {
-				navigate('/orders');
-			}
+		if (location.pathname !== '/checkout') {
+			handleOrderDeletion();
+		}
+	}, [location.key]);
+
+	useEffect(() => {
+		const savedOrder = JSON.parse(localStorage.getItem('currentOrder'));
+
+		if (!currentOrder && savedOrder) {
+			console.log('🚨 Avoiding reloading deleted order from localStorage!');
+			localStorage.removeItem('currentOrder');
+			navigate('/orders');
 		}
 	}, [currentOrder, dispatch, navigate]);
 
@@ -215,10 +210,10 @@ export default function Checkout() {
 
 			{/* Right Sidebar - Order Summary */}
 			<div className='checkout-right'>
-				<OrderRestaurant />
+				<OrderRestaurant restaurant={currentOrder.restaurant} />
 				<div className='order-summary'>
 					<h4>Cart summary ({currentOrder?.orderItems?.length} item/s)</h4>
-					<CartItems />
+					<CartItems items={currentOrder?.orderItems} />
 				</div>
 
 				{/* Order Total Section including Tip */}

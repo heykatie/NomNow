@@ -68,6 +68,7 @@ def get_orders():
                         "quantity": item.quantity,
                         "price": float(item.price),
                         "restaurant_id": item.menu_items.restaurants.id,
+                        "food_image": item.menu_items.food_image,
                     }
                     for item in order.order_items
                 ],
@@ -128,6 +129,7 @@ def get_order(order_id):
             "quantity": item.quantity,
             "price": float(item.price),
             "restaurant_id": order.restaurant_id,
+            "food_image": item.menu_items.food_image,
         }
         for item in order.order_items
     ]
@@ -153,6 +155,7 @@ def get_order(order_id):
                     "quantity": item.quantity,
                     "price": float(item.price),
                     "restaurant_id": item.menu_items.restaurants.id,
+                    "food_image": item.menu_items.food_image,
                 }
                 for item in order.order_items
             ],

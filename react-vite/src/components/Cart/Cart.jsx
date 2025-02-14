@@ -1,20 +1,27 @@
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { FaShoppingCart, FaTimes } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom'; // Import for navigation
+import { useNavigate } from 'react-router-dom';
+import { getCart, checkoutCart } from '../../redux/cart';
+import Order from '../Orders/Order';
 import './Cart.css';
 
 export default function Cart() {
 	const currentOrder = useSelector((store) => store.orders.currentOrder);
-	const cartItems = currentOrder?.orderItems || [];
+	const cartItems = useSelector(getCart) || currentOrder?.orderItems || [];
 	const [isOpen, setIsOpen] = useState(false);
-	const navigate = useNavigate(); // React Router navigation
+	const navigate = useNavigate();
+	const dispatch = useDispatch();
+
+	const handleCheckout = () => {
+		dispatch(checkoutCart());
+	};
 
 	useEffect(() => {
 		if (isOpen) {
-			document.body.style.overflow = 'hidden'; // Prevents scrolling
+			document.body.style.overflow = 'hidden';
 		} else {
-			document.body.style.overflow = 'auto'; // Allows scrolling
+			document.body.style.overflow = 'auto';
 		}
 	}, [isOpen]);
 
@@ -29,14 +36,15 @@ export default function Cart() {
 			{/* Side Panel (Cart Drawer) */}
 			<div className={`cart-panel ${isOpen ? 'open' : ''}`}>
 				<div className='cart-header'>
-					{/* <h2>Your Cart</h2> */}
 					<button className='close-btn' onClick={() => setIsOpen(false)}>
 						<FaTimes />
 					</button>
 				</div>
 
-				{/* Empty Cart UI */}
-				{!cartItems || cartItems.length === 0 ? (
+				{/* Render `Order` component if cart has items */}
+				{cartItems.length > 0 ? (
+					<Order order={{ orderItems: cartItems }} />
+				) : (
 					<div className='empty-cart'>
 						<img
 							src='/images/cart.jpeg'
@@ -57,43 +65,24 @@ export default function Cart() {
 							Start shopping
 						</button>
 					</div>
-				) : (
-					<>
-						{/* Cart Items */}
-						<div className='cart-items'>
-							{cartItems?.map((item) => (
-								<div key={item.id} className='cart-item'>
-									<img
-										src={item.image || '/images/cart.jpeg'}
-										alt={item.name}
-									/>
-									<div className='cart-item-details'>
-										<p>{item.name}</p>
-										<p>${item.price.toFixed(2)}</p>
-									</div>
-									<div className='cart-item-controls'>
-										<button>-</button>
-										<span>{item.quantity}</span>
-										<button>+</button>
-									</div>
-								</div>
-							))}
-						</div>
+				)}
 
-						{/* Checkout Button */}
-						<div className='cart-footer'>
-							<p>
-								Subtotal: $
-								{cartItems
-									.reduce(
-										(acc, item) => acc + item.price * item.quantity,
-										0
-									)
-									.toFixed(2)}
-							</p>
-							<button className='checkout-btn'>Go to checkout</button>
-						</div>
-					</>
+				{/* Checkout Button (only if cart has items) */}
+				{cartItems.length > 0 && (
+					<div className='cart-footer'>
+						<p>
+							Subtotal: $
+							{cartItems
+								.reduce(
+									(acc, item) => acc + item.price * item.quantity,
+									0
+								)
+								.toFixed(2)}
+						</p>
+						<button onClick={handleCheckout} className='checkout-btn'>
+							Go to checkout
+						</button>
+					</div>
 				)}
 			</div>
 
