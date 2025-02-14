@@ -357,20 +357,33 @@ function DropdownMenu({ user }) {
 								</div>
 							</div>
 							</li>
+							<li className='user-li'>
+								<NavLink to='/orders' className='y' onClick={closeMenu}>
+									<i class="fa-sharp fa-solid fa-suitcase-rolling"></i>
+									Orders
+								</NavLink>
+							</li>
+							<li className='user-li'>
+								<NavLink to='/favorites' className='y' onClick={closeMenu}>
+									<i class="fa-sharp fa-solid fa-heart"></i>
+									Favorites
+								</NavLink>
+							</li>
+							<li className='user-li'>
+								<NavLink to='/wallet' className='y' onClick={closeMenu}>
+									<i class="fa-sharp fa-solid fa-wallet"></i>
+									Wallet
+								</NavLink>
+							</li>
 							<li>
 							<NavLink to='/login' onClick={closeMenu}>
-								<button className='auth-buttons z'>Log in</button>
+								<button className='auth-buttons y'>Log in</button>
 							</NavLink>
 							</li>
 							<li>
 								<NavLink to='/signup' onClick={closeMenu}>
-									<button className='auth-buttons z'>Sign up</button>
+									<button className='auth-buttons y'>Sign up</button>
 								</NavLink>
-							</li>
-							<li>
-								<button onClick={handleRestaurantClick}>
-									{getButtonText()}
-								</button>
 							</li>
 							</>
 						)}

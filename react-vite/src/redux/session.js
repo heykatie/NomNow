@@ -162,7 +162,8 @@ export const guestLogin = (address) => async (dispatch)=>{
     address: address.address,
     city: address.city,
     state: address.state,
-    zip: address.zip
+    zip: address.zip,
+    wallet: 0
   }
 
   await dispatch(setUser(guest))
