@@ -46,6 +46,10 @@
   margin: 0;
 }
 
+.order-details a {
+  text-decoration: underline;
+}
+
 .order-header p {
   font-size: 14px;
   color: #666;

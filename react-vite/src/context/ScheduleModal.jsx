@@ -155,17 +155,20 @@ export default function ScheduleModal({
 						←
 					</button>
 				)}
+
 				<div className='date-selection' ref={dateScrollRef}>
 					{dates.map(({ day, date }) => (
 						<button
 							key={date}
 							className={selectedDate === date ? 'selected' : ''}
 							onClick={() => setSelectedDate(date)}>
-							<span>{day}, </span>
+							<span>{day}</span>
+							<br />
 							<span>{date}</span>
 						</button>
 					))}
 				</div>
+
 				<button
 					className='scroll-arrow right'
 					onClick={() =>
@@ -200,6 +203,7 @@ export default function ScheduleModal({
 
 			<div className='modal-actions'>
 				<button
+					className='schedule-btn'
 					onClick={handleSchedule}
 					disabled={!selectedDate || !selectedTime}>
 					Schedule
