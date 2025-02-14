@@ -56,7 +56,6 @@ export default function Checkout() {
 	};
 
 	const handlePlaceOrder = async () => {
-
 		if (paymentMethod === 'wallet') {
 			if (user.wallet < total) {
 				alert('Insufficient funds in your wallet.');
@@ -69,9 +68,7 @@ export default function Checkout() {
 		await dispatch(placeOrder(currentOrder.id));
 
 		setTimeout(() => {
-			const updatedOrder = JSON.parse(
-				localStorage.getItem('currentOrder')
-			);
+			const updatedOrder = JSON.parse(localStorage.getItem('currentOrder'));
 			if (updatedOrder && updatedOrder.status === 'Submitted') {
 				navigate('/orders');
 			}
@@ -86,33 +83,28 @@ export default function Checkout() {
 		}
 	};
 	useEffect(() => {
-		const handleNavigation = () => {
-			if (location.pathname !== '/checkout') {
-				handleOrderDeletion();
-			}
-		};
+		const handleBeforeUnload = () => handleOrderDeletion();
 
-		const handlePopstate = () => {
-			setTimeout(() => {
-				handleOrderDeletion();
-			}, 100);
-		};
-
-		window.addEventListener('popstate', handlePopstate);
+		window.addEventListener('beforeunload', handleBeforeUnload);
 
 		return () => {
-			window.removeEventListener('popstate', handlePopstate);
-			handleNavigation();
+			window.removeEventListener('beforeunload', handleBeforeUnload);
+			handleOrderDeletion();
 		};
-	}, [location.pathname, currentOrder, dispatch, handleOrderDeletion]);
+	}, []);
 
+	useEffect(() => {
+		if (location.pathname !== '/checkout') {
+			handleOrderDeletion();
+		}
+	}, [location.key]);
 
 	useEffect(() => {
 		const savedOrder = JSON.parse(localStorage.getItem('currentOrder'));
 
 		if (!currentOrder && savedOrder) {
 			console.log('🚨 Avoiding reloading deleted order from localStorage!');
-			localStorage.removeItem('currentOrder'); 
+			localStorage.removeItem('currentOrder');
 			navigate('/orders');
 		}
 	}, [currentOrder, dispatch, navigate]);

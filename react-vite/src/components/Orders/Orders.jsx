@@ -53,15 +53,13 @@ export default function Orders() {
 		}
 
 		dispatch(clearCurrentOrder());
-		// Extract restaurant ID
 		const restaurantId = order.restaurant?.id;
 		if (!restaurantId) {
 			return;
 		}
 
-		// Format the items to match the API request
 		const items = order.orderItems.map((item) => ({
-			menu_item_id: item.menu_item_id, // Ensure correct menu item ID
+			menu_item_id: item.menu_item_id,
 			quantity: item.quantity,
 			restaurant_id: item.restaurant_id,
 		}));
@@ -71,7 +69,6 @@ export default function Orders() {
 			items,
 		};
 
-		// Send the request to create a new order
 		const response = await dispatch(createOrder(reorderData));
 
 		if (response?.payload) {
