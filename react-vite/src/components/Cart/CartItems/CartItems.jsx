@@ -23,14 +23,12 @@ export default function CartItems({ items }) {
 							e.stopPropagation();
 							handleCartItemClick(item.menu_item_id);
 						}}>
-						{/* Item Image */}
 						<img
 							src={item.food_image || '/images/cart.jpeg'}
 							alt={item.name || 'Menu Item'}
 							className='cart-item-image'
 						/>
 
-						{/* Item Details */}
 						<div className='cart-item-details'>
 							<p className='cart-item-name'>
 								{item.name || item.menu_item_name || 'Unavailable Item'}
@@ -46,7 +44,6 @@ export default function CartItems({ items }) {
 							</p>
 						</div>
 
-						{/* Quantity Selector */}
 						<div className='cart-item-quantity'>{item.quantity || 1}</div>
 					</div>
 				))

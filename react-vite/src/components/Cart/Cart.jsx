@@ -28,13 +28,11 @@ export default function Cart() {
 
 	return (
 		<>
-			{/* Shopping Cart Icon */}
 			<button className='cart-container' onClick={() => setIsOpen(true)}>
 				<FaShoppingCart className='cart-icon' />
 				<span className='cart-badge'>{cartItems?.length || 0}</span>
 			</button>
 
-			{/* Side Panel (Cart Drawer) */}
 			<div className={`cart-panel ${isOpen ? 'open' : ''}`}>
 				<div className='cart-header'>
 					<button className='close-btn' onClick={() => setIsOpen(false)}>
@@ -42,7 +40,6 @@ export default function Cart() {
 					</button>
 				</div>
 
-				{/* Render `Order` component if cart has items */}
 				{cartItems.length > 0 ? (
 					<Order items={cartItems } />
 				) : (
@@ -68,7 +65,6 @@ export default function Cart() {
 					</div>
 				)}
 
-				{/* Checkout Button (only if cart has items) */}
 				{cartItems.length > 0 && (
 					<div className='cart-footer'>
 						<p>
@@ -87,7 +83,6 @@ export default function Cart() {
 				)}
 			</div>
 
-			{/* Background Overlay (click to close) */}
 			{isOpen && (
 				<div
 					className='cart-overlay'

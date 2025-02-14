@@ -134,7 +134,7 @@ export default function Orders() {
 										? new Date(order.createdAt).toLocaleString()
 										: 'No Date Available'}
 								</p>
-								•{/* Order Actions */}
+
 								<div className='order-actions'>
 									<a href={`/orders/${order.id}/receipt`}>
 										View receipt
@@ -145,7 +145,7 @@ export default function Orders() {
 									</a>
 								</div>
 							</div>
-							{/* Order Items */}
+
 							<div className='order-items'>
 								{Array.isArray(order.orderItems) ? (
 									order.orderItems.map((item) => (
@@ -160,7 +160,7 @@ export default function Orders() {
 							</div>
 						</div>
 
-						{/* Buttons */}
+
 						<div className='order-buttons'>
 							<button
 								className='reorder-btn'
