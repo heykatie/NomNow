@@ -3,15 +3,15 @@
   padding: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  align-items: center;  
+  justify-content: center;  
 }
 
 /* Review List */
 .review-list {
   margin-top: 20px;
-  width: 100%;
-  max-width: 800px;
+  width: 100%;  
+  max-width: 800px;  
 }
 
 /* Review Item */
@@ -19,7 +19,7 @@
   border: 1px solid #ccc;
   padding: 10px;
   margin-bottom: 10px;
-  width: 100%;
+  width: 100%;  
 }
 
 /* Rating Container */
@@ -31,7 +31,7 @@
 .rating-item {
   margin-bottom: 5px;
   display: flex;
-  align-items: center;
+  align-items: center; 
 }
 
 /* Review Actions */
@@ -40,20 +40,20 @@
 }
 
 /* Button styles for all buttons */
-.review-button {
+button {
   margin-right: 10px;
-  padding: 10px 15px;
-  background-color: rgb(0, 0, 0);
-  color: white;
+  padding: 10px 15px;  
+  background-color: rgb(0, 0, 0);  
+  color: white;  
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 6px;  
   cursor: pointer;
-  font-size: 14px;
+  font-size: 14px;  
   transition: background-color 0.2s, color 0.2s;
 }
 
-.review-button:hover {
-  background-color: #333333d0;
+button:hover {
+  background-color: #333333d0; 
   color: white;
 }
 
@@ -76,11 +76,11 @@
 }
 
 .star-rating .star.selected {
-  color: #ffcc00;
+  color: #ffcc00;  
 }
 
 .star-rating .star:hover {
-  color: #ffcc00;
+  color: #ffcc00;  
 }
 
 .rating-value {
@@ -102,8 +102,8 @@
   border-radius: 8px;
   max-width: 500px;
   width: 100%;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8);
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.8); 
+  border: 1px solid rgba(0, 0, 0, 0.2);  
 }
 
 /* Review Overlay Styles */
@@ -113,7 +113,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.75);
+  background-color: rgba(0, 0, 0, 0.75);  
 }
 
 /* Reviews.css */
@@ -132,11 +132,11 @@
 }
 
 .rating-item {
-  font-size: 0.9em;
+  font-size: 0.9em;  
 }
 
 .rating-item span {
-  color: #ffcc00;
+  color: #ffcc00;  
 }
 
 .review-actions {
@@ -146,41 +146,41 @@
 /* Ensure review-actions buttons match the global button style */
 .review-actions button {
   margin-right: 10px;
-  padding: 8px 15px;
-  background-color: rgba(5, 146, 0, 0.884);
-  color: white;
+  padding: 8px 15px;  
+  background-color: rgba(5, 146, 0, 0.884);  
+  color: white;  
   border: 1px solid #ccc;
-  border-radius: 6px;
+  border-radius: 6px; 
   cursor: pointer;
-  font-size: 13px;
+  font-size: 13px;  
   transition: background-color 0.2s, color 0.2s;
 }
 
 .review-actions button:hover {
-  background-color: rgba(5, 146, 0, 0.534);
+  background-color: rgba(5, 146, 0, 0.534);  
   color: white;
 }
 
 /* Textarea Styling for Review Form */
 textarea {
-  width: 95%;
+  width: 95%;  
   height: fit-content;
-  padding: 10px;
-  font-size: 14px;
-  border: 1px solid #444;
-  border-radius: 6px;
-  background-color: #e6dddd;
-  color: #000000;
-  resize: vertical;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  padding: 10px; 
+  font-size: 14px;  
+  border: 1px solid #444;  
+  border-radius: 6px;  
+  background-color: #e6dddd;  
+  color: #000000;  
+  resize: vertical; 
+  transition: border-color 0.2s, box-shadow 0.2s;  
 }
 
 textarea:focus {
-  border-color: #666;
-  box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);
-  outline: none;
+  border-color: #666;  
+  box-shadow: 0 0 5px rgba(255, 255, 255, 0.2);  
+  outline: none;  
 }
 
 textarea::placeholder {
-  color: #aaa;
+  color: #aaa;  
 }
