@@ -80,7 +80,16 @@ export const checkoutCart = () => async (dispatch, getState) => {
 		return { payload: null };
 	}
 
-	const restaurantId = cartItems[0]?.restaurant_id;
+	let restaurantId = cartItems[0]?.restaurant_id || cartItems[0]?.restaurantId;
+	if (!restaurantId && state.orders.currentOrder) {
+		restaurantId = state.orders.currentOrder.restaurant?.id;
+	}
+
+	if (!restaurantId) {
+		// console.error('Cannot create order: Missing restaurant ID');
+		return { payload: null };
+	}
+
 	const items = cartItems.map((item) => ({
 		menu_item_id: item.id,
 		quantity: item.quantity,
