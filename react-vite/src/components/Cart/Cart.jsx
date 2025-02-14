@@ -1,8 +1,8 @@
 import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
-import { FaShoppingCart, FaTimes, } from 'react-icons/fa';
+import { FaShoppingCart, FaTimes, FaEllipsisV } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
-import {getCart, checkoutCart } from '../../redux/cart';
+import { getCart, checkoutCart, clearCart } from '../../redux/cart';
 import Order from '../Orders/Order';
 import './Cart.css';
 
@@ -11,6 +11,7 @@ export default function Cart() {
 	const cart = useSelector((store) => store.cart) || {};
 	const cartItems = cart?.cartItems || [];
 	const [isOpen, setIsOpen] = useState(false);
+	const [menuOpen, setMenuOpen] = useState(false);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
 
@@ -20,9 +21,14 @@ export default function Cart() {
 		const { payload } = await dispatch(checkoutCart());
 
 		if (payload) {
-			localStorage.setItem('currentOrder', JSON.stringify(payload)); 
+			localStorage.setItem('currentOrder', JSON.stringify(payload));
 			navigate('/checkout');
 		}
+	};
+
+	const handleClearCart = () => {
+		dispatch(clearCart());
+		setMenuOpen(false);
 	};
 
 	// useEffect(() => {
@@ -67,7 +73,6 @@ export default function Cart() {
 		};
 	}, [isOpen]);
 
-
 	return (
 		<>
 			<button className='cart-container' onClick={() => setIsOpen(true)}>
@@ -84,6 +89,22 @@ export default function Cart() {
 					<button className='close-btn' onClick={() => setIsOpen(false)}>
 						<FaTimes />
 					</button>
+					<div className='menu-container'>
+						<button
+							className='menu-btn'
+							onClick={() => setMenuOpen(!menuOpen)}>
+							<FaEllipsisV />
+						</button>
+						{menuOpen && (
+							<div className='menu-dropdown'>
+								<button
+									onClick={handleClearCart}
+									className='clear-cart-btn'>
+									🗑️ Clear Cart
+								</button>
+							</div>
+						)}
+					</div>
 				</div>
 
 				{cartItems.length > 0 ? (
