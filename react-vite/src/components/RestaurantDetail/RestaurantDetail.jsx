@@ -15,6 +15,8 @@ function RestaurantDetail() {
     const [deliveryMethod, setDeliveryMethod] = useState('delivery');
     const { menuItems } = useSelector(state => state.menuItems);
     const user = useSelector(state => state.session.user);
+    const cart = useSelector(state => state.cart);
+    const cartItems = cart?.cartItems || [];
 
     useEffect(() => {
         if (id) {
@@ -34,16 +36,22 @@ function RestaurantDetail() {
             alert('You must be logged in to add items to the cart!');
             return;
         }
-
+    
+        // Check if cart has items from a different restaurant
+        if (cartItems.length > 0 && cartItems[0].restaurantId !== parseInt(id)) {
+            alert('Your cart contains items from a different restaurant. Please clear your cart or complete your existing order first.');
+            return;
+        }
+    
         const orderData = {
             id: item.id,
             name: item.name,
             price: item.price,
-            restaurantId: item.restaurantId,
+            restaurantId: parseInt(id), // Make sure restaurantId is an integer
             food_image: item.food_image,
             quantity: 1,
         };
-
+    
         dispatch(addToCart(orderData));
     };
 
@@ -131,11 +139,19 @@ function RestaurantDetail() {
                                     <p className="price">${item.price}</p>
                                     <p className="tag">{item.food_type}</p>
                                     <button
-                                        className="add-to-cart-btn"
+                                        className={`add-to-cart-btn ${
+                                            cartItems.length > 0 && cartItems[0].restaurantId !== parseInt(id)
+                                                ? 'disabled'
+                                                : ''
+                                        }`}
+                                        disabled={cartItems.length > 0 && cartItems[0].restaurantId !== parseInt(id)}
                                         onClick={() => handleAddToCart(item)}
                                     >
-                                        Add to Cart
+                                        {cartItems.length > 0 && cartItems[0].restaurantId !== parseInt(id)
+                                            ? 'Items from another restaurant in cart'
+                                            : 'Add to Cart'}
                                     </button>
+
                                 </div>
                             </div>
                         ))}

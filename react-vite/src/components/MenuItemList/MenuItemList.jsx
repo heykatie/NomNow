@@ -12,6 +12,8 @@ const MenuItemList = () => {
 	const error = useSelector((state) => state.menuItems.error);
 	const isLoading = useSelector((state) => state.menuItems.isLoading);
 	const user = useSelector((state) => state.session.user);
+	const cart = useSelector(state => state.cart);
+	const cartItems = cart?.cartItems || [];
 
 	const [likes, setLikes] = useState({});
 
@@ -42,7 +44,13 @@ const MenuItemList = () => {
 			alert('You must be logged in to add items to the cart!');
 			return;
 		}
-
+	
+		// Check if cart has items from a different restaurant
+		if (cartItems.length > 0 && cartItems[0].restaurantId !== item.restaurantId) {
+			alert('Your cart contains items from a different restaurant. Please clear your cart or complete your existing order first.');
+			return;
+		}
+	
 		const orderData = {
 			id: item.id,
 			name: item.name,
@@ -51,7 +59,7 @@ const MenuItemList = () => {
 			food_image: item.food_image,
 			quantity: 1,
 		};
-
+	
 		dispatch(addToCart(orderData));
 	};
 
@@ -86,9 +94,17 @@ const MenuItemList = () => {
 							<img className="menu-item-list__item-image" src={item.food_image} alt={item.name} />
 
 							<button
-								className="menu-item-list__add-to-cart-btn"
-								onClick={() => handleAddToCart(item)}>
-								+
+								className={`menu-item-list__add-to-cart-btn ${
+									cartItems.length > 0 && cartItems[0].restaurantId !== item.restaurantId
+										? 'disabled'
+										: ''
+								}`}
+								disabled={cartItems.length > 0 && cartItems[0].restaurantId !== item.restaurantId}
+								onClick={() => handleAddToCart(item)}
+							>
+								{cartItems.length > 0 && cartItems[0].restaurantId !== item.restaurantId
+									? '⚠️'
+									: '+'}
 							</button>
 						</div>
 					))}
