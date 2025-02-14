@@ -78,20 +78,24 @@ export default function Checkout() {
 		}, 500);
 	};
 
+	const handleOrderDeletion = async () => {
+		if (currentOrder?.status === 'Active') {
+			console.log(`Deleting order ${currentOrder.id}...`);
+			await dispatch(deleteOrder(currentOrder.id));
+			localStorage.removeItem('currentOrder');
+		}
+	};
 	useEffect(() => {
 		const handleNavigation = () => {
-			if (
-				location.pathname !== '/checkout' &&
-				currentOrder?.status === 'Active'
-			) {
-				dispatch(deleteOrder(currentOrder.id));
+			if (location.pathname !== '/checkout') {
+				handleOrderDeletion();
 			}
 		};
 
 		const handlePopstate = () => {
 			setTimeout(() => {
-				handleNavigation();
-			}, 100); 
+				handleOrderDeletion();
+			}, 100);
 		};
 
 		window.addEventListener('popstate', handlePopstate);
@@ -100,16 +104,16 @@ export default function Checkout() {
 			window.removeEventListener('popstate', handlePopstate);
 			handleNavigation();
 		};
-	}, [location.pathname, currentOrder, dispatch]);
+	}, [location.pathname, currentOrder, dispatch, handleOrderDeletion]);
+
 
 	useEffect(() => {
-		if (!currentOrder) {
-			const savedOrder = JSON.parse(localStorage.getItem('currentOrder'));
-			if (savedOrder) {
-				dispatch(loadUserOrder(savedOrder));
-			} else {
-				navigate('/orders');
-			}
+		const savedOrder = JSON.parse(localStorage.getItem('currentOrder'));
+
+		if (!currentOrder && savedOrder) {
+			console.log('🚨 Avoiding reloading deleted order from localStorage!');
+			localStorage.removeItem('currentOrder'); 
+			navigate('/orders');
 		}
 	}, [currentOrder, dispatch, navigate]);
 
