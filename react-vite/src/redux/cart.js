@@ -5,7 +5,9 @@ import { createOrder } from './orders';
 // Action Types
 const ADD_TO_CART = 'cart/addToCart';
 const REMOVE_FROM_CART = 'cart/removeFromCart';
+const UPDATE_CART_ITEM = 'cart/updateCartItem';
 const CLEAR_CART = 'cart/clearCart';
+
 
 // Action Creators
 
@@ -17,6 +19,11 @@ const addCartItem = (item) => ({
 const removeCartItem = (itemId) => ({
 	type: REMOVE_FROM_CART,
 	payload: itemId,
+});
+
+const updateCartItem = (itemId, quantity) => ({
+	type: UPDATE_CART_ITEM,
+	payload: { itemId, quantity },
 });
 
 const clearCartItems = () => ({
@@ -59,6 +66,9 @@ export const removeFromCart = (menuItemId) => async (dispatch) => {
 	}
 };
 
+export const updateItemQuantity = (menuItemId, quantity) => (dispatch) => {
+	dispatch(updateCartItem(menuItemId, quantity));
+};
 
 export const checkoutCart = () => async (dispatch, getState) => {
 	const state = getState();
@@ -109,6 +119,15 @@ export default function cartReducer(state = initialState, action) {
 				...state,
 				cartItems: state.cartItems.filter(
 					(item) => item.id !== action.payload
+				),
+			};
+		case UPDATE_CART_ITEM:
+			return {
+				...state,
+				cartItems: state.cartItems.map((item) =>
+					item.id === action.payload.itemId
+						? { ...item, quantity: action.payload.quantity }
+						: item
 				),
 			};
 		case CLEAR_CART:
