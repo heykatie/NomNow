@@ -45,6 +45,11 @@ const MenuItemDetail = () => {
   };
 
   const handleToggleLike = () => {
+    if (!user) {
+			// Show alert if the user is not logged in
+			alert('You must be logged in to add items to the favorites');
+			return;
+		}
     dispatch(toggleLike(menuItem.id));
     dispatch(getFavoriteItems());
   };

@@ -1,55 +1,113 @@
-.menu-container {
+/* Menu Item List Container */
+.menu-item-list {
+  padding: 20px;
+}
+
+/* Create New Menu Item Button */
+.menu-item-list__create-button {
+  background-color: #000000;
+  border: none;
+  color: #ffffff;
+  font-size: 16px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-bottom: 20px;
+}
+
+.menu-item-list__create-button:hover {
+  background-color: #333333;
+}
+
+/* Empty Message */
+.menu-item-list__empty-message {
+  text-align: center;
+  font-size: 18px;
+  color: #666;
+}
+
+/* Menu Item List Container */
+.menu-item-list__container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 20px;
   padding: 20px;
 }
 
-.menu-item {
+/* Menu Item Card */
+.menu-item-list__item {
   border: 1px solid #ddd;
   padding: 15px;
   border-radius: 8px;
   background-color: #fff;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.1);
   position: relative;
+  transition: transform 0.3s ease;
 }
 
-.menu-item img {
+.menu-item-list__item:hover {
+  transform: translateY(-5px);
+}
+
+/* Restaurant Name */
+.menu-item-list__restaurant-name {
+  font-size: 16px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.menu-item-list__restaurant-name a {
+  color: black;
+  text-decoration: none;
+}
+
+.menu-item-list__restaurant-name a:hover {
+  text-decoration: underline;
+}
+
+/* Item Name */
+.menu-item-list__item-name {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.menu-item-list__item-name a {
+  color: black;
+  text-decoration: none;
+}
+
+.menu-item-list__item-name a:hover {
+  text-decoration: underline;
+}
+
+/* Item Price */
+.menu-item-list__item-price {
+  font-size: 14px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+/* Item Likes */
+.menu-item-list__item-likes {
+  font-size: 14px;
+  color: gray;
+  margin-bottom: 10px;
+}
+
+/* Item Image */
+.menu-item-list__item-image {
   width: 100%;
   height: 150px;
   object-fit: cover;
   border-radius: 8px;
+  margin-bottom: 10px;
 }
 
-.menu-item h3, .menu-item p {
-  font-size: 14px;
-  text-align: left;
-  margin: 5px 0;
-}
-
-.menu-item h3 {
-  font-weight: bold;
-}
-.menu-item h2 a,
-.menu-item h3 a {
-  color: black; /* Set the text color to black */
-  text-decoration: none; /* Remove the underline */
-}
-
-.menu-item h2 a:hover,
-.menu-item h3 a:hover {
-  text-decoration: underline; /* Optional: Add underline on hover if desired */
-}
-.price {
-  font-size: 14px;
-  font-weight: bold;
-  color: #333;
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-}
-
-.add-to-cart-btn {
+/* Add to Cart Button */
+.menu-item-list__add-to-cart-btn {
   position: absolute;
   bottom: 10px;
   right: 10px;
@@ -63,32 +121,10 @@
   transition: background-color 0.3s ease;
 }
 
-.create-button {
-  background-color: #000000; /* Black background */
-  border: none;
-  color: #ffffff; /* White text */
-  font-size: 16px;
-  padding: 10px 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.add-to-cart-btn:hover {
+.menu-item-list__add-to-cart-btn:hover {
   background-color: gray;
 }
 
-.add-to-cart-btn:focus {
+.menu-item-list__add-to-cart-btn:focus {
   outline: none;
-}
-
-.likes {
-  font-size: 14px;
-  color: gray;
-  margin-top: 5px;
-}
-
-.menu-item-link, .menu-item-link:visited, .menu-item-link:hover, .menu-item-link:active {
-  text-decoration: none;
-  color: black;
 }

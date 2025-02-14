@@ -11,7 +11,7 @@ const MenuItemList = () => {
 	const menuItems = useSelector((state) => state.menuItems.menuItems);
 	const error = useSelector((state) => state.menuItems.error);
 	const isLoading = useSelector((state) => state.menuItems.isLoading);
-	const user = useSelector((state) => state.session.user); // Get user state
+	const user = useSelector((state) => state.session.user);
 
 	const [likes, setLikes] = useState({});
 
@@ -34,58 +34,59 @@ const MenuItemList = () => {
 	}, [menuItems]);
 
 	if (error) {
-		return <div>Error: {error}</div>;
+		return <div className="menu-item-list__error">Error: {error}</div>;
 	}
 
 	const handleAddToCart = (item) => {
+		if (!user) {
+			alert('You must be logged in to add items to the cart!');
+			return;
+		}
+
 		const orderData = {
 			id: item.id,
 			name: item.name,
 			price: item.price,
 			restaurantId: item.restaurantId,
 			food_image: item.food_image,
-			quantity: 1, // default quantity is 1
+			quantity: 1,
 		};
 
 		dispatch(addToCart(orderData));
 	};
 
 	return (
-		<div>
-			{/* <h2>Menu Items</h2> */}
-
-			{/* Show "Create New Menu Item" button only if user is logged in */}
+		<div className="menu-item-list">
 			{user && (
 				<Link to='/menu-items/new'>
-					<button className='create-button'>Create New Menu Item</button>
+					<button className="menu-item-list__create-button">Create New Menu Item</button>
 				</Link>
 			)}
 
 			{menuItems.length === 0 ? (
-				<p>No menu items available.</p>
+				<p className="menu-item-list__empty-message">No menu items available.</p>
 			) : (
-				<div className='menu-container'>
+				<div className="menu-item-list__container">
 					{menuItems.map((item) => (
-						<div className='menu-item' key={item.id}>
-							<h2>
+						<div className="menu-item-list__item" key={item.id}>
+							<h2 className="menu-item-list__restaurant-name">
 								<Link to={`/restaurants/${item.restaurantId}`}>
 									{item.restaurant_name}
 								</Link>
 							</h2>
 
-							<h3>
+							<h3 className="menu-item-list__item-name">
 								<Link to={`/menu-items/${item.id}`}>{item.name}</Link>
 							</h3>
 
-							<p> ${item.price}</p>
-							<p className='likes'>
+							<p className="menu-item-list__item-price">${item.price}</p>
+							<p className="menu-item-list__item-likes">
 								<FaThumbsUp /> {likes[item.id]}
 							</p>
-							<img src={item.food_image} alt={item.name} />
+							<img className="menu-item-list__item-image" src={item.food_image} alt={item.name} />
 
-							{/* The + button positioned at the bottom right */}
 							<button
-								className='add-to-cart-btn'
+								className="menu-item-list__add-to-cart-btn"
 								onClick={() => handleAddToCart(item)}>
 								+
 							</button>
