@@ -147,6 +147,10 @@
   cursor: not-allowed;
 }
 
+.modal-actions .schedule-btn:hover {
+  background: #333;
+}
+
 .modal-actions .schedule-btn {
   background: black;
   color: white;
