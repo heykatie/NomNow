@@ -267,7 +267,7 @@ function DropdownMenu({ user }) {
 			</button>
 			{/* Dropdown Menu */}
 			<div className={`menu-dropdown ${menuOpen ? 'open' : 'closed'}`}>
-				{user ? (
+				{user && !user.guestAccount ? (
 					<>
 						<li>
 							<div className='profile'>
@@ -284,32 +284,36 @@ function DropdownMenu({ user }) {
 								</div>
 							</div>
 						</li>
-						<li>
-							<NavLink to='/orders' onClick={closeMenu}>
+						<li className='user-li'>
+							<NavLink to='/orders' className='y' onClick={closeMenu}>
+								<i class="fa-sharp fa-solid fa-suitcase-rolling"></i>
 								Orders
 							</NavLink>
 						</li>
-						<li>
-							<NavLink to='/favorites' onClick={closeMenu}>
+						<li className='user-li'>
+							<NavLink to='/favorites' className='y' onClick={closeMenu}>
+								<i class="fa-sharp fa-solid fa-heart"></i>
 								Favorites
 							</NavLink>
 						</li>
-						<li>
-							<NavLink to='/wallet' onClick={closeMenu}>
+						<li className='user-li'>
+							<NavLink to='/wallet' className='y' onClick={closeMenu}>
+								<i class="fa-sharp fa-solid fa-wallet"></i>
 								Wallet
 							</NavLink>
 						</li>
-						<li>
-							<NavLink to='/menu-items' onClick={closeMenu}>
+						<li className='user-li'>
+							<NavLink to='/menu-items' className='y' onClick={closeMenu}>
+								<i class="fa-sharp fa-solid fa-pizza-slice"></i>
 								Menu Items
 							</NavLink>
 						</li>
-						<li>
+						<li className='user-li'>
 							<button className='auth-buttons' onClick={logout}>
 								Sign out
 							</button>
 						</li>
-						<li>
+						<li className='user-li'>
 							<button
 								className='auth-buttons'
 								onClick={handleRestaurantClick}>
@@ -318,15 +322,17 @@ function DropdownMenu({ user }) {
 						</li>
 					</>
 				) : (
-					<>
+					<ul className='align-buttons'>
+						{!user?.guestAccount ? (
+						<>
 						<li>
 							<NavLink to='/login' onClick={closeMenu}>
-								Log in
+								<button className='auth-buttons z'>Log in</button>
 							</NavLink>
 						</li>
 						<li>
 							<NavLink to='/signup' onClick={closeMenu}>
-								Sign up
+								<button className='auth-buttons z'>Sign up</button>
 							</NavLink>
 						</li>
 						<li>
@@ -334,7 +340,41 @@ function DropdownMenu({ user }) {
 								{getButtonText()}
 							</button>
 						</li>
-					</>
+						</>
+						):(
+							<>
+							<li>
+							<div className='profile'>
+								<img
+									src='/icons/user.png'
+									alt='User'
+									className='icon'
+								/>
+								<div className='profile-info'>
+									<h4>
+										{user.firstName} {user.lastName}
+									</h4>
+								</div>
+							</div>
+							</li>
+							<li>
+							<NavLink to='/login' onClick={closeMenu}>
+								<button className='auth-buttons z'>Log in</button>
+							</NavLink>
+							</li>
+							<li>
+								<NavLink to='/signup' onClick={closeMenu}>
+									<button className='auth-buttons z'>Sign up</button>
+								</NavLink>
+							</li>
+							<li>
+								<button onClick={handleRestaurantClick}>
+									{getButtonText()}
+								</button>
+							</li>
+							</>
+						)}
+					</ul>
 				)}
 			</div>
 		</div>

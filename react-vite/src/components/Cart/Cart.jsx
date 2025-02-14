@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import { FaShoppingCart, FaTimes, FaEllipsisV } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { getCart, checkoutCart, clearCart } from '../../redux/cart';
-import Order from '../Orders/Order';
+import Order from '../Orders/Order/Order.jsx';
 import './Cart.css';
 
 export default function Cart() {

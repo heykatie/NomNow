@@ -155,6 +155,19 @@ export const uploadPfp = (file) => async (dispatch) => {
   }
 }
 
+export const guestLogin = (address) => async (dispatch)=>{
+  const guest = {
+    firstName: "Guest",
+    guestAccount: true,
+    address: address.address,
+    city: address.city,
+    state: address.state,
+    zip: address.zip
+  }
+
+  await dispatch(setUser(guest))
+}
+
 const initialState = { user: null };
 
 function sessionReducer(state = initialState, action) {

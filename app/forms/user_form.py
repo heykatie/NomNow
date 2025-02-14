@@ -8,7 +8,7 @@ class UserForm(FlaskForm):
     first_name = StringField("first Name")
     last_name = StringField("last Name")
     phone_number = StringField("phone Number")
-    email = StringField("email")
+    email = StringField("email", validators=[Email()])
     password = StringField("password")
     address = StringField("address")
     city = StringField("city")

@@ -115,55 +115,55 @@ def create_restaurant():
 
 
 # Update an existing restaurant
-@restaurant_routes.route("/<int:restaurant_id>", methods=["PUT"])
-@login_required
-def update_restaurant(restaurant_id):
-    restaurant = Restaurant.query.get(restaurant_id)
+# @restaurant_routes.route("/<int:restaurant_id>", methods=["PUT"])
+# @login_required
+# def update_restaurant(restaurant_id):
+#     restaurant = Restaurant.query.get(restaurant_id)
 
-    if not restaurant:
-        return {"errors": ["Restaurant not found"]}, 404
+#     if not restaurant:
+#         return {"errors": ["Restaurant not found"]}, 404
 
-    # Verify owner is current user
-    if restaurant.owner_id != current_user.id:
-        return {"errors": ["Unauthorized"]}, 403
+#     # Verify owner is current user
+#     if restaurant.owner_id != current_user.id:
+#         return {"errors": ["Unauthorized"]}, 403
 
-    form = RestaurantForm()
-    form["csrf_token"].data = request.cookies["csrf_token"]
+#     form = RestaurantForm()
+#     form["csrf_token"].data = request.cookies["csrf_token"]
 
-    if form.validate_on_submit():
-        try:
-            # Update restaurant with form data
-            restaurant_data = form.to_dict()
-            for key, value in restaurant_data.items():
-                setattr(restaurant, key, value)
+#     if form.validate_on_submit():
+#         try:
+#             # Update restaurant with form data
+#             restaurant_data = form.to_dict()
+#             for key, value in restaurant_data.items():
+#                 setattr(restaurant, key, value)
 
-            restaurant.updated_at = datetime.now()
-            db.session.commit()
-            return {"restaurant": restaurant.to_dict()}
+#             restaurant.updated_at = datetime.now()
+#             db.session.commit()
+#             return {"restaurant": restaurant.to_dict()}
 
-        except Exception as e:
-            db.session.rollback()
-            return {"errors": [str(e)]}, 400
+#         except Exception as e:
+#             db.session.rollback()
+#             return {"errors": [str(e)]}, 400
 
-    return {
-        "errors": [error for field in form.errors for error in form.errors[field]]
-    }, 400
-"""
-{
-    "name": "Updated NomNow Bistro",
-    "address": "456 New Street",
-    "city": "San Francisco",
-    "state": "CA",
-    "zip": 94110,
-    "cuisine_type": "MEXICAN",
-    "delivery_fee": 5.99,
-    "business_hours": "Mon-Fri: 9 AM - 10 PM, Sat-Sun: 10 AM - 11 PM",
-    "servicing": true,
-    "description": "A cozy place serving modern Mexican cuisine with a fresh twist.",
-    "price_level": "MODERATE",
-    "delivery_time": 25
-}
-"""
+#     return {
+#         "errors": [error for field in form.errors for error in form.errors[field]]
+#     }, 400
+# """
+# {
+#     "name": "Updated NomNow Bistro",
+#     "address": "456 New Street",
+#     "city": "San Francisco",
+#     "state": "CA",
+#     "zip": 94110,
+#     "cuisine_type": "MEXICAN",
+#     "delivery_fee": 5.99,
+#     "business_hours": "Mon-Fri: 9 AM - 10 PM, Sat-Sun: 10 AM - 11 PM",
+#     "servicing": true,
+#     "description": "A cozy place serving modern Mexican cuisine with a fresh twist.",
+#     "price_level": "MODERATE",
+#     "delivery_time": 25
+# }
+# """
 
 
 # Delete a restaurant

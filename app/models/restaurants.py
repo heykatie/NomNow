@@ -12,26 +12,26 @@ class PriceLevel(Enum):
 
 
 class CuisineType(Enum):
-    AMERICAN = "American"
-    CHINESE = "Chinese"
-    ITALIAN = "Italian"
-    JAPANESE = "Japanese"
-    MEXICAN = "Mexican"
-    INDIAN = "Indian"
-    THAI = "Thai"
-    MEDITERRANEAN = "Mediterranean"
-    KOREAN = "Korean"
-    VIETNAMESE = "Vietnamese"
-    GREEK = "Greek"
-    SPANISH = "Spanish"
-    SEAFOOD = "Seafood"
-    PIZZA = "Pizza"
-    VEGETARIAN = "Vegetarian"
-    VEGAN = "Vegan"
-    BREAKFAST = "Breakfast"
-    FAST_FOOD = "Fast Food"
-    CARIBBEAN = "Caribbean"
-    SOUL_FOOD = "Soul Food"
+    AMERICAN = "AMERICAN"
+    CHINESE = "CHINESE"
+    ITALIAN = "ITALIAN"
+    JAPANESE = "JAPANESE"
+    MEXICAN = "MEXICAN"
+    INDIAN = "INDIAN"
+    THAI = "THAI"
+    MEDITERRANEAN = "MEDITERRANEAN"
+    KOREAN = "KOREAN"
+    VIETNAMESE = "VIETNAMESE"
+    GREEK = "GREEK"
+    SPANISH = "SPANISH"
+    SEAFOOD = "SEAFOOD"
+    PIZZA = "PIZZA"
+    VEGETARIAN = "VEGETARIAN"
+    VEGAN = "VEGAN"
+    BREAKFAST = "BREAKFAST"
+    FAST_FOOD = "FAST FOOD"
+    CARIBBEAN = "CARIBBEAN"
+    SOUL_FOOD = "SOUL FOOD"
 
 
 class Restaurant(db.Model):
@@ -66,8 +66,8 @@ class Restaurant(db.Model):
     # RELATIONSHIPS
     users = db.relationship("User", back_populates="restaurants")
     menu_items = db.relationship("MenuItem", back_populates="restaurants", cascade="all, delete-orphan")
-    reviews = db.relationship("Review", back_populates="restaurants")
-    orders = db.relationship("Order", back_populates="restaurants")
+    reviews = db.relationship("Review", back_populates="restaurants", cascade = "all, delete-orphan")
+    orders = db.relationship("Order", back_populates="restaurants", cascade = "all, delete-orphan")
 
     def to_dict(self):
         return {

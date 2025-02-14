@@ -16,9 +16,10 @@ import DeleteMenuItem from '../components/MenuItemDelete';
 import ManageRestaurants from '../components/ManageRestaurants/ManageRestaurants';
 import Checkout from '../components/Cart/Checkout';
 import { AccountFormPage, NameFormPage, PhoneNumberPage, EmailPage } from '../components/AccountFormPage';
-import CreateRestaurant from '../components/CreateRestaurant/CreateRestaurant';
 import HomePage from '../components/HomePage';
 import RestaurantDetail from '../components/RestaurantDetail';
+import RestaurantForm from '../components/RestaurantForm/Restaurantform';
+import RestaurantMenuManager from '../components/RestaurantMenuManager';
 
 export const router = createBrowserRouter([
   {
@@ -94,12 +95,17 @@ export const router = createBrowserRouter([
       },
       {
         path: 'restaurants/new', // Added from HEAD
-        element: <CreateRestaurant />,
+        element: <RestaurantForm />,
+      },
+      {
+        path: 'restaurants/:id/update',
+        element: <RestaurantForm />
       },
       {
         path: 'restaurants/:id',
         element: <RestaurantDetail />,
       },
+
       {
         path: 'restaurants/manage', // Added from HEAD
         element: <ManageRestaurants />,
@@ -111,6 +117,10 @@ export const router = createBrowserRouter([
       {
 				path: 'home',
 				element: <HomePage />,
+      },
+      {
+        path: 'restaurants/:restaurantId/menu',
+        element: <RestaurantMenuManager />,
       },
     ],
   },

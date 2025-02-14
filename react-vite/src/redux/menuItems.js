@@ -194,6 +194,18 @@ const menuReducer = (state = initialState, action) => {
 
     case MENU_ERROR:
       return { ...state, error: action.payload };
+    
+    case 'SET_MENU_ITEMS':
+      return {
+          ...state,
+          menuItems: action.payload,
+          error: null
+      };
+    case 'SET_MENU_ITEMS_ERROR':
+      return {
+            ...state,
+            error: action.payload
+        };
 
     default:
       return state;
