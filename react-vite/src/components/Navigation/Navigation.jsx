@@ -45,6 +45,7 @@ function Navigation() {
 							<button className='selected'>Delivery</button>
 						) : (
 							<button
+								className='travel-option'
 								onClick={(e) => {
 									e.preventDefault();
 									setDeliveryType('delivery');
@@ -57,6 +58,7 @@ function Navigation() {
 							<button className='selected'>Pickup</button>
 						) : (
 							<button
+								className='travel-option'
 								onClick={(e) => {
 									e.preventDefault();
 									setDeliveryType('pickup');
