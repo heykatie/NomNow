@@ -207,6 +207,7 @@ h3 {
   font-size: 18px;
   color: black;
   transition: transform 0.2s ease;
+  margin-right: 1rem;
 }
 
 .restaurant-header:hover .arrow {
