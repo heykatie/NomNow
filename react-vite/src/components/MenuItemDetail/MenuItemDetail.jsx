@@ -32,9 +32,10 @@ const MenuItemDetail = () => {
 
   const handleAddToCart = () => {
     dispatch(addToCart({
-      menuItemId: menuItem.id,
+      id: menuItem.id,
       name: menuItem.name,
       price: menuItem.price,
+      restaurantId: menuItem.restaurantId,
       quantity,
     }));
     setQuantity(1);

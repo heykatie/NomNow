@@ -209,7 +209,7 @@ export default function Checkout() {
 
 
 			<div className='checkout-right'>
-				<OrderRestaurant restaurant={currentOrder.restaurant} />
+				<OrderRestaurant restaurantId={currentOrder.restaurant.id} />
 				<div className='order-summary'>
 					<h4>Cart summary ({currentOrder?.orderItems?.length} item/s)</h4>
 					<CartItems items={currentOrder?.orderItems} />
