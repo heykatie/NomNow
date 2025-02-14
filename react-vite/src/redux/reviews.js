@@ -1,5 +1,6 @@
 //react-vite/src/redux/reviews.js
 // ========================== ACTION TYPE CONSTANTS ==========================
+const GET_USER_REVIEWS = 'reviews/getUserReviews';
 const GET_REVIEWS_FOR_REST = 'reviews/getReviewsForRest';
 const GET_SINGLE_REVIEW = 'reviews/getSingleReview';
 const CREATE_REVIEW = 'reviews/createReview';
@@ -7,6 +8,12 @@ const UPDATE_REVIEW = 'reviews/updateReview';
 const DELETE_REVIEW = 'reviews/deleteReview';
 
 // ========================== ACTION CREATORS ================================
+const getUserReviews = (reviews) => ({
+  type: GET_USER_REVIEWS,
+  reviews,
+});
+
+
 const getReviewsForRest = (reviews) => ({
   type: GET_REVIEWS_FOR_REST,
   reviews,
@@ -32,9 +39,24 @@ const deleteReview = (reviewId) => ({
   reviewId,
 });
 
+
+
 // ========================== THUNKS =====================================
 
 // THUNK: GET ALL REVIEWS FOR A RESTAURANT
+
+export const getUserReviewsThunk = () => async (dispatch) => {
+	try {
+		const res = await fetch(`/api/reviews/user`);
+		if (!res.ok) throw await res.json();
+
+		const data = await res.json();
+		dispatch(getUserReviews(data.reviews));
+	} catch (error) {
+		console.error('Error fetching user reviews:', error);
+	}
+};
+
 export const getReviewsForRestThunk = (restaurantId) => async (dispatch) => {
   try {
     const res = await fetch(`/api/reviews/restaurant/${restaurantId}`);
@@ -115,7 +137,7 @@ export const updateReviewThunk = (updatedReview) => async (dispatch) => {
 
     if (response.ok) {
       const data = await response.json();
-      dispatch(updateReview(data));  
+      dispatch(updateReview(data));
       return data;
     } else {
       throw new Error("Failed to update review");
@@ -149,14 +171,17 @@ export const deleteReviewThunk = (reviewId) => async (dispatch) => {
 // ========================== REDUCER =====================================
 
 const initialState = {
-  allReviewsForRest: [],
-  singleReview: {},
-  loading: false,
-  error: null,
+	allReviewsForRest: [],
+	userReviews: [],
+	singleReview: {},
+	loading: false,
+	error: null,
 };
 
 export default function reviewsReducer(state = initialState, action) {
   switch (action.type) {
+    case GET_USER_REVIEWS:
+      return { ...state, userReviews: action.reviews, loading: false, error: null };
     case GET_REVIEWS_FOR_REST:
       return { ...state, allReviewsForRest: action.reviews, loading: false, error: null };
     case GET_SINGLE_REVIEW:
