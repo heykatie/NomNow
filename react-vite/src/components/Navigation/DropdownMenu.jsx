@@ -267,7 +267,7 @@ function DropdownMenu({ user }) {
 			</button>
 			{/* Dropdown Menu */}
 			<div className={`menu-dropdown ${menuOpen ? 'open' : 'closed'}`}>
-				{user ? (
+				{user && !user.guestAccount ? (
 					<>
 						<li>
 							<div className='profile'>
@@ -323,6 +323,8 @@ function DropdownMenu({ user }) {
 					</>
 				) : (
 					<ul className='align-buttons'>
+						{!user?.guestAccount ? (
+						<>
 						<li>
 							<NavLink to='/login' onClick={closeMenu}>
 								<button className='auth-buttons z'>Log in</button>
@@ -338,6 +340,40 @@ function DropdownMenu({ user }) {
 								{getButtonText()}
 							</button>
 						</li>
+						</>
+						):(
+							<>
+							<li>
+							<div className='profile'>
+								<img
+									src='/icons/user.png'
+									alt='User'
+									className='icon'
+								/>
+								<div className='profile-info'>
+									<h4>
+										{user.firstName} {user.lastName}
+									</h4>
+								</div>
+							</div>
+							</li>
+							<li>
+							<NavLink to='/login' onClick={closeMenu}>
+								<button className='auth-buttons z'>Log in</button>
+							</NavLink>
+							</li>
+							<li>
+								<NavLink to='/signup' onClick={closeMenu}>
+									<button className='auth-buttons z'>Sign up</button>
+								</NavLink>
+							</li>
+							<li>
+								<button onClick={handleRestaurantClick}>
+									{getButtonText()}
+								</button>
+							</li>
+							</>
+						)}
 					</ul>
 				)}
 			</div>

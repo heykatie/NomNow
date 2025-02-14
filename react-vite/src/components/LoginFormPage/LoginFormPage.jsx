@@ -13,7 +13,7 @@ function LoginFormPage({ isLogin, isSignup }) {
     const [password, setPassword] = useState("");
     const [errors, setErrors] = useState({});
 
-    if (sessionUser) return <Navigate to="/" replace={true} />;
+    if (sessionUser && !sessionUser.guestAccount) return <Navigate to="/" replace={true} />;
 
     const demoSubmit = async (e, name) => {
         e.preventDefault();
