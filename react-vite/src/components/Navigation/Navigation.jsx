@@ -82,7 +82,7 @@ function Navigation() {
 				<li className='user-actions'>
 					{user?.address && (
 						<li className='cart-nav'>
-							<Cart />
+							{/* <Cart /> */}
 						</li>
 					)}
 					{!user && (
