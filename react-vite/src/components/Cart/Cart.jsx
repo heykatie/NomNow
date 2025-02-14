@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FaShoppingCart, FaTimes, FaEllipsisV } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { getCart, checkoutCart, clearCart } from '../../redux/cart';
@@ -14,6 +14,7 @@ export default function Cart() {
 	const [menuOpen, setMenuOpen] = useState(false);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
+		const menuRef = useRef(null);
 
 	const handleCheckout = async () => {
 		if (cartItems.length === 0) return;
@@ -57,21 +58,58 @@ export default function Cart() {
 		}
 	}, [isOpen]);
 
+	// useEffect(() => {
+	// 	const handleEscape = (event) => {
+	// 		if (event.key === 'Escape') {
+	// 			setIsOpen(false);
+	// 		}
+	// 	};
+
+	// 	if (isOpen) {
+	// 		document.addEventListener('keydown', handleEscape);
+	// 	}
+
+	// 	return () => {
+	// 		document.removeEventListener('keydown', handleEscape);
+	// 	};
+	// }, [isOpen]);
+
 	useEffect(() => {
 		const handleEscape = (event) => {
 			if (event.key === 'Escape') {
-				setIsOpen(false);
+				if (menuOpen) {
+					setMenuOpen(false);
+				} else {
+					setIsOpen(false); 
+				}
 			}
 		};
 
-		if (isOpen) {
+		if (isOpen || menuOpen) {
 			document.addEventListener('keydown', handleEscape);
 		}
 
 		return () => {
 			document.removeEventListener('keydown', handleEscape);
 		};
-	}, [isOpen]);
+	}, [isOpen, menuOpen]);
+
+	useEffect(() => {
+		const handleClickOutside = (event) => {
+			if (menuRef.current && !menuRef.current.contains(event.target)) {
+				setMenuOpen(false);
+			}
+		};
+
+		if (menuOpen) {
+			document.addEventListener('mousedown', handleClickOutside);
+		}
+
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+		};
+	}, [menuOpen]);
+
 
 	return (
 		<>
@@ -91,6 +129,7 @@ export default function Cart() {
 					</button>
 					<div className='menu-container'>
 						<button
+							ref={menuRef}
 							className='menu-btn'
 							onClick={() => setMenuOpen(!menuOpen)}>
 							<FaEllipsisV />
