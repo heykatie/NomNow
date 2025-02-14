@@ -77,13 +77,13 @@ h3 {
 }
 
 .confirm-order-btn {
-  width: 100%;
-  padding: 12px;
-  background: black;
-  color: white;
-  border: none;
-  cursor: pointer;
-  border-radius: 8px;
+  width: 100% !important;
+  padding: 12px !important;
+  background: black !important;
+  color: white !important;
+  border: none !important;
+  cursor: pointer !important;
+  border-radius: 8px !important;
 }
 
 .checkout-page .tip-buttons button {

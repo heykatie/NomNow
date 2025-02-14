@@ -87,25 +87,25 @@
 
 .reorder-btn,
 .rate-btn {
-  padding: 10px 14px;
-  font-size: 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  border: none;
+  padding: 10px 14px !important;
+  font-size: 16px !important;
+  border-radius: 6px !important;
+  cursor: pointer !important;
+  font-weight: bold !important;
+  border: none !important;
 }
 
 .reorder-btn {
-  background-color: black;
-  color: white;
+  background-color: black !important;
+  color: white !important;
 }
 
 .rate-btn {
-  background-color: #f0f0f0;
-  color: #666;
+  background-color: #f0f0f0 !important;
+  color: #666 !important;
 }
 
 .rate-btn:disabled {
-  cursor: not-allowed;
-  opacity: 0.5;
+  cursor: not-allowed !important;
+  opacity: 0.5 !important;
 }
