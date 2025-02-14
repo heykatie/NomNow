@@ -22,9 +22,16 @@ export default function Orders() {
 		dispatch(getUserOrders());
 	}, [dispatch]);
 
+	useEffect(() => {
+		if (!orders || orders.length === 0) {
+			console.log('🔄 Orders missing, refetching...');
+			dispatch(getUserOrders());
+		}
+	}, [dispatch, orders]);
+
 	if (isLoading) return <div>Loading orders...</div>;
 	if (error) return <div className='error-message'>{error}</div>;
-	if (!orders.length) return <div>No past orders found.</div>;
+	// if (!orders.length) return <div>No past orders found.</div>;
 
 	const handleRestaurantClick = (restaurantId) => {
 		if (restaurantId) {
@@ -74,14 +81,14 @@ export default function Orders() {
 		if (response?.payload) {
 			const newOrder = response.payload;
 
-			// Update Redux state and localStorage
 			dispatch(loadUserOrder(newOrder));
 			localStorage.setItem('currentOrder', JSON.stringify(newOrder));
 
-			// Navigate to checkout
 			navigate('/checkout');
 		}
 	};
+
+
 
 	return (
 		<div className='orders-container'>
