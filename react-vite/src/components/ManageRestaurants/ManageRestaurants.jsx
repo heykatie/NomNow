@@ -79,18 +79,18 @@ function ManageRestaurants() {
                         <h2>{restaurant.name}</h2>
                         <p>Status: {restaurant.servicing ? 'Active' : 'Inactive'}</p>
                         {restaurant.servicing ? (
-                            <button onClick={() => handleDelete(restaurant.id)}>
+                            <button  className ="auth-buttons" onClick={() => handleDelete(restaurant.id)}>
                                 Deactivate/Delete Restaurant
                             </button>
                         ) : (
-                            <button onClick={() => handleReactivate(restaurant)}>
+                            <button className ="auth-buttons" onClick={() => handleReactivate(restaurant)}>
                                 Reactivate Restaurant
                             </button>
                         )}
-                        <button onClick={() => handleUpdate(restaurant.id)}>
+                        <button className ="auth-buttons" onClick={() => handleUpdate(restaurant.id)}>
                             Update Info
                         </button>
-                        <button onClick={() => navigate(`/restaurants/${restaurant.id}/menu`)}>
+                        <button className ="auth-buttons" onClick={() => navigate(`/restaurants/${restaurant.id}/menu`)}>
                             Update Menu
                         </button>
                     </div>

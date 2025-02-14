@@ -19,11 +19,6 @@
   left: 0;
 }
 
-.no-scroll {
-  overflow: hidden;
-  height: 100vh;
-}
-
 #modal-content {
   position: relative;
   background: white;
@@ -39,7 +34,6 @@
   z-index: 10;
 }
 
-/* Global Close Button */
 #modal-content .close-button {
   position: absolute !important;
   top: 12px !important;
@@ -61,4 +55,10 @@
 
 #modal-content .close-button:hover {
   background: #f2f2f2;
+}
+
+body.no-scroll {
+  overflow: hidden !important;
+  height: 100vh !important;
+  touch-action: none;
 }

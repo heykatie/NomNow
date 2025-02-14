@@ -30,32 +30,37 @@ function NameFormPage(){
         }
     }
 
-    return(
-        <div>
-            <h1>Name</h1>
-            This is the name you would like other people to use when referring to you
-            <form onSubmit={e=> handleSubmit(e)}>
-            <label>
-                First Name
-                <input 
-                    type="text" 
-                    value={firstName}
-                    onChange={(e)=> setFirstName(e.target.value)}
-                    required
-                />
-            </label>
-            <label>
-                Last Name
-                <input 
-                    type="text" 
-                    value={lastName}
-                    onChange={(e)=> setLastName(e.target.value)}
-                />
-            </label>
-            <button onClick={(e)=>handleSubmit(e)}>Update</button>
-            </form>
-        </div>
-    )
+    return (
+			<div>
+				<h1>Name</h1>
+				This is the name you would like other people to use when referring
+				to you
+				<form onSubmit={(e) => handleSubmit(e)}>
+					<label>
+						First Name
+						<input
+							type='text'
+							value={firstName}
+							onChange={(e) => setFirstName(e.target.value)}
+							required
+						/>
+					</label>
+					<label>
+						Last Name
+						<input
+							type='text'
+							value={lastName}
+							onChange={(e) => setLastName(e.target.value)}
+						/>
+					</label>
+					<button
+						className='auth-buttons'
+						onClick={(e) => handleSubmit(e)}>
+						Update
+					</button>
+				</form>
+			</div>
+		);
 }
 
 export default NameFormPage;

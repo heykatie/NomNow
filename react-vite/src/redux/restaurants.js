@@ -58,20 +58,20 @@ export const createRestaurant = (formData) => async (dispatch) => {
     try {
         const response = await fetch('/api/restaurants/', {
             method: 'POST',
-            body: formData  // Using FormData finstead of JSON so user can upload images. 
+            body: formData  // Using FormData finstead of JSON so user can upload images.
         });
-        
+
         const data = await response.json();
-        
+
         if (!response.ok) {
             throw new Error(data.errors);
         }
-        
+
         dispatch({ type: CREATE_RESTAURANT, payload: data.restaurant });
         return data.restaurant;  // Return for successful navigation
     } catch (error) {
         dispatch({ type: RESTAURANT_ERROR, payload: error.message });
-        throw error;  
+        throw error;
     }
 };
 
@@ -119,7 +119,7 @@ export const deleteRestaurant = (id, deleteType) => async (dispatch) => {
         });
         
         const data = await response.json();
-        
+
         if (!response.ok) {
             throw new Error(data.message || 'Failed to delete restaurant');
         }
@@ -174,7 +174,7 @@ const restaurantReducer = (state = initialState, action) => {
                 restaurants: action.payload,
                 error: null
             };
-            
+
         case GET_RESTAURANT:
             return {
                 ...state,
@@ -188,7 +188,7 @@ const restaurantReducer = (state = initialState, action) => {
                 restaurants: action.payload,
                 error: null
             };
-            
+
         case CREATE_RESTAURANT:
             return {
                 ...state,
@@ -205,16 +205,16 @@ const restaurantReducer = (state = initialState, action) => {
                 currentRestaurant: action.payload,
                 error: null
             };
-            
+
         case DELETE_RESTAURANT:
             return {
                 ...state,
-                restaurants: state.restaurants.filter(restaurant => 
+                restaurants: state.restaurants.filter(restaurant =>
                     restaurant.id !== action.payload
                 ),
                 error: null
             };
-            
+
         case RESTAURANT_ERROR:
             return {
                 ...state,
@@ -222,7 +222,7 @@ const restaurantReducer = (state = initialState, action) => {
             };
         case 'SET_USER_RESTAURANTS':
                 return { ...state, userRestaurants: action.payload };
-            
+
         default:
             return state;
     }

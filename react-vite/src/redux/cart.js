@@ -1,4 +1,3 @@
-import { csrfFetch } from './csrf';
 import { setError } from './errors';
 import { createOrder } from './orders';
 
@@ -6,8 +5,13 @@ const ADD_TO_CART = 'cart/addToCart';
 const REMOVE_FROM_CART = 'cart/removeFromCart';
 const UPDATE_CART_ITEM = 'cart/updateCartItem';
 const CLEAR_CART = 'cart/clearCart';
+const CART_STORAGE_KEY = 'cartItems';
 
 
+const loadCartFromStorage = () => {
+	const storedCart = localStorage.getItem(CART_STORAGE_KEY);
+	return storedCart ? JSON.parse(storedCart) : [];
+};
 
 const addCartItem = (item) => ({
 	type: ADD_TO_CART,
@@ -24,47 +28,48 @@ const updateCartItem = (itemId, quantity) => ({
 	payload: { itemId, quantity },
 });
 
+const saveCartToStorage = (cartItems) => {
+	localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
+};
+
 const clearCartItems = () => ({
 	type: CLEAR_CART,
 });
 
-export const getCart = (state) => state.cart.cartItems;
+export const getCart = (state) => state.cart?.cartItems || [];
 
 export const addToCart =
-	(menuItemId, quantity = 1) =>
-	async (dispatch) => {
-		try {
-			const response = await csrfFetch('/api/cart', {
-				method: 'POST',
-				body: JSON.stringify({ menu_item_id: menuItemId, quantity }),
-			});
-			if (!response.ok) throw response;
+	(menuItem, quantity = 1) =>
+	(dispatch, getState) => {
+		const state = getState();
+		const existingItem = state.cart.cartItems.find(
+			(item) => item.id === menuItem.id
+		);
 
-			const data = await response.json();
-			dispatch(addCartItem(data));
-		} catch (error) {
-			const errorMessage = await error.json();
-			dispatch(setError(errorMessage.errors));
+		if (existingItem) {
+			dispatch(
+				updateItemQuantity(menuItem.id, existingItem.quantity + quantity)
+			);
+		} else {
+			dispatch(addCartItem({ ...menuItem, quantity }));
 		}
 	};
 
-export const removeFromCart = (menuItemId) => async (dispatch) => {
-	try {
-		const response = await csrfFetch(`/api/cart/${menuItemId}`, {
-			method: 'DELETE',
-		});
-		if (!response.ok) throw response;
-
-		dispatch(removeCartItem(menuItemId));
-	} catch (error) {
-		const errorMessage = await error.json();
-		dispatch(setError(errorMessage.errors));
-	}
+export const removeFromCart = (menuItemId) => (dispatch) => {
+	dispatch(removeCartItem(menuItemId));
 };
 
-export const updateItemQuantity = (menuItemId, quantity) => (dispatch) => {
-	dispatch(updateCartItem(menuItemId, quantity));
-};
+export const updateItemQuantity =
+	(menuItemId, quantity) => (dispatch, getState) => {
+		const state = getState();
+		const existingItem = state.cart.cartItems.find(
+			(item) => item.id === menuItemId
+		);
+
+		if (existingItem) {
+			dispatch(updateCartItem(menuItemId, quantity));
+		}
+	};
 
 export const checkoutCart = () => async (dispatch, getState) => {
 	const state = getState();
@@ -72,58 +77,77 @@ export const checkoutCart = () => async (dispatch, getState) => {
 
 	if (cartItems.length === 0) {
 		console.warn('Cart is empty, cannot proceed to checkout.');
-		return;
+		return { payload: null };
 	}
 
-	const restaurantId = cartItems[0]?.restaurant_id;
+	let restaurantId = cartItems[0]?.restaurant_id || cartItems[0]?.restaurantId;
+	if (!restaurantId && state.orders.currentOrder) {
+		restaurantId = state.orders.currentOrder.restaurant?.id;
+	}
+
+	if (!restaurantId) {
+		// console.error('Cannot create order: Missing restaurant ID');
+		return { payload: null };
+	}
+
 	const items = cartItems.map((item) => ({
 		menu_item_id: item.id,
 		quantity: item.quantity,
 	}));
 
-	await dispatch(createOrder({ restaurant_id: restaurantId, items }));
-};
+	const { payload } = await dispatch(
+		createOrder({ restaurant_id: restaurantId, items })
+	);
 
-export const clearCart = () => async (dispatch) => {
-	try {
-		const response = await csrfFetch('/api/cart/clear', {
-			method: 'DELETE',
-		});
-		if (!response.ok) throw response;
-
-		dispatch(clearCartItems());
-	} catch (error) {
-		const errorMessage = await error.json();
-		dispatch(setError(errorMessage.errors));
+	if (payload) {
+		localStorage.setItem('currentOrder', JSON.stringify(payload)); // Save order
 	}
+
+	return { payload };
 };
+
+export const confirmOrderPlacement = () => (dispatch) => {
+	dispatch(clearCartItems());
+};
+	// dispatch(clearCartItems()); // Clear cart after checkout
+
+export const clearCart = () => (dispatch) => {
+	dispatch(clearCartItems());
+};
+
 
 const initialState = {
-	cartItems: [],
+	cartItems: loadCartFromStorage() || [],
 };
 
 export default function cartReducer(state = initialState, action) {
+	let updatedCart;
 	switch (action.type) {
 		case ADD_TO_CART:
-			return { ...state, cartItems: [...state.cartItems, action.payload] };
+			updatedCart = [...state.cartItems, action.payload];
+			saveCartToStorage(updatedCart);
+			return { ...state, cartItems: updatedCart };
+
 		case REMOVE_FROM_CART:
-			return {
-				...state,
-				cartItems: state.cartItems.filter(
-					(item) => item.id !== action.payload
-				),
-			};
+			updatedCart = state.cartItems.filter(
+				(item) => item.id !== action.payload
+			);
+			saveCartToStorage(updatedCart);
+			return { ...state, cartItems: updatedCart };
+
 		case UPDATE_CART_ITEM:
-			return {
-				...state,
-				cartItems: state.cartItems.map((item) =>
-					item.id === action.payload.itemId
-						? { ...item, quantity: action.payload.quantity }
-						: item
-				),
-			};
+			updatedCart = state.cartItems.map((item) =>
+				item.id === action.payload.itemId
+					? { ...item, quantity: action.payload.quantity }
+					: item
+			);
+			saveCartToStorage(updatedCart);
+			return { ...state, cartItems: updatedCart };
+
 		case CLEAR_CART:
+			saveCartToStorage([]);
 			return { ...state, cartItems: [] };
+
 		default:
 			return state;
 	}

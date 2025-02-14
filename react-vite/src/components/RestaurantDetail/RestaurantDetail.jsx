@@ -32,7 +32,7 @@ function RestaurantDetail() {
 
     // nested restaurant data 
     const restaurant = currentRestaurant.restaurant;
-    
+
     // Filter menu items for this restaurant
     const restaurantMenuItems = menuItems.filter(item => item.restaurantId === parseInt(id));
 

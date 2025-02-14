@@ -32,9 +32,11 @@ const MenuItemDetail = () => {
 
   const handleAddToCart = () => {
     dispatch(addToCart({
-      menuItemId: menuItem.id,
+      id: menuItem.id,
       name: menuItem.name,
       price: menuItem.price,
+      restaurantId: menuItem.restaurantId,
+      food_image: menuItem.food_image,
       quantity,
     }));
     setQuantity(1);
@@ -43,6 +45,11 @@ const MenuItemDetail = () => {
   };
 
   const handleToggleLike = () => {
+    if (!user) {
+			// Show alert if the user is not logged in
+			alert('You must be logged in to add items to the favorites');
+			return;
+		}
     dispatch(toggleLike(menuItem.id));
     dispatch(getFavoriteItems());
   };

@@ -1,4 +1,4 @@
-.schedule-modal {
+/* .schedule-modal {
   display: flex;
   flex-direction: column;
   padding: 20px;
@@ -17,71 +17,75 @@
 
 #modal-content:has(.schedule-modal) .close-button {
   display: none !important;
-}
+} */
 
-.schedule-modal::-webkit-scrollbar {
-  display: none;
-}
 
-.schedule-modal h2 {
-  font-size: 22px;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 15px;
-}
-
+/* 🔹 Date selection (scrollable buttons) */
 .date-selection-container {
   display: flex;
   align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
   gap: 10px;
-  margin-bottom: 15px;
-  overflow: hidden;
+  overflow-x: auto;
+  white-space: nowrap;
+  /* overflow: hidden; */
 }
 
 .date-selection {
   display: flex;
   gap: 10px;
   overflow-x: auto;
-  white-space: nowrap;
-  padding: 10px 0;
   scroll-behavior: smooth;
+  padding: 10px 0;
   max-width: 90%;
+  /* white-space: nowrap; */
 }
 
 .date-selection::-webkit-scrollbar {
   display: none;
 }
 
-.date-selection button {
-  padding: 12px 18px !important;
-  border: 2px solid transparent !important;
-  border-radius: 10px !important;
-  background: #f5f5f5 !important;
-  font-weight: bold !important;
-  transition: 0.2s !important;
-  text-align: center !important;
+/* 🔹 Individual Date Buttons */
+.date-selection>button {
+  padding: 12px 18px;
+  border: 2px solid transparent;
+  border-radius: 12px;
+  background: white;
+  border-color: #f5f5f5;
+  font-weight: bold;
+  min-width: 90px;
+  text-align: center;
+  transition: 0.2s;
+  color: black;
 }
 
-.date-selection button.selected {
-  border-color: black !important;
-  background: white !important;
+.date-selection>button.selected {
+  border-color: black;
+  background: white;
+  font-weight: bold;
+  color: black;
 }
 
+/* 🔹 Scroll Arrows */
 .scroll-arrow {
   background: transparent;
   border: none;
   font-size: 20px;
   cursor: pointer;
   padding: 5px;
+  color: black;
 }
 
+/* 🔹 Time selection */
 .time-selection {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
   padding: 10px 0;
 }
 
+/* 🔹 Radio Button Styling */
 .radio-option {
   display: flex;
   align-items: center;
@@ -92,7 +96,7 @@
   font-size: 16px;
 }
 
-.radio-option input {
+.radio-option>input {
   display: none;
 }
 
@@ -107,12 +111,12 @@
   transition: 0.2s;
 }
 
-.radio-option input:checked+.radio-circle {
+.radio-option>input:checked+.radio-circle {
   border-color: black;
   background: black;
 }
 
-.radio-option input:checked+.radio-circle::after {
+.radio-option>input:checked+.radio-circle::after {
   content: "";
   width: 10px;
   height: 10px;
@@ -120,7 +124,7 @@
   border-radius: 50%;
 }
 
-/* Modal Actions */
+/* 🔹 Modal Actions (Buttons) */
 .modal-actions {
   display: flex;
   flex-direction: column;
@@ -128,19 +132,42 @@
   margin-top: 20px;
 }
 
-.modal-actions button {
-  padding: 12px !important;
-  font-size: 16px !important;
-  border-radius: 8px !important;
-  cursor: pointer !important;
-  border: none !important;
+.modal-actions>button {
+  padding: 12px;
+  font-size: 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: none;
+  font-weight: bold;
 }
 
-.modal-actions button:disabled {
-  background: #e0e0e0 !important;
-  cursor: not-allowed !important;
+.modal-actions>button:disabled {
+  background: #e0e0e0;
+  color: #b0b0b0;
+  cursor: not-allowed;
+}
+
+.modal-actions .schedule-btn:hover {
+  background: #333;
+}
+
+.modal-actions .schedule-btn {
+  background: black;
+  color: white;
 }
 
 .modal-actions .cancel-btn {
-  background: #f5f5f5 !important;
+  background: #f5f5f5;
+  color: black;
+}
+
+.schedule-modal::-webkit-scrollbar {
+  display: none;
+}
+
+.schedule-modal h2 {
+  font-size: 22px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 15px;
 }

@@ -11,6 +11,7 @@
   padding: 12px 0;
   border-bottom: 1px solid #e0e0e0;
   cursor: pointer;
+  margin-left: 1rem;
 }
 
 .cart-item-image {
@@ -51,4 +52,36 @@
   font-size: 16px;
   font-weight: 600;
   color: #333;
+}
+
+.cart-item-quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f8f8f8;
+  border-radius: 20px;
+  padding: 6px 10px;
+}
+
+.quantity-btn {
+  background: none;
+  border: none !important;
+  cursor: pointer;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background-color: #f8f8f8 !important;
+  color: #f8f8f8 !important;
+}
+
+.quantity-btn svg:hover {
+  fill: grey !important;
+}
+
+.quantity-btn svg {
+  fill: black !important;
+  border: none !important;
 }

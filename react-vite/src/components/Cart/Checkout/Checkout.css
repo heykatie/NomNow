@@ -205,11 +205,12 @@ h3 {
 
 .restaurant-header .arrow {
   font-size: 18px;
-  color: gray;
+  color: black;
   transition: transform 0.2s ease;
+  margin-right: 1rem;
 }
 
 .restaurant-header:hover .arrow {
   transform: translateX(5px);
-  color: black;
+  color: gray;
 }

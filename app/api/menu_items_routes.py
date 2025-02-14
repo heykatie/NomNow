@@ -9,7 +9,7 @@ from datetime import datetime
 from flask import jsonify
 from flask_cors import CORS
 
-menu_item_routes = Blueprint('menu_items', __name__)  
+menu_item_routes = Blueprint('menu_items', __name__)
 # api/menu-items/
 
 
@@ -24,9 +24,9 @@ def get_menu_item(id):
         }), 200
     else:
         return jsonify({"error": "Menu item not found"}), 404
-    
 
-    
+
+
 
 ### Get all-menu item # api/menu-items
 @menu_item_routes.route('/', methods=['GET'])
@@ -42,7 +42,7 @@ def get_menu_items():
         for item, restaurant_name in menu_items
     ]), 200
 
-    
+
 
 
 @menu_item_routes.route('/<int:id>', methods=['PUT'])

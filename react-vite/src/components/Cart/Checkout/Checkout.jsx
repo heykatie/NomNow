@@ -5,6 +5,7 @@ import { useModal } from '../../../context/Modal';
 import TipModal from '../../../context/TipModal';
 import ScheduleModal from '../../../context/ScheduleModal';
 import { placeOrder, deleteOrder } from '../../../redux/orders';
+import { confirmOrderPlacement } from '../../../redux/cart';
 import { deductFundsThunk } from '../../../redux/session';
 import OrderRestaurant from '../../Orders/OrderRestaurant';
 import CartItems from '../CartItems';
@@ -66,6 +67,8 @@ export default function Checkout() {
 		}
 
 		await dispatch(placeOrder(currentOrder.id));
+
+		dispatch(confirmOrderPlacement());
 
 		setTimeout(() => {
 			const updatedOrder = JSON.parse(localStorage.getItem('currentOrder'));
@@ -209,7 +212,7 @@ export default function Checkout() {
 
 
 			<div className='checkout-right'>
-				<OrderRestaurant restaurant={currentOrder.restaurant} />
+				<OrderRestaurant restaurantId={currentOrder.restaurant.id} />
 				<div className='order-summary'>
 					<h4>Cart summary ({currentOrder?.orderItems?.length} item/s)</h4>
 					<CartItems items={currentOrder?.orderItems} />
