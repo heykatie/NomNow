@@ -4,17 +4,26 @@ import { useLocation } from "react-router-dom"
 import "./Footer.css"
 
 function Footer(){
-    const location = useLocation()
-    console.log("Location: ", location)
+    const location = useLocation().pathname
+    let isShown = true
+    restrictedLinks.forEach(link =>{
+        if(link === location){
+            isShown = false
+        }
+    })
 
     return (
-        <div className="footer">
-            <FooterButton dev={"Gabe"} />
-            <FooterButton dev={"Burak"} />
-            <FooterButton dev={"Katie"} />
-            <FooterButton dev={"Marcellies"} />
-            <FooterButton dev={"Sama"} />
-        </div>
+        <>
+        {isShown && (
+            <div className="footer">
+                <FooterButton dev={"Gabe"} />
+                <FooterButton dev={"Burak"} />
+                <FooterButton dev={"Katie"} />
+                <FooterButton dev={"Marcellies"} />
+                <FooterButton dev={"Sama"} />
+            </div>
+        )}
+        </>
     )
 }
 
