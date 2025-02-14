@@ -24,7 +24,6 @@ export default function Orders() {
 
 	useEffect(() => {
 		if (!orders || orders.length === 0) {
-			console.log('🔄 Orders missing, refetching...');
 			dispatch(getUserOrders());
 		}
 	}, [dispatch, orders]);

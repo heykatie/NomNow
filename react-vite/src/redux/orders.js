@@ -35,12 +35,10 @@ const removeOrder = (orderId) => ({ type: REMOVE_ORDER, payload: orderId });
 
 export const getUserOrders = () => async (dispatch) => {
 	try {
-		console.log(`Fetching user orders...`);
 		const response = await csrfFetch('/api/orders/');
 		if (!response.ok) throw response;
 
 		const data = await response.json();
-		console.log(`Fetched ${data.orders.length} orders`);
 
 		dispatch(loadUserOrders(data.orders));
 	} catch (error) {
@@ -151,26 +149,26 @@ export const placeOrder = (orderId) => async (dispatch) => {
 
 export const deleteOrder = (orderId) => async (dispatch, getState) => {
 	try {
-		console.log(`Attempting to delete order ${orderId}`);
+		// console.log(`Attempting to delete order ${orderId}`);
 		const response = await csrfFetch(`/api/orders/${orderId}`, {
 			method: 'DELETE',
 		});
 
 		if (!response.ok) throw response;
 
-		console.log(`Order ${orderId} deleted successfully`);
+		// console.log(`Order ${orderId} deleted successfully`);
 		dispatch(removeOrder(orderId));
 		localStorage.removeItem('currentOrder');
 
 		const { orders } = getState();
 		if (orders.currentOrder?.id === orderId) {
-			console.log(`Clearing currentOrder for ${orderId}`);
+			// console.log(`Clearing currentOrder for ${orderId}`);
 			dispatch(clearCurrentOrder());
 		}
 
 		await dispatch(getUserOrders());
 	} catch (error) {
-		console.error(`Error deleting order ${orderId}:`, error);
+		// console.error(`Error deleting order ${orderId}:`, error);
 		dispatch(setError(await error.json()));
 	}
 };
@@ -233,7 +231,7 @@ export default function ordersReducer(state = initialState, action) {
 				currentOrder: action.payload,
 			};
 		case REMOVE_ORDER: {
-			console.log(`Removing order ${action.payload} from Redux state`);
+			// console.log(`Removing order ${action.payload} from Redux state`);
 
 			const updatedUserOrders = state.userOrders.filter(
 				(order) => order.id !== action.payload

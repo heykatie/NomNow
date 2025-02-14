@@ -77,7 +77,6 @@ export default function Checkout() {
 
 	const handleOrderDeletion = async () => {
 		if (currentOrder?.status === 'Active') {
-			console.log(`Deleting order ${currentOrder.id}...`);
 			await dispatch(deleteOrder(currentOrder.id));
 			localStorage.removeItem('currentOrder');
 		}
@@ -103,7 +102,7 @@ export default function Checkout() {
 		const savedOrder = JSON.parse(localStorage.getItem('currentOrder'));
 
 		if (!currentOrder && savedOrder) {
-			console.log('🚨 Avoiding reloading deleted order from localStorage!');
+
 			localStorage.removeItem('currentOrder');
 			navigate('/orders');
 		}
@@ -117,7 +116,7 @@ export default function Checkout() {
 	return (
 		<div className='checkout-page'>
 			<div className='checkout-left'>
-				{/* Delivery Details */}
+
 				<div className='delivery-section'>
 					<h3>Delivery details</h3>
 					<div className='address'>
@@ -140,7 +139,7 @@ export default function Checkout() {
 					</div>
 				</div>
 
-				{/* Delivery Options */}
+
 				<div className='delivery-options'>
 					<h3>Delivery options</h3>
 					<div
@@ -175,7 +174,7 @@ export default function Checkout() {
 					</div>
 				</div>
 
-				{/* Payment */}
+
 				<div className='payment-section'>
 					<h3>Payment</h3>
 					<div className='payment-options'>
@@ -202,13 +201,13 @@ export default function Checkout() {
 					</div>
 				</div>
 
-				{/* Place Order Button */}
+
 				<button className='confirm-order-btn' onClick={handlePlaceOrder}>
 					Place order
 				</button>
 			</div>
 
-			{/* Right Sidebar - Order Summary */}
+
 			<div className='checkout-right'>
 				<OrderRestaurant restaurant={currentOrder.restaurant} />
 				<div className='order-summary'>
@@ -216,14 +215,14 @@ export default function Checkout() {
 					<CartItems items={currentOrder?.orderItems} />
 				</div>
 
-				{/* Order Total Section including Tip */}
+
 				<div className='order-total'>
 					<h3>Order total</h3>
 					<p>Subtotal: ${subtotal.toFixed(2)}</p>
 					<p>Delivery Fee: ${deliveryFee.toFixed(2)}</p>
 					<p>Taxes & Other Fees: ${taxes.toFixed(2)}</p>
 
-					{/* Tip Selection*/}
+
 					<div className='tip-section'>
 						<h4>
 							Add a tip <span className='tooltip'></span>
