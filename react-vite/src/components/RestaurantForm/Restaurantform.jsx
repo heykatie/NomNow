@@ -1,19 +1,35 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { createRestaurant } from '../../redux/restaurants';
-
+import { useParams, useNavigate } from 'react-router-dom';
+import { createRestaurant, updateRestaurant, getRestaurant } from '../../redux/restaurants';
+import './RestaurantForm.css'
 const CUISINE_TYPES = [
-    "American", "Chinese", "Italian", "Japanese", "Mexican", "Indian", 
-    "Thai", "Mediterranean", "Korean", "Vietnamese", "Greek", "Spanish",
-    "Seafood", "Pizza", "Vegetarian", "Vegan", "Breakfast", "Fast Food",
-    "Caribbean", "Soul Food"
+    "AMERICAN", "CHINESE", "ITALIAN", "JAPANESE", "MEXICAN", "INDIAN",
+    "THAI", "MEDITERRANEAN", "KOREAN", "VIETNAMESE", "GREEK", "SPANISH",
+    "SEAFOOD", "PIZZA", "VEGETARIAN", "VEGAN", "BREAKFAST", "FAST_FOOD",
+    "CARIBBEAN", "SOUL_FOOD"
 ];
 
-const PRICE_LEVELS = ["$", "$$", "$$$", "$$$$"];
+const formatCuisineType = (type) => {
+    return type.split('_')
+              .map(word => word.charAt(0) + word.slice(1).toLowerCase())
+              .join(' ');
+};
+const PRICE_LEVELS = {
+    "INEXPENSIVE": "$",
+    "MODERATE": "$$",
+    "EXPENSIVE": "$$$",
+    "VERY_EXPENSIVE": "$$$$"
+};
 
-export default function CreateRestaurant() {
+export default function RestaurantForm() {
+    const { id } = useParams(); // Get restaurant ID if editing
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const error = useSelector((state) => state.restaurants.error);
+    const currentRestaurant = useSelector((state) => state.restaurants.currentRestaurant);
+    const isEditMode = Boolean(id);
+
     const [formData, setFormData] = useState({
         name: '',
         description: '',
@@ -31,6 +47,35 @@ export default function CreateRestaurant() {
     });
     const [isLoading, setIsLoading] = useState(false);
 
+    // Fetch restaurant data if in edit mode
+    useEffect(() => {
+        if (isEditMode) {
+            dispatch(getRestaurant(id));
+        }
+    }, [dispatch, id, isEditMode]);
+
+    // Populate form when editing and data is available
+    useEffect(() => {
+        if (isEditMode && currentRestaurant?.restaurant) {
+            const restaurant = currentRestaurant.restaurant;
+            setFormData({
+                name: restaurant.name || '',
+                description: restaurant.description || '',
+                address: restaurant.address || '',
+                city: restaurant.city || '',
+                state: restaurant.state || '',
+                zip: restaurant.zip || '',
+                cuisine_type: restaurant.cuisineType || '',
+                delivery_fee: restaurant.deliveryFee || '',
+                business_hours: restaurant.businessHours || '',
+                servicing: restaurant.servicing !== undefined ? restaurant.servicing : true,
+                store_image: null, // Can't pre-fill file input
+                price_level: restaurant.priceLevel || '',
+                delivery_time: restaurant.deliveryTime || ''
+            });
+        }
+    }, [currentRestaurant, isEditMode]);
+
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
         setFormData(prev => ({
@@ -46,45 +91,45 @@ export default function CreateRestaurant() {
         }));
     };
 
+    
     const handleSubmit = async (e) => {
         e.preventDefault();
         setIsLoading(true);
-
+    
         try {
             const submitData = new FormData();
+            
             Object.keys(formData).forEach(key => {
-                if (formData[key] !== null && formData[key] !== '') {
+                if (key === 'store_image') {
+                    if (formData[key] instanceof File) {
+                        submitData.append(key, formData[key]);
+                    }
+                } else if (formData[key] !== null && formData[key] !== '') {
+                    // Send the enum key directly for price_level
                     submitData.append(key, formData[key]);
                 }
             });
-
-            await dispatch(createRestaurant(submitData));
-            // Reset form after successful submission
-            setFormData({
-                name: '',
-                description: '',
-                address: '',
-                city: '',
-                state: '',
-                zip: '',
-                cuisine_type: '',
-                delivery_fee: '',
-                business_hours: '',
-                servicing: true,
-                store_image: null,
-                price_level: '',
-                delivery_time: ''
-            });
+    
+            if (isEditMode) {
+                const result = await dispatch(updateRestaurant(id, submitData));
+                if (result) {
+                    navigate('/restaurants/manage');
+                }
+            } else {
+                const result = await dispatch(createRestaurant(submitData));
+                if (result) {
+                    navigate('/restaurants/manage');
+                }
+            }
         } catch (err) {
-            console.error('Failed to create restaurant:', err);
+            console.error(isEditMode ? 'Failed to update restaurant:' : 'Failed to create restaurant:', err);
         } finally {
             setIsLoading(false);
         }
     };
-
     return (
-        <div className='create-restaurant-container'>
-            <h2>Create New Restaurant</h2>
+        <div className='restaurant-form-container'>
+            <h2>{isEditMode ? 'Update Restaurant' : 'Create New Restaurant'}</h2>
             
             {error && <div className='error-message'>{error}</div>}
             
@@ -171,7 +216,7 @@ export default function CreateRestaurant() {
                     >
                         <option value="">Select cuisine type</option>
                         {CUISINE_TYPES.map(type => (
-                            <option key={type} value={type}>{type}</option>
+                            <option key={type} value={type}>{formatCuisineType(type)}</option>
                         ))}
                     </select>
                 </div>
@@ -186,12 +231,11 @@ export default function CreateRestaurant() {
                         required
                     >
                         <option value="">Select price level</option>
-                        {PRICE_LEVELS.map(level => (
-                            <option key={level} value={level}>{level}</option>
+                        {Object.entries(PRICE_LEVELS).map(([key, value]) => (
+                            <option key={key} value={key}>{value}</option>
                         ))}
                     </select>
                 </div>
-
                 <div className='form-group'>
                     <label htmlFor="delivery_fee">Delivery Fee</label>
                     <input
@@ -256,7 +300,8 @@ export default function CreateRestaurant() {
                     disabled={isLoading}
                     className='submit-btn'
                 >
-                    {isLoading ? 'Creating...' : 'Create Restaurant'}
+                    {isLoading ? (isEditMode ? 'Updating...' : 'Creating...') : 
+                              (isEditMode ? 'Update Restaurant' : 'Create Restaurant')}
                 </button>
             </form>
         </div>

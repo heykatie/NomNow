@@ -7,7 +7,8 @@ const CREATE_RESTAURANT = 'CREATE_RESTAURANT';
 const UPDATE_RESTAURANT = 'UPDATE_RESTAURANT';
 const DELETE_RESTAURANT = 'DELETE_RESTAURANT';
 const RESTAURANT_ERROR = 'RESTAURANT_ERROR';
-// actions/restaurants.js
+const REACTIVATE_RESTAURANT = 'REACTIVATE_RESTAURANT';
+//actions/restaurants.js
 export const fetchUserRestaurants = (userId) => async (dispatch) => {
     const response = await fetch(`/api/restaurants/current`);
     if (response.ok) {
@@ -15,6 +16,8 @@ export const fetchUserRestaurants = (userId) => async (dispatch) => {
       dispatch({ type: 'SET_USER_RESTAURANTS', payload: data.restaurants });
     }
   };
+
+
 // Get all restaurants (owned by current user)
 export const getUserRestaurants = () => async (dispatch) => {
     try {
@@ -75,52 +78,83 @@ export const createRestaurant = (formData) => async (dispatch) => {
 // Update an existing restaurant
 export const updateRestaurant = (id, formData) => async (dispatch) => {
     try {
-        const response = await fetch(`/api/restaurants/${id}`, {
+        // Ensure price_level is in the correct format
+        const priceLevel = formData.get('price_level');
+        if (priceLevel) {
+            formData.set('price_level', priceLevel); // Keep the $ signs
+        }
+
+        // Ensure cuisine_type is in uppercase
+        const cuisineType = formData.get('cuisine_type');
+        if (cuisineType) {
+            formData.set('cuisine_type', cuisineType.toUpperCase());
+        }
+
+        const response = await fetch(`/api/manage/${id}`, {
             method: 'PUT',
             body: formData
+        });
+        
+        if (!response.ok) {
+            const data = await response.json();
+            throw new Error(data.message || data.errors?.[0] || 'Failed to update restaurant');
+        }
+
+        const data = await response.json();
+        dispatch({ type: UPDATE_RESTAURANT, payload: data.restaurant });
+        return data;
+    } catch (error) {
+        dispatch({ type: RESTAURANT_ERROR, payload: error.message });
+        throw error;
+    }
+};
+//Delete restaurant
+export const deleteRestaurant = (id, deleteType) => async (dispatch) => {
+    try {
+        const response = await fetch(`/api/manage/${id}?type=${deleteType}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
         
         const data = await response.json();
         
         if (!response.ok) {
-            throw new Error(data.errors);
+            throw new Error(data.message || 'Failed to delete restaurant');
         }
 
-        dispatch({ type: UPDATE_RESTAURANT, payload: data.restaurant });
-        return data.restaurant;
+        dispatch({ type: DELETE_RESTAURANT, payload: id });
+        return true;
     } catch (error) {
         dispatch({ type: RESTAURANT_ERROR, payload: error.message });
         throw error;
     }
 };
 
-
-// Delete a restaurant
-export const deleteRestaurant = (id) => async (dispatch) => {
+// Specific action for reactivating a restaurant
+export const reactivateRestaurant = (id) => async (dispatch) => {
     try {
-        const response = await fetch(`/api/restaurants/${id}`, {
-            method: 'DELETE'
+        const response = await fetch(`/api/manage/${id}/reactivate`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
         
-        if (!response.ok) {
-            const data = await response.json();
-            throw new Error(data.errors?.[0] || 'Failed to delete restaurant');
-        }
-
         const data = await response.json();
         
-        if (data.id) {
-            dispatch({ type: DELETE_RESTAURANT, payload: data.id });
-            return true; // Return success
-        } else {
-            throw new Error('Invalid response from server');
+        if (!response.ok) {
+            throw new Error(data.message || 'Failed to reactivate restaurant');
         }
+
+        dispatch({ type: REACTIVATE_RESTAURANT, payload: data });
+        return data;
     } catch (error) {
         dispatch({ type: RESTAURANT_ERROR, payload: error.message });
-        throw error; // Re-throw to handle in component
+        throw error;
     }
 };
-
 // ---- Reducer
 
 const initialState = {
@@ -161,7 +195,7 @@ const restaurantReducer = (state = initialState, action) => {
                 restaurants: [...state.restaurants, action.payload],
                 error: null
             };
-            
+        case REACTIVATE_RESTAURANT:
         case UPDATE_RESTAURANT:
             return {
                 ...state,

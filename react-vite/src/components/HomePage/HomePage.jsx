@@ -123,7 +123,7 @@ function HomePage() {
                                     </span>
                                 </div>
                                 <div className='restaurant-tags'>
-                                    <span className='cuisine-type'>{restaurant.cuisineType}</span>
+                                    <span className='cuisine-type'>{restaurant.cuisineType.toLowerCase()}</span>
                                     <span className='price-level'>{restaurant.priceLevel}</span>
                                 </div>
                                 {restaurant.description && (
