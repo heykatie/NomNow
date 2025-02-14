@@ -67,7 +67,7 @@ export default function CartItems({ items }) {
 									e.stopPropagation();
 									handleDecrease(item);
 								}}>
-								{item.quantity > 1 ? <FaMinus /> : <FaTrash />}
+								{item.quantity > 1 ? <FaMinus color='black'/> : <FaTrash />}
 							</button>
 							<span className='cart-item-quantity'>
 								{item.quantity || 1}
