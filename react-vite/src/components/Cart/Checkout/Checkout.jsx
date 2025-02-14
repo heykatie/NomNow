@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useModal } from '../../../context/Modal';
 import TipModal from '../../../context/TipModal';
 import ScheduleModal from '../../../context/ScheduleModal';
-import { loadUserOrder, placeOrder, deleteOrder } from '../../../redux/orders';
+import { placeOrder, deleteOrder } from '../../../redux/orders';
 import { deductFundsThunk } from '../../../redux/session';
 import OrderRestaurant from '../../Orders/OrderRestaurant';
 import CartItems from '../CartItems';
