@@ -58,9 +58,9 @@ const MenuItemDetail = () => {
 
   return (
     <div className="menu-item-detail-container">
-      <button className="back-button" onClick={() => navigate('/menu-items')}>
-        Back to Menu Items List
-      </button>
+     <button className="back-button" onClick={() => navigate('/menu-items')}>
+  <span className="back-arrow">←</span> Back to Item List
+</button>
 
       <div className="menu-item-detail">
         <div>
@@ -83,14 +83,14 @@ const MenuItemDetail = () => {
 
           {user && (
             <>
-              <div className="quantity-selector">
+              {/* <div className="quantity-selector">
                 <button onClick={decreaseQuantity}>-</button>
                 <span>{quantity}</span>
                 <button onClick={increaseQuantity}>+</button>
-              </div>
+              </div> */}
 
               <button className="add-to-cart-button" onClick={handleAddToCart}>
-                + Add {quantity} to Cart
+                Add to Cart
               </button>
 
               {message && <p className="confirmation-message">{message}</p>}

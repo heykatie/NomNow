@@ -59,7 +59,7 @@ const MenuItemList = () => {
 		<div className="menu-item-list">
 			{user && (
 				<Link to='/menu-items/new'>
-					<button className="menu-item-list__create-button">Create New Menu Item</button>
+					<button className="menu-item-list__create-button">Create a New Menu Item</button>
 				</Link>
 			)}
 
