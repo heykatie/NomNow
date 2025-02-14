@@ -1,4 +1,3 @@
-import { csrfFetch } from './csrf';
 import { setError } from './errors';
 import { createOrder } from './orders';
 
@@ -6,8 +5,6 @@ const ADD_TO_CART = 'cart/addToCart';
 const REMOVE_FROM_CART = 'cart/removeFromCart';
 const UPDATE_CART_ITEM = 'cart/updateCartItem';
 const CLEAR_CART = 'cart/clearCart';
-
-
 
 const addCartItem = (item) => ({
 	type: ADD_TO_CART,
@@ -31,42 +28,39 @@ const clearCartItems = () => ({
 export const getCart = (state) => state.cart.cartItems;
 
 export const addToCart =
-	(menuItemId, quantity = 1) =>
-	async (dispatch) => {
-		try {
-			const response = await csrfFetch('/api/cart', {
-				method: 'POST',
-				body: JSON.stringify({ menu_item_id: menuItemId, quantity }),
-			});
-			if (!response.ok) throw response;
+	(menuItem, quantity = 1) =>
+	(dispatch, getState) => {
+		const state = getState();
+		const existingItem = state.cart.cartItems.find(
+			(item) => item.id === menuItem.id
+		);
 
-			const data = await response.json();
-			dispatch(addCartItem(data));
-		} catch (error) {
-			const errorMessage = await error.json();
-			dispatch(setError(errorMessage.errors));
+		if (existingItem) {
+			dispatch(
+				updateItemQuantity(menuItem.id, existingItem.quantity + quantity)
+			);
+		} else {
+			dispatch(addCartItem({ ...menuItem, quantity }));
 		}
 	};
 
-export const removeFromCart = (menuItemId) => async (dispatch) => {
-	try {
-		const response = await csrfFetch(`/api/cart/${menuItemId}`, {
-			method: 'DELETE',
-		});
-		if (!response.ok) throw response;
-
-		dispatch(removeCartItem(menuItemId));
-	} catch (error) {
-		const errorMessage = await error.json();
-		dispatch(setError(errorMessage.errors));
-	}
+export const removeFromCart = (menuItemId) => (dispatch) => {
+	dispatch(removeCartItem(menuItemId));
 };
 
-export const updateItemQuantity = (menuItemId, quantity) => (dispatch) => {
-	dispatch(updateCartItem(menuItemId, quantity));
-};
+export const updateItemQuantity =
+	(menuItemId, quantity) => (dispatch, getState) => {
+		const state = getState();
+		const existingItem = state.cart.cartItems.find(
+			(item) => item.id === menuItemId
+		);
 
-export const checkoutCart = () => async (dispatch, getState) => {
+		if (existingItem) {
+			dispatch(updateCartItem(menuItemId, quantity));
+		}
+	};
+
+export const checkoutCart = () => (dispatch, getState) => {
 	const state = getState();
 	const cartItems = state.cart.cartItems;
 
@@ -81,21 +75,12 @@ export const checkoutCart = () => async (dispatch, getState) => {
 		quantity: item.quantity,
 	}));
 
-	await dispatch(createOrder({ restaurant_id: restaurantId, items }));
+	dispatch(createOrder({ restaurant_id: restaurantId, items }));
+	// dispatch(clearCartItems()); // Clear cart after checkout
 };
 
-export const clearCart = () => async (dispatch) => {
-	try {
-		const response = await csrfFetch('/api/cart/clear', {
-			method: 'DELETE',
-		});
-		if (!response.ok) throw response;
-
-		dispatch(clearCartItems());
-	} catch (error) {
-		const errorMessage = await error.json();
-		dispatch(setError(errorMessage.errors));
-	}
+export const clearCart = () => (dispatch) => {
+	dispatch(clearCartItems());
 };
 
 const initialState = {
@@ -106,6 +91,7 @@ export default function cartReducer(state = initialState, action) {
 	switch (action.type) {
 		case ADD_TO_CART:
 			return { ...state, cartItems: [...state.cartItems, action.payload] };
+
 		case REMOVE_FROM_CART:
 			return {
 				...state,
@@ -113,6 +99,7 @@ export default function cartReducer(state = initialState, action) {
 					(item) => item.id !== action.payload
 				),
 			};
+
 		case UPDATE_CART_ITEM:
 			return {
 				...state,
@@ -122,8 +109,10 @@ export default function cartReducer(state = initialState, action) {
 						: item
 				),
 			};
+
 		case CLEAR_CART:
 			return { ...state, cartItems: [] };
+
 		default:
 			return state;
 	}
