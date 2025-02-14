@@ -210,10 +210,10 @@ export default function Checkout() {
 
 			{/* Right Sidebar - Order Summary */}
 			<div className='checkout-right'>
-				<OrderRestaurant />
+				<OrderRestaurant restaurant={currentOrder.restaurant} />
 				<div className='order-summary'>
 					<h4>Cart summary ({currentOrder?.orderItems?.length} item/s)</h4>
-					<CartItems/>
+					<CartItems items={currentOrder?.orderItems} />
 				</div>
 
 				{/* Order Total Section including Tip */}

@@ -1,5 +1,6 @@
 import { csrfFetch } from './csrf';
 import { setError } from './errors';
+import { createOrder } from './orders';
 
 // Action Types
 const ADD_TO_CART = 'cart/addToCart';
@@ -23,6 +24,8 @@ const clearCartItems = () => ({
 });
 
 // Thunks
+
+export const getCart = (state) => state.cart.cartItems;
 
 export const addToCart =
 	(menuItemId, quantity = 1) =>
@@ -54,6 +57,27 @@ export const removeFromCart = (menuItemId) => async (dispatch) => {
 		const errorMessage = await error.json();
 		dispatch(setError(errorMessage.errors));
 	}
+};
+
+
+export const checkoutCart = () => async (dispatch, getState) => {
+	const state = getState();
+	const cartItems = state.cart.cartItems;
+
+	if (cartItems.length === 0) {
+		console.warn('Cart is empty, cannot proceed to checkout.');
+		return;
+	}
+
+	const restaurantId = cartItems[0]?.restaurant_id;
+	const items = cartItems.map((item) => ({
+		menu_item_id: item.id,
+		quantity: item.quantity,
+	}));
+
+	await dispatch(createOrder({ restaurant_id: restaurantId, items }));
+
+	dispatch(clearCart());
 };
 
 export const clearCart = () => async (dispatch) => {

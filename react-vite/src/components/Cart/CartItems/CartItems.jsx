@@ -2,7 +2,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import './CartItems.css';
 
-export default function CartItems() {
+export default function CartItems({ items }) {
 	const navigate = useNavigate();
 	const handleCartItemClick = (menuItemId) => {
 		if (menuItemId) {
@@ -10,12 +10,12 @@ export default function CartItems() {
 		}
 	};
 
-	const currentOrder = useSelector((state) => state.orders.currentOrder);
+	// const currentOrder = useSelector((state) => state.orders.currentOrder);
 
 	return (
 		<div className='cart-items-container'>
-			{currentOrder?.orderItems && currentOrder.orderItems.length > 0 ? (
-				currentOrder.orderItems.map((item) => (
+			{items && items.length > 0 ? (
+				items.map((item) => (
 					<div
 						key={item.id}
 						className='cart-item'
