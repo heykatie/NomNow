@@ -25,7 +25,7 @@ export default function CartItems() {
 						}}>
 						{/* Item Image */}
 						<img
-							src={item.image || '/default-placeholder.png'}
+							src={item.food_image || '/images/cart.jpeg'}
 							alt={item.name || 'Menu Item'}
 							className='cart-item-image'
 						/>
