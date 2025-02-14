@@ -3,7 +3,7 @@ import './OrderItems.css';
 
 export default function OrderItems({ item }) {
 	const navigate = useNavigate();
-	const handleMenuItemClick = (menuItemId) => {
+	const handleOrderItemClick = (menuItemId) => {
 		if (menuItemId) {
 			navigate(`/menu-items/${menuItemId}`);
 		}
@@ -14,7 +14,7 @@ export default function OrderItems({ item }) {
 			className='order-item'
 			onClick={(e) => {
 				e.stopPropagation();
-				handleMenuItemClick(item.menu_item_id);
+				handleOrderItemClick(item.menu_item_id);
 			}}
 			style={{
 				cursor: 'pointer',

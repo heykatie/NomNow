@@ -213,7 +213,7 @@ export default function Checkout() {
 				<OrderRestaurant />
 				<div className='order-summary'>
 					<h4>Cart summary ({currentOrder?.orderItems?.length} item/s)</h4>
-					<CartItems />
+					<CartItems/>
 				</div>
 
 				{/* Order Total Section including Tip */}

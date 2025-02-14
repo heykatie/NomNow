@@ -39,12 +39,6 @@ export default function Orders() {
 		}
 	};
 
-	const handleMenuItemClick = (menuItemId) => {
-		if (menuItemId) {
-			navigate(`/menu-items/${menuItemId}`);
-		}
-	};
-
 	// Handle "Rate your order" button
 	const handleRateOrder = (orderId, restaurantId, restaurantName) => {
 		navigate(
