@@ -4,7 +4,7 @@ import CartItems from "../../Cart/CartItems";
 export default function Order({items}) {
   return (
 		<div>
-			<OrderRestaurant restaurant={items.restaurant.id} />
+			<OrderRestaurant restaurant={items.item.restaurant.id} />
       <CartItems items={items} />
 		</div>
   );

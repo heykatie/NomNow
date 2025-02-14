@@ -7,8 +7,8 @@ import Order from '../Orders/Order';
 import './Cart.css';
 
 export default function Cart() {
-	const currentOrder = useSelector((store) => store.orders.currentOrder);
-	const cartItems = useSelector(getCart) || currentOrder?.orderItems || [];
+	// const currentOrder = useSelector((store) => store.orders.currentOrder);
+	const cartItems = useSelector((store) => store.cart.cartItems) || [];
 	const [isOpen, setIsOpen] = useState(false);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
@@ -43,7 +43,7 @@ export default function Cart() {
 
 				{/* Render `Order` component if cart has items */}
 				{cartItems.length > 0 ? (
-					<Order order={{ orderItems: cartItems }} />
+					<Order items={cartItems } />
 				) : (
 					<div className='empty-cart'>
 						<img
