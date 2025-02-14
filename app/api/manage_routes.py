@@ -71,14 +71,11 @@ def update_my_restaurant(restaurant_id):
             restaurant.business_hours = form.data['business_hours']
             restaurant.servicing = form.data['servicing']
             restaurant.description = form.data['description']
+            restaurant.store_image = form.data['store_image']
             restaurant.price_level = price_level
             restaurant.delivery_time = form.data['delivery_time']
             
-            if 'store_image' in request.files:
-                file = request.files['store_image']
-                if file and file.filename:
-                    # Add your file handling logic here
-                    pass
+     
 
             db.session.commit()
             return jsonify({"restaurant": restaurant.to_dict()}), 200
