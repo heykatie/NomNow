@@ -2,7 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 import { useDispatch} from "react-redux";
 import { thunkLogout } from "../../redux/session";
 import { NavLink, useNavigate, useLocation } from "react-router-dom";
-// import OpenModalMenuItem from "./OpenModalMenuItem";
+import OpenModalMenuItem from "./OpenModalMenuItem";
+import SignupFormModal from "../SignupFormModal"
 // import { useModal } from "../../context/Modal";
 import "./Navigation.css";
 
@@ -358,10 +359,17 @@ function DropdownMenu({ user }) {
 							</div>
 							</li>
 							<li className='user-li'>
-								<NavLink to='/orders' className='y' onClick={closeMenu}>
-									<i class="fa-sharp fa-solid fa-suitcase-rolling"></i>
-									Orders
-								</NavLink>
+								<label htmlFor="mdbt">
+									<NavLink to='/orders' className='y' onClick={closeMenu}>
+										<i class="fa-sharp fa-solid fa-suitcase-rolling"></i>
+										Orders
+									</NavLink>
+									<OpenModalMenuItem 
+										className='mdbt'
+										modalComponent={SignupFormModal}
+									/>
+								</label>
+								
 							</li>
 							<li className='user-li'>
 								<NavLink to='/favorites' className='y' onClick={closeMenu}>

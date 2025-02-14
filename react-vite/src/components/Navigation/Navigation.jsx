@@ -35,6 +35,8 @@ function Navigation() {
 	}
 	const setGuest = async (e) => {
 		e.preventDefault();
+		return alert('Feature Coming Soon')
+
 		const split = address.split(',')
 		if(split.length !== 4){
 			return setErrors({
