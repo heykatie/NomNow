@@ -40,7 +40,7 @@
 }
 
 /* Button styles for all buttons */
-:where(button) {
+.review-buttons {
   margin-right: 10px;
   padding: 10px 15px;
   background-color: rgb(0, 0, 0);
@@ -52,7 +52,7 @@
   transition: background-color 0.2s, color 0.2s;
 }
 
-:where(button):hover {
+.review-buttons:hover {
   background-color: #333333d0;
   color: white;
 }
