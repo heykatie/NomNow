@@ -1,106 +1,152 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { getRestaurant } from '../../redux/restaurants';
-import { getMenuItems } from '../../redux/menuItems'; // Import the menu items action
+import { getMenuItems } from '../../redux/menuItems';
+import { addToCart } from '../../redux/cart';
+import './RestaurantDetail.css'
 
 function RestaurantDetail() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { id } = useParams();
     const { currentRestaurant, error } = useSelector(state => state.restaurants);
-    const { menuItems } = useSelector(state => state.menuItems); // Get menu items from Redux store
+    const [deliveryMethod, setDeliveryMethod] = useState('delivery');
+    const { menuItems } = useSelector(state => state.menuItems);
+    const user = useSelector(state => state.session.user);
 
     useEffect(() => {
         if (id) {
             dispatch(getRestaurant(id));
-            dispatch(getMenuItems()); // Fetch all menu items
+            dispatch(getMenuItems());
         }
     }, [dispatch, id]);
-
-    // Debug logs
-    console.log("Current Restaurant Data:", currentRestaurant);
-    console.log("Menu Items:", menuItems);
-    console.log("Error State:", error);
 
     if (error) return <div>Error: {error}</div>;
     if (!currentRestaurant?.restaurant) return <div>Loading...</div>;
 
-    // Access the nested restaurant data
     const restaurant = currentRestaurant.restaurant;
-
-    // Filter menu items for this restaurant
     const restaurantMenuItems = menuItems.filter(item => item.restaurantId === parseInt(id));
 
+    const handleAddToCart = (item) => {
+        if (!user) {
+            alert('You must be logged in to add items to the cart!');
+            return;
+        }
+
+        const orderData = {
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            restaurantId: item.restaurantId,
+            food_image: item.food_image,
+            quantity: 1,
+        };
+
+        dispatch(addToCart(orderData));
+    };
+
     return (
-			<div>
-				{/* Header Image */}
-				<div>
-					<img src={restaurant.storeImage} alt={restaurant.name} />
-				</div>
+        <div className="restaurant-detail">
+            {/* Header Image */}
+            <div className="restaurant-hero">
+                <img src={restaurant.storeImage} alt={restaurant.name} />
+            </div>
+    
+            {/* Restaurant Name and Search Section */}
+            <div className="restaurant-info-section">
+            <div className="restaurant-main-info">
+                    <h1>{restaurant.name}</h1>
+                    <div className="restaurant-details">
+                        <span>{restaurant.deliveryTime} min</span>
+                        <span>{restaurant.priceLevel}</span>
+                        <span className="tag">{restaurant.cuisineType}</span>
+                    </div>
+                    <div className="location-hours">
+                        <p>{restaurant.address}, {restaurant.city}, {restaurant.state} {restaurant.zip}</p>
+                        <p className="business-hours-top">{restaurant.businessHours}</p>
+                    </div>
+                </div>
+                
+                <div className="search-section">
+                    <input 
+                        type="search" 
+                        className="search-input"
+                        placeholder={`Search in ${restaurant.name || 'restaurant'}`}
+                    />
+                </div>
+            </div>
+    
+            {/* Delivery Options */}
+            <div className="delivery-header">
+                <div className="delivery-toggle" data-active={deliveryMethod}>
+                    <button 
+                        className={deliveryMethod === 'delivery' ? 'active' : ''} 
+                        onClick={() => setDeliveryMethod('delivery')}
+                    >
+                        Delivery
+                    </button>
+                    <button 
+                        className={deliveryMethod === 'pickup' ? 'active' : ''} 
+                        onClick={() => setDeliveryMethod('pickup')}
+                    >
+                        Pickup
+                    </button>
+                    <div className="slider"></div>
+                </div>
 
-				{/* Restaurant Name and Search Section */}
-				<div>
-					<div>
-						<h1>{restaurant.name}</h1>
-						<div>
-							<span>{restaurant.deliveryTime} min</span>
-							<span>{restaurant.priceLevel}</span>
-							<span>{restaurant.cuisineType}</span>
-						</div>
-						<p>
-							{restaurant.address}, {restaurant.city}, {restaurant.state}{' '}
-							{restaurant.zip}
-						</p>
-					</div>
+                <button className="group-order-btn">
+                    <span className="icon">👥</span>
+                    Group order
+                </button>
 
-					<div>
-						<input
-							type='search'
-							placeholder={`Search in ${
-								restaurant.name || 'restaurant'
-							}`}
-						/>
-					</div>
-				</div>
+                <div className="delivery-info">
+                    <div className="info-item">
+                        <span className="delivery-fee">${restaurant.deliveryFee ? `${restaurant.deliveryFee} Delivery Fee on $15+` : '$0 Delivery Fee on $15+'}</span>
+                        <span className="info-label">Pricing & fees</span>
+                    </div>
 
-				{/* Delivery Options */}
-				<div>
-					<button className='auth-buttons'>
-						Delivery ${restaurant.deliveryFee}
-					</button>
-					<button className='auth-buttons'>Pickup</button>
-					<button className='auth-buttons'>Group order</button>
-				</div>
+                    <div className="info-item">
+                        <span className="arrival-time">{restaurant.deliveryTime} min</span>
+                        <span className="info-label">Earliest arrival</span>
+                    </div>
+                </div>
+            </div>
+    
+            {/* Menu Section */}
+            <div className="menu-section">
+                <h2>Menu</h2>
+                {restaurantMenuItems.length > 0 ? (
+                    <div className="menu-grid">
+                        {restaurantMenuItems.map(item => (
+                            <div key={item.id} className="menu-item">
+                                <Link to={`/menu-items/${item.id}`}>
+                                    <img src={item.food_image} alt={item.name} />
+                                </Link>
+                                <div className="menu-item-info">
+                                    <Link to={`/menu-items/${item.id}`}>
+                                        <h3>{item.name}</h3>
+                                    </Link>
+                                    <p className="price">${item.price}</p>
+                                    <p className="tag">{item.food_type}</p>
+                                    <button
+                                        className="add-to-cart-btn"
+                                        onClick={() => handleAddToCart(item)}
+                                    >
+                                        Add to Cart
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <p>No menu items available</p>
+                )}
+            </div>
 
-				{/* Menu Section */}
-				<div>
-					<h2>Menu</h2>
-					{restaurantMenuItems.length > 0 ? (
-						<div>
-							{restaurantMenuItems.map((item) => (
-								<div key={item.id}>
-									<img src={item.food_image} alt={item.name} />
-									<div>
-										<h3>{item.name}</h3>
-										<p>{item.description}</p>
-										<p>${item.price}</p>
-										<p>Type: {item.food_type}</p>
-									</div>
-								</div>
-							))}
-						</div>
-					) : (
-						<p>No menu items available</p>
-					)}
-				</div>
-
-				{/* Business Hours */}
-				<div>
-					<p>{restaurant.businessHours}</p>
-				</div>
-			</div>
-		);
+        </div>
+    );
 }
 
 export default RestaurantDetail;
