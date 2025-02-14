@@ -117,6 +117,12 @@ function DropdownMenu({ user }) {
 							</NavLink>
 						</li>
 						<li className='user-li'>
+							<NavLink to='/reviews' className='y' onClick={closeMenu}>
+								<i class='fa-sharp fa-solid fa-wallet'></i>
+								Reviews
+							</NavLink>
+						</li>
+						<li className='user-li'>
 							<NavLink
 								to='/menu-items'
 								className='y'
@@ -209,6 +215,15 @@ function DropdownMenu({ user }) {
 										onClick={closeMenu}>
 										<i class='fa-sharp fa-solid fa-wallet'></i>
 										Wallet
+									</NavLink>
+								</li>
+								<li className='user-li'>
+									<NavLink
+										to='/reviews'
+										className='y'
+										onClick={closeMenu}>
+										<i class='fa-sharp fa-solid fa-wallet'></i>
+										Reviews
 									</NavLink>
 								</li>
 								<li>
