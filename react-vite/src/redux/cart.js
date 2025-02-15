@@ -19,7 +19,7 @@ const loadCartFromStorage = (userId) => {
 // 	return storedCart ? JSON.parse(storedCart) : [];
 // };
 
-const loadCart = (items) => ({
+export const loadCart = (items) => ({
 	type: 'LOAD_CART',
 	payload: items,
 });
@@ -54,20 +54,23 @@ const clearCartItems = () => ({
 // export const getCart = (state) => state.cart?.cartItems || [];
 
 export const getCart = (userId) => (dispatch) => {
-	const storedCart = localStorage.getItem(CART_STORAGE_KEY(userId));
-	const cartItems = storedCart ? JSON.parse(storedCart) : [];
+	if (!userId) return;
 
-	dispatch(loadCart);
+	const storedCart =
+		JSON.parse(localStorage.getItem(`cartItems_${userId}`)) || [];
+	dispatch(loadCart(storedCart));
 };
 
 export const addToCart =
 	(menuItem, quantity = 1) =>
 	(dispatch, getState) => {
 		const state = getState();
+		const userId = state.session?.user?.id || 'guest';
 		const existingItem = state.cart.cartItems.find(
 			(item) => item.id === menuItem.id
 		);
 
+		let updatedCart;
 		if (existingItem) {
 			dispatch(
 				updateItemQuantity(menuItem.id, existingItem.quantity + quantity)
@@ -75,6 +78,9 @@ export const addToCart =
 		} else {
 			dispatch(addCartItem({ ...menuItem, quantity }));
 		}
+
+		updatedCart = [...state.cart.cartItems, { ...menuItem, quantity }];
+		saveCartToStorage(updatedCart, userId);
 	};
 
 export const removeFromCart = (menuItemId) => (dispatch) => {
@@ -84,12 +90,19 @@ export const removeFromCart = (menuItemId) => (dispatch) => {
 export const updateItemQuantity =
 	(menuItemId, quantity) => (dispatch, getState) => {
 		const state = getState();
+		const userId = state.session?.user?.id || 'guest';
 		const existingItem = state.cart.cartItems.find(
 			(item) => item.id === menuItemId
 		);
 
 		if (existingItem) {
 			dispatch(updateCartItem(menuItemId, quantity));
+
+			const updatedCart = state.cart.cartItems.map((item) =>
+				item.id === menuItemId ? { ...item, quantity } : item
+			);
+
+			saveCartToStorage(updatedCart, userId);
 		}
 	};
 
@@ -133,8 +146,7 @@ export const confirmOrderPlacement = () => (dispatch) => {
 };
 	// dispatch(clearCartItems()); // Clear cart after checkout
 
-export const clearCart = (userId) => (dispatch) => {
-	localStorage.removeItem(CART_STORAGE_KEY(userId));
+export const clearCart = () => (dispatch) => {
 	dispatch(clearCartItems());
 };
 
