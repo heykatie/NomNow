@@ -1,3 +1,6 @@
+/* MyReviews.css */
+
+/* General container */
 .my-reviews-container {
   max-width: 800px;
   margin: auto;
@@ -5,6 +8,7 @@
   text-align: center;
 }
 
+/* Review card styling */
 .review-card {
   background: #fff;
   padding: 15px;
@@ -14,6 +18,25 @@
   text-align: left;
 }
 
+/* Button styles for all buttons (matching the black button style) */
+.review-buttons {
+  margin-right: 10px;
+  padding: 10px 15px;
+  background-color: rgb(0, 0, 0); /* Black background */
+  color: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.review-buttons:hover {
+  background-color: #333333d0; /* Darker on hover */
+  color: white;
+}
+
+/* Styling for other review-related elements */
 .restaurant-name {
   cursor: pointer;
   color: #1E88E5;
@@ -30,6 +53,7 @@
   color: #777;
 }
 
+/* Actions section */
 .my-reviews-actions {
   display: flex;
   justify-content: flex-end;
@@ -50,4 +74,11 @@
 .review-delete-btn {
   background: #D32F2F;
   color: white;
+}
+
+/* Small heading style for the additional info */
+.small-heading {
+  font-size: 16px;
+  color: rgba(22, 255, 1, 0.562); /* Green text color */
+  margin-top: 10px;
 }
