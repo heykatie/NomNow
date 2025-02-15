@@ -37,6 +37,8 @@
 }
 
 .my-reviews-actions button {
+  background: #D32F2F;
+  color: white;
   padding: 8px 12px;
   border: none;
   cursor: pointer;
@@ -47,7 +49,3 @@
   opacity: 0.8;
 }
 
-.review-delete-btn {
-  background: #D32F2F;
-  color: white;
-}

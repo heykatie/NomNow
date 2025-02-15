@@ -21,112 +21,117 @@ import RestaurantDetail from '../components/RestaurantDetail';
 import RestaurantForm from '../components/RestaurantForm/Restaurantform';
 import RestaurantMenuManager from '../components/RestaurantMenuManager';
 import MyReviews from '../components/Reviews/MyReviews';
+import PrivateRoute from '../components/Reviews/PrivateRoute';  // Import the PrivateRoute component
 
 export const router = createBrowserRouter([
-	{
-		element: <Layout />,
-		children: [
-			{
-				path: '/',
-				element: <LandingPage />,
-			},
-			{
-				path: 'login',
-				element: <LoginFormPage isLogin={true} />,
-			},
-			{
-				path: 'signup',
-				element: <LoginFormPage isSignup={true} />,
-			},
-			{
-				path: 'account',
-				element: <AccountFormPage />,
-			},
-			{
-				path: 'account/name',
-				element: <NameFormPage />,
-			},
-			{
-				path: 'account/phone',
-				element: <PhoneNumberPage />,
-			},
-			{
-				path: 'account/email',
-				element: <EmailPage />,
-			},
-			{
-				path: 'wallet',
-				element: <WalletPage />,
-			},
-			{
-				path: 'orders',
-				element: <Orders />,
-			},
-			{
-				path: 'reviews/restaurant/:restaurantId', // Updated path from 627f183
-				element: <Reviews />,
-			},
-			{
-				path: '*',
-				element: <h1>Feature Coming Soon!</h1>,
-			},
-			{
-				path: 'menu-items',
-				element: <MenuItemList />,
-			},
-			{
-				path: 'favorites',
-				element: <Favorites />,
-			},
-			{
-				path: 'menu-items/:id',
-				element: <MenuItemDetail />,
-			},
-			{
-				path: 'menu-items/new',
-				element: <MenuItemCreate />,
-			},
-			{
-				path: 'menu-items/:id/update',
-				element: <UpdateMenuItem />,
-			},
-			{
-				path: 'menu-items/:id/delete',
-				element: <DeleteMenuItem />,
-			},
-			{
-				path: 'restaurants/new', // Added from HEAD
-				element: <RestaurantForm />,
-			},
-			{
-				path: 'restaurants/:id/update',
-				element: <RestaurantForm />,
-			},
-			{
-				path: 'restaurants/:id',
-				element: <RestaurantDetail />,
-			},
+  {
+    element: <Layout />,
+    children: [
+      {
+        path: '/',
+        element: <LandingPage />,
+      },
+      {
+        path: 'login',
+        element: <LoginFormPage isLogin={true} />,
+      },
+      {
+        path: 'signup',
+        element: <LoginFormPage isSignup={true} />,
+      },
+      {
+        path: 'account',
+        element: <AccountFormPage />,
+      },
+      {
+        path: 'account/name',
+        element: <NameFormPage />,
+      },
+      {
+        path: 'account/phone',
+        element: <PhoneNumberPage />,
+      },
+      {
+        path: 'account/email',
+        element: <EmailPage />,
+      },
+      {
+        path: 'wallet',
+        element: <WalletPage />,
+      },
+      {
+        path: 'orders',
+        element: <Orders />,
+      },
+      {
+        path: 'reviews/restaurant/:restaurantId', 
+        element: <Reviews />,
+      },
+      {
+        path: '*',
+        element: <h1>Feature Coming Soon!</h1>,
+      },
+      {
+        path: 'menu-items',
+        element: <MenuItemList />,
+      },
+      {
+        path: 'favorites',
+        element: <Favorites />,
+      },
+      {
+        path: 'menu-items/:id',
+        element: <MenuItemDetail />,
+      },
+      {
+        path: 'menu-items/new',
+        element: <MenuItemCreate />,
+      },
+      {
+        path: 'menu-items/:id/update',
+        element: <UpdateMenuItem />,
+      },
+      {
+        path: 'menu-items/:id/delete',
+        element: <DeleteMenuItem />,
+      },
+      {
+        path: 'restaurants/new', // Added from HEAD
+        element: <RestaurantForm />,
+      },
+      {
+        path: 'restaurants/:id/update',
+        element: <RestaurantForm />,
+      },
+      {
+        path: 'restaurants/:id',
+        element: <RestaurantDetail />,
+      },
 
-			{
-				path: 'restaurants/manage', // Added from HEAD
-				element: <ManageRestaurants />,
-			},
-			{
-				path: 'checkout', // Added from HEAD
-				element: <Checkout />,
-			},
-			{
-				path: 'home',
-				element: <HomePage />,
-			},
-			{
-				path: 'restaurants/:restaurantId/menu',
-				element: <RestaurantMenuManager />,
-			},
-			{
-				path: 'reviews',
-				element: <MyReviews />,
-			},
-		],
-	},
+      {
+        path: 'restaurants/manage', // Added from HEAD
+        element: <ManageRestaurants />,
+      },
+      {
+        path: 'checkout', // Added from HEAD
+        element: <Checkout />,
+      },
+      {
+        path: 'home',
+        element: <HomePage />,
+      },
+      {
+        path: 'restaurants/:restaurantId/menu',
+        element: <RestaurantMenuManager />,
+      },
+      {
+        path: 'reviews',
+        element: (
+          <PrivateRoute>
+            <MyReviews />
+          </PrivateRoute>
+        ),
+      },
+    ],
+  },
 ]);
