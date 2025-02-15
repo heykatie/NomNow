@@ -65,10 +65,12 @@ export const addToCart =
 	(menuItem, quantity = 1) =>
 	(dispatch, getState) => {
 		const state = getState();
+		const userId = state.session?.user?.id || 'guest';
 		const existingItem = state.cart.cartItems.find(
 			(item) => item.id === menuItem.id
 		);
 
+		let updatedCart;
 		if (existingItem) {
 			dispatch(
 				updateItemQuantity(menuItem.id, existingItem.quantity + quantity)
@@ -76,6 +78,9 @@ export const addToCart =
 		} else {
 			dispatch(addCartItem({ ...menuItem, quantity }));
 		}
+
+		updatedCart = [...state.cart.cartItems, { ...menuItem, quantity }];
+		saveCartToStorage(updatedCart, userId);
 	};
 
 export const removeFromCart = (menuItemId) => (dispatch) => {
@@ -85,12 +90,19 @@ export const removeFromCart = (menuItemId) => (dispatch) => {
 export const updateItemQuantity =
 	(menuItemId, quantity) => (dispatch, getState) => {
 		const state = getState();
+		const userId = state.session?.user?.id || 'guest';
 		const existingItem = state.cart.cartItems.find(
 			(item) => item.id === menuItemId
 		);
 
 		if (existingItem) {
 			dispatch(updateCartItem(menuItemId, quantity));
+
+			const updatedCart = state.cart.cartItems.map((item) =>
+				item.id === menuItemId ? { ...item, quantity } : item
+			);
+
+			saveCartToStorage(updatedCart, userId);
 		}
 	};
 
