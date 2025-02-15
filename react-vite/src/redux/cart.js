@@ -1,17 +1,28 @@
 import { setError } from './errors';
 import { createOrder } from './orders';
 
+const LOAD_CART = 'cart/loadCart';
 const ADD_TO_CART = 'cart/addToCart';
 const REMOVE_FROM_CART = 'cart/removeFromCart';
 const UPDATE_CART_ITEM = 'cart/updateCartItem';
 const CLEAR_CART = 'cart/clearCart';
-const CART_STORAGE_KEY = 'cartItems';
 
+const CART_STORAGE_KEY = (userId) => `cartItems_${userId || 'guest'}`;
 
-const loadCartFromStorage = () => {
-	const storedCart = localStorage.getItem(CART_STORAGE_KEY);
+const loadCartFromStorage = (userId) => {
+	const storedCart = localStorage.getItem(CART_STORAGE_KEY(userId));
 	return storedCart ? JSON.parse(storedCart) : [];
 };
+
+// const loadCartFromStorage = () => {
+// 	const storedCart = localStorage.getItem(CART_STORAGE_KEY);
+// 	return storedCart ? JSON.parse(storedCart) : [];
+// };
+
+const loadCart = (items) => ({
+	type: 'LOAD_CART',
+	payload: items,
+});
 
 const addCartItem = (item) => ({
 	type: ADD_TO_CART,
@@ -28,15 +39,26 @@ const updateCartItem = (itemId, quantity) => ({
 	payload: { itemId, quantity },
 });
 
-const saveCartToStorage = (cartItems) => {
-	localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
+const saveCartToStorage = (cartItems, userId) => {
+	localStorage.setItem(CART_STORAGE_KEY(userId), JSON.stringify(cartItems));
 };
+
+// const saveCartToStorage = (cartItems) => {
+// 	localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
+// };
 
 const clearCartItems = () => ({
 	type: CLEAR_CART,
 });
 
-export const getCart = (state) => state.cart?.cartItems || [];
+// export const getCart = (state) => state.cart?.cartItems || [];
+
+export const getCart = (userId) => (dispatch) => {
+	const storedCart = localStorage.getItem(CART_STORAGE_KEY(userId));
+	const cartItems = storedCart ? JSON.parse(storedCart) : [];
+
+	dispatch(loadCart);
+};
 
 export const addToCart =
 	(menuItem, quantity = 1) =>
@@ -111,28 +133,37 @@ export const confirmOrderPlacement = () => (dispatch) => {
 };
 	// dispatch(clearCartItems()); // Clear cart after checkout
 
-export const clearCart = () => (dispatch) => {
+export const clearCart = (userId) => (dispatch) => {
+	localStorage.removeItem(CART_STORAGE_KEY(userId));
 	dispatch(clearCartItems());
 };
 
 
+// const initialState = {
+// 	cartItems: loadCartFromStorage() || [],
+// };
+
 const initialState = {
-	cartItems: loadCartFromStorage() || [],
+	cartItems: loadCartFromStorage(localStorage.getItem('currentUser')) || [],
 };
 
 export default function cartReducer(state = initialState, action) {
 	let updatedCart;
+	const userId = action.userId || 'guest';
+
 	switch (action.type) {
+		case 'LOAD_CART':
+			return { ...state, cartItems: action.payload };
 		case ADD_TO_CART:
 			updatedCart = [...state.cartItems, action.payload];
-			saveCartToStorage(updatedCart);
+			saveCartToStorage(updatedCart, userId);
 			return { ...state, cartItems: updatedCart };
 
 		case REMOVE_FROM_CART:
 			updatedCart = state.cartItems.filter(
 				(item) => item.id !== action.payload
 			);
-			saveCartToStorage(updatedCart);
+			saveCartToStorage(updatedCart, userId);
 			return { ...state, cartItems: updatedCart };
 
 		case UPDATE_CART_ITEM:
@@ -141,11 +172,11 @@ export default function cartReducer(state = initialState, action) {
 					? { ...item, quantity: action.payload.quantity }
 					: item
 			);
-			saveCartToStorage(updatedCart);
+			saveCartToStorage(updatedCart, userId);
 			return { ...state, cartItems: updatedCart };
 
 		case CLEAR_CART:
-			saveCartToStorage([]);
+			saveCartToStorage([], userId);
 			return { ...state, cartItems: [] };
 
 		default:
