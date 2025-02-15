@@ -24,6 +24,8 @@ export default function Cart() {
 
 		if (payload) {
 			localStorage.setItem('currentOrder', JSON.stringify(payload));
+			setMenuOpen(false)
+			setIsOpen(false)
 			navigate('/checkout');
 		}
 	};

@@ -111,6 +111,13 @@ export default function Checkout() {
 		}
 	}, [currentOrder, dispatch, navigate]);
 
+	useEffect(() => {
+		document.body.style.overflow = 'auto';
+		return () => {
+			document.body.style.overflow = 'auto'; 
+		};
+	}, []);
+
 	if (!currentOrder) {
 		navigate('/orders');
 		return null;
