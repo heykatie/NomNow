@@ -1,5 +1,5 @@
 import { csrfFetch } from "./csrf";
-import { clearCart } from './cart';
+import { clearCart, loadCart } from './cart';
 
 const SET_USER = 'session/setUser';
 const REMOVE_USER = 'session/removeUser';
@@ -33,29 +33,30 @@ export const thunkAuthenticate = () => async (dispatch) => {
 };
 
 export const thunkLogin = (credentials) => async (dispatch) => {
-  const response = await fetch('/api/auth/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(credentials),
-  });
+	const response = await fetch('/api/auth/login', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify(credentials),
+	});
 
-  if (response.ok) {
-    const data = await response.json();
-    const prevUserId = localStorage.getItem('currentUser');
-    const newUserId = data.id;
+	if (response.ok) {
+		const data = await response.json();
+		const newUserId = data.id;
+		const prevUserId = localStorage.getItem('currentUser');
 
-    if (prevUserId !== newUserId) {
-      dispatch(clearCart(prevUserId));
-    }
+		localStorage.setItem('currentUser', newUserId);
 
-    localStorage.setItem('currentUser', newUserId);
-    dispatch(setUser(data));
-  } else if (response.status < 500) {
-    const errorMessages = await response.json();
-    return errorMessages;
-  } else {
-    return { server: 'Something went wrong. Please try again' };
-  }
+		// If different user logs in, clear Redux slice but keep their cart saved
+		if (prevUserId && prevUserId !== newUserId) {
+			dispatch(clearCart());
+		}
+
+		dispatch(setUser(data));
+
+		const savedCart =
+			JSON.parse(localStorage.getItem(`cartItems_${newUserId}`)) || [];
+		dispatch(loadCart(savedCart));
+	}
 };
 
 export const thunkSignup = (user) => async (dispatch) => {
@@ -70,9 +71,9 @@ export const thunkSignup = (user) => async (dispatch) => {
     const prevUserId = localStorage.getItem('currentUser');
     const newUserId = data.id;
 
-    if (prevUserId !== newUserId) {
-      dispatch(clearCart(prevUserId));
-    }
+    if (prevUserId && prevUserId !== newUserId) {
+			dispatch(clearCart(prevUserId));
+		}
 
     localStorage.setItem('currentUser', newUserId);
     dispatch(setUser(data));
@@ -84,9 +85,20 @@ export const thunkSignup = (user) => async (dispatch) => {
   }
 };
 
-export const thunkLogout = () => async (dispatch) => {
-  await fetch("/api/auth/logout");
-  dispatch(removeUser());
+export const thunkLogout = () => async (dispatch, getState) => {
+	const state = getState();
+	const userId = state.session?.user?.id;
+
+	if (userId) {
+		const cart = state.cart.cartItems;
+		if (cart.length > 0) {
+			localStorage.setItem(`cartItems_${userId}`, JSON.stringify(cart)); // ✅ Save cart
+		}
+	}
+
+	await fetch('/api/auth/logout');
+	dispatch(removeUser());
+	dispatch(clearCart());
 };
 
 

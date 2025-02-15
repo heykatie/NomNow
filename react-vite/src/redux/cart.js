@@ -19,7 +19,7 @@ const loadCartFromStorage = (userId) => {
 // 	return storedCart ? JSON.parse(storedCart) : [];
 // };
 
-const loadCart = (items) => ({
+export const loadCart = (items) => ({
 	type: 'LOAD_CART',
 	payload: items,
 });
@@ -54,10 +54,11 @@ const clearCartItems = () => ({
 // export const getCart = (state) => state.cart?.cartItems || [];
 
 export const getCart = (userId) => (dispatch) => {
-	const storedCart = localStorage.getItem(CART_STORAGE_KEY(userId));
-	const cartItems = storedCart ? JSON.parse(storedCart) : [];
+	if (!userId) return;
 
-	dispatch(loadCart);
+	const storedCart =
+		JSON.parse(localStorage.getItem(`cartItems_${userId}`)) || [];
+	dispatch(loadCart(storedCart));
 };
 
 export const addToCart =
@@ -133,8 +134,7 @@ export const confirmOrderPlacement = () => (dispatch) => {
 };
 	// dispatch(clearCartItems()); // Clear cart after checkout
 
-export const clearCart = (userId) => (dispatch) => {
-	localStorage.removeItem(CART_STORAGE_KEY(userId));
+export const clearCart = () => (dispatch) => {
 	dispatch(clearCartItems());
 };
 
