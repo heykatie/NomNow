@@ -38,12 +38,6 @@ function HomePage() {
         dispatch(getAllRestaurants());
     }, [dispatch]);
 
-    useEffect(() => {
-		if (!user) {
-			navigate('/');
-		}
-	}, [user, navigate]);
-
     
     const handleRestaurantClick = (restaurantId) => {
         navigate(`/restaurants/${restaurantId}`);
