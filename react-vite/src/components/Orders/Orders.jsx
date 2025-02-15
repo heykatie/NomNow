@@ -92,7 +92,7 @@ export default function Orders() {
 
 		const response = await dispatch(createOrder(reorderData));
 
-		console.log('REORDER', response);
+		// console.log('REORDER', response);
 
 		if (response?.payload) {
 			const newOrder = response.payload;

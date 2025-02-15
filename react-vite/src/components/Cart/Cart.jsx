@@ -22,7 +22,7 @@ export default function Cart() {
 
 		const { payload } = await dispatch(checkoutCart());
 
-		console.log('CART', payload);
+		// console.log('CART', payload);
 
 
 		if (payload) {

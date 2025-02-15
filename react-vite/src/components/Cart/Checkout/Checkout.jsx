@@ -57,7 +57,7 @@ export default function Checkout() {
 	};
 
 	const handlePlaceOrder = async () => {
-		console.log('CHECKOUT', currentOrder)
+		// console.log('CHECKOUT', currentOrder)
 		if (paymentMethod === 'wallet') {
 			if (user.wallet < total) {
 				alert('Insufficient funds in your wallet.');
