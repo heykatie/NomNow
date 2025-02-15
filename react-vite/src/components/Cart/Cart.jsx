@@ -14,7 +14,8 @@ export default function Cart() {
 	const [menuOpen, setMenuOpen] = useState(false);
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-		const menuRef = useRef(null);
+	const menuRef = useRef(null);
+	const userId = useSelector((state) => state.session?.user?.id || 'guest');
 
 	const handleCheckout = async () => {
 		if (cartItems.length === 0) return;
@@ -28,9 +29,30 @@ export default function Cart() {
 	};
 
 	const handleClearCart = () => {
-		dispatch(clearCart());
+		dispatch(clearCart(userId));
 		setMenuOpen(false);
 	};
+
+
+	useEffect(() => {
+		if (isOpen) {
+			document.body.style.overflow = 'hidden';
+		} else {
+			document.body.style.overflow = 'auto';
+		}
+	}, [isOpen]);
+
+	useEffect(() => {
+		if (userId) {
+			dispatch(getCart(userId));
+		}
+	}, [dispatch, userId]);
+
+	// useEffect(() => {
+	// 	if (!cartItems) {
+	// 		dispatch(getCart());
+	// 	}
+	// }, [dispatch, cartItems]);
 
 	// useEffect(() => {
 	// 	const savedOrder = JSON.parse(localStorage.getItem('currentOrder'));
@@ -44,19 +66,6 @@ export default function Cart() {
 	// 	}
 	// }, [currentOrder, dispatch, navigate]);
 
-	useEffect(() => {
-		if (!cartItems) {
-			dispatch(getCart());
-		}
-	}, [dispatch, cartItems]);
-
-	useEffect(() => {
-		if (isOpen) {
-			document.body.style.overflow = 'hidden';
-		} else {
-			document.body.style.overflow = 'auto';
-		}
-	}, [isOpen]);
 
 	// useEffect(() => {
 	// 	const handleEscape = (event) => {

@@ -1,4 +1,5 @@
 import { csrfFetch } from "./csrf";
+import { clearCart } from './cart';
 
 const SET_USER = 'session/setUser';
 const REMOVE_USER = 'session/removeUser';
@@ -18,52 +19,68 @@ const editUser = (payload) => ({
   payload
 })
 
-export const thunkAuthenticate = () => async (dispatch) => {
-	const response = await fetch("/api/auth/");
-	if (response.ok) {
-		const data = await response.json();
-		if (data.errors) {
-			return;
-		}
 
-		dispatch(setUser(data));
-	}
+export const thunkAuthenticate = () => async (dispatch) => {
+  const response = await fetch("/api/auth/");
+  if (response.ok) {
+    const data = await response.json();
+    if (data.errors) {
+      return;
+    }
+
+    dispatch(setUser(data));
+  }
 };
 
-export const thunkLogin = (credentials) => async dispatch => {
-  const response = await fetch("/api/auth/login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(credentials)
+export const thunkLogin = (credentials) => async (dispatch) => {
+  const response = await fetch('/api/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(credentials),
   });
 
-  if(response.ok) {
+  if (response.ok) {
     const data = await response.json();
+    const prevUserId = localStorage.getItem('currentUser');
+    const newUserId = data.id;
+
+    if (prevUserId !== newUserId) {
+      dispatch(clearCart(prevUserId));
+    }
+
+    localStorage.setItem('currentUser', newUserId);
     dispatch(setUser(data));
   } else if (response.status < 500) {
     const errorMessages = await response.json();
-    return errorMessages
+    return errorMessages;
   } else {
-    return { server: "Something went wrong. Please try again" }
+    return { server: 'Something went wrong. Please try again' };
   }
 };
 
 export const thunkSignup = (user) => async (dispatch) => {
-  const response = await fetch("/api/auth/signup", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(user)
+  const response = await fetch('/api/auth/signup', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(user),
   });
 
-  if(response.ok) {
+  if (response.ok) {
     const data = await response.json();
+    const prevUserId = localStorage.getItem('currentUser');
+    const newUserId = data.id;
+
+    if (prevUserId !== newUserId) {
+      dispatch(clearCart(prevUserId));
+    }
+
+    localStorage.setItem('currentUser', newUserId);
     dispatch(setUser(data));
   } else if (response.status < 500) {
     const errorMessages = await response.json();
-    console.log('ERRORR MESSE', errorMessages)
-    return errorMessages
+    return errorMessages;
   } else {
-    return { server: "Something went wrong. Please try again" }
+    return { server: 'Something went wrong. Please try again' };
   }
 };
 
@@ -185,3 +202,5 @@ function sessionReducer(state = initialState, action) {
 }
 
 export default sessionReducer;
+
+
