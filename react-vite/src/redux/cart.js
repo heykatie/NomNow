@@ -146,8 +146,9 @@ export const confirmOrderPlacement = () => (dispatch) => {
 };
 	// dispatch(clearCartItems()); // Clear cart after checkout
 
-export const clearCart = () => (dispatch) => {
+export const clearCart = (userId) => (dispatch) => {
 	dispatch(clearCartItems());
+	localStorage.setItem(CART_STORAGE_KEY(userId), JSON.stringify([]));
 };
 
 
@@ -188,7 +189,10 @@ export default function cartReducer(state = initialState, action) {
 			return { ...state, cartItems: updatedCart };
 
 		case CLEAR_CART:
-			saveCartToStorage([], userId);
+			localStorage.setItem(
+				CART_STORAGE_KEY(localStorage.getItem('currentUser') || 'guest'),
+				JSON.stringify([])
+			);
 			return { ...state, cartItems: [] };
 
 		default:

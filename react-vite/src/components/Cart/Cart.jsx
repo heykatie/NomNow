@@ -30,7 +30,7 @@ export default function Cart() {
 		}
 	};
 
-	const handleClearCart = () => {
+	const handleClearCart = (userId) => {
 		dispatch(clearCart(userId));
 		setMenuOpen(false);
 	};
@@ -143,12 +143,13 @@ export default function Cart() {
 							ref={menuRef}
 							className='cart-menu-btn'
 							onClick={() => setMenuOpen(!menuOpen)}>
-							<FaEllipsisV />
+							{/* <FaEllipsisV /> */}
+							🗑️
 						</button>
 						{menuOpen && (
 							<div className='cart-menu-dropdown'>
 								<button
-									onClick={handleClearCart}
+									onClick={handleClearCart(userId)}
 									className='clear-cart-btn'>
 									🗑️ Clear Cart
 								</button>
