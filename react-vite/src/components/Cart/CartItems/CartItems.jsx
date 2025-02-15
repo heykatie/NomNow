@@ -1,5 +1,5 @@
 // import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { updateItemQuantity, removeFromCart } from '../../../redux/cart';
 import { FaPlus, FaMinus, FaTrash } from 'react-icons/fa';
