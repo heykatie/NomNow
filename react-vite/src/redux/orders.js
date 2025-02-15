@@ -143,9 +143,12 @@ export const placeOrder = (orderId) => async (dispatch) => {
 		dispatch(loadUserOrder(updatedOrder));
 		localStorage.setItem('currentOrder', JSON.stringify(updatedOrder));
 
+		setTimeout(async () => {
+			await dispatch(getUserOrders());
+			dispatch(clearCart(localStorage.getItem('currentUser').id));
+		}, 1000);
 
-		dispatch(clearCart(localStorage.getItem('currentUser').id));
-		await dispatch(getUserOrders());
+
 	} catch (error) {
 		const err = (await error.json()) || error.message;
 		dispatch(setError(err));

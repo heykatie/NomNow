@@ -22,6 +22,9 @@ export default function Cart() {
 
 		const { payload } = await dispatch(checkoutCart());
 
+		console.log('CART', payload);
+
+
 		if (payload) {
 			localStorage.setItem('currentOrder', JSON.stringify(payload));
 			setMenuOpen(false)

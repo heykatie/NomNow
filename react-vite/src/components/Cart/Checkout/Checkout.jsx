@@ -5,7 +5,7 @@ import { useModal } from '../../../context/Modal';
 import TipModal from '../../../context/TipModal';
 import ScheduleModal from '../../../context/ScheduleModal';
 import { placeOrder, deleteOrder } from '../../../redux/orders';
-import { confirmOrderPlacement } from '../../../redux/cart';
+import {confirmOrderPlacement, clearCart} from '../../../redux/cart';
 import { deductFundsThunk } from '../../../redux/session';
 import OrderRestaurant from '../../Orders/OrderRestaurant';
 import CartItems from '../CartItems';
@@ -57,6 +57,7 @@ export default function Checkout() {
 	};
 
 	const handlePlaceOrder = async () => {
+		console.log('CHECKOUT', currentOrder)
 		if (paymentMethod === 'wallet') {
 			if (user.wallet < total) {
 				alert('Insufficient funds in your wallet.');
@@ -68,11 +69,13 @@ export default function Checkout() {
 
 		await dispatch(placeOrder(currentOrder.id));
 
-		dispatch(confirmOrderPlacement());
+		// dispatch(confirmOrderPlacement());
+		// dispatch(clearCart());
 
 		setTimeout(() => {
 			const updatedOrder = JSON.parse(localStorage.getItem('currentOrder'));
 			if (updatedOrder && updatedOrder.status === 'Submitted') {
+				alert('Your food will arrive soon!')
 				navigate('/orders');
 			}
 		}, 500);
@@ -80,7 +83,7 @@ export default function Checkout() {
 
 	const handleOrderDeletion = async () => {
 		if (currentOrder?.status === 'Active') {
-			await dispatch(deleteOrder(currentOrder.id));
+			// await dispatch(deleteOrder(currentOrder.id));
 			localStorage.removeItem('currentOrder');
 		}
 	};
@@ -114,7 +117,7 @@ export default function Checkout() {
 	useEffect(() => {
 		document.body.style.overflow = 'auto';
 		return () => {
-			document.body.style.overflow = 'auto'; 
+			document.body.style.overflow = 'auto';
 		};
 	}, []);
 
@@ -219,7 +222,7 @@ export default function Checkout() {
 
 
 			<div className='checkout-right'>
-				<OrderRestaurant restaurantId={currentOrder.restaurant.id} />
+				<OrderRestaurant restaurantId={currentOrder.restaurantId} />
 				<div className='order-summary'>
 					<h4>Cart summary ({currentOrder?.orderItems?.length} item/s)</h4>
 					<CartItems items={currentOrder?.orderItems} />
