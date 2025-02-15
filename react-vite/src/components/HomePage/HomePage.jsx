@@ -30,6 +30,7 @@ const CUISINE_TYPES = [
 function HomePage() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    const user = useSelector((store) => store.session.user);
     const restaurants = useSelector(state => state.restaurants.restaurants);
     const [selectedCuisine, setSelectedCuisine] = useState(null);
 
@@ -37,28 +38,29 @@ function HomePage() {
         dispatch(getAllRestaurants());
     }, [dispatch]);
 
-
-
     
     const handleRestaurantClick = (restaurantId) => {
         navigate(`/restaurants/${restaurantId}`);
     };
 
+    // Filter active restaurants first - using servicing property
+    const activeRestaurants = restaurants.filter(restaurant => restaurant.servicing === true);
+
     const availableCuisines = new Set(
-        restaurants.map(restaurant => restaurant.cuisineType.toLowerCase())
+        activeRestaurants.map(restaurant => restaurant.cuisineType.toLowerCase())
     );
 
     const handleCuisineClick = (cuisineName) => {
-        // Only allow selection if cuisine type has restaurants
         if (availableCuisines.has(cuisineName.toLowerCase())) {
             setSelectedCuisine(cuisineName === selectedCuisine ? null : cuisineName);
         }
     };
 
+    // Apply cuisine filter only to active restaurants
     const filteredRestaurants = selectedCuisine
-        ? restaurants.filter(restaurant => 
+        ? activeRestaurants.filter(restaurant => 
             restaurant.cuisineType.toLowerCase() === selectedCuisine.toLowerCase())
-        : restaurants;
+        : activeRestaurants;
 
     return (
         <div className='home-page'>
@@ -93,48 +95,46 @@ function HomePage() {
                     <div className='restaurants-grid'>
                         {filteredRestaurants.map((restaurant) => ( 
                             <div 
-                            key={restaurant.id} 
-                            className='restaurant-card'
-                            onClick={() => handleRestaurantClick(restaurant.id)}
-                        >
-                            <div className='restaurant-image'>
-                                <img 
-                                    src={restaurant.storeImage || '/placeholder.jpg'} 
-                                    alt={restaurant.name} 
-                                />
-                            </div>
-                            <div className='restaurant-info'>
-                                <h3>{restaurant.name}</h3>
-                                <div className='restaurant-details'>
-                                    <span className='rating'>
-                                        ⭐ {restaurant.rating || '4.5'}
-                                        {restaurant.numReviews && (
-                                            <span className='review-count'>
-                                                ({restaurant.numReviews})
+                                key={restaurant.id} 
+                                className='restaurant-card'
+                                onClick={() => handleRestaurantClick(restaurant.id)}
+                            >
+                                <div className='restaurant-image'>
+                                    <img 
+                                        src={restaurant.storeImage || '/placeholder.jpg'} 
+                                        alt={restaurant.name} 
+                                    />
+                                </div>
+                                <div className='restaurant-info'>
+                                    <h3>{restaurant.name}</h3>
+                                    <div className='restaurant-details'>
+                                        <span className='rating'>
+                                            ⭐ {restaurant.rating || '4.5'}
+                                            {restaurant.numReviews && (
+                                                <span className='review-count'>
+                                                    ({restaurant.numReviews})
+                                                </span>
+                                            )}
+                                        </span>
+                                        {restaurant.deliveryTime && (
+                                            <span className='delivery-time'>
+                                                {restaurant.deliveryTime} min
                                             </span>
                                         )}
-                                    </span>
-                                    {restaurant.deliveryTime && (
-                                        <span className='delivery-time'>
-                                            {restaurant.deliveryTime} min
+                                        <span className='delivery-fee'>
+                                            ${restaurant.deliveryFee?.toFixed(2) || '0.00'} delivery
                                         </span>
+                                    </div>
+                                    <div className='restaurant-tags'>
+                                        <span className='cuisine-type'>{restaurant.cuisineType.toLowerCase()}</span>
+                                        <span className='price-level'>{restaurant.priceLevel}</span>
+                                    </div>
+                                    {restaurant.description && (
+                                        <p className='description'>{restaurant.description}</p>
                                     )}
-                                    <span className='delivery-fee'>
-                                        ${restaurant.deliveryFee?.toFixed(2) || '0.00'} delivery
-                                    </span>
                                 </div>
-                                <div className='restaurant-tags'>
-                                    <span className='cuisine-type'>{restaurant.cuisineType.toLowerCase()}</span>
-                                    <span className='price-level'>{restaurant.priceLevel}</span>
-                                </div>
-                                {restaurant.description && (
-                                    <p className='description'>{restaurant.description}</p>
-                                )}
                             </div>
-                        </div>
-                    ))}
-                            
-            
+                        ))}
                     </div>
                 </div>
             </div>

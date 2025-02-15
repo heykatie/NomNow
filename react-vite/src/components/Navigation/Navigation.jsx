@@ -2,6 +2,7 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
 import { useState} from "react";
 import DropdownMenu from "./DropdownMenu";
+import { guestLogin, editUserThunk } from '../../redux/session';
 import "./Navigation.css";
 import Cart from '../Cart';
 
@@ -34,6 +35,8 @@ function Navigation() {
 	}
 	const setGuest = async (e) => {
 		e.preventDefault();
+		
+
 		const split = address.split(',')
 		if(split.length !== 4){
 			return setErrors({
@@ -47,7 +50,17 @@ function Navigation() {
 			zip: split[3]
 		}
 
-		await dispatch(guestLogin(addressObj))
+		let server
+		if(user && !user.guest){
+			addressObj.id = user.id
+			server = await dispatch(editUserThunk(addressObj))
+		}else{
+			return alert('Must login to add address')
+		}
+		
+		if(server){
+			console.log(server)
+		}
 	}
 
   // console.log('DELIVERY TYPE:', deliveryType);
