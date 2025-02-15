@@ -1,14 +1,16 @@
-// import { useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { updateItemQuantity, removeFromCart } from '../../../redux/cart';
+import { editOrder } from '../../../redux/orders';
 import { FaPlus, FaMinus, FaTrash } from 'react-icons/fa';
 import './CartItems.css';
+import { useEffect } from 'react';
 
 export default function CartItems({ items }) {
 	const navigate = useNavigate();
 	const dispatch = useDispatch();
-	// const currentOrder = useSelector((state) => state.orders.currentOrder);
+	const currentOrder = useSelector((state) => state.orders.currentOrder);
 
 	const handleCartItemClick = (menuItemId) => {
 		if (menuItemId) {
@@ -17,16 +19,68 @@ export default function CartItems({ items }) {
 	};
 
 	const handleIncrease = (item) => {
-		dispatch(updateItemQuantity(item.id, item.quantity + 1));
-	};
+		if (currentOrder) {
+			const updatedItems = currentOrder.orderItems.map((i) =>
+				i.id === item.id ? { ...i, quantity: i.quantity + 1 } : i
+			);
 
-	const handleDecrease = (item) => {
-		if (item.quantity > 1) {
-			dispatch(updateItemQuantity(item.id, item.quantity - 1));
+			dispatch(editOrder(currentOrder.id, { orderItems: updatedItems }));
 		} else {
-			dispatch(removeFromCart(item.id));
+			dispatch(updateItemQuantity(item.id, item.quantity + 1));
 		}
 	};
+
+	// const handleDecrease = (item) => {
+	// 	if (currentOrder) {
+	// 		if (item.quantity > 1) {
+	// 			dispatch(
+	// 				editOrder(currentOrder.id, {
+	// 					orderItems: currentOrder.orderItems.map((i) =>
+	// 						i.id === item.id ? { ...i, quantity: i.quantity - 1 } : i
+	// 					),
+	// 				})
+	// 			);
+	// 		} else {
+	// 			dispatch(
+	// 				editOrder(currentOrder.id, {
+	// 					orderItems: currentOrder.orderItems.filter(
+	// 						(i) => i.id !== item.id
+	// 					),
+	// 				})
+	// 			);
+	// 		}
+	// 	} else {
+	// 			if (item.quantity > 1) {
+	// 				dispatch(updateItemQuantity(item.id, item.quantity - 1));
+	// 			} else {
+	// 				dispatch(removeFromCart(item.id));
+	// 			}
+
+	// 	}
+	// };
+
+	const handleDecrease = (item) => {
+		if (currentOrder) {
+			const updatedItems =
+				item.quantity > 1
+					? currentOrder.orderItems.map((i) =>
+							i.id === item.id ? { ...i, quantity: i.quantity - 1 } : i
+					)
+					: currentOrder.orderItems.filter((i) => i.id !== item.id);
+
+			dispatch(editOrder(currentOrder.id, { orderItems: updatedItems }));
+		} else {
+			if (item.quantity > 1) {
+				dispatch(updateItemQuantity(item.id, item.quantity - 1));
+			} else {
+				dispatch(removeFromCart(item.id));
+			}
+		}
+	};
+
+	if (currentOrder) {
+		items = currentOrder.orderItems;
+	}
 
 	return (
 		<div className='cart-items-container'>
@@ -67,7 +121,11 @@ export default function CartItems({ items }) {
 									e.stopPropagation();
 									handleDecrease(item);
 								}}>
-								{item.quantity > 1 ? <FaMinus color='black'/> : <FaTrash />}
+								{item.quantity > 1 ? (
+									<FaMinus color='black' />
+								) : (
+									<FaTrash />
+								)}
 							</button>
 							<span className='cart-item-quantity'>
 								{item.quantity || 1}

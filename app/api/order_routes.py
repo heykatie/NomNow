@@ -283,38 +283,94 @@ def update_order_items(order_id):
     if not isinstance(items, list):
         return {"message": "Invalid request. 'items' must be a list."}, 400
 
-    total_cost = 0
+    # total_cost = 0
+    updated_items = []
+    existing_order_items = {item.menu_item_id: item for item in order.order_items}
 
-    # Process new or updated items
     for item in items:
-        menu_item = MenuItem.query.get(item["menu_item_id"])
+        menu_item_id = item["menu_item_id"]
         quantity = item["quantity"]
 
-        order_item = OrderItem.query.filter_by(
-            order_id=order.id, menu_item_id=menu_item.id
-        ).first()
-
-        if order_item:
+        if menu_item_id in existing_order_items:
+            order_item = existing_order_items[menu_item_id]
             if quantity > 0:
-                order_item.quantity = quantity  # Update quantity
+                order_item.quantity = quantity  # ✅ Update existing item quantity
             else:
-                db.session.delete(order_item)  # Remove item if quantity is 0
+                db.session.delete(order_item)  # 🚨 Only delete explicitly removed items
         else:
-            db.session.add(
-                OrderItem(
+            if quantity > 0:
+                new_order_item = OrderItem(
                     order_id=order.id,
-                    menu_item_id=menu_item.id,
+                    menu_item_id=menu_item_id,
                     quantity=quantity,
-                    price=menu_item.price,
+                    price=MenuItem.query.get(menu_item_id).price,
                 )
-            )
+                db.session.add(new_order_item)
 
-        total_cost += menu_item.price * quantity
-
-    order.total_cost = total_cost  # Recalculate total
+    order.total_cost = sum(item.price * item.quantity for item in order.order_items)
+    # order.total_cost = total_cost  # Recalculate total
     db.session.commit()
 
-    return jsonify(order.to_dict()), 200
+    return jsonify({
+        "id": order.id,
+        "status": order.status,
+        "totalCost": float(order.total_cost),
+        "restaurant": {
+            "id": order.restaurants.id,
+            "name": order.restaurants.name,
+            "address": order.restaurants.address,
+            "city": order.restaurants.city,
+            "image": order.restaurants.store_image,
+        },
+        "orderItems": updated_items
+    }), 200
+
+    # for item in items:
+    #     menu_item = MenuItem.query.get(item["menu_item_id"])
+    #     quantity = item["quantity"]
+
+    #     if not menu_item:
+    #         continue
+
+    #     order_item = OrderItem.query.filter_by(
+    #         order_id=order.id, menu_item_id=menu_item.id
+    #     ).first()
+
+    #     if order_item:
+    #         if quantity > 0:
+    #             order_item.quantity = quantity
+    #             updated_items.append({
+    #                 "id": order_item.id,
+    #                 "menu_item_id": order_item.menu_item_id,
+    #                 "menu_item_name": menu_item.name,
+    #                 "quantity": order_item.quantity,
+    #                 "price": float(order_item.price),
+    #                 "restaurant_id": menu_item.restaurants.id,
+    #                 "food_image": menu_item.food_image
+    #             })
+    #         else:
+    #             db.session.delete(order_item)  # Remove item if quantity is 0
+    #     else:
+    #         if quantity > 0:
+    #             new_order_item = OrderItem(
+    #                 order_id=order.id,
+    #                 menu_item_id=menu_item.id,
+    #                 quantity=quantity,
+    #                 price=menu_item.price,
+    #             )
+    #             db.session.add(new_order_item)
+    #             updated_items.append(
+    #                 {
+    #                     "id": new_order_item.id,
+    #                     "menu_item_id": new_order_item.menu_item_id,
+    #                     "menu_item_name": menu_item.name,
+    #                     "quantity": new_order_item.quantity,
+    #                     "price": float(new_order_item.price),
+    #                     "restaurant_id": menu_item.restaurants.id,
+    #                     "food_image": menu_item.food_image,
+    #                 }
+    #             )
+    # total_cost += menu_item.price * quantity
 
 
 """

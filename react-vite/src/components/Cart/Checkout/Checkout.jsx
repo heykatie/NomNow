@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useModal } from '../../../context/Modal';
 import TipModal from '../../../context/TipModal';
 import ScheduleModal from '../../../context/ScheduleModal';
-import { placeOrder, deleteOrder } from '../../../redux/orders';
+import { placeOrder, deleteOrder, loadUserOrder } from '../../../redux/orders';
 import { confirmOrderPlacement } from '../../../redux/cart';
 import { deductFundsThunk } from '../../../redux/session';
 import OrderRestaurant from '../../Orders/OrderRestaurant';
@@ -18,6 +18,7 @@ export default function Checkout() {
 	const user = useSelector((state) => state.session.user);
 	const { setModalContent } = useModal();
 	const currentOrder = useSelector((state) => state.orders.currentOrder);
+	// const currentOrder = useSelector((state) => state.orders.currentOrder, shallowEqual);
 	const [tip, setTip] = useState(0);
 	const [customTipUsed, setCustomTipUsed] = useState(false);
 	const [deliveryOption, setDeliveryOption] = useState('standard');
@@ -105,23 +106,27 @@ export default function Checkout() {
 		const savedOrder = JSON.parse(localStorage.getItem('currentOrder'));
 
 		if (!currentOrder && savedOrder) {
-
-			localStorage.removeItem('currentOrder');
-			navigate('/orders');
+			dispatch(loadUserOrder(savedOrder));
 		}
-	}, [currentOrder, dispatch, navigate]);
+	}, [currentOrder, dispatch]);
 
 	useEffect(() => {
 		document.body.style.overflow = 'auto';
 		return () => {
-			document.body.style.overflow = 'auto'; 
+			document.body.style.overflow = 'auto';
 		};
 	}, []);
 
-	if (!currentOrder) {
-		navigate('/orders');
-		return null;
-	}
+	useEffect(() => {
+		if (!currentOrder) {
+			const savedOrder = JSON.parse(localStorage.getItem('currentOrder'));
+			if (savedOrder) {
+				dispatch(loadUserOrder(savedOrder));
+			} else {
+				navigate('/orders');
+			}
+		}
+	}, [currentOrder, dispatch, navigate]);
 
 	return (
 		<div className='checkout-page'>

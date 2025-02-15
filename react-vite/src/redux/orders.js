@@ -1,6 +1,6 @@
 import { csrfFetch } from './csrf';
 import { setError } from './errors';
-import {clearCart} from './cart';
+import { clearCart } from './cart';
 
 const LOAD_USER_ORDERS = 'orders/loadUserOrders';
 const LOAD_USER_ORDER = 'orders/loadUserOrder';
@@ -106,7 +106,7 @@ export const createOrder = (orderData) => async (dispatch) => {
 	}
 };
 
-export const editOrder = (orderId, orderData) => async (dispatch) => {
+export const editOrder = (orderId, orderData) => async (dispatch, getState) => {
 	try {
 		const response = await csrfFetch(`/api/orders/${orderId}`, {
 			method: 'PUT',
@@ -114,8 +114,22 @@ export const editOrder = (orderId, orderData) => async (dispatch) => {
 		});
 		if (!response.ok) throw response;
 
-		const data = await response.json();
-		dispatch(updateOrder(data));
+		const updatedOrder = await response.json();
+		const currentOrder = getState().orders.currentOrder;
+
+		dispatch(
+			updateOrder({
+				...updatedOrder,
+				orderItems: updatedOrder.orderItems?.length
+					? [...updatedOrder.orderItems]
+					: [...(currentOrder?.orderItems || [])],
+			})
+		);
+
+		// updatedOrder.orderItems = [...updatedOrder.orderItems];
+		// dispatch(updateOrder(updatedOrder));
+
+		localStorage.setItem('currentOrder', JSON.stringify(updatedOrder));
 	} catch (error) {
 		const errorMessage = await error.json();
 		dispatch(setError(errorMessage));
@@ -142,7 +156,6 @@ export const placeOrder = (orderId) => async (dispatch) => {
 		const updatedOrder = await orderResponse.json();
 		dispatch(loadUserOrder(updatedOrder));
 		localStorage.setItem('currentOrder', JSON.stringify(updatedOrder));
-
 
 		dispatch(clearCart(localStorage.getItem('currentUser').id));
 		await dispatch(getUserOrders());
@@ -195,7 +208,7 @@ export default function ordersReducer(state = initialState, action) {
 				userOrders: Array.isArray(action.payload)
 					? action.payload.sort(
 							(a, b) => new Date(b.createdAt) - new Date(a.createdAt)
-					)
+					  )
 					: [],
 			};
 		case LOAD_USER_ORDER:
@@ -220,6 +233,12 @@ export default function ordersReducer(state = initialState, action) {
 				userOrders: state.userOrders.map((order) =>
 					order.id === action.payload.id ? action.payload : order
 				),
+				currentOrder: {
+					...action.payload,
+					orderItems: action.payload.orderItems?.length
+						? [...action.payload.orderItems]
+						: [...(state.currentOrder?.orderItems || [])],
+				},
 			};
 		case SUBMIT_ORDER:
 			if (!action.payload) return state;
