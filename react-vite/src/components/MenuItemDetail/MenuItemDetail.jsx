@@ -17,7 +17,9 @@ const MenuItemDetail = () => {
 
   const [quantity, setQuantity] = useState(1);
   const [message, setMessage] = useState('');
-
+  const cart = useSelector(state => state.cart);
+  const cartItems = cart?.cartItems || [];
+  
   useEffect(() => {
     if (id) {
       dispatch(getMenuItem(id));
@@ -27,18 +29,24 @@ const MenuItemDetail = () => {
   if (error) return <div>Error: {error}</div>;
   if (!menuItem) return <div>Loading...</div>;
 
-  const increaseQuantity = () => setQuantity(prev => prev + 1);
-  const decreaseQuantity = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
-
   const handleAddToCart = () => {
+    // Check if the cart already has items and if those items belong to a different restaurant
+    if (cartItems.length > 0 && cartItems[0].restaurantId !== menuItem.restaurantId) {
+      alert('Your cart contains items from a different restaurant. Please clear your cart or complete your existing order first.');
+      return;
+    }
+
+    // Proceed to add the item to the cart
     dispatch(addToCart({
       id: menuItem.id,
       name: menuItem.name,
       price: menuItem.price,
-      restaurantId: menuItem.restaurantId,
+      restaurantId: menuItem.restaurantId, // Correctly pass the restaurantId
       food_image: menuItem.food_image,
       quantity,
     }));
+
+    // Reset the quantity and show a confirmation message
     setQuantity(1);
     setMessage(`${quantity} ${menuItem.name} added to cart!`);
     setTimeout(() => setMessage(''), 2000);
@@ -46,10 +54,9 @@ const MenuItemDetail = () => {
 
   const handleToggleLike = () => {
     if (!user) {
-			// Show alert if the user is not logged in
-			alert('You must be logged in to add items to the favorites');
-			return;
-		}
+      alert('You must be logged in to add items to the favorites');
+      return;
+    }
     dispatch(toggleLike(menuItem.id));
     dispatch(getFavoriteItems());
   };
@@ -58,10 +65,9 @@ const MenuItemDetail = () => {
 
   return (
     <div className="menu-item-detail-container">
-    <button className="back-button" onClick={() => navigate(`/restaurants/${menuItem.restaurantId}`)}>
-  <span className="back-arrow">←</span> Back to Restaurant
-</button>
-
+      <button className="back-button" onClick={() => navigate(`/restaurants/${menuItem.restaurantId}`)}>
+        <span className="back-arrow">←</span> Back to Restaurant
+      </button>
 
       <div className="menu-item-detail">
         <div>
@@ -78,20 +84,24 @@ const MenuItemDetail = () => {
 
         <div className="menu-item-details">
           <h2>{menuItem.name}</h2>
-          <p> ${menuItem.price}</p>
+          <p>${menuItem.price}</p>
           <p>{menuItem.description}</p>
           <p>{menuItem.food_type}</p>
 
           {user && (
             <>
-              {/* <div className="quantity-selector">
-                <button onClick={decreaseQuantity}>-</button>
-                <span>{quantity}</span>
-                <button onClick={increaseQuantity}>+</button>
-              </div> */}
-
-              <button className="add-to-cart-button" onClick={handleAddToCart}>
-                Add to Cart
+              <button
+                className={`add-to-cart-btn ${
+                  cartItems.length > 0 && cartItems[0].restaurantId !== menuItem.restaurantId
+                    ? 'disabled'
+                    : ''
+                }`}
+                disabled={cartItems.length > 0 && cartItems[0].restaurantId !== menuItem.restaurantId}
+                onClick={handleAddToCart}
+              >
+                {cartItems.length > 0 && cartItems[0].restaurantId !== menuItem.restaurantId
+                  ? 'Items from another restaurant in cart'
+                  : 'Add to Cart'}
               </button>
 
               {message && <p className="confirmation-message">{message}</p>}
