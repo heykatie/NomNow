@@ -110,7 +110,7 @@ export const addFundsThunk = (fundsObject) => async (dispatch) => {
     });
     if(response.ok){
         const data = await response.json()
-        console.log('DATA', data)
+        // console.log('DATA', data)
         dispatch(editUser(data))
     }
     else if(response.status < 500){
@@ -148,7 +148,7 @@ export const editUserThunk = (updateObj) => async (dispatch) => {
     });
     if(response.ok){
         const data = await response.json()
-        console.log('DATA', data)
+        // console.log('DATA', data)
         dispatch(editUser(data))
     }
     else if(response.status < 500){
@@ -173,7 +173,7 @@ export const uploadPfp = (file) => async (dispatch) => {
   });
   if(response.ok){
       const data = await response.json()
-      console.log('DATA', data)
+      // console.log('DATA', data)
       dispatch(editUser(data))
   }
   else if(response.status < 500){
