@@ -11,7 +11,7 @@ const MenuItemDetail = () => {
   const navigate = useNavigate();
 
   const menuItem = useSelector(state => state.menuItems.menuItem);
-  const likedItems = useSelector(state => state.menuItems.likedItems);
+  const likedItems = useSelector(state => state.menuItems.likedItems); // This is now an object
   const error = useSelector(state => state.menuItems.error);
   const user = useSelector(state => state.session.user);
 
@@ -27,8 +27,8 @@ const MenuItemDetail = () => {
   if (error) return <div>Error: {error}</div>;
   if (!menuItem) return <div>Loading...</div>;
 
-  const increaseQuantity = () => setQuantity(prev => prev + 1);
-  const decreaseQuantity = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
+  // const increaseQuantity = () => setQuantity(prev => prev + 1);
+  // const decreaseQuantity = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
 
   const handleAddToCart = () => {
     dispatch(addToCart({
@@ -46,15 +46,17 @@ const MenuItemDetail = () => {
 
   const handleToggleLike = () => {
     if (!user) {
-			// Show alert if the user is not logged in
-			alert('You must be logged in to add items to the favorites');
-			return;
-		}
-    dispatch(toggleLike(menuItem.id));
+      // Show alert if the user is not logged in
+      alert('You must be logged in to add items to the favorites');
+      return;
+    }
+    dispatch(toggleLike(menuItem.id, user.id)); // Pass user ID
     dispatch(getFavoriteItems());
   };
 
-  const isLiked = likedItems.includes(menuItem.id);
+  // Get the liked items for the current user
+  const userLikedItems = likedItems[user?.id] || [];
+  const isLiked = userLikedItems.includes(menuItem.id); // Check if the item is liked by the current user
 
   return (
     <div className="menu-item-detail-container">
@@ -83,14 +85,14 @@ const MenuItemDetail = () => {
 
           {user && (
             <>
-              <div className="quantity-selector">
+              {/* <div className="quantity-selector">
                 <button onClick={decreaseQuantity}>-</button>
                 <span>{quantity}</span>
                 <button onClick={increaseQuantity}>+</button>
-              </div>
+              </div> */}
 
               <button className="add-to-cart-button" onClick={handleAddToCart}>
-                + Add {quantity} to Cart
+                Add to Cart
               </button>
 
               {message && <p className="confirmation-message">{message}</p>}

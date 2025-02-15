@@ -100,15 +100,18 @@ export const deleteMenuItem = (id) => async (dispatch) => {
 };
 
 // Toggle like on a menu item
-export const toggleLike = (itemId) => {
+export const toggleLike = (itemId, userId) => {
   return {
     type: TOGGLE_LIKE,
-    payload: itemId,
+    payload: { itemId, userId },
   };
 };
 
 export const getFavoriteItems = () => async (dispatch, getState) => {
-  const likedItemIds = getState().menuItems.likedItems;
+  const userId = getState().session.user?.id;
+  if (!userId) return;
+
+  const likedItemIds = getState().menuItems.likedItems[userId] || [];
 
   if (likedItemIds.length === 0) {
     dispatch({ type: 'SET_FAVORITE_ITEMS', payload: [] });
@@ -137,12 +140,14 @@ export const getFavoriteItems = () => async (dispatch, getState) => {
     dispatch({ type: 'MENU_ERROR', payload: error.message });
   }
 };
+
+
 const initialState = {
   menuItems: [],
   menuItem: null,
   error: null,
-  likedItems: JSON.parse(localStorage.getItem('likedItems')) || [], // Load from localStorage
-  favoriteItems: [], // Store full favorite items
+  likedItems: JSON.parse(localStorage.getItem('likedItems')) || {}, // Change to an object
+  favoriteItems: [],
 };
 
 const menuReducer = (state = initialState, action) => {
@@ -180,17 +185,23 @@ const menuReducer = (state = initialState, action) => {
       case 'SET_FAVORITE_ITEMS':
         return { ...state, favoriteItems: action.payload, error: null };
 
-    case TOGGLE_LIKE:
-      const itemId = action.payload;
-      const isAlreadyLiked = state.likedItems.includes(itemId);
-      
-      const updatedLikedItems = isAlreadyLiked
-        ? state.likedItems.filter(id => id !== itemId) // Remove if already liked
-        : [...state.likedItems, itemId]; // Add if not liked
-      
-      localStorage.setItem('likedItems', JSON.stringify(updatedLikedItems)); // Save to localStorage
-      
-      return { ...state, likedItems: updatedLikedItems };
+        case TOGGLE_LIKE:
+          const { itemId, userId } = action.payload;
+          const userLikedItems = state.likedItems[userId] || [];
+          const isAlreadyLiked = userLikedItems.includes(itemId);
+        
+          const updatedUserLikedItems = isAlreadyLiked
+            ? userLikedItems.filter(id => id !== itemId) // Remove if already liked
+            : [...userLikedItems, itemId]; // Add if not liked
+        
+          const updatedLikedItems = {
+            ...state.likedItems,
+            [userId]: updatedUserLikedItems,
+          };
+        
+          localStorage.setItem('likedItems', JSON.stringify(updatedLikedItems)); // Save to localStorage
+        
+          return { ...state, likedItems: updatedLikedItems };
 
     case MENU_ERROR:
       return { ...state, error: action.payload };
