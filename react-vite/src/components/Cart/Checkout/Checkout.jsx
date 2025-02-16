@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useModal } from '../../../context/Modal';
 import TipModal from '../../../context/TipModal';
 import ScheduleModal from '../../../context/ScheduleModal';
-import { placeOrder, deleteOrder } from '../../../redux/orders';
-import {confirmOrderPlacement, clearCart} from '../../../redux/cart';
+import { placeOrder } from '../../../redux/orders';
+// import {confirmOrderPlacement, clearCart} from '../../../redux/cart';
 import { deductFundsThunk } from '../../../redux/session';
 import OrderRestaurant from '../../Orders/OrderRestaurant';
 import CartItems from '../CartItems';
@@ -81,12 +82,19 @@ export default function Checkout() {
 		}, 500);
 	};
 
-	const handleOrderDeletion = async () => {
+	// const handleOrderDeletion = async () => {
+	// 	if (currentOrder?.status === 'Active') {
+	// 		// await dispatch(deleteOrder(currentOrder.id));
+	// 		localStorage.removeItem('currentOrder');
+	// 	}
+	// };
+
+	const handleOrderDeletion = useCallback(async () => {
 		if (currentOrder?.status === 'Active') {
-			// await dispatch(deleteOrder(currentOrder.id));
 			localStorage.removeItem('currentOrder');
 		}
-	};
+	}, [currentOrder?.status]);
+
 	useEffect(() => {
 		const handleBeforeUnload = () => handleOrderDeletion();
 
@@ -96,13 +104,13 @@ export default function Checkout() {
 			window.removeEventListener('beforeunload', handleBeforeUnload);
 			handleOrderDeletion();
 		};
-	}, []);
+	}, [handleOrderDeletion]);
 
 	useEffect(() => {
 		if (location.pathname !== '/checkout') {
 			handleOrderDeletion();
 		}
-	}, [location.key]);
+	}, [handleOrderDeletion, location.pathname]);
 
 	useEffect(() => {
 		const savedOrder = JSON.parse(localStorage.getItem('currentOrder'));

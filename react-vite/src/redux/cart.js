@@ -1,4 +1,4 @@
-import { setError } from './errors';
+// import { setError } from './errors';
 import { createOrder } from './orders';
 
 const LOAD_CART = 'cart/loadCart';
@@ -165,7 +165,7 @@ export default function cartReducer(state = initialState, action) {
 	const userId = action.userId || 'guest';
 
 	switch (action.type) {
-		case 'LOAD_CART':
+		case LOAD_CART:
 			return { ...state, cartItems: action.payload };
 		case ADD_TO_CART:
 			updatedCart = [...state.cartItems, action.payload];

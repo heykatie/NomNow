@@ -70,57 +70,77 @@ const MenuItemDetail = () => {
   const isLiked = userLikedItems.includes(menuItem.id); // Check if the item is liked by the current user
 
   return (
+<<<<<<< HEAD
     <div className="menu-item-detail-container">
       <button className="back-button" onClick={() => navigate(`/restaurants/${menuItem.restaurantId}`)}>
         <span className="back-arrow">←</span> Back to Restaurant
       </button>
+=======
+		<div className='menu-item-detail-container'>
+			<button
+				className='back-button'
+				onClick={() => navigate('/menu-items')}>
+				Back to Menu Items List
+			</button>
+>>>>>>> dev
 
-      <div className="menu-item-detail">
-        <div>
-          <img src={menuItem.food_image} alt={menuItem.name} />
-          <div className="heart-button-container">
-            <button
-              className={`like-button ${isLiked ? 'liked' : ''}`}
-              onClick={handleToggleLike}
-            >
-              {isLiked ? '❤️' : '🤍'}
-            </button>
-          </div>
-        </div>
+			<div className='menu-item-detail'>
+				<div>
+					<img src={menuItem.food_image} alt={menuItem.name} />
+					<div className='heart-button-container'>
+						<button
+							className={`like-button ${isLiked ? 'liked' : ''}`}
+							onClick={handleToggleLike}>
+							{isLiked ? '❤️' : '🤍'}
+						</button>
+					</div>
+				</div>
 
+<<<<<<< HEAD
         <div className="menu-item-details">
           <h2>{menuItem.name}</h2>
           <p>${menuItem.price}</p>
           <p>{menuItem.description}</p>
           <p>{menuItem.food_type}</p>
+=======
+				<div className='menu-item-details'>
+					<h2>{menuItem.name}</h2>
+					<p> ${menuItem.price}</p>
+					<p>{menuItem.description}</p>
+					<p>{menuItem.food_type}</p>
+>>>>>>> dev
 
-          {user && (
-            <>
-              {/* <div className="quantity-selector">
+					{user && (
+						<>
+							{/* <div className="quantity-selector">
                 <button onClick={decreaseQuantity}>-</button>
                 <span>{quantity}</span>
                 <button onClick={increaseQuantity}>+</button>
               </div> */}
 
-              <button className="add-to-cart-button" onClick={handleAddToCart}>
-                Add to Cart
-              </button>
+							<button
+								className='add-to-cart-button'
+								onClick={handleAddToCart}>
+								{user.address ? 'Add to Cart' : 'Enter address to add'}
+							</button>
 
-              {message && <p className="confirmation-message">{message}</p>}
+							{message && (
+								<p className='confirmation-message'>{message}</p>
+							)}
 
-              <div className="update-delete-buttons">
-                <Link to={`/menu-items/${menuItem.id}/update`}>
-                  <button>Update</button>
-                </Link>
-                <Link to={`/menu-items/${menuItem.id}/delete`}>
-                  <button>Delete</button>
-                </Link>
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-    </div>
+							<div className='update-delete-buttons'>
+								<Link to={`/menu-items/${menuItem.id}/update`}>
+									<button>Update</button>
+								</Link>
+								<Link to={`/menu-items/${menuItem.id}/delete`}>
+									<button>Delete</button>
+								</Link>
+							</div>
+						</>
+					)}
+				</div>
+			</div>
+		</div>
   );
 };
 

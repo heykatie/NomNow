@@ -44,13 +44,13 @@ const MenuItemList = () => {
 			alert('You must be logged in to add items to the cart!');
 			return;
 		}
-	
+
 		// Check if cart has items from a different restaurant
 		if (cartItems.length > 0 && cartItems[0].restaurantId !== item.restaurantId) {
 			alert('Your cart contains items from a different restaurant. Please clear your cart or complete your existing order first.');
 			return;
 		}
-	
+
 		const orderData = {
 			id: item.id,
 			name: item.name,
@@ -59,7 +59,7 @@ const MenuItemList = () => {
 			food_image: item.food_image,
 			quantity: 1,
 		};
-	
+
 		dispatch(addToCart(orderData));
 	};
 

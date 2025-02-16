@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { thunkLogout } from '../../redux/session';
-import { NavLink, useNavigate, useLocation } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import OpenModalMenuItem from './OpenModalMenuItem';
 import SignupFormModal from '../SignupFormModal';
 // import { useModal } from "../../context/Modal";
@@ -24,11 +24,12 @@ function DropdownMenu({ user }) {
 		setMenuOpen(false);
 	};
 
-	const logout = (e) => {
+	const logout = async (e) => {
 		e.preventDefault();
-		dispatch(thunkLogout());
+		await dispatch(thunkLogout());
 		// closeModal();
 		closeMenu();
+		navigate('/')
 	};
 
 	const handleRestaurantClick = () => {
