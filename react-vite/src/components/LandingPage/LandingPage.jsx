@@ -21,20 +21,20 @@ function LandingPage() {
 		e.preventDefault();
 		return alert('Feature Coming Soon')
 
-		const split = address.split(',')
-		if(split.length !== 4){
-			return setErrors({
-				address: "Address must by ADDRESS, CITY, STATE, ZIP, seperated by commas"
-			})
-		}
-		const addressObj = {
-			address: split[0],
-			city: split[1],
-			state: split[2],
-    		zip: split[3]
-		}
+		// const split = address.split(',')
+		// if(split.length !== 4){
+		// 	return setErrors({
+		// 		address: "Address must by ADDRESS, CITY, STATE, ZIP, seperated by commas"
+		// 	})
+		// }
+		// const addressObj = {
+		// 	address: split[0],
+		// 	city: split[1],
+		// 	state: split[2],
+		// 	zip: split[3]
+		// }
 
-		await dispatch(guestLogin(addressObj))
+		// await dispatch(guestLogin(addressObj))
 	}
 
 	return (

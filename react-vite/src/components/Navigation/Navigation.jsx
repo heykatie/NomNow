@@ -24,6 +24,12 @@ function Navigation() {
 		}
 	}, [address])
 
+	useEffect(() => {
+  if (errors?.address) {
+    alert(errors.address);
+  }
+}, [errors?.address]);
+
 	if (isCheckoutPage) {
 		return (
 			<div className='checkout-navbar'>
@@ -106,20 +112,23 @@ function Navigation() {
 							</button>
 						)}
 						<span>
-								{user && (
-									<input className='address-set'
-										type='text'
-										placeholder={`${user.address}, ${user.city}`}
-										value={address}
-										onChange={(e) => setAddress(e.target.value)}
-									/>
-								)}
-								{address && (
-									<button onClick={(e) => setGuest(e)}>
-										Change address
-									</button>
-								)}
-							{errors?.address && <p>{errors.address}</p>}
+							{user && (
+								<input
+									className='address-set'
+									type='text'
+									placeholder={`${user.address}, ${user.city}`}
+									value={address}
+									onChange={(e) => setAddress(e.target.value)}
+								/>
+							)}
+							{address && (
+								<button onClick={(e) => setGuest(e)}>
+									Change address
+								</button>
+							)}
+							{/* {errors?.address && (
+								<p className='address-error'>{errors.address}</p>
+							)} */}
 						</span>
 					</li>
 				) : (
@@ -139,7 +148,8 @@ function Navigation() {
 								</button>
 							)}
 						</li>
-						{errors?.address && <p>{errors.address}</p>}
+							{/* {errors?.address &&
+							<p className='address-error'>{errors.address}</p>} */}
 					</>
 				)}
 
@@ -151,7 +161,7 @@ function Navigation() {
 							value={search}
 							onChange={(e) => {
 								setSearch(e.target.value);
-								alert('Feature coming soon')
+								alert('Feature coming soon');
 							}}
 						/>
 					)}
