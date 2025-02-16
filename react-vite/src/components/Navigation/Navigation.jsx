@@ -149,7 +149,10 @@ function Navigation() {
 							type='search'
 							placeholder='Search NomNow'
 							value={search}
-							onChange={(e) => setSearch(e.target.value)}
+							onChange={(e) => {
+								setSearch(e.target.value);
+								alert('Feature coming soon')
+							}}
 						/>
 					)}
 				</li>
