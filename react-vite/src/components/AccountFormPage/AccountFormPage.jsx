@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from "react-redux"
 import { NavLink, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 import "./AccountFormPage.css"
 import {uploadPfp} from "../../redux/session"
 
@@ -8,7 +9,10 @@ function AccountFormPage(){
     const navigate = useNavigate()
     const dispatch = useDispatch()
 
-    if(!user) return navigate('/login')
+    
+    // useEffect(() => {
+    //     if(!user) return navigate('/login')
+    // }, [user, navigate]);
 
     let pfp = '/icons/user.png'
     if(user.profileImage){
