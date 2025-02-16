@@ -29,11 +29,11 @@ export default function Footer() {
 								href='https://heykatie.github.io/'
 								target='_blank'
 								rel='noopener noreferrer'>
-								<div>Gabriel Dean</div>
+								<div>Gabriel Deane</div>
 							</a>
 							<div className='footer-links'>
 								<a
-									href='https://www.linkedin.com/in/gabriel-dean'
+									href='https://www.linkedin.com/in/gabriel-deane'
 									target='_blank'
 									rel='noopener noreferrer'>
 									<i className='fa-brands fa-linkedin'></i>
