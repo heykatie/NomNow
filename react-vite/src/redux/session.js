@@ -56,7 +56,12 @@ export const thunkLogin = (credentials) => async (dispatch) => {
 		const savedCart =
 			JSON.parse(localStorage.getItem(`cartItems_${newUserId}`)) || [];
 		dispatch(loadCart(savedCart));
-	}
+	} else if (response.status < 500) {
+    const errorMessages = await response.json();
+    return errorMessages;
+  } else {
+    return { server: 'Something went wrong. Please try again' };
+  }
 };
 
 export const thunkSignup = (user) => async (dispatch) => {

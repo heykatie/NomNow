@@ -7,18 +7,33 @@ from app.models import User
 def user_exists(form, field):
     # Checking if user exists
     email = field.data
-    user = User.query.filter(User.email == email).first()
-    if not user:
-        raise ValidationError('Email provided not found.')
+    if email:
+        user = User.query.filter(User.email == email).first()
+        if not user:
+            raise ValidationError('Email provided not found.')
+
+def phone_exists(form, field):
+    # Checking if user exists
+    phone_number = field.data
+    if phone_number:
+        user = User.query.filter(User.phone_number == phone_number).first()
+        if not user:
+            raise ValidationError("Phone number provided not found.")
 
 
 def password_matches(form, field):
     # Checking if password matches
     password = field.data
-    email = form.data['email']
-    print('\n EMAIL: ', email)
+    if form.data['email']:
+        target = form.data['email']
+        user = User.query.filter(User.email == target).first()
+    elif form.data['phone_number']:
+        target = form.data['phone_number']
+        user = User.query.filter(User.phone_number == target).first()
+    print('\n TARGET: ', target)
     print('PASSWORD: ', password)
-    user = User.query.filter(User.email == email).first()
+    print('USER', user, '\n')
+    
     print('USER PASSWORD: ',user.password, '\n')
     if not user:
         raise ValidationError('No such user exists.')
@@ -27,5 +42,6 @@ def password_matches(form, field):
 
 
 class LoginForm(FlaskForm):
-    email = StringField('email', validators=[DataRequired(), user_exists])
+    email = StringField('email', validators=[user_exists])
+    phone_number = StringField("phone Number", validators=[phone_exists])
     password = PasswordField('password', validators=[DataRequired(), password_matches])
