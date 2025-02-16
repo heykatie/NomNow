@@ -40,7 +40,8 @@ function LandingPage() {
 	return (
 		<div className='landing-page'>
 			<div className='main-content'>
-				<h1>Order delivery near you</h1>
+				<h1>NomNow</h1>
+				<h2>Order delivery near you</h2>
 				<form onSubmit={(e)=> setGuest(e)}>
 					<input
 						type='text'
