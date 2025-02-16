@@ -44,6 +44,7 @@ const validateField = (name, value) => {
         case 'address':
             if (!value.trim()) return 'Address is required';
             if (value.length < 5) return 'Please enter a valid address';
+            if (!/^\d+/.test(value)) return 'Address must start with a street number';
             return '';
 
         case 'city':
@@ -518,7 +519,7 @@ export default function RestaurantForm() {
                 <button 
                     type="submit" 
                     disabled={isLoading || Object.keys(formErrors).length > 0 || hasEmptyRequired()}
-                    className='submit-btn'
+                    className='auth-buttons'
                 >
                     {isLoading ? (isEditMode ? 'Updating...' : 'Creating...') : 
                                 (isEditMode ? 'Update Restaurant' : 'Create Restaurant')}
