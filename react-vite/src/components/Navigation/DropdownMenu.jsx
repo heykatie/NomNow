@@ -24,11 +24,12 @@ function DropdownMenu({ user }) {
 		setMenuOpen(false);
 	};
 
-	const logout = (e) => {
+	const logout = async (e) => {
 		e.preventDefault();
-		dispatch(thunkLogout());
+		await dispatch(thunkLogout());
 		// closeModal();
 		closeMenu();
+		navigate('/')
 	};
 
 	const handleRestaurantClick = () => {
