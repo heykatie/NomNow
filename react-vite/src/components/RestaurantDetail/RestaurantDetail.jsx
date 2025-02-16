@@ -92,7 +92,8 @@ function RestaurantDetail() {
 					<input
 						type='search'
 						className='search-input'
-						placeholder={`Search in ${restaurant.name || 'restaurant'}`}
+                        placeholder={`Search in ${restaurant.name || 'restaurant'}`}
+                        onClick={()=> alert('Feature coming soon')}
 					/>
 				</div>
 			</div>

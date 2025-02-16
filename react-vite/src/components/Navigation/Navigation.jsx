@@ -94,7 +94,7 @@ function Navigation() {
 								onClick={(e) => {
 									e.preventDefault();
 									setDeliveryType('delivery');
-									alert('Set to delivery')
+									alert('Set to delivery');
 								}}>
 								Delivery
 							</button>
@@ -150,7 +150,7 @@ function Navigation() {
 								</button>
 							)}
 						</li>
-							{/* {errors?.address &&
+						{/* {errors?.address &&
 							<p className='address-error'>{errors.address}</p>} */}
 					</>
 				)}
@@ -163,8 +163,8 @@ function Navigation() {
 							value={search}
 							onChange={(e) => {
 								setSearch(e.target.value);
-								alert('Feature coming soon');
 							}}
+							onClick={() => alert('Feature coming soon')}
 						/>
 					)}
 				</li>
