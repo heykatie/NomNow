@@ -94,6 +94,7 @@ function Navigation() {
 								onClick={(e) => {
 									e.preventDefault();
 									setDeliveryType('delivery');
+									alert('Set to delivery')
 								}}>
 								Delivery
 							</button>
@@ -107,6 +108,7 @@ function Navigation() {
 								onClick={(e) => {
 									e.preventDefault();
 									setDeliveryType('pickup');
+									alert('Set for pickup');
 								}}>
 								Pickup
 							</button>
