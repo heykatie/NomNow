@@ -109,8 +109,11 @@ export default function Orders() {
 	return (
 		<div className='orders-container'>
 			<h2>Past Orders</h2>
-			{orders
-				.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+			{orders.sort((a, b) => {
+					const dateDiff = new Date(b.createdAt) - new Date(a.createdAt);
+					if (dateDiff !== 0) return dateDiff;
+					return b.id - a.id; 
+			})
 				.map((order) => (
 					<div
 						key={order.id}
@@ -195,7 +198,7 @@ export default function Orders() {
 							</button>
 							<button
 								className='rate-btn'
-								disabled={order.status !== 'Completed'}
+								disabled={order.status == 'Canceled'}
 								onClick={(e) => {
 									e.stopPropagation();
 									handleRateOrder(
