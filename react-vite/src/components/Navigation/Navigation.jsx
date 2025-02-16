@@ -1,6 +1,6 @@
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
-import { useState} from "react";
+import { useState, useEffect} from "react";
 import DropdownMenu from "./DropdownMenu";
 import { guestLogin, editUserThunk } from '../../redux/session';
 import "./Navigation.css";
@@ -17,6 +17,12 @@ function Navigation() {
 	const dispatch = useDispatch()
 	const isCheckoutPage = location.pathname === '/checkout';
   // const location = useLocation().pathname.split('/');
+
+	useEffect(()=>{
+		if(errors){
+			setErrors({})
+		}
+	}, [address])
 
 	if (isCheckoutPage) {
 		return (
