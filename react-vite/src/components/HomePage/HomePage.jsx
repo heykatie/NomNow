@@ -89,7 +89,7 @@ function HomePage() {
                     <h2>
                         {selectedCuisine ? `${selectedCuisine} Restaurants` : 'All Restaurants'}
                         <span className="results-count">
-                            ({filteredRestaurants.length} results)
+                            {/* ({filteredRestaurants.length} results) */}
                         </span>
                     </h2>
                     <div className='restaurants-grid'>

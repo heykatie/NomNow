@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import  { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMenuItems } from '../../redux/menuItems';
 import { addToCart } from '../../redux/cart';
@@ -10,7 +10,7 @@ const MenuItemList = () => {
 	const dispatch = useDispatch();
 	const menuItems = useSelector((state) => state.menuItems.menuItems);
 	const error = useSelector((state) => state.menuItems.error);
-	const isLoading = useSelector((state) => state.menuItems.isLoading);
+	// const isLoading = useSelector((state) => state.menuItems.isLoading);
 	const user = useSelector((state) => state.session.user);
 	const cart = useSelector(state => state.cart);
 	const cartItems = cart?.cartItems || [];

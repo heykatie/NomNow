@@ -14,7 +14,6 @@ export const getMenuItems = () => async (dispatch) => {
   try {
     const response = await fetch('/api/menu-items');
     const data = await response.json();
-    // console.log("Fetched Menu Items:", data); // Debugging log
 
     dispatch({ type: GET_MENU_ITEMS, payload: data });
   } catch (error) {
@@ -141,7 +140,6 @@ export const getFavoriteItems = () => async (dispatch, getState) => {
   }
 };
 
-
 const initialState = {
   menuItems: [],
   menuItem: null,
@@ -152,74 +150,86 @@ const initialState = {
 
 const menuReducer = (state = initialState, action) => {
   switch (action.type) {
-    case GET_MENU_ITEMS:
+    case GET_MENU_ITEMS: {
       return { ...state, menuItems: action.payload, error: null };
+    }
 
-    case GET_MENU_ITEM:
+    case GET_MENU_ITEM: {
       return { ...state, menuItem: action.payload, error: null };
+    }
 
-    case CREATE_MENU_ITEM:
+    case CREATE_MENU_ITEM: {
       return {
         ...state,
         menuItems: [action.payload, ...state.menuItems], // Add new item at the front
         error: null,
       };
+    }
 
-      case UPDATE_MENU_ITEM:
-        return {
-          ...state,
-          menuItems: state.menuItems.map((item) =>
-            item.id === action.payload.id ? action.payload : item
-          ),
-          menuItem: action.payload, // Update the current menu item in state
-          error: null,
-        };
+    case UPDATE_MENU_ITEM: {
+      return {
+        ...state,
+        menuItems: state.menuItems.map((item) =>
+          item.id === action.payload.id ? action.payload : item
+        ),
+        menuItem: action.payload, // Update the current menu item in state
+        error: null,
+      };
+    }
 
-    case DELETE_MENU_ITEM:
+    case DELETE_MENU_ITEM: {
       return {
         ...state,
         menuItems: state.menuItems.filter((item) => item.id !== action.payload),
         error: null,
       };
+    }
 
-      case 'SET_FAVORITE_ITEMS':
-        return { ...state, favoriteItems: action.payload, error: null };
+    case 'SET_FAVORITE_ITEMS': {
+      return { ...state, favoriteItems: action.payload, error: null };
+    }
 
-        case TOGGLE_LIKE:
-          const { itemId, userId } = action.payload;
-          const userLikedItems = state.likedItems[userId] || [];
-          const isAlreadyLiked = userLikedItems.includes(itemId);
-        
-          const updatedUserLikedItems = isAlreadyLiked
-            ? userLikedItems.filter(id => id !== itemId) // Remove if already liked
-            : [...userLikedItems, itemId]; // Add if not liked
-        
-          const updatedLikedItems = {
-            ...state.likedItems,
-            [userId]: updatedUserLikedItems,
-          };
-        
-          localStorage.setItem('likedItems', JSON.stringify(updatedLikedItems)); // Save to localStorage
-        
-          return { ...state, likedItems: updatedLikedItems };
-
-    case MENU_ERROR:
-      return { ...state, error: action.payload };
+    case TOGGLE_LIKE: {
+      const { itemId, userId } = action.payload;
+      const userLikedItems = state.likedItems[userId] || [];
+      const isAlreadyLiked = userLikedItems.includes(itemId);
     
-    case 'SET_MENU_ITEMS':
-      return {
-          ...state,
-          menuItems: action.payload,
-          error: null
+      const updatedUserLikedItems = isAlreadyLiked
+        ? userLikedItems.filter(id => id !== itemId) // Remove if already liked
+        : [...userLikedItems, itemId]; // Add if not liked
+    
+      const updatedLikedItems = {
+        ...state.likedItems,
+        [userId]: updatedUserLikedItems,
       };
-    case 'SET_MENU_ITEMS_ERROR':
-      return {
-            ...state,
-            error: action.payload
-        };
+    
+      localStorage.setItem('likedItems', JSON.stringify(updatedLikedItems)); // Save to localStorage
+    
+      return { ...state, likedItems: updatedLikedItems };
+    }
 
-    default:
+    case MENU_ERROR: {
+      return { ...state, error: action.payload };
+    }
+    
+    case 'SET_MENU_ITEMS': {
+      return {
+        ...state,
+        menuItems: action.payload,
+        error: null,
+      };
+    }
+    
+    case 'SET_MENU_ITEMS_ERROR': {
+      return {
+        ...state,
+        error: action.payload,
+      };
+    }
+
+    default: {
       return state;
+    }
   }
 };
 
