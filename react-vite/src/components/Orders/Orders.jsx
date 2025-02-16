@@ -109,11 +109,8 @@ export default function Orders() {
 	return (
 		<div className='orders-container'>
 			<h2>Past Orders</h2>
-			{orders.sort((a, b) => {
-					const dateDiff = new Date(b.createdAt) - new Date(a.createdAt);
-					if (dateDiff !== 0) return dateDiff;
-					return b.id - a.id; 
-			})
+			{orders
+				.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
 				.map((order) => (
 					<div
 						key={order.id}
