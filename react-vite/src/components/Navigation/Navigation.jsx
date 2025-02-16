@@ -7,11 +7,11 @@ import "./Navigation.css";
 import Cart from '../Cart';
 
 function Navigation() {
-  	const user = useSelector((store) => store.session.user);
+	const user = useSelector((store) => store.session.user);
 	const [deliveryType, setDeliveryType] = useState('delivery');
-  	const [search, setSearch] = useState('');
+	const [search, setSearch] = useState('');
 	const [address, setAddress] = useState('');
-	const [errors, setErrors] = useState({})
+	const [errors, setErrors] = useState()
 	const location = useLocation();
 	const navigate = useNavigate();
 	const dispatch = useDispatch()
@@ -20,7 +20,7 @@ function Navigation() {
 
 	useEffect(()=>{
 		if(errors){
-			setErrors({})
+			setErrors()
 		}
 	}, [address])
 
@@ -70,7 +70,7 @@ function Navigation() {
 	}
 
   // console.log('DELIVERY TYPE:', deliveryType);
-  console.log('USER', user)
+//   console.log('USER', user)
   return (
 		<div className='navContainer'>
 			<ul className='nav'>
@@ -121,7 +121,7 @@ function Navigation() {
 							</button>
 						)}
 					</li>
-					{errors.address && <p>{errors.address}</p>}
+					{errors?.address && <p>{errors.address}</p>}
 					</>
 				)}
 

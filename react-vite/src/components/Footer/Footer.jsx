@@ -1,14 +1,17 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import {useEffect} from 'react'
 import './Footer.css';
 
 export default function Footer() {
   const navigate = useNavigate();
   const user = useSelector((store) => store.session.user);
 
-  if (!user) {
-    navigate('/');
-  }
+  useEffect(() => {
+		if (!user) {
+			navigate('/');
+		}
+	}, [user, navigate]);
 
   return (
     <>
