@@ -4,8 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useModal } from '../../../context/Modal';
 import TipModal from '../../../context/TipModal';
 import ScheduleModal from '../../../context/ScheduleModal';
-import { placeOrder, deleteOrder } from '../../../redux/orders';
-import {confirmOrderPlacement, clearCart} from '../../../redux/cart';
+import { placeOrder } from '../../../redux/orders';
+// import {confirmOrderPlacement, clearCart} from '../../../redux/cart';
 import { deductFundsThunk } from '../../../redux/session';
 import OrderRestaurant from '../../Orders/OrderRestaurant';
 import CartItems from '../CartItems';
@@ -96,13 +96,13 @@ export default function Checkout() {
 			window.removeEventListener('beforeunload', handleBeforeUnload);
 			handleOrderDeletion();
 		};
-	}, []);
+	}, [handleOrderDeletion]);
 
 	useEffect(() => {
 		if (location.pathname !== '/checkout') {
 			handleOrderDeletion();
 		}
-	}, [location.key]);
+	}, [handleOrderDeletion, location.pathname]);
 
 	useEffect(() => {
 		const savedOrder = JSON.parse(localStorage.getItem('currentOrder'));

@@ -1,6 +1,6 @@
-import { Link, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
+// import { useSelector } from 'react-redux';
+// import { useEffect } from 'react';
 import './Footer.css';
 
 export default function Footer() {

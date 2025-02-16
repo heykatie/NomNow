@@ -2,7 +2,7 @@ import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect} from "react";
 import DropdownMenu from "./DropdownMenu";
-import { guestLogin, editUserThunk } from '../../redux/session';
+import { editUserThunk } from '../../redux/session';
 import "./Navigation.css";
 import Cart from '../Cart';
 
@@ -22,7 +22,7 @@ function Navigation() {
 		if(errors){
 			setErrors()
 		}
-	}, [address])
+	}, [errors, address])
 
 	useEffect(() => {
   if (errors?.address) {

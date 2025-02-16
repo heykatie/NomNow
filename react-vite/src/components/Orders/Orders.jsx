@@ -25,7 +25,7 @@ export default function Orders() {
 
 	useEffect(() => {
 		if (!user) navigate('/login');
-	}, [user]);
+	}, [navigate, user]);
 
 	useEffect(() => {
 		if (!orders) {

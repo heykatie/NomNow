@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { getRestaurant } from '../../redux/restaurants';
 import { getMenuItems } from '../../redux/menuItems';
 import { addToCart } from '../../redux/cart';
@@ -9,7 +9,7 @@ import './RestaurantDetail.css';
 
 function RestaurantDetail() {
 	const dispatch = useDispatch();
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 	const { id } = useParams();
 	const { currentRestaurant, error } = useSelector(
 		(state) => state.restaurants
