@@ -38,12 +38,14 @@ function LoginFormPage({ isLogin, isSignup }) {
 
         if (credential === "") {
             return setErrors({ credential: "Please enter a valid email or phone number", type: 'credential; None' });
-        } else if (credential.includes("@")) {
+        }
+        if (credential.includes("@")) {
             if (credential.split('@')[1].includes('.')) userSubmission.email = credential;
-        } else if (credential.includes('-') || credential.length === 10) {
+            else return setErrors({ credential: "Invalid email", type: 'credential; No "." after "@"' });
+        } else if (credential.includes('-') || !isNaN(Number(credential))) {
             let phoneNumber = credential;
             if (phoneNumber.includes('-')) phoneNumber = phoneNumber.split('-').join('');
-            if (phoneNumber.length !== 10) return setErrors({ credential: "Please enter a valid email or phone number", type: 'phone; Invalid' });
+            if (phoneNumber.length !== 10) return setErrors({ credential: "Invalid phone number", type: 'phone; Must have 10 digits' });
             userSubmission.phone_number = phoneNumber;
         }
 
