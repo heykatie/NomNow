@@ -103,7 +103,7 @@ const MenuItemList = () => {
 								onClick={() => handleAddToCart(item)}
 							>
 								{cartItems.length > 0 && cartItems[0].restaurantId !== item.restaurantId
-									? '⚠️'
+									? ''
 									: '+'}
 							</button>
 						</div>
