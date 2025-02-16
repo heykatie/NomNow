@@ -70,19 +70,10 @@ const MenuItemDetail = () => {
   const isLiked = userLikedItems.includes(menuItem.id); // Check if the item is liked by the current user
 
   return (
-<<<<<<< HEAD
     <div className="menu-item-detail-container">
       <button className="back-button" onClick={() => navigate(`/restaurants/${menuItem.restaurantId}`)}>
         <span className="back-arrow">←</span> Back to Restaurant
       </button>
-=======
-		<div className='menu-item-detail-container'>
-			<button
-				className='back-button'
-				onClick={() => navigate('/menu-items')}>
-				Back to Menu Items List
-			</button>
->>>>>>> dev
 
 			<div className='menu-item-detail'>
 				<div>
@@ -96,19 +87,11 @@ const MenuItemDetail = () => {
 					</div>
 				</div>
 
-<<<<<<< HEAD
         <div className="menu-item-details">
           <h2>{menuItem.name}</h2>
           <p>${menuItem.price}</p>
           <p>{menuItem.description}</p>
           <p>{menuItem.food_type}</p>
-=======
-				<div className='menu-item-details'>
-					<h2>{menuItem.name}</h2>
-					<p> ${menuItem.price}</p>
-					<p>{menuItem.description}</p>
-					<p>{menuItem.food_type}</p>
->>>>>>> dev
 
 					{user && (
 						<>
