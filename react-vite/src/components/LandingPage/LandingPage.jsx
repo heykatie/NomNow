@@ -1,15 +1,15 @@
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LandingPage.css';
-import { guestLogin } from '../../redux/session';
+// import { guestLogin } from '../../redux/session';
 function LandingPage() {
 	const [address, setAddress] = useState('');
 	const [delivery_time, setDeliveryTime] = useState('');
 	const [errors, setErrors] = useState({})
 	const navigate = useNavigate();
 	const user = useSelector((store) => store.session.user);
-	const dispatch = useDispatch()
+	// const dispatch = useDispatch()
 
 	useEffect(() => {
 		if (user) {

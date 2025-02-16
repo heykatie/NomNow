@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useModal } from '../../../context/Modal';
@@ -81,12 +82,19 @@ export default function Checkout() {
 		}, 500);
 	};
 
-	const handleOrderDeletion = async () => {
+	// const handleOrderDeletion = async () => {
+	// 	if (currentOrder?.status === 'Active') {
+	// 		// await dispatch(deleteOrder(currentOrder.id));
+	// 		localStorage.removeItem('currentOrder');
+	// 	}
+	// };
+
+	const handleOrderDeletion = useCallback(async () => {
 		if (currentOrder?.status === 'Active') {
-			// await dispatch(deleteOrder(currentOrder.id));
 			localStorage.removeItem('currentOrder');
 		}
-	};
+	}, [currentOrder?.status]);
+
 	useEffect(() => {
 		const handleBeforeUnload = () => handleOrderDeletion();
 
