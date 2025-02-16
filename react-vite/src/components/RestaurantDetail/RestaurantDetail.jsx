@@ -102,18 +102,24 @@ function RestaurantDetail() {
 				<div className='delivery-toggle' data-active={deliveryMethod}>
 					<button
 						className={deliveryMethod === 'delivery' ? 'active' : ''}
-						onClick={() => setDeliveryMethod('delivery')}>
+                        onClick={() => {
+                            setDeliveryMethod('delivery');
+                            alert('Set to delivery')
+                        }}>
 						Delivery
 					</button>
 					<button
 						className={deliveryMethod === 'pickup' ? 'active' : ''}
-						onClick={() => setDeliveryMethod('pickup')}>
+                        onClick={() => {
+                            setDeliveryMethod('pickup');
+                            alert('Set for pickup');
+                        }}>
 						Pickup
 					</button>
 					<div className='slider'></div>
 				</div>
 
-				<button className='group-order-btn'>
+				<button className='group-order-btn' onClick={()=> alert('Feature coming soon')}>
 					<span className='icon'>👥</span>
 					Group order
 				</button>
@@ -126,14 +132,14 @@ function RestaurantDetail() {
 								? `${restaurant.deliveryFee} Delivery Fee on $15+`
 								: '$0 Delivery Fee on $15+'}
 						</span>
-						<span className='info-label'>Pricing & fees</span>
+						{/* <span className='info-label'>Pricing & fees</span> */}
 					</div>
 
 					<div className='info-item'>
 						<span className='arrival-time'>
 							{restaurant.deliveryTime} min
 						</span>
-						<span className='info-label'>Earliest arrival</span>
+						<span className='info-label' style={{textDecoration: 'none'}}>Earliest arrival</span>
 					</div>
 				</div>
 			</div>
