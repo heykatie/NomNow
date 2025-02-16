@@ -10,9 +10,7 @@ function AccountFormPage(){
     const dispatch = useDispatch()
 
     
-    // useEffect(() => {
-    //     if(!user) return navigate('/login')
-    // }, [user, navigate]);
+    if(!user) return navigate('/login')
 
     let pfp = '/icons/user.png'
     if(user.profileImage){
