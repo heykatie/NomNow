@@ -41,7 +41,7 @@ function Navigation() {
 	}
 	const setGuest = async (e) => {
 		e.preventDefault();
-		
+
 
 		const split = address.split(',')
 		if(split.length !== 4){
@@ -63,7 +63,7 @@ function Navigation() {
 		}else{
 			return alert('Must login to add address')
 		}
-		
+
 		if(server){
 			console.log(server)
 		}
@@ -105,33 +105,53 @@ function Navigation() {
 								Pickup
 							</button>
 						)}
+						<span>
+								{user && (
+									<input className='address-set'
+										type='text'
+										placeholder={`${user.address}, ${user.city}`}
+										value={address}
+										onChange={(e) => setAddress(e.target.value)}
+									/>
+								)}
+								{address && (
+									<button onClick={(e) => setGuest(e)}>
+										Change address
+									</button>
+								)}
+							{errors?.address && <p>{errors.address}</p>}
+						</span>
 					</li>
 				) : (
 					<>
-					<li className='delivery-type'>
-						<input 
-							type="text" 
-							placeholder='Enter delivery address'
-							value={address}
-							onChange={(e) => setAddress(e.target.value)}
-						/>
-						{address && (
-							<button onClick={(e)=> setGuest(e)}>
-								Add address
-							</button>
-						)}
-					</li>
-					{errors?.address && <p>{errors.address}</p>}
+						<li className='delivery-type'>
+							{user && (
+								<input
+									type='text'
+									placeholder='Enter delivery address'
+									value={address}
+									onChange={(e) => setAddress(e.target.value)}
+								/>
+							)}
+							{address && (
+								<button onClick={(e) => setGuest(e)}>
+									Add address
+								</button>
+							)}
+						</li>
+						{errors?.address && <p>{errors.address}</p>}
 					</>
 				)}
 
 				<li>
-					<input
-						type='search'
-						placeholder='Search NomNow'
-						value={search}
-						onChange={(e) => setSearch(e.target.value)}
-					/>
+					{user && (
+						<input
+							type='search'
+							placeholder='Search NomNow'
+							value={search}
+							onChange={(e) => setSearch(e.target.value)}
+						/>
+					)}
 				</li>
 				<li className='user-actions'>
 					{user?.address && (
