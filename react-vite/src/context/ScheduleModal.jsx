@@ -145,7 +145,7 @@ export default function ScheduleModal({
 			<div className='date-selection-container'>
 				{showLeftArrow && (
 					<button
-						className='scroll-arrow left'
+						className='schedule-scroll-arrow left'
 						onClick={() =>
 							dateScrollRef.current.scrollBy({
 								left: -100,
@@ -170,7 +170,7 @@ export default function ScheduleModal({
 				</div>
 
 				<button
-					className='scroll-arrow right'
+					className='schedule-scroll-arrow right'
 					onClick={() =>
 						dateScrollRef.current.scrollBy({
 							left: 100,
