@@ -57,6 +57,7 @@ function RestaurantDetail() {
 			price: item.price,
 			restaurantId: parseInt(id), // Make sure restaurantId is an integer
 			food_image: item.food_image,
+			restaurant: item.restaurant,
 			quantity: 1,
 		};
 
