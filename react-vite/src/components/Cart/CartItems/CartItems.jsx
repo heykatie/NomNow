@@ -15,7 +15,12 @@ export default function CartItems({ items, closeCart }) {
 
 	const handleCartItemClick = (menuItemId) => {
 		if (menuItemId) {
-			closeCart();
+			if (
+				location.pathname !== '/checkout' &&
+				typeof closeCart === 'function'
+			) {
+				closeCart();
+			}
 			navigate(`/menu-items/${menuItemId}`);
 		}
 	};

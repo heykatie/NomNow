@@ -40,7 +40,12 @@ export default function OrderRestaurant({ restaurant, closeCart }) {
 		<div
 			className='restaurant-header'
 			onClick={() => {
-				closeCart();
+				if (
+					location.pathname !== '/checkout' &&
+					typeof closeCart === 'function'
+				) {
+					closeCart();
+				}
 				navigate(`/restaurants/${restaurantData.id}`)
 			}}>
 			<img
