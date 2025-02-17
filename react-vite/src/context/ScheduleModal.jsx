@@ -112,6 +112,24 @@ export default function ScheduleModal({
 		}
 	}, [dates]);
 
+	useEffect(() => {
+		const scrollContainer = dateScrollRef.current;
+		if (!scrollContainer) return;
+
+		const handleWheelScroll = (event) => {
+			if (event.deltaY !== 0) {
+				event.preventDefault();
+				scrollContainer.scrollLeft += event.deltaY; 
+			}
+		};
+
+		scrollContainer.addEventListener('wheel', handleWheelScroll, {
+			passive: false,
+		});
+		return () =>
+			scrollContainer.removeEventListener('wheel', handleWheelScroll);
+	}, []);
+
 	const handleSchedule = () => {
 		if (selectedDate && selectedTime) {
 			setScheduledTime(`${selectedDate} at ${selectedTime}`);
@@ -145,7 +163,7 @@ export default function ScheduleModal({
 			<div className='date-selection-container'>
 				{showLeftArrow && (
 					<button
-						className='scroll-arrow left'
+						className='schedule-scroll-arrow left'
 						onClick={() =>
 							dateScrollRef.current.scrollBy({
 								left: -100,
@@ -170,7 +188,7 @@ export default function ScheduleModal({
 				</div>
 
 				<button
-					className='scroll-arrow right'
+					className='schedule-scroll-arrow right'
 					onClick={() =>
 						dateScrollRef.current.scrollBy({
 							left: 100,
