@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { FaChevronDown, FaChevronUp, FaShoppingCart } from 'react-icons/fa';
 import { useCallback } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -26,6 +27,7 @@ export default function Checkout() {
 	const restaurantClosingTime =
 		currentOrder?.restaurant?.closingTime || '20:00';
 	const [paymentMethod, setPaymentMethod] = useState('credit-card');
+	const [isCartExpanded, setIsCartExpanded] = useState(false);
 
 	const subtotal = parseInt(currentOrder?.totalCost) || 0;
 	const baseDeliveryFee = 6.49;
@@ -227,7 +229,7 @@ export default function Checkout() {
 				<OrderRestaurant restaurantId={currentOrder.restaurantId} />
 				<div className='order-summary'>
 					{/* <h4>Cart summary ({currentOrder?.orderItems?.length} item/s)</h4> */}
-					<h4>
+					{/* <h4>
 						Cart summary (
 						{Array.isArray(currentOrder?.orderItems)
 							? currentOrder.orderItems.reduce(
@@ -244,7 +246,33 @@ export default function Checkout() {
 							: ''}
 						)
 					</h4>
-					<CartItems items={currentOrder?.orderItems} />
+					<CartItems items={currentOrder?.orderItems} /> */}
+					<div
+						className='cart-summary-header'
+						onClick={() => setIsCartExpanded(!isCartExpanded)}>
+						<FaShoppingCart className='cart-summary-icon' />
+						<h4>
+							Cart summary (
+							{Array.isArray(currentOrder?.orderItems)
+								? currentOrder.orderItems.reduce(
+										(total, item) => total + item.quantity,
+										0
+								)
+								: 0}{' '}
+							items)
+						</h4>
+						{isCartExpanded ? (
+							<FaChevronUp className='toggle-arrow' />
+						) : (
+							<FaChevronDown className='toggle-arrow' />
+						)}
+					</div>
+
+					{isCartExpanded && (
+						<div className='cart-items-container'>
+							<CartItems items={currentOrder?.orderItems} />
+						</div>
+					)}
 				</div>
 
 				<div className='order-total'>

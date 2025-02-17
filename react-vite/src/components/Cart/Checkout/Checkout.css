@@ -239,6 +239,34 @@ h3 {
   color: gray;
 }
 
+.cart-summary-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  padding: 15px;
+  background: #fff;
+  border-radius: 10px;
+  /* border: 1px solid #ddd; */
+  /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
+  transition: background 0.3s ease-in-out;
+  max-height: 1rem;
+}
+
+.cart-summary-header:hover {
+  background: #f9f9f9;
+}
+
+.cart-summary-icon {
+  font-size: 18px;
+  margin-right: 8px;
+}
+
+.toggle-arrow {
+  font-size: 16px;
+  transition: transform 0.2s ease-in-out;
+}
+
 /* 🎯 RESPONSIVE STYLING */
 @media (max-width: 1024px) {
   .checkout-page {
