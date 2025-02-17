@@ -64,6 +64,14 @@ h3 {
 .delivery-options.selected {
   border: 2px solid black;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  color: white !important;
+}
+
+.delivery-options .selected span{
+  color: white !important;
+}
+.delivery-options span{
+  color: black !important;
 }
 
 .credit-card span,
