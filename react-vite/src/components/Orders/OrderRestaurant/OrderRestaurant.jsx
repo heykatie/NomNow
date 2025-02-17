@@ -29,7 +29,6 @@ export default function OrderRestaurant({ restaurant }) {
 	// 		dispatch(getRestaurant(restaurantId));
 	// 	}
 	// }, [dispatch, restaurantId, location.pathname]);
-	console.log('KATIE', restaurant);
 
 	useEffect(() => {
 		if (location.pathname == '/checkout') {
