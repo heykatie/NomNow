@@ -177,6 +177,7 @@ export default function Orders() {
 											? new Date(order.createdAt).toLocaleString()
 											: 'No Date Available'}
 									</p>
+									•
 									<div className='order-actions'>
 										<a href={`/orders/${order.id}/receipt`}>
 											View receipt
