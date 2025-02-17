@@ -1,12 +1,12 @@
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useEffect, useState } from 'react';
-import {getRestaurant} from '../../../redux/restaurants'
+// import {getRestaurant} from '../../../redux/restaurants'
 import './OrderRestaurant.css';
 
 
 export default function OrderRestaurant({ restaurant, closeCart }) {
-	const dispatch = useDispatch();
+	// const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const location = useLocation();
 	const [restaurantData, setRestaurantData] = useState(restaurant);
