@@ -112,6 +112,24 @@ export default function ScheduleModal({
 		}
 	}, [dates]);
 
+	useEffect(() => {
+		const scrollContainer = dateScrollRef.current;
+		if (!scrollContainer) return;
+
+		const handleWheelScroll = (event) => {
+			if (event.deltaY !== 0) {
+				event.preventDefault();
+				scrollContainer.scrollLeft += event.deltaY; 
+			}
+		};
+
+		scrollContainer.addEventListener('wheel', handleWheelScroll, {
+			passive: false,
+		});
+		return () =>
+			scrollContainer.removeEventListener('wheel', handleWheelScroll);
+	}, []);
+
 	const handleSchedule = () => {
 		if (selectedDate && selectedTime) {
 			setScheduledTime(`${selectedDate} at ${selectedTime}`);

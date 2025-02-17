@@ -38,7 +38,8 @@
   scroll-behavior: smooth;
   padding: 10px 0;
   max-width: 90%;
-  /* white-space: nowrap; */
+  white-space: nowrap;
+  cursor: grab;
 }
 
 .date-selection::-webkit-scrollbar {
