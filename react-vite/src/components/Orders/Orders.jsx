@@ -203,8 +203,10 @@ export default function Orders() {
 									<div className='order-review'>
 										{'★'.repeat(review.restaurantRating)}
 										{'☆'.repeat(5 - review.restaurantRating)}
-										{review.orderRating >= parseInt(3) && (
+										{review.orderRating >= parseInt(3) ? (
 											<i className='fa-solid fa-thumbs-up'></i>
+										) : (
+											<i className='fa-solid fa-thumbs-down'></i>
 										)}
 									</div>
 								)}

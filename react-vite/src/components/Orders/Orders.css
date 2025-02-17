@@ -99,7 +99,9 @@
   cursor: pointer !important;
   font-weight: bold !important;
   border: none !important;
-  padding: 12px 18px !important;
+  padding: 12px 1px !important;
+  width: 120px;
+  flex-shrink: 0;
 }
 
 .reorder-btn {
@@ -153,4 +155,9 @@
 
 .find-food-btn:hover {
   background-color: #333;
+}
+
+.order-review {
+  gap: 6px;
+  margin-top: 1rem;
 }
