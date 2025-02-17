@@ -76,7 +76,7 @@ export const getCart = (userId) => (dispatch) => {
 };
 
 export const addToCart =
-	(menuItem, quantity = 1) =>
+	(menuItem, quantity=1) =>
 	(dispatch, getState) => {
 		const state = getState();
 		const userId = state.session?.user?.id || 'guest';

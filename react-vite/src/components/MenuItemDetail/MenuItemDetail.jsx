@@ -38,7 +38,8 @@ const MenuItemDetail = () => {
       alert('Your cart contains items from a different restaurant. Please clear your cart or complete your existing order first.');
       return;
     }
-  
+
+    console.log('KATIE', quantity)
     // Proceed to add the item to the cart with the correct quantity
     dispatch(addToCart({
       id: menuItem.id,
@@ -47,19 +48,19 @@ const MenuItemDetail = () => {
       restaurantId: menuItem.restaurantId, // Correctly pass the restaurantId
       food_image: menuItem.food_image,
       restaurant: menuItem.restaurant,
-      quantity,
-    }));
-  
+      quantity: parseInt(quantity),
+    }, parseInt(quantity)));
+
     // Show a confirmation message with the correct quantity
     setMessage(`${quantity} ${menuItem.name} added to cart!`);
-    
+
     // Reset quantity after a small delay to allow the message to be visible
     setTimeout(() => {
       setMessage('');
       setQuantity(1); // Reset quantity here to 1 after adding to the cart
     }, 2000);
   };
-  
+
 
   const handleToggleLike = () => {
     if (!user) {
@@ -108,14 +109,14 @@ const MenuItemDetail = () => {
           {user && (
             <>
               <div className="quantity-selector">
-                <button 
-                  onClick={decreaseQuantity} 
+                <button
+                  onClick={decreaseQuantity}
                   disabled={isQuantitySelectorDisabled}>
                   -
                 </button>
                 <span>{quantity}</span>
-                <button 
-                  onClick={increaseQuantity} 
+                <button
+                  onClick={increaseQuantity}
                   disabled={isQuantitySelectorDisabled}>
                   +
                 </button>
