@@ -101,7 +101,12 @@ export const createOrder = (orderData) => async (dispatch) => {
 		dispatch(addOrder(fullOrder));
 		return { payload: fullOrder };
 	} catch (error) {
-		const errorMessage = await error.json();
+		let errorMessage;
+		try {
+			errorMessage = await error.json();
+		} catch {
+			errorMessage = { message: 'Server error: Could not create order.' };
+		}
 		dispatch(setError(errorMessage));
 	}
 };

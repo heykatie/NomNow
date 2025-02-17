@@ -225,7 +225,7 @@ def create_order():
         restaurant_id=restaurant_id,
         status="Active",
         promo=promo,
-        total_cost=total_cost,  # Set the total_cost here
+        total_cost=total_cost,
     )
 
     db.session.add(new_order)
