@@ -20,6 +20,7 @@ def get_menu_item(id):
         restaurant = Restaurant.query.get(menu_item.restaurant_id)
         return jsonify({
             **menu_item.to_dict(),
+            "restaurant": restaurant.to_dict(),
             "restaurant_owner_id": restaurant.owner_id,  # Include restaurant owner ID
         }), 200
     else:
@@ -32,15 +33,21 @@ def get_menu_item(id):
 @menu_item_routes.route('/', methods=['GET'])
 def get_menu_items():
     menu_items = (
-        db.session.query(MenuItem, Restaurant.name)
+        db.session.query(MenuItem, Restaurant)
         .join(Restaurant, MenuItem.restaurant_id == Restaurant.id)
         .all()
     )
 
-    return jsonify([
-        {**item.to_dict(), "restaurant_name": restaurant_name}
-        for item, restaurant_name in menu_items
-    ]), 200
+    return jsonify(
+        [
+            {
+                **item.to_dict(),
+                "restaurant_name": Restaurant.name,
+                "restaurant": Restaurant.to_dict(),
+            }
+            for item, Restaurant in menu_items
+        ]
+    ), 200
 
 
 

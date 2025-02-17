@@ -19,7 +19,7 @@ const MenuItemDetail = () => {
   const [message, setMessage] = useState('');
   const cart = useSelector(state => state.cart);
   const cartItems = cart?.cartItems || [];
-  
+
   useEffect(() => {
     if (id) {
       dispatch(getMenuItem(id));
@@ -46,6 +46,7 @@ const MenuItemDetail = () => {
       price: menuItem.price,
       restaurantId: menuItem.restaurantId, // Correctly pass the restaurantId
       food_image: menuItem.food_image,
+      restaurant: menuItem.restaurant,
       quantity,
     }));
 
