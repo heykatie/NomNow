@@ -65,11 +65,11 @@ const MenuItemList = () => {
 
 	return (
 		<div className="menu-item-list">
-			{user && (
+			{/* {user && (
 				<Link to='/menu-items/new'>
 					<button className="menu-item-list__create-button">Create a New Menu Item</button>
 				</Link>
-			)}
+			)} */}
 
 			{menuItems.length === 0 ? (
 				<p className="menu-item-list__empty-message">No menu items available.</p>

@@ -46,7 +46,7 @@ const RestaurantMenuManager = () => {
             <div className="header-container">
                 <div className="create-button-position">
                     <NavLink to="/menu-items/new" element={<MenuItemCreate />}>
-                        <button className="auth-buttons">Create New Menu Item</button>
+                        <button className="auth-buttons">Create a New Menu Item</button>
                     </NavLink>
                 </div>
                 <h1>Manage Menu</h1>
@@ -71,7 +71,7 @@ const RestaurantMenuManager = () => {
                                     element={<UpdateMenuItem />}
                                     className="auth-buttons"
                                 >
-                                    Edit
+                                    Update
                                 </NavLink>
                                 <NavLink
                                     to={`/menu-items/${item.id}/delete`}

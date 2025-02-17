@@ -1,8 +1,8 @@
-import  { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMenuItem, toggleLike, getFavoriteItems } from '../../redux/menuItems';
 import { addToCart } from '../../redux/cart';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import './MenuItemDetail.css'; // Import the updated CSS
 
 const MenuItemDetail = () => {
@@ -29,8 +29,8 @@ const MenuItemDetail = () => {
   if (error) return <div>Error: {error}</div>;
   if (!menuItem) return <div>Loading...</div>;
 
-  // const increaseQuantity = () => setQuantity(prev => prev + 1);
-  // const decreaseQuantity = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
+  const increaseQuantity = () => setQuantity(prev => prev + 1);
+  const decreaseQuantity = () => setQuantity(prev => (prev > 1 ? prev - 1 : 1));
 
   const handleAddToCart = () => {
     // Check if the cart already has items and if those items belong to a different restaurant
@@ -38,22 +38,27 @@ const MenuItemDetail = () => {
       alert('Your cart contains items from a different restaurant. Please clear your cart or complete your existing order first.');
       return;
     }
-
-    // Proceed to add the item to the cart
+  
+    // Proceed to add the item to the cart with the correct quantity
     dispatch(addToCart({
       id: menuItem.id,
       name: menuItem.name,
       price: menuItem.price,
       restaurantId: menuItem.restaurantId, // Correctly pass the restaurantId
       food_image: menuItem.food_image,
-      quantity,
+      quantity, // Pass the current quantity state
     }));
-
-    // Reset the quantity and show a confirmation message
-    setQuantity(1);
+  
+    // Show a confirmation message with the correct quantity
     setMessage(`${quantity} ${menuItem.name} added to cart!`);
-    setTimeout(() => setMessage(''), 2000);
+    
+    // Reset quantity after a small delay to allow the message to be visible
+    setTimeout(() => {
+      setMessage('');
+      setQuantity(1); // Reset quantity here to 1 after adding to the cart
+    }, 2000);
   };
+  
 
   const handleToggleLike = () => {
     if (!user) {
@@ -69,23 +74,29 @@ const MenuItemDetail = () => {
   const userLikedItems = likedItems[user?.id] || [];
   const isLiked = userLikedItems.includes(menuItem.id); // Check if the item is liked by the current user
 
+  // Check if the cart contains items from another restaurant
+  const isCartFromAnotherRestaurant = cartItems.length > 0 && cartItems[0].restaurantId !== menuItem.restaurantId;
+
+  // Disable quantity selector and add to cart button if cart has items from another restaurant or user has no address
+  const isQuantitySelectorDisabled = isCartFromAnotherRestaurant || !user?.address;
+
   return (
     <div className="menu-item-detail-container">
       <button className="back-button" onClick={() => navigate(`/restaurants/${menuItem.restaurantId}`)}>
         <span className="back-arrow">←</span> Back to Restaurant
       </button>
 
-			<div className='menu-item-detail'>
-				<div>
-					<img src={menuItem.food_image} alt={menuItem.name} />
-					<div className='heart-button-container'>
-						<button
-							className={`like-button ${isLiked ? 'liked' : ''}`}
-							onClick={handleToggleLike}>
-							{isLiked ? '❤️' : '🤍'}
-						</button>
-					</div>
-				</div>
+      <div className='menu-item-detail'>
+        <div>
+          <img src={menuItem.food_image} alt={menuItem.name} />
+          <div className='heart-button-container'>
+            <button
+              className={`like-button ${isLiked ? 'liked' : ''}`}
+              onClick={handleToggleLike}>
+              {isLiked ? '❤️' : '🤍'}
+            </button>
+          </div>
+        </div>
 
         <div className="menu-item-details">
           <h2>{menuItem.name}</h2>
@@ -93,37 +104,37 @@ const MenuItemDetail = () => {
           <p>{menuItem.description}</p>
           <p>{menuItem.food_type}</p>
 
-					{user && (
-						<>
-							{/* <div className="quantity-selector">
-                <button onClick={decreaseQuantity}>-</button>
+          {user && (
+            <>
+              <div className="quantity-selector">
+                <button 
+                  onClick={decreaseQuantity} 
+                  disabled={isQuantitySelectorDisabled}>
+                  -
+                </button>
                 <span>{quantity}</span>
-                <button onClick={increaseQuantity}>+</button>
-              </div> */}
+                <button 
+                  onClick={increaseQuantity} 
+                  disabled={isQuantitySelectorDisabled}>
+                  +
+                </button>
+              </div>
 
-							<button
-								className='add-to-cart-button'
-								onClick={handleAddToCart}>
-								{user.address ? 'Add to Cart' : 'Enter address to add'}
-							</button>
+              <button
+                className='add-to-cart-button'
+                onClick={handleAddToCart}
+                disabled={isCartFromAnotherRestaurant || !user.address}>
+                {user.address ? 'Add to Cart' : 'Enter address to add'}
+              </button>
 
-							{message && (
-								<p className='confirmation-message'>{message}</p>
-							)}
-
-							<div className='update-delete-buttons'>
-								<Link to={`/menu-items/${menuItem.id}/update`}>
-									<button>Update</button>
-								</Link>
-								<Link to={`/menu-items/${menuItem.id}/delete`}>
-									<button>Delete</button>
-								</Link>
-							</div>
-						</>
-					)}
-				</div>
-			</div>
-		</div>
+              {message && (
+                <p className='confirmation-message'>{message}</p>
+              )}
+            </>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
 

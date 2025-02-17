@@ -43,11 +43,12 @@ const MenuItemDelete = () => {
   }, [menuItem, user, navigate, id]);
 
   // Handle delete action
-  const handleDelete = () => {
-    dispatch(deleteMenuItem(id)).then(() => {
-      navigate('/menu-items'); // Redirect to the menu items list page after delete
-    });
-  };
+const handleDelete = () => {
+  dispatch(deleteMenuItem(id)).then(() => {
+    // Redirect to the menu items list page of the restaurant after delete
+    navigate(`/restaurants/${menuItem.restaurant_owner_id}/menu`); // Use backticks to interpolate the restaurant ID
+  });
+};
 
   // Handle cancel action
   const handleCancel = () => {
