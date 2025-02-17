@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { thunkLogin, thunkSignup } from "../../redux/session";
+import { thunkLogin, thunkSignup, demoLogin } from "../../redux/session";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Navigate } from "react-router-dom";
 import "./LoginForm.css"; // Import the updated CSS
@@ -15,19 +15,25 @@ function LoginFormPage({ isLogin, isSignup }) {
 
     if (sessionUser && !sessionUser.guestAccount) return <Navigate to="/" replace={true} />;
 
-    const demoSubmit = async (e, name) => {
+    const demoSubmit = async (e, id) => {
         e.preventDefault();
-        if (name === 'burak') {
-            await dispatch(thunkLogin({ email: 'b@user.io', password: 'password' }));
-        } else if (name === 'gabe') {
-            await dispatch(thunkLogin({ email: 'g@user.io', password: 'password' }));
-        } else if (name === 'katie') {
-            await dispatch(thunkLogin({ email: 'k@user.io', password: 'password' }));
-        } else if (name === 'mar') {
-            await dispatch(thunkLogin({ email: 'm@user.io', password: 'password' }));
-        } else if (name === 'sama') {
-            await dispatch(thunkLogin({ email: 's@user.io', password: 'password' }));
+
+        const server = await dispatch(demoLogin(id))
+
+        if(server){
+            console.log(server)
         }
+        // if (name === 'burak') {
+        //     await dispatch(thunkLogin({ email: 'b@user.io', password: 'password' }));
+        // } else if (name === 'gabe') {
+        //     await dispatch(thunkLogin({ email: 'g@user.io', password: 'password' }));
+        // } else if (name === 'katie') {
+        //     await dispatch(thunkLogin({ email: 'k@user.io', password: 'password' }));
+        // } else if (name === 'mar') {
+        //     await dispatch(thunkLogin({ email: 'm@user.io', password: 'password' }));
+        // } else if (name === 'sama') {
+        //     await dispatch(thunkLogin({ email: 's@user.io', password: 'password' }));
+        // }
     };
 
     const handleSubmit = async (e) => {
@@ -128,9 +134,7 @@ function LoginFormPage({ isLogin, isSignup }) {
                         <button
                             className="login-form-page-demo-button"
                             onClick={(e) => {
-                                setCredential('b@user.io');
-                                setPassword('password');
-                                demoSubmit(e, 'burak');
+                                demoSubmit(e, 3);
                             }}>
                             Login as Burak
                         </button>
@@ -139,7 +143,7 @@ function LoginFormPage({ isLogin, isSignup }) {
                             onClick={(e) => {
                                 setCredential('g@user.io');
                                 setPassword('password');
-                                demoSubmit(e, 'gabe');
+                                demoSubmit(e, 2);
                             }}>
                             Login as Gabe
                         </button>
@@ -148,7 +152,7 @@ function LoginFormPage({ isLogin, isSignup }) {
                             onClick={(e) => {
                                 setCredential('k@user.io');
                                 setPassword('password');
-                                demoSubmit(e, 'katie');
+                                demoSubmit(e, 4);
                             }}>
                             Login as Katie
                         </button>
@@ -157,7 +161,7 @@ function LoginFormPage({ isLogin, isSignup }) {
                             onClick={(e) => {
                                 setCredential('m@user.io');
                                 setPassword('password');
-                                demoSubmit(e, 'mar');
+                                demoSubmit(e, 1);
                             }}>
                             Login as Mar
                         </button>
@@ -166,7 +170,7 @@ function LoginFormPage({ isLogin, isSignup }) {
                             onClick={(e) => {
                                 setCredential('s@user.io');
                                 setPassword('password');
-                                demoSubmit(e, 'sama');
+                                demoSubmit(e, 5);
                             }}>
                             Login as Sama
                         </button>

@@ -107,6 +107,7 @@ export const thunkLogout = () => async (dispatch, getState) => {
 };
 
 
+
 export const addFundsThunk = (fundsObject) => async (dispatch) => {
   const {id, amount} = fundsObject
     const response = await csrfFetch(`/api/users/wallet/${id}`, {
@@ -201,6 +202,22 @@ export const guestLogin = (address) => async (dispatch)=>{
   }
 
   await dispatch(setUser(guest))
+}
+
+export const demoLogin = (id) => async(dispatch) =>{
+  const res = await fetch(`/api/users/demo/${id}`, {
+    method: "POST"
+  })
+
+  if(res.ok){
+    const data = await res.json()
+    dispatch(setUser(data))
+  } else if (response.status < 500) {
+    const errorMessages = await response.json();
+    return errorMessages;
+  } else {
+    return { server: 'Something went wrong. Please try again' };
+  }
 }
 
 const initialState = { user: null };

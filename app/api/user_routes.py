@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify
-from flask_login import login_required
+from flask_login import login_required, login_user
 from app.models import User
 from app.forms.user_form import UserForm, FundsForm
 
@@ -79,3 +79,15 @@ def update_pfp(id):
     # user = User.query.get(id)
     # user.update(form.data)
     # return user.to_dict()
+
+@user_routes.route('/demo/<int:id>', methods=['POST'])
+def demo_login(id):
+    if id > 5:
+        return {"errors": {"message": "Unauthorized"}}, 401
+    user = User.query.get(id)
+    print('\n USER:', user)
+    if user:
+        print('FOUND', user.to_dict(), '\n')
+        login_user(user)
+        return user.to_dict()
+    return {"errors": {"message": 'Unable to find user'}}, 404

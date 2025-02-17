@@ -7,6 +7,7 @@ import {
 	createOrder,
 	clearCurrentOrder,
 } from '../../redux/orders';
+import { getUserReviewsThunk } from '../../redux/reviews';
 import OrderItems from './OrderItems';
 import './Orders.css';
 
@@ -15,6 +16,7 @@ export default function Orders() {
 	const navigate = useNavigate();
 	const user = useSelector((state) => state.session.user || null);
 	const error = useSelector((state) => state.errors.message || '');
+	const userReviews = useSelector((state) => state.reviews.userReviews || []);
 	// const currentOrder = useSelector((store) => store.orders.currentOrder || {});
 	const orders = useSelector((state) => state.orders.userOrders || []);
 	const isLoading = !orders || orders.length === 0;
@@ -32,6 +34,15 @@ export default function Orders() {
 			dispatch(getUserOrders());
 		}
 	}, [dispatch, orders]);
+
+	useEffect(() => {
+		dispatch(getUserOrders());
+		dispatch(getUserReviewsThunk());
+	}, [dispatch]);
+
+	const getOrderReview = (orderId) => {
+		return userReviews.find((review) => review.orderId === orderId);
+	};
 
 	// if (isLoading) return <div>Loading orders...</div>;
 	if (error) return <div className='error-message'>{error}</div>;
@@ -109,115 +120,125 @@ export default function Orders() {
 			<h2>Past Orders</h2>
 			{orders
 				.sort((a, b) => b.id - a.id)
-				.map((order) => (
-					<div
-						key={order.id}
-						className='order-card'
-						// onClick={() => handleRestaurantClick(order.restaurant?.id)}
-					>
-						<img
-							src={order.restaurant?.image || '/images/cart.jpeg'}
-							alt={order.restaurant?.name || 'Unknown Restaurant'}
-							className='restaurant-img'
-							onClick={(e) => {
-								e.stopPropagation();
-								handleRestaurantClick(order.restaurant?.id);
-							}}
-							style={{
-								cursor: 'pointer',
-							}}
-						/>
-						<div className='order-header'>
-							<div className='order-restaurant'>
-								<h3
-									onClick={(e) => {
-										e.stopPropagation();
-										handleRestaurantClick(order.restaurant?.id);
-									}}
-									style={{
-										cursor: 'pointer',
-									}}>
-									{order.restaurant?.name || 'Unknown Restaurant'}
-								</h3>
-							</div>
-							<div className='order-details'>
-								{/* <p>
-									{Array.isArray(order.orderItems)
-										? order.orderItems.length
-										: 0}{' '}
-									item
-									{order.orderItems?.length > 1 ? 's' : ''} for $
-									{Number(order.totalCost).toFixed(2) || '0.00'}{' '}
-								</p> */}
-								<p>
-									{Array.isArray(order.orderItems)
-										? order.orderItems.reduce(
-												(total, item) => total + item.quantity,
-												0
-										)
-										: 0}{' '}
-									item
-									{order.orderItems?.reduce(
-										(total, item) => total + item.quantity,
-										0
-									) > 1
-										? 's'
-										: ''}{' '}
-									for ${Number(order.totalCost).toFixed(2) || '0.00'}{' '}
-								</p>
-								•
-								<p>
-									{order.createdAt
-										? new Date(order.createdAt).toLocaleString()
-										: 'No Date Available'}
-								</p>
-								<div className='order-actions'>
-									<a href={`/orders/${order.id}/receipt`}>
-										View receipt
-									</a>
+				.map((order) => {
+					const review = getOrderReview(order.id);
+					return (
+						<div
+							key={order.id}
+							className='order-card'
+							// onClick={() => handleRestaurantClick(order.restaurant?.id)}
+						>
+							<img
+								src={order.restaurant?.image || '/images/cart.jpeg'}
+								alt={order.restaurant?.name || 'Unknown Restaurant'}
+								className='restaurant-img'
+								onClick={(e) => {
+									e.stopPropagation();
+									handleRestaurantClick(order.restaurant?.id);
+								}}
+								style={{
+									cursor: 'pointer',
+								}}
+							/>
+							<div className='order-header'>
+								<div className='order-restaurant'>
+									<h3
+										onClick={(e) => {
+											e.stopPropagation();
+											handleRestaurantClick(order.restaurant?.id);
+										}}
+										style={{
+											cursor: 'pointer',
+										}}>
+										{order.restaurant?.name || 'Unknown Restaurant'}
+									</h3>
+								</div>
+								<div className='order-details'>
+									<p>
+										{Array.isArray(order.orderItems)
+											? order.orderItems.reduce(
+													(total, item) => total + item.quantity,
+													0
+											)
+											: 0}{' '}
+										item
+										{order.orderItems?.reduce(
+											(total, item) => total + item.quantity,
+											0
+										) > 1
+											? 's'
+											: ''}{' '}
+										for $
+										{Number(order.totalCost).toFixed(2) || '0.00'}{' '}
+									</p>
 									•
-									<a href={`/orders/${order.id}/invoice`}>
-										Request Invoice
-									</a>
+									<p>
+										{order.createdAt
+											? new Date(order.createdAt).toLocaleString()
+											: 'No Date Available'}
+									</p>
+									<div className='order-actions'>
+										<a href={`/orders/${order.id}/receipt`}>
+											View receipt
+										</a>
+										•
+										<a href={`/orders/${order.id}/invoice`}>
+											Request Invoice
+										</a>
+									</div>
+								</div>
+
+								<div className='order-items'>
+									{Array.isArray(order.orderItems) ? (
+										order.orderItems.map((item) => (
+											<OrderItems key={item.id} item={item} />
+										))
+									) : (
+										<p>No items found</p>
+									)}
 								</div>
 							</div>
-
-							<div className='order-items'>
-								{Array.isArray(order.orderItems) ? (
-									order.orderItems.map((item) => (
-										<OrderItems key={item.id} item={item} />
-									))
-								) : (
-									<p>No items found</p>
+							<div>
+								{review && (
+									<div className='order-review'>
+										{'★'.repeat(review.restaurantRating)}
+										{'☆'.repeat(5 - review.restaurantRating)}
+										{review.orderRating >= parseInt(3) ? (
+											<i className='fa-solid fa-thumbs-up'></i>
+										) : (
+											<i className='fa-solid fa-thumbs-down'></i>
+										)}
+									</div>
+								)}
+							</div>
+							<div className='order-buttons'>
+								<button
+									className='reorder-btn'
+									onClick={(e) => {
+										e.stopPropagation();
+										handleReorder(order);
+									}}>
+									Reorder
+								</button>
+								{!review && (
+									<button
+										className='rate-btn'
+										disabled={order.status == 'Canceled'}
+										onClick={(e) => {
+											e.stopPropagation();
+											handleRateOrder(
+												order.id,
+												order.restaurant?.id,
+												order.restaurant?.name
+											);
+										}}>
+										Rate your order
+									</button>
 								)}
 							</div>
 						</div>
-
-						<div className='order-buttons'>
-							<button
-								className='reorder-btn'
-								onClick={(e) => {
-									e.stopPropagation();
-									handleReorder(order);
-								}}>
-								Reorder
-							</button>
-							<button
-								className='rate-btn'
-								disabled={order.status == 'Canceled'}
-								onClick={(e) => {
-									e.stopPropagation();
-									handleRateOrder(
-										order.id,
-										order.restaurant?.id,
-										order.restaurant?.name
-									);
-								}}>
-								Rate your order
-							</button>
-						</div>
-					</div>
-				))}
+					);
+				})}
 		</div>
 	);
 }

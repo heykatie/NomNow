@@ -18,12 +18,47 @@
 .cuisine-scroll-bar {
     display: flex;
     overflow-x: auto;
-    width: 100%;    /* Make sure it takes full width of parent */
- 
-    gap: 20px;
+    width: 100%;
+    gap: 0; /* Remove the gap */
     scrollbar-width: none; /* Firefox */
     -ms-overflow-style: none;  /* IE and Edge */
-    
+    padding: 10px 20px; /* Keep padding for scroll arrows */
+}
+
+.cuisine-scroll-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.scroll-arrow {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: white;
+    border: 1px solid #e0e0e0;
+    cursor: pointer;
+    z-index: 10;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.scroll-arrow:hover {
+    background-color: #f5f5f5;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.scroll-arrow-left {
+    left: -12px;
+}
+
+.scroll-arrow-right {
+    right: -12px;
 }
 
 .cuisine-scroll-bar::-webkit-scrollbar {
@@ -34,12 +69,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 5px;
     padding: 10px;
     border: none;
     background: none;
     cursor: pointer;
-    min-width: 80px;
+    min-width: 100px; /* Increase minimum width to better accommodate text */
+    width: fit-content; /* Allow button to grow based on content */
     transition: all 0.2s ease;
 }
 
@@ -67,8 +102,11 @@
 .cuisine-name {
     font-size: 14px;
     color: #333;
+    white-space: nowrap; /* Prevent text from wrapping */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Add ellipsis for very long text */
+    max-width: 100%; /* Ensure text doesn't overflow container */
 }
-
 .cuisine-button.disabled .cuisine-name {
     color: #999;
 }
