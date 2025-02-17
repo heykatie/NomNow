@@ -68,25 +68,33 @@ const CreateMenuItem = () => {
     return Object.keys(errors).length === 0;
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (!validateForm()) {
       return;
     }
-
+  
     const newItemData = { ...formData };
-
+  
     try {
       const createdItem = await dispatch(createMenuItem(newItemData));
       if (createdItem && createdItem.id) {
-        navigate(`/menu-items/${createdItem.id}`);
+        // Find the restaurant's ID from userRestaurants
+        const restaurant = userRestaurants.find(
+          (restaurant) => restaurant.name === formData.restaurant_name
+        );
+  
+        // If the restaurant is found, navigate to its menu page
+        if (restaurant) {
+          navigate(`/restaurants/${restaurant.id}/menu`);
+        }
       }
     } catch (err) {
       setError('Failed to create menu item. Please try again.');
     }
   };
+  
 
   return (
     <div className="create-menu-item-container">

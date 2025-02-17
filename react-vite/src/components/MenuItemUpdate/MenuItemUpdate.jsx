@@ -68,7 +68,7 @@ const UpdateMenuItem = () => {
     dispatch(updateMenuItem(id, formData))
       .then(() => {
         dispatch(getMenuItem(id)); // Refetch updated menu item
-        navigate(`/menu-items/${id}`);
+        navigate(`/restaurants/${menuItem.restaurant_owner_id}/menu`);
       })
       .catch((error) => {
         console.error('Update failed:', error);
@@ -85,8 +85,8 @@ const UpdateMenuItem = () => {
 
   return (
     <div className="update-menu-item-container">
-      <button className="back-button" type="button" onClick={() => navigate(`/menu-items/${id}`)}>
-        Back to Menu Items List
+      <button className="back-button" type="button" onClick={() => navigate(`/restaurants/manage`)}>
+        Back to Manage
       </button>
 
       <form className="update-menu-item-form" onSubmit={handleSubmit}>
