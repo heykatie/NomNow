@@ -198,7 +198,17 @@ export default function Orders() {
 									)}
 								</div>
 							</div>
-
+							<div>
+								{review && (
+									<div className='order-review'>
+										{'★'.repeat(review.restaurantRating)}
+										{'☆'.repeat(5 - review.restaurantRating)}
+										{review.orderRating >= parseInt(3) && (
+											<i className='fa-solid fa-thumbs-up'></i>
+										)}
+									</div>
+								)}
+							</div>
 							<div className='order-buttons'>
 								<button
 									className='reorder-btn'
