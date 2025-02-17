@@ -5,6 +5,9 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { getRestaurant } from '../../redux/restaurants';
 import { getMenuItems } from '../../redux/menuItems';
 import { addToCart } from '../../redux/cart';
+import { getReviewsForRestThunk } from '../../redux/reviews';
+import ReviewList from '../Reviews/ReviewList';
+import ReviewForm from '../Reviews/ReviewForm';
 
 import './RestaurantDetail.css';
 
@@ -15,6 +18,7 @@ function RestaurantDetail() {
 	const { currentRestaurant, error } = useSelector(
 		(state) => state.restaurants
 	);
+    const reviews = useSelector((state) => state.reviews.allReviewsForRest);
 	const [deliveryMethod, setDeliveryMethod] = useState('delivery');
 	const { menuItems } = useSelector((state) => state.menuItems);
 	const user = useSelector((state) => state.session.user);
@@ -26,6 +30,7 @@ function RestaurantDetail() {
 		if (id) {
 			dispatch(getRestaurant(id));
 			dispatch(getMenuItems());
+            dispatch(getReviewsForRestThunk(id)); 
 		}
 	}, [dispatch, id]);
 
@@ -204,6 +209,13 @@ function RestaurantDetail() {
 					<p>No menu items available</p>
 				)}
 			</div>
+            <div className='reviews-section'>
+                <div className='reviews-header'>
+                    <h2>Reviews</h2>
+                    {user && <ReviewForm restaurantId={id} />}
+                </div>
+                <ReviewList />
+            </div>
 		</div>
 	);
 }
