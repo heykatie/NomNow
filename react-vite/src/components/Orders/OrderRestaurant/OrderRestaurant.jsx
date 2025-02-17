@@ -5,7 +5,7 @@ import {getRestaurant} from '../../../redux/restaurants'
 import './OrderRestaurant.css';
 
 
-export default function OrderRestaurant({ restaurant }) {
+export default function OrderRestaurant({ restaurant, closeCart }) {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const location = useLocation();
@@ -39,7 +39,10 @@ export default function OrderRestaurant({ restaurant }) {
 	return (
 		<div
 			className='restaurant-header'
-			onClick={() => navigate(`/restaurants/${restaurantData.id}`)}>
+			onClick={() => {
+				closeCart();
+				navigate(`/restaurants/${restaurantData.id}`)
+			}}>
 			<img
 				src={
 					restaurantData?.storeImage ||

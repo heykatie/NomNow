@@ -162,7 +162,7 @@ export default function Cart() {
 				</div>
 
 				{cartItems.length > 0 ? (
-					<Order items={cartItems} />
+					<Order items={cartItems} closeCart={() => setIsOpen(false)} />
 				) : (
 					<div className='empty-cart'>
 						<img

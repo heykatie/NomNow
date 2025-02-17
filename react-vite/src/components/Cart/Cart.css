@@ -39,6 +39,8 @@
   display: flex;
   flex-direction: column;
   z-index: 1000;
+  overflow-y: auto;
+  max-height: 100vh;
 }
 
 .cart-panel.open {
@@ -84,12 +86,14 @@
   flex-grow: 1;
   padding: 16px;
   overflow-y: auto;
+  max-height: 60vh;
 }
 
 .cart-item {
   display: flex;
   align-items: center;
   margin-bottom: 12px;
+  margin-right: .5rem;
 }
 
 .cart-item img {
@@ -117,13 +121,17 @@
 }
 
 .cart-footer {
-  padding: 16px;
+  padding: 1px;
   border-top: 1px solid #ddd;
   text-align: center;
+  background: white;
+  position: sticky;
+  bottom: 0;
+  width: 100%;
 }
 
 .checkout-btn {
-  width: 100% !important;
+  width: 95% !important;
   padding: 12px !important;
   background: black !important;
   color: white !important;
@@ -131,6 +139,7 @@
   cursor: pointer !important;
   border: none !important;
   border-radius: 10px;
+  margin-bottom: 1rem;
 }
 
 .cart-overlay {

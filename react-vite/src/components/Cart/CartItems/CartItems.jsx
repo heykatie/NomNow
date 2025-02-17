@@ -5,7 +5,7 @@ import { updateItemQuantity, removeFromCart } from '../../../redux/cart';
 import { FaPlus, FaMinus, FaTrash } from 'react-icons/fa';
 import './CartItems.css';
 
-export default function CartItems({ items }) {
+export default function CartItems({ items, closeCart }) {
 	const navigate = useNavigate();
 	const location = useLocation();
 	const dispatch = useDispatch();
@@ -15,6 +15,7 @@ export default function CartItems({ items }) {
 
 	const handleCartItemClick = (menuItemId) => {
 		if (menuItemId) {
+			closeCart();
 			navigate(`/menu-items/${menuItemId}`);
 		}
 	};
@@ -40,7 +41,7 @@ export default function CartItems({ items }) {
 						className='cart-item'
 						onClick={(e) => {
 							e.stopPropagation();
-							handleCartItemClick(item.menu_item_id);
+							handleCartItemClick(item.menu_item_id || item.id);
 						}}>
 						<img
 							src={item.food_image || '/images/cart.jpeg'}
