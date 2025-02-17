@@ -35,6 +35,7 @@ export const getRestaurant = (id) => async (dispatch) => {
         const response = await fetch(`/api/restaurants/${id}`);
         const data = await response.json();
         dispatch({ type: GET_RESTAURANT, payload: data });
+        return data;
     } catch (error) {
         dispatch({ type: RESTAURANT_ERROR, payload: error.message });
     }

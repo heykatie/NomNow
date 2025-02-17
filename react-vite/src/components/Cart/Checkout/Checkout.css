@@ -20,8 +20,16 @@
   border-radius: 10px;
 }
 
-.delivery-section,
+.delivery-options {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  }
+
 .delivery-options,
+.delivery-section,
 .payment-section,
 .restaurant-header,
 .order-summary,
@@ -64,6 +72,14 @@ h3 {
 .delivery-options.selected {
   border: 2px solid black;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  color: white !important;
+}
+
+.delivery-options .selected span{
+  color: white !important;
+}
+.delivery-options span{
+  color: black !important;
 }
 
 .credit-card span,
@@ -84,6 +100,7 @@ h3 {
   border: none !important;
   cursor: pointer !important;
   border-radius: 8px !important;
+  font-size: 14px;
 }
 
 .checkout-page .tip-buttons button {
@@ -125,6 +142,10 @@ h3 {
   font-size: 16px;
   font-weight: 500;
   transition: all 0.2s ease-in-out;
+}
+
+.delivery-options .d-option, .delivery-options h3 {
+  margin: 0px 1rem;
 }
 
 .d-option span {

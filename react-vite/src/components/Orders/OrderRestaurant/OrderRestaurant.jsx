@@ -9,7 +9,7 @@ export default function OrderRestaurant({ restaurantId }) {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const location = useLocation();
-	const restaurantFromStore = useSelector(
+	let restaurantFromStore = useSelector(
 		(state) => state.restaurants.currentRestaurant
 	);
 	const currentOrder = useSelector((state) => state.orders.currentOrder);
@@ -25,7 +25,7 @@ export default function OrderRestaurant({ restaurantId }) {
 
 	useEffect(() => {
 		if (location.pathname !== '/checkout') {
-			dispatch(getRestaurant(restaurantId));
+			restaurantFromStore = dispatch(getRestaurant(restaurantId));
 		}
 	}, [dispatch, restaurantId, location.pathname]);
 

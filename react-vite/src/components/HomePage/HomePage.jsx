@@ -1,8 +1,8 @@
-import { useSelector, useDispatch } from 'react-redux';
-import { useEffect, useState } from 'react';
+import { useSelector, useDispatch} from 'react-redux';
+import { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getAllRestaurants } from '../../redux/restaurants';
-
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa';
 import './HomePage.css'
 const CUISINE_TYPES = [
     { name: "American", icon: "🍔" },
@@ -33,10 +33,35 @@ function HomePage() {
     // const user = useSelector((store) => store.session.user);
     const restaurants = useSelector(state => state.restaurants.restaurants);
     const [selectedCuisine, setSelectedCuisine] = useState(null);
+    const scrollContainerRef = useRef(null);   
+    const [showLeftArrow, setShowLeftArrow] = useState(false);
+    const [showRightArrow, setShowRightArrow] = useState(true);
 
     useEffect(() => {
         dispatch(getAllRestaurants());
     }, [dispatch]);
+
+
+    const handleScroll = () => {
+        const container = scrollContainerRef.current;
+        if (container) {
+            setShowLeftArrow(container.scrollLeft > 0);
+            setShowRightArrow(
+                container.scrollLeft < container.scrollWidth - container.clientWidth
+            );
+        }
+    };
+
+    const scroll = (direction) => {
+        const container = scrollContainerRef.current;
+        if (container) {
+            const scrollAmount = 200; // Adjust this value to control scroll distance
+            container.scrollBy({
+                left: direction === 'left' ? -scrollAmount : scrollAmount,
+                behavior: 'smooth'
+            });
+        }
+    };
 
 
     const handleRestaurantClick = (restaurantId) => {
@@ -62,27 +87,52 @@ function HomePage() {
             restaurant.cuisineType.toLowerCase() === selectedCuisine.toLowerCase())
         : activeRestaurants;
 
-    return (
-        <div className='home-page'>
-            <div className='main-content'>
-                {/* Cuisine Type Scroll Bar */}
-                <div className='cuisine-scroll-bar'>
-                    {CUISINE_TYPES.map((cuisine) => {
-                        const isAvailable = availableCuisines.has(cuisine.name.toLowerCase());
-                        return (
-                            <button
-                                key={cuisine.name}
-                                onClick={() => handleCuisineClick(cuisine.name)}
-                                className={`cuisine-button ${selectedCuisine === cuisine.name ? 'active' : ''}
-                                          ${!isAvailable ? 'disabled' : ''}`}
-                                disabled={!isAvailable}
+        return (
+            <div className='home-page'>
+                <div className='main-content'>
+                    <div className='cuisine-scroll-container'>
+                        {showLeftArrow && (
+                            <button 
+                                className='scroll-arrow scroll-arrow-left'
+                                onClick={() => scroll('left')}
+                                aria-label="Scroll left"
                             >
-                                <span className="cuisine-icon">{cuisine.icon}</span>
-                                <span className="cuisine-name">{cuisine.name}</span>
+                                <FaChevronLeft size={24} />
                             </button>
-                        );
-                    })}
-                </div>
+                        )}
+                        
+                        <div 
+                            className='cuisine-scroll-bar'
+                            ref={scrollContainerRef}
+                            onScroll={handleScroll}
+                        >
+                            {CUISINE_TYPES.map((cuisine) => {
+                                const isAvailable = availableCuisines.has(cuisine.name.toLowerCase());
+                                return (
+                                    <button
+                                        key={cuisine.name}
+                                        onClick={() => handleCuisineClick(cuisine.name)}
+                                        className={`cuisine-button ${selectedCuisine === cuisine.name ? 'active' : ''}
+                                                  ${!isAvailable ? 'disabled' : ''}`}
+                                        disabled={!isAvailable}
+                                    >
+                                        <span className="cuisine-icon">{cuisine.icon}</span>
+                                        <span className="cuisine-name">{cuisine.name}</span>
+                                    </button>
+                                );
+                            })}
+                        </div>
+    
+                        {showRightArrow && (
+                            <button 
+                                className='scroll-arrow scroll-arrow-right'
+                                onClick={() => scroll('right')}
+                                aria-label="Scroll right"
+                            >
+                                <FaChevronRight size={24} />
+                            </button>
+                        )}
+                    </div>
 
                 {/* Restaurants Grid */}
                 <div className='restaurants-section'>

@@ -20,7 +20,7 @@ function RestaurantDetail() {
 	const user = useSelector((state) => state.session.user);
 	const cart = useSelector((state) => state.cart);
 	const cartItems = cart?.cartItems || [];
-	
+
 
 	useEffect(() => {
 		if (id) {
@@ -64,7 +64,7 @@ function RestaurantDetail() {
 	};
 
     return (
-        
+
         <div className="restaurant-detail">
             {/* Header Image */}
             <div className="restaurant-hero">
@@ -73,7 +73,7 @@ function RestaurantDetail() {
             <button className="back-button" onClick={() => navigate(`/`)}>
   <span className="back-arrow">←</span> Back to Restaurants
 </button>
-    
+
             {/* Restaurant Name and Search Section */}
             <div className="restaurant-info-section">
             <div className="restaurant-main-info">
@@ -88,10 +88,10 @@ function RestaurantDetail() {
                         <p className="business-hours-top">{restaurant.businessHours}</p>
                     </div>
                 </div>
-                
+
                 <div className="search-section">
-                    <input 
-                        type="search" 
+                    <input
+                        type="search"
                         className="search-input"
                         placeholder={`Search in ${restaurant.name || 'restaurant'}`}
                         onClick={()=> alert('Feature coming soon')}
@@ -106,7 +106,7 @@ function RestaurantDetail() {
 						className={deliveryMethod === 'delivery' ? 'active' : ''}
                         onClick={() => {
                             setDeliveryMethod('delivery');
-                            alert('Set to delivery')
+                            alert('Feature coming soon')
                         }}>
 						Delivery
 					</button>
@@ -114,7 +114,7 @@ function RestaurantDetail() {
 						className={deliveryMethod === 'pickup' ? 'active' : ''}
                         onClick={() => {
                             setDeliveryMethod('pickup');
-                            alert('Set for pickup');
+                            alert('Feature coming soon');
                         }}>
 						Pickup
 					</button>

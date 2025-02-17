@@ -76,7 +76,7 @@ export default function Checkout() {
 		setTimeout(() => {
 			const updatedOrder = JSON.parse(localStorage.getItem('currentOrder'));
 			if (updatedOrder && updatedOrder.status === 'Submitted') {
-				alert('Your food will arrive soon!')
+				alert('Your food will arrive soon!');
 				navigate('/orders');
 			}
 		}, 500);
@@ -116,7 +116,6 @@ export default function Checkout() {
 		const savedOrder = JSON.parse(localStorage.getItem('currentOrder'));
 
 		if (!currentOrder && savedOrder) {
-
 			localStorage.removeItem('currentOrder');
 			navigate('/orders');
 		}
@@ -137,7 +136,6 @@ export default function Checkout() {
 	return (
 		<div className='checkout-page'>
 			<div className='checkout-left'>
-
 				<div className='delivery-section'>
 					<h3>Delivery details</h3>
 					<div className='address'>
@@ -159,7 +157,6 @@ export default function Checkout() {
 						</p>
 					</div>
 				</div>
-
 
 				<div className='delivery-options'>
 					<h3>Delivery options</h3>
@@ -195,7 +192,6 @@ export default function Checkout() {
 					</div>
 				</div>
 
-
 				<div className='payment-section'>
 					<h3>Payment</h3>
 					<div className='payment-options'>
@@ -222,27 +218,40 @@ export default function Checkout() {
 					</div>
 				</div>
 
-
 				<button className='confirm-order-btn' onClick={handlePlaceOrder}>
 					Place order
 				</button>
 			</div>
 
-
 			<div className='checkout-right'>
 				<OrderRestaurant restaurantId={currentOrder.restaurantId} />
 				<div className='order-summary'>
-					<h4>Cart summary ({currentOrder?.orderItems?.length} item/s)</h4>
+					{/* <h4>Cart summary ({currentOrder?.orderItems?.length} item/s)</h4> */}
+					<h4>
+						Cart summary (
+						{Array.isArray(currentOrder?.orderItems)
+							? currentOrder.orderItems.reduce(
+									(total, item) => total + item.quantity,
+									0
+							)
+							: 0}{' '}
+						item
+						{currentOrder?.orderItems?.reduce(
+							(total, item) => total + item.quantity,
+							0
+						) > 1
+							? 's'
+							: ''}
+						)
+					</h4>
 					<CartItems items={currentOrder?.orderItems} />
 				</div>
-
 
 				<div className='order-total'>
 					<h3>Order total</h3>
 					<p>Subtotal: ${subtotal.toFixed(2)}</p>
 					<p>Delivery Fee: ${deliveryFee.toFixed(2)}</p>
 					<p>Taxes & Other Fees: ${taxes.toFixed(2)}</p>
-
 
 					<div className='tip-section'>
 						<h4>
