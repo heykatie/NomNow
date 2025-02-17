@@ -24,7 +24,12 @@ function RestaurantDetail() {
 	const user = useSelector((state) => state.session.user);
 	const cart = useSelector((state) => state.cart);
 	const cartItems = cart?.cartItems || [];
-
+    const calculateAverageRating = (reviews) => {
+        if (!reviews || reviews.length === 0) return null;
+        const totalRating = reviews.reduce((sum, review) => sum + review.restaurantRating, 0);
+        return (totalRating / reviews.length).toFixed(1);
+    };
+    
 
 	useEffect(() => {
 		if (id) {
@@ -212,7 +217,17 @@ function RestaurantDetail() {
 			</div>
             <div className='reviews-section'>
                 <div className='reviews-header'>
-                    <h2>Reviews</h2>
+                    <div className='reviews-title-rating'>
+                        <h2>Reviews</h2>
+                        {reviews && reviews.length > 0 && (
+                            <span className='rating-summary'>
+                                ⭐ {calculateAverageRating(reviews)}
+                                <span className='review-count'>
+                                    ({reviews.length} {reviews.length === 1 ? 'review' : 'reviews'})
+                                </span>
+                            </span>
+                        )}
+                    </div>
                     {user && <ReviewForm restaurantId={id} />}
                 </div>
                 <ReviewList />

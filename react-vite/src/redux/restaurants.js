@@ -1,5 +1,15 @@
-//Restaurant Actions
+// restaurants.js
 
+// Helper function to calculate average rating
+const calculateAverageRating = (reviews) => {
+    if (!reviews || reviews.length === 0) return null;
+    const totalRating = reviews.reduce((sum, review) => {
+        return sum + review.restaurantRating;
+    }, 0);
+    return (totalRating / reviews.length).toFixed(1);
+};
+
+//Restaurant Actions
 const GET_RESTAURANTS = 'GET_RESTAURANTS';
 const GET_USER_RESTAURANTS = 'GET_USER_RESTAURANTS'
 const GET_RESTAURANT = 'GET_RESTAURANT';
@@ -8,15 +18,16 @@ const UPDATE_RESTAURANT = 'UPDATE_RESTAURANT';
 const DELETE_RESTAURANT = 'DELETE_RESTAURANT';
 const RESTAURANT_ERROR = 'RESTAURANT_ERROR';
 const REACTIVATE_RESTAURANT = 'REACTIVATE_RESTAURANT';
+const SET_RESTAURANT_REVIEWS = 'SET_RESTAURANT_REVIEWS';
+
 //actions/restaurants.js
 export const fetchUserRestaurants = () => async (dispatch) => {
     const response = await fetch(`/api/restaurants/current`);
     if (response.ok) {
-      const data = await response.json();
-      dispatch({ type: 'SET_USER_RESTAURANTS', payload: data.restaurants });
+        const data = await response.json();
+        dispatch({ type: 'SET_USER_RESTAURANTS', payload: data.restaurants });
     }
-  };
-
+};
 
 // Get all restaurants (owned by current user)
 export const getUserRestaurants = () => async (dispatch) => {
@@ -41,14 +52,45 @@ export const getRestaurant = (id) => async (dispatch) => {
     }
 };
 
-
-
-// Get all restaurants
+// Get all restaurants with ratings
 export const getAllRestaurants = () => async (dispatch) => {
     try {
-        const response = await fetch('/api/restaurants/');
-        const data = await response.json();
-        dispatch({ type: GET_RESTAURANTS, payload: data.restaurants });
+        // First fetch restaurants
+        const restaurantsResponse = await fetch('/api/restaurants/');
+        if (!restaurantsResponse.ok) {
+            throw new Error('Failed to fetch restaurants');
+        }
+        const restaurantsData = await restaurantsResponse.json();
+        
+        // Store to track all reviews
+        const allRestaurantReviews = {};
+
+        // Fetch reviews for each restaurant
+        await Promise.all(restaurantsData.restaurants.map(async (restaurant) => {
+            try {
+                const reviewsResponse = await fetch(`/api/reviews/restaurant/${restaurant.id}`);
+                if (reviewsResponse.ok) {
+                    const reviewsData = await reviewsResponse.json();
+                    // Store reviews in our tracking object
+                    allRestaurantReviews[restaurant.id] = reviewsData.data || [];
+                }
+            } catch (error) {
+                console.error(`Error fetching reviews for restaurant ${restaurant.id}:`, error);
+                allRestaurantReviews[restaurant.id] = [];
+            }
+        }));
+
+        // First dispatch the reviews
+        dispatch({
+            type: SET_RESTAURANT_REVIEWS,
+            payload: allRestaurantReviews
+        });
+
+        // Then dispatch restaurants
+        dispatch({
+            type: GET_RESTAURANTS,
+            payload: restaurantsData.restaurants
+        });
     } catch (error) {
         dispatch({ type: RESTAURANT_ERROR, payload: error.message });
     }
@@ -104,6 +146,7 @@ export const updateRestaurant = (id, restaurantData) => async (dispatch) => {
         throw error;
     }
 };
+
 //Delete restaurant
 export const deleteRestaurant = (id, deleteType) => async (dispatch) => {
     try {
@@ -151,19 +194,37 @@ export const reactivateRestaurant = (id) => async (dispatch) => {
         throw error;
     }
 };
-// ---- Reducer
 
+// Initial State
 const initialState = {
     restaurants: [],
     currentRestaurant: null,
     error: null,
     isLoading: false,
     userRestaurants: [],
+    restaurantReviews: {}, // Store reviews by restaurant ID
 };
 
-
+// Reducer
 const restaurantReducer = (state = initialState, action) => {
     switch (action.type) {
+        case SET_RESTAURANT_REVIEWS:
+            return {
+                ...state,
+                restaurantReviews: action.payload
+            };
+
+        case GET_RESTAURANTS:
+            return {
+                ...state,
+                restaurants: action.payload.map(restaurant => ({
+                    ...restaurant,
+                    rating: calculateAverageRating(state.restaurantReviews[restaurant.id]),
+                    numReviews: state.restaurantReviews[restaurant.id]?.length || 0
+                })),
+                error: null
+            };
+
         case GET_USER_RESTAURANTS:
             return {
                 ...state,
@@ -178,19 +239,13 @@ const restaurantReducer = (state = initialState, action) => {
                 error: null
             };
 
-        case GET_RESTAURANTS:
-            return {
-                ...state,
-                restaurants: action.payload,
-                error: null
-            };
-
         case CREATE_RESTAURANT:
             return {
                 ...state,
                 restaurants: [...state.restaurants, action.payload],
                 error: null
             };
+
         case REACTIVATE_RESTAURANT:
         case UPDATE_RESTAURANT:
             return {
@@ -216,8 +271,9 @@ const restaurantReducer = (state = initialState, action) => {
                 ...state,
                 error: action.payload
             };
+
         case 'SET_USER_RESTAURANTS':
-                return { ...state, userRestaurants: action.payload };
+            return { ...state, userRestaurants: action.payload };
 
         default:
             return state;

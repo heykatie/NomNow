@@ -158,14 +158,12 @@ function HomePage() {
                                 <div className='restaurant-info'>
                                     <h3>{restaurant.name}</h3>
                                     <div className='restaurant-details'>
-                                        <span className='rating'>
-                                            ⭐ {restaurant.rating || '4.5'}
-                                            {restaurant.numReviews && (
-                                                <span className='review-count'>
-                                                    ({restaurant.numReviews})
-                                                </span>
-                                            )}
+                                    <span className='rating'>
+                                        ⭐ {restaurant.rating || 'New'}
+                                        <span className='review-count'>
+                                            {restaurant.numReviews > 0 && `(${restaurant.numReviews} reviews)`}
                                         </span>
+                                    </span>
                                         {restaurant.deliveryTime && (
                                             <span className='delivery-time'>
                                                 {restaurant.deliveryTime} min
