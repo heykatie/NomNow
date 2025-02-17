@@ -1,33 +1,28 @@
 .checkout-page {
   display: flex;
   justify-content: center;
+  align-items: flex-start;
   gap: 20px;
   padding: 20px;
   background-color: #f8f8f8;
 }
 
+/* Left Section (Delivery & Payment) */
 .checkout-left {
   flex: 2;
-  background: f8f8f8;
+  background: #f8f8f8;
   padding: 20px;
   border-radius: 10px;
 }
 
+/* Right Section (Order Summary) */
 .checkout-right {
   flex: 1;
-  /* background: white; */
   padding: 20px;
   border-radius: 10px;
 }
 
-.delivery-options {
-    margin-bottom: 20px;
-    padding: 15px;
-    border-radius: 10px;
-    background: #fff;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-
+/* Shared Styles */
 .delivery-options,
 .delivery-section,
 .payment-section,
@@ -41,24 +36,27 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+/* Tip Section */
 .tip-section {
-  border-top: 1px solid;
-  border-bottom: 1px solid;
-  border-color: #f5f5f5;
+  border-top: 1px solid #f5f5f5;
+  border-bottom: 1px solid #f5f5f5;
 }
 
+/* Headings */
 h3 {
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 10px;
 }
 
+/* Payment Options */
 .payment-options {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
+/* Delivery Options */
 .delivery-options span {
   display: flex;
   align-items: center;
@@ -75,13 +73,15 @@ h3 {
   color: white !important;
 }
 
-.delivery-options .selected span{
+.delivery-options .selected span {
   color: white !important;
 }
-.delivery-options span{
+
+.delivery-options span {
   color: black !important;
 }
 
+/* Payment Buttons */
 .credit-card span,
 .wallet span {
   font-weight: bold;
@@ -92,6 +92,7 @@ h3 {
   justify-content: space-between;
 }
 
+/* Order Button */
 .confirm-order-btn {
   width: 100% !important;
   padding: 12px !important;
@@ -103,12 +104,13 @@ h3 {
   font-size: 14px;
 }
 
+/* Tip Buttons */
 .checkout-page .tip-buttons button {
   background: #eee !important;
   border: none !important;
   padding: 8px 12px !important;
   cursor: pointer !important;
-  margin: .2rem !important;
+  margin: 0.2rem !important;
   border-radius: 25px !important;
   color: black !important;
 }
@@ -123,6 +125,7 @@ h3 {
   color: white !important;
 }
 
+/* Delivery Options */
 .delivery-options {
   display: flex;
   flex-direction: column;
@@ -136,15 +139,15 @@ h3 {
   padding: 16px;
   background: #fff;
   border-radius: 12px;
-  border: 1px solid;
-  border-color: rgb(225, 225, 225);
+  border: 1px solid #e1e1e1;
   cursor: pointer;
   font-size: 16px;
   font-weight: 500;
   transition: all 0.2s ease-in-out;
 }
 
-.delivery-options .d-option, .delivery-options h3 {
+.delivery-options .d-option,
+.delivery-options h3 {
   margin: 0px 1rem;
 }
 
@@ -234,4 +237,82 @@ h3 {
 .restaurant-header:hover .arrow {
   transform: translateX(5px);
   color: gray;
+}
+
+/* 🎯 RESPONSIVE STYLING */
+@media (max-width: 1024px) {
+  .checkout-page {
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+  }
+
+  .checkout-left,
+  .checkout-right {
+    width: 90%;
+  }
+}
+
+@media (max-width: 768px) {
+  .checkout-page {
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+  }
+
+  .checkout-left,
+  .checkout-right {
+    width: 95%;
+    padding: 15px;
+  }
+
+  .checkout-left h3,
+  .checkout-right h3 {
+    font-size: 16px;
+  }
+
+  .confirm-order-btn {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .d-option {
+    font-size: 14px;
+    padding: 12px;
+  }
+
+  .tip-section {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 480px) {
+  .checkout-page {
+    padding: 8px;
+  }
+
+  .checkout-left,
+  .checkout-right {
+    width: 100%;
+    padding: 10px;
+  }
+
+  .confirm-order-btn {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .tip-section {
+    font-size: 12px;
+  }
+
+  .d-option {
+    font-size: 13px;
+    padding: 10px;
+  }
+
+  .tip-buttons button {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
 }
