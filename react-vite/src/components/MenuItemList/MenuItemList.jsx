@@ -57,6 +57,7 @@ const MenuItemList = () => {
 			price: item.price,
 			restaurantId: item.restaurantId,
 			food_image: item.food_image,
+			restaurant: item.restaurant,
 			quantity: 1,
 		};
 

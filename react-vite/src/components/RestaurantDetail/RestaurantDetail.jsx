@@ -4,13 +4,19 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { getRestaurant } from '../../redux/restaurants';
 import { getMenuItems } from '../../redux/menuItems';
 import { addToCart } from '../../redux/cart';
+import { getReviewsForRestThunk } from '../../redux/reviews';
+import ReviewList from '../Reviews/ReviewList';
+import ReviewForm from '../Reviews/ReviewForm';
+
 import './RestaurantDetail.css';
 
 function RestaurantDetail() {
 	const dispatch = useDispatch();
 	const navigate = useNavigate();
 	const { id } = useParams();
-	const { currentRestaurant, error } = useSelector((state) => state.restaurants);
+	const { currentRestaurant, error } = useSelector(
+		(state) => state.restaurants
+	);
 	const [deliveryMethod, setDeliveryMethod] = useState('delivery');
 	const { menuItems } = useSelector((state) => state.menuItems);
 	const user = useSelector((state) => state.session.user);
@@ -22,6 +28,7 @@ function RestaurantDetail() {
 		if (id) {
 			dispatch(getRestaurant(id));
 			dispatch(getMenuItems());
+            dispatch(getReviewsForRestThunk(id)); 
 		}
 	}, [dispatch, id]);
 
@@ -53,6 +60,7 @@ function RestaurantDetail() {
 			price: item.price,
 			restaurantId: parseInt(id), // Make sure restaurantId is an integer
 			food_image: item.food_image,
+			restaurant: item.restaurant,
 			quantity: 1,
 		};
 
@@ -205,6 +213,13 @@ function RestaurantDetail() {
 					<p>No menu items available</p>
 				)}
 			</div>
+            <div className='reviews-section'>
+                <div className='reviews-header'>
+                    <h2>Reviews</h2>
+                    {user && <ReviewForm restaurantId={id} />}
+                </div>
+                <ReviewList />
+            </div>
 		</div>
 	);
 }

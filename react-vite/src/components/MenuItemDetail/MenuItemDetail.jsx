@@ -19,7 +19,7 @@ const MenuItemDetail = () => {
   const [message, setMessage] = useState('');
   const cart = useSelector(state => state.cart);
   const cartItems = cart?.cartItems || [];
-  
+
   useEffect(() => {
     if (id) {
       dispatch(getMenuItem(id));
@@ -46,7 +46,8 @@ const MenuItemDetail = () => {
       price: menuItem.price,
       restaurantId: menuItem.restaurantId, // Correctly pass the restaurantId
       food_image: menuItem.food_image,
-      quantity, // Pass the current quantity state
+      restaurant: menuItem.restaurant,
+      quantity,
     }));
   
     // Show a confirmation message with the correct quantity

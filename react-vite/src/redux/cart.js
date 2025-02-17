@@ -10,10 +10,24 @@ const CLEAR_CART = 'cart/clearCart';
 const CART_STORAGE_KEY = (userId) => `cartItems_${userId || 'guest'}`;
 
 const loadCartFromStorage = (userId) => {
-	const storedCart = localStorage.getItem(CART_STORAGE_KEY(userId));
+	let storedCart = localStorage.getItem(CART_STORAGE_KEY(userId));
+	// if (storedCart == undefined) {storedCart = []}
 	return storedCart ? JSON.parse(storedCart) : [];
 };
 
+// const loadCartFromStorage = (userId) => {
+// 	let storedCart = localStorage.getItem(CART_STORAGE_KEY(userId));
+// 	if (!storedCart || storedCart === 'undefined' || storedCart === 'null') {
+// 		return [];
+// 	}
+// 	try {
+// 		return JSON.parse(storedCart);
+// 	} catch (error) {
+// 		console.error('Error parsing cart data:', error);
+// 		localStorage.removeItem(CART_STORAGE_KEY(userId));
+// 		return [];
+// 	}
+// };
 // const loadCartFromStorage = () => {
 // 	const storedCart = localStorage.getItem(CART_STORAGE_KEY);
 // 	return storedCart ? JSON.parse(storedCart) : [];
