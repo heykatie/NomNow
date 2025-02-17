@@ -227,26 +227,10 @@ export default function Checkout() {
 
 			<div className='checkout-right'>
 				<OrderRestaurant restaurantId={currentOrder.restaurantId} />
+				<button className='confirm-order-btn' onClick={handlePlaceOrder}>
+					Place order
+				</button>
 				<div className='order-summary'>
-					{/* <h4>Cart summary ({currentOrder?.orderItems?.length} item/s)</h4> */}
-					{/* <h4>
-						Cart summary (
-						{Array.isArray(currentOrder?.orderItems)
-							? currentOrder.orderItems.reduce(
-									(total, item) => total + item.quantity,
-									0
-							)
-							: 0}{' '}
-						item
-						{currentOrder?.orderItems?.reduce(
-							(total, item) => total + item.quantity,
-							0
-						) > 1
-							? 's'
-							: ''}
-						)
-					</h4>
-					<CartItems items={currentOrder?.orderItems} /> */}
 					<div
 						className='cart-summary-header'
 						onClick={() => setIsCartExpanded(!isCartExpanded)}>
@@ -277,15 +261,32 @@ export default function Checkout() {
 
 				<div className='order-total'>
 					<h3>Order total</h3>
-					<p>Subtotal: ${subtotal.toFixed(2)}</p>
-					<p>Delivery Fee: ${deliveryFee.toFixed(2)}</p>
-					<p>Taxes & Other Fees: ${taxes.toFixed(2)}</p>
+
+					<div className='total-row'>
+						<span>Subtotal</span>
+						<span className='price-num'>${subtotal.toFixed(2)}</span>
+					</div>
+
+					<div className='total-row'>
+						<span>
+							Delivery Fee <span className='info-icon'>ℹ️</span>
+						</span>
+						<span className='price-num'>${deliveryFee.toFixed(2)}</span>
+					</div>
+
+					<div className='total-row'>
+						<span>
+							Taxes & Other Fees <span className='info-icon'>ℹ️</span>
+						</span>
+						<span className='price-num'>${taxes.toFixed(2)}</span>
+					</div>
 
 					<div className='tip-section'>
 						<h4>
-							Add a tip <span className='tooltip'></span>
+							Add a tip <span className='info-icon'>ℹ️</span>
 						</h4>
 						<p>100% of your tip goes to your courier.</p>
+
 						<div className='tip-buttons'>
 							{[0.15, 0.2, 0.25, 0.3].map((percentage) => (
 								<button
@@ -308,10 +309,19 @@ export default function Checkout() {
 								Other
 							</button>
 						</div>
-						<p>Tip: ${tip.toFixed(2)}</p>
+
+						<div className='total-row'>
+							<span>Tip</span>
+							<span className='price-num'>${tip.toFixed(2)}</span>
+						</div>
 					</div>
 
-					<h3>Total: ${total.toFixed(2)}</h3>
+					{/* <div className='total-divider'></div> */}
+
+					<div className='total-row total-amount'>
+						<h3>Total</h3>
+						<h3 className='price-num'>${total.toFixed(2)}</h3>
+					</div>
 				</div>
 			</div>
 		</div>

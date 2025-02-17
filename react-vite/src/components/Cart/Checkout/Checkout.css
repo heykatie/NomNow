@@ -7,7 +7,7 @@
   background-color: #f8f8f8;
 }
 
-/* Left Section (Delivery & Payment) */
+
 .checkout-left {
   flex: 2;
   background: #f8f8f8;
@@ -15,14 +15,14 @@
   border-radius: 10px;
 }
 
-/* Right Section (Order Summary) */
+
 .checkout-right {
   flex: 1;
   padding: 20px;
   border-radius: 10px;
 }
 
-/* Shared Styles */
+
 .delivery-options,
 .delivery-section,
 .payment-section,
@@ -36,27 +36,142 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Tip Section */
 .tip-section {
   border-top: 1px solid #f5f5f5;
   border-bottom: 1px solid #f5f5f5;
+  padding: 10px 0;
 }
 
-/* Headings */
+.tip-section h4 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.tip-section p {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+
+.tip-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.tip-buttons button {
+  background: #eee;
+  border: none;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 25px;
+  font-size: 14px;
+  transition: background 0.2s ease-in-out;
+}
+
+.tip-buttons button:hover {
+  background: #ddd;
+}
+
+.tip-buttons .selected-tip {
+  background: black;
+  color: white;
+  font-weight: bold;
+}
+
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  padding: 6px 0;
+}
+
+
+.price-num {
+  text-align: right;
+  font-weight: bold;
+  min-width: 80px;
+}
+
+
+.info-icon {
+  font-size: 14px;
+  margin-left: 4px;
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+.order-total {
+  margin-bottom: 20px;
+  padding: 15px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.order-total h3 {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 16px;
+  padding: 6px 0;
+}
+
+
+.total-amount {
+  font-weight: bold;
+}
+
+
+.price-num {
+  text-align: right;
+  font-weight: bold;
+  min-width: 80px;
+
+}
+
+
+.total-divider {
+  border-top: 1px solid #ddd;
+  margin: 10px 0;
+}
+
+
+.info-icon {
+  font-size: 14px;
+  margin-left: 4px;
+  cursor: pointer;
+  opacity: 0.6;
+}
+
+
 h3 {
   font-size: 18px;
   font-weight: bold;
   margin-bottom: 10px;
 }
 
-/* Payment Options */
+
 .payment-options {
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
 
-/* Delivery Options */
+
 .delivery-options span {
   display: flex;
   align-items: center;
@@ -81,7 +196,7 @@ h3 {
   color: black !important;
 }
 
-/* Payment Buttons */
+
 .credit-card span,
 .wallet span {
   font-weight: bold;
@@ -92,7 +207,7 @@ h3 {
   justify-content: space-between;
 }
 
-/* Order Button */
+
 .confirm-order-btn {
   width: 100% !important;
   padding: 12px !important;
@@ -102,9 +217,10 @@ h3 {
   cursor: pointer !important;
   border-radius: 8px !important;
   font-size: 14px;
+  margin-bottom: 1rem;
 }
 
-/* Tip Buttons */
+
 .checkout-page .tip-buttons button {
   background: #eee !important;
   border: none !important;
@@ -125,7 +241,7 @@ h3 {
   color: white !important;
 }
 
-/* Delivery Options */
+
 .delivery-options {
   display: flex;
   flex-direction: column;
@@ -244,11 +360,11 @@ h3 {
   align-items: center;
   justify-content: space-between;
   cursor: pointer;
-  padding: 15px;
+  padding: 5px;
   background: #fff;
   border-radius: 10px;
-  /* border: 1px solid #ddd; */
-  /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); */
+
+
   transition: background 0.3s ease-in-out;
   max-height: 1rem;
 }
@@ -267,7 +383,7 @@ h3 {
   transition: transform 0.2s ease-in-out;
 }
 
-/* 🎯 RESPONSIVE STYLING */
+
 @media (max-width: 1024px) {
   .checkout-page {
     flex-direction: column;
@@ -344,3 +460,4 @@ h3 {
     padding: 6px 10px;
   }
 }
+
