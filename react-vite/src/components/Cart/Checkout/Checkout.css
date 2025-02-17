@@ -36,6 +36,12 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+.tip-section {
+  border-top: 1px solid #f5f5f5;
+  border-bottom: 1px solid #f5f5f5;
+  margin-top: 1rem;
+}
+
 .tip-section .total-row {
   display: flex;
   justify-content: space-between;
@@ -64,7 +70,7 @@
 
 .tip-buttons {
   display: flex;
-  margin-bottom: 5px;
+  margin-bottom: 1rem;
 }
 
 .tip-buttons button {
@@ -134,21 +140,6 @@
 .price-num {
   text-align: right;
   min-width: 80px;
-
-}
-
-
-.total-divider {
-  border-top: 1px solid #ddd;
-  margin: 10px 0;
-}
-
-
-.info-icon {
-  font-size: 14px;
-  margin-left: 4px;
-  cursor: pointer;
-  opacity: 0.6;
 }
 
 
@@ -454,4 +445,3 @@ h3 {
     padding: 6px 10px;
   }
 }
-
