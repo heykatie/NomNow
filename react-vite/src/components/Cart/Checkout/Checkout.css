@@ -36,18 +36,23 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-.tip-section {
-  border-top: 1px solid #f5f5f5;
-  border-bottom: 1px solid #f5f5f5;
-  padding: 10px 0;
-}
-
-.tip-section h4 {
+.tip-section .total-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 6px 0;
   font-size: 16px;
+}
+
+.tip-section h4 {
+  margin-bottom: 0;
+}
+
+.tip-section .price-num {
   font-weight: bold;
+  text-align: right;
+  min-width: 80px;
+  flex-shrink: 0;
 }
 
 .tip-section p {
@@ -59,8 +64,7 @@
 
 .tip-buttons {
   display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 }
 
 .tip-buttons button {
@@ -95,16 +99,7 @@
 
 .price-num {
   text-align: right;
-  font-weight: bold;
   min-width: 80px;
-}
-
-
-.info-icon {
-  font-size: 14px;
-  margin-left: 4px;
-  cursor: pointer;
-  opacity: 0.6;
 }
 
 .order-total {
@@ -138,7 +133,6 @@
 
 .price-num {
   text-align: right;
-  font-weight: bold;
   min-width: 80px;
 
 }

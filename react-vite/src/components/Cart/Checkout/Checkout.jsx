@@ -268,23 +268,20 @@ export default function Checkout() {
 					</div>
 
 					<div className='total-row'>
-						<span>
-							Delivery Fee <span className='info-icon'>ℹ️</span>
-						</span>
+						<span>Delivery Fee</span>
 						<span className='price-num'>${deliveryFee.toFixed(2)}</span>
 					</div>
 
 					<div className='total-row'>
-						<span>
-							Taxes & Other Fees <span className='info-icon'>ℹ️</span>
-						</span>
+						<span>Taxes & Other Fees</span>
 						<span className='price-num'>${taxes.toFixed(2)}</span>
 					</div>
 
 					<div className='tip-section'>
-						<h4>
-							Add a tip <span className='info-icon'>ℹ️</span>
-						</h4>
+						<div className='total-row'>
+							<h4>Add a tip</h4>
+							<h4 className='price-num'>${tip.toFixed(2)}</h4>
+						</div>
 						<p>100% of your tip goes to your courier.</p>
 
 						<div className='tip-buttons'>
@@ -308,11 +305,6 @@ export default function Checkout() {
 								onClick={openTipModal}>
 								Other
 							</button>
-						</div>
-
-						<div className='total-row'>
-							<span>Tip</span>
-							<span className='price-num'>${tip.toFixed(2)}</span>
 						</div>
 					</div>
 
