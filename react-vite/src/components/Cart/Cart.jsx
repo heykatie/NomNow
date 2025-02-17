@@ -145,19 +145,22 @@ export default function Cart() {
 						<button
 							ref={menuRef}
 							className='cart-menu-btn'
-							onClick={() => setMenuOpen(!menuOpen)}>
+							onClick={() => {
+								// setMenuOpen(!menuOpen);
+								handleClearCart(userId)
+							}}>
 							{/* <FaEllipsisV /> */}
 							🗑️
 						</button>
-						{menuOpen && (
+						{/* {menuOpen && (
 							<div className='cart-menu-dropdown'>
 								<button
-									onClick={handleClearCart(userId)}
+									onClick={()=> handleClearCart(userId)}
 									className='clear-cart-btn'>
 									🗑️ Clear Cart
 								</button>
 							</div>
-						)}
+						)} */}
 					</div>
 				</div>
 
