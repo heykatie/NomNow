@@ -7,12 +7,12 @@ def seed_orders():
     restaurants = [1, 2, 3, 4, 5, 6]  # 6 restaurants
 
     orders = []
-    order_id = 100
+    # order_id = 100
 
     for user in users:
         for restaurant in restaurants:
             order = Order(
-                id=order_id,
+                # id=order_id,
                 restaurant_id=restaurant,
                 user_id=user,
                 total_cost=0,
@@ -20,7 +20,7 @@ def seed_orders():
                 promo=None,
             )
             orders.append(order)
-            order_id += 1
+            # order_id += 1
 
     db.session.add_all(orders)
     db.session.commit()
