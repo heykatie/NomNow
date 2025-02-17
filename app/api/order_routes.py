@@ -229,7 +229,8 @@ def create_order():
     )
 
     db.session.add(new_order)
-    db.session.flush()  # Get order ID before adding items
+    # db.session.flush()  # Get order ID before adding items
+    db.session.commit()
 
     # Add items to order
     order_items = []
