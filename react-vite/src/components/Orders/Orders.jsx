@@ -104,8 +104,6 @@ export default function Orders() {
 		}
 	};
 
-
-
 	return (
 		<div className='orders-container'>
 			<h2>Past Orders</h2>
@@ -143,13 +141,29 @@ export default function Orders() {
 								</h3>
 							</div>
 							<div className='order-details'>
-								<p>
+								{/* <p>
 									{Array.isArray(order.orderItems)
 										? order.orderItems.length
 										: 0}{' '}
 									item
 									{order.orderItems?.length > 1 ? 's' : ''} for $
 									{Number(order.totalCost).toFixed(2) || '0.00'}{' '}
+								</p> */}
+								<p>
+									{Array.isArray(order.orderItems)
+										? order.orderItems.reduce(
+												(total, item) => total + item.quantity,
+												0
+										)
+										: 0}{' '}
+									item
+									{order.orderItems?.reduce(
+										(total, item) => total + item.quantity,
+										0
+									) > 1
+										? 's'
+										: ''}{' '}
+									for ${Number(order.totalCost).toFixed(2) || '0.00'}{' '}
 								</p>
 								•
 								<p>
@@ -157,7 +171,6 @@ export default function Orders() {
 										? new Date(order.createdAt).toLocaleString()
 										: 'No Date Available'}
 								</p>
-
 								<div className='order-actions'>
 									<a href={`/orders/${order.id}/receipt`}>
 										View receipt
@@ -172,17 +185,13 @@ export default function Orders() {
 							<div className='order-items'>
 								{Array.isArray(order.orderItems) ? (
 									order.orderItems.map((item) => (
-										<OrderItems
-											key={item.id}
-											item={item}
-										/>
+										<OrderItems key={item.id} item={item} />
 									))
 								) : (
 									<p>No items found</p>
 								)}
 							</div>
 						</div>
-
 
 						<div className='order-buttons'>
 							<button
@@ -212,7 +221,6 @@ export default function Orders() {
 		</div>
 	);
 }
-
 
 // const handleReorder = async (order) => {
 // 	console.log('Reordering order:', order);
