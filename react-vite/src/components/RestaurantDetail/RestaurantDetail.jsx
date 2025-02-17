@@ -25,6 +25,8 @@ function RestaurantDetail() {
 	const cart = useSelector((state) => state.cart);
 	const cartItems = cart?.cartItems || [];
 
+	// State to track confirmation messages for each menu item
+	const [confirmationMessages, setConfirmationMessages] = useState({});
 
 	useEffect(() => {
 		if (id) {
@@ -67,22 +69,36 @@ function RestaurantDetail() {
 		};
 
 		dispatch(addToCart(orderData));
+		
+		// Set the confirmation message for the specific item that was added to the cart
+		setConfirmationMessages((prevMessages) => ({
+			...prevMessages,
+			[item.id]: `Added ${item.name} to cart!`,
+		}));
+		
+		// Clear the confirmation message after 3 seconds
+		setTimeout(() => {
+			setConfirmationMessages((prevMessages) => {
+				const newMessages = { ...prevMessages };
+				delete newMessages[item.id]; // Remove the message for this specific item
+				return newMessages;
+			});
+		}, 3000);
 	};
 
     return (
-
         <div className="restaurant-detail">
             {/* Header Image */}
             <div className="restaurant-hero">
                 <img src={restaurant.storeImage} alt={restaurant.name} />
             </div>
             <button className="back-button" onClick={() => navigate(`/`)}>
-  <span className="back-arrow">←</span> Back to Restaurants
-</button>
+                <span className="back-arrow">←</span> Back to Restaurants
+            </button>
 
             {/* Restaurant Name and Search Section */}
             <div className="restaurant-info-section">
-            <div className="restaurant-main-info">
+                <div className="restaurant-main-info">
                     <h1>{restaurant.name}</h1>
                     <div className="restaurant-details">
                         <span>{restaurant.deliveryTime} min</span>
@@ -101,7 +117,7 @@ function RestaurantDetail() {
                         className="search-input"
                         placeholder={`Search in ${restaurant.name || 'restaurant'}`}
                         onClick={()=> alert('Feature coming soon')}
-					/>
+                    />
 				</div>
 			</div>
 
@@ -140,7 +156,6 @@ function RestaurantDetail() {
 								? `${restaurant.deliveryFee} Delivery Fee on $15+`
 								: '$0 Delivery Fee on $15+'}
 						</span>
-						{/* <span className='info-label'>Pricing & fees</span> */}
 					</div>
 
 					<div className='info-item'>
@@ -168,19 +183,6 @@ function RestaurantDetail() {
 									</Link>
 									<p className='price'>${item.price}</p>
 									<p className='tag'>{item.food_type}</p>
-									{/* <button
-                                        className={`add-to-cart-btn ${
-                                            cartItems.length > 0 && cartItems[0].restaurantId !== parseInt(id)
-                                                ? 'disabled'
-                                                : ''
-                                        }`}
-                                        disabled={cartItems.length > 0 && cartItems[0].restaurantId !== parseInt(id)}
-                                        onClick={() => handleAddToCart(item)}
-                                    >
-                                        {cartItems.length > 0 && cartItems[0].restaurantId !== parseInt(id)
-                                            ? 'Items from another restaurant in cart'
-                                            : 'Add to Cart'}
-                                    </button> */}
 									<button
 										className={`add-to-cart-btn ${
 											!user.address ||
@@ -202,6 +204,10 @@ function RestaurantDetail() {
 											? 'Items from another restaurant in cart'
 											: 'Add to Cart'}
 									</button>
+									{/* Show confirmation message only for the clicked item */}
+									{confirmationMessages[item.id] && (
+										<p className="confirmation-message">{confirmationMessages[item.id]}</p>
+									)}
 								</div>
 							</div>
 						))}
@@ -210,6 +216,8 @@ function RestaurantDetail() {
 					<p>No menu items available</p>
 				)}
 			</div>
+
+            {/* Reviews Section */}
             <div className='reviews-section'>
                 <div className='reviews-header'>
                     <h2>Reviews</h2>
