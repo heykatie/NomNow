@@ -26,7 +26,7 @@ export default function Footer() {
 					<div className='footer-contact'>
 						<div className='footer-name'>
 							<a
-								href='https://heykatie.github.io/'
+								href='https://burakoncuy.github.io/'
 								target='_blank'
 								rel='noopener noreferrer'>
 								<div>Burak Ozdemir</div>
