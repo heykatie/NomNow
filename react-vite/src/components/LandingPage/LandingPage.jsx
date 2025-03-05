@@ -6,7 +6,7 @@ import './LandingPage.css';
 function LandingPage() {
 	const [address, setAddress] = useState('');
 	const [delivery_time, setDeliveryTime] = useState('');
-	const [errors, setErrors] = useState({})
+	// const [errors, setErrors] = useState({})
 	const navigate = useNavigate();
 	const user = useSelector((store) => store.session.user);
 	// const dispatch = useDispatch()
@@ -40,7 +40,7 @@ function LandingPage() {
 	return (
 		<div className='landing-page'>
 			<div className='main-content'>
-			<h2 class="brand-name">NomNow</h2>
+			<h2 className="brand-name">NomNow</h2>
 				<h2>Order delivery near you</h2>
 				<form onSubmit={(e)=> setGuest(e)}>
 					<input
@@ -49,7 +49,7 @@ function LandingPage() {
 						value={address}
 						onChange={(e) => setAddress(e.target.value)}
 					/>
-					{errors.address && <p>{errors.address}</p>}
+					{/* {errors.address && <p>{errors.address}</p>} */}
 
 					<select
 						value={delivery_time}

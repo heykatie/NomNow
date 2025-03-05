@@ -28,7 +28,7 @@ const PRICE_LEVELS = {
 
 // Validation rules
 const validateField = (name, value) => {
-    switch (name) {
+    switch(name) {
         case 'name':
             if (!value.trim()) return 'Restaurant name is required';
             if (value.length < 2) return 'Name must be at least 2 characters';

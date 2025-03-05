@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateMenuItem, getMenuItem } from '../../redux/menuItems';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -28,7 +28,7 @@ const UpdateMenuItem = () => {
   const error = useSelector((state) => state.menuItems.error);
   const user = useSelector((state) => state.session.user);
 
-  const hasCheckedAuth = useRef(false);
+  // const hasCheckedAuth = useRef(false);
 
   useEffect(() => {
     if (id) {
@@ -48,15 +48,15 @@ const UpdateMenuItem = () => {
     }
   }, [menuItem, user]);
 
-  useEffect(() => {
-    if (!hasCheckedAuth.current && menuItem && user) {
-      hasCheckedAuth.current = true;
-      if (menuItem.restaurant_owner_id !== user.id) {
-        alert('You are not authorized to update this menu item.');
-        navigate(`/menu-items/${id}`);
-      }
-    }
-  }, [menuItem, user, navigate, id]);
+  // useEffect(() => {
+  //   if (!hasCheckedAuth.current && menuItem && user) {
+  //     hasCheckedAuth.current = true;
+  //     if (menuItem.restaurant_owner_id !== user.id) {
+  //       alert('You are not authorized to update this menu item.');
+  //       navigate(`/menu-items/${id}`);
+  //     }
+  //   }
+  // }, [menuItem, user, navigate, id]);
 
   const handleChange = (e) => {
     setFormData({
