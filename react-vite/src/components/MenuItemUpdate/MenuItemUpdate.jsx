@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateMenuItem, getMenuItem } from '../../redux/menuItems';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -28,7 +28,6 @@ const UpdateMenuItem = () => {
   const error = useSelector((state) => state.menuItems.error);
   const user = useSelector((state) => state.session.user);
 
-  const hasCheckedAuth = useRef(false);
 
   useEffect(() => {
     if (id) {

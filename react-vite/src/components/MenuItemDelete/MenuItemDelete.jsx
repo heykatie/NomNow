@@ -1,4 +1,4 @@
-import  { useEffect, useState, useRef } from 'react';
+import  { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deleteMenuItem, getMenuItem } from '../../redux/menuItems';
 import { useParams, useNavigate } from 'react-router-dom';
@@ -13,7 +13,6 @@ const MenuItemDelete = () => {
   const menuItem = useSelector((state) => state.menuItems.menuItem);
   const error = useSelector((state) => state.menuItems.error);
   const user = useSelector((state) => state.session.user); // Logged-in user
-  const alertShown = useRef(false); // Track if the alert has been shown
 
   // Fetch the menu item details when the component mounts or the ID changes
   useEffect(() => {
