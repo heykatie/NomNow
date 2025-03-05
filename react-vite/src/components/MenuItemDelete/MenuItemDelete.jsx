@@ -29,15 +29,6 @@ const MenuItemDelete = () => {
       if (user.id === restaurantOwnerId) {
         setIsAuthorized(true); // User is authorized
         setMenuItemName(menuItem.name); // Set the menu item name
-      } else {
-        if (!alertShown.current) {
-          alertShown.current = true; // Mark that the alert has been shown
-          alert('You are not authorized to delete this menu item.');
-          // Redirect to the item detail page after the alert
-          setTimeout(() => {
-            navigate(`/menu-items/${id}`);
-          }, 1000); // Wait 1 second before redirecting
-        }
       }
     }
   }, [menuItem, user, navigate, id]);

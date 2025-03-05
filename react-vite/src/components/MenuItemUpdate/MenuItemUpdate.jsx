@@ -48,15 +48,7 @@ const UpdateMenuItem = () => {
     }
   }, [menuItem, user]);
 
-  useEffect(() => {
-    if (!hasCheckedAuth.current && menuItem && user) {
-      hasCheckedAuth.current = true;
-      if (menuItem.restaurant_owner_id !== user.id) {
-        alert('You are not authorized to update this menu item.');
-        navigate(`/menu-items/${id}`);
-      }
-    }
-  }, [menuItem, user, navigate, id]);
+
 
   const handleChange = (e) => {
     setFormData({
