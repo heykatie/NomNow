@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateMenuItem, getMenuItem } from '../../redux/menuItems';
 import { useNavigate, useParams } from 'react-router-dom';
-import './MenuItemUpdate.css'; // Import the updated CSS
+import './MenuItemUpdate.css';
 
 const UpdateMenuItem = () => {
   const { id } = useParams();
@@ -17,20 +17,24 @@ const UpdateMenuItem = () => {
     food_type: 'appetizer',
   });
 
+  const [errors, setErrors] = useState({
+    name: '',
+    description: '',
+    price: '',
+    food_image: '',
+  });
+
   const menuItem = useSelector((state) => state.menuItems.menuItem);
   const error = useSelector((state) => state.menuItems.error);
   const user = useSelector((state) => state.session.user);
 
-  const hasCheckedAuth = useRef(false); // Ensure we check authorization only once on load
 
-  // Fetch menu item on mount
   useEffect(() => {
     if (id) {
       dispatch(getMenuItem(id));
     }
   }, [dispatch, id]);
 
-  // Set form data when menu item loads
   useEffect(() => {
     if (menuItem && user && menuItem.restaurant_owner_id === user.id) {
       setFormData({
@@ -43,18 +47,8 @@ const UpdateMenuItem = () => {
     }
   }, [menuItem, user]);
 
-  // Redirect unauthorized users (only runs once when data first loads)
-  useEffect(() => {
-    if (!hasCheckedAuth.current && menuItem && user) {
-      hasCheckedAuth.current = true; // Mark as checked
-      if (menuItem.restaurant_owner_id !== user.id) {
-        alert('You are not authorized to update this menu item.');
-        navigate(`/menu-items/${id}`); // Redirect to the menu item page
-      }
-    }
-  }, [menuItem, user, navigate, id]);
 
-  // Handle input changes
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -62,17 +56,52 @@ const UpdateMenuItem = () => {
     });
   };
 
-  // Handle form submission
+  const validate = () => {
+    let isValid = true;
+    let errorMessages = { name: '', description: '', price: '', food_image: '' };
+
+   // Name validation
+if (!/^[A-Za-z\s]+$/.test(formData.name.trim()) || formData.name.trim() === '') {
+  errorMessages.name = 'Name must be a string and cannot contain only numbers.';
+  isValid = false;
+}
+
+
+    // Description validation
+    if (typeof formData.description !== 'string' || formData.description.length < 5) {
+      errorMessages.description = 'Description must be at least 5 characters and a string.';
+      isValid = false;
+    }
+
+    // Price validation
+    if (formData.price <= 0 || isNaN(formData.price)) {
+      errorMessages.price = 'Price must be greater than zero.';
+      isValid = false;
+    }
+
+    // Food Image URL validation
+    const urlPattern = /^(ftp|http|https):\/\/[^ "]+$/;
+    if (!urlPattern.test(formData.food_image)) {
+      errorMessages.food_image = 'Food image must be a valid URL.';
+      isValid = false;
+    }
+
+    setErrors(errorMessages);
+    return isValid;
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    dispatch(updateMenuItem(id, formData))
-      .then(() => {
-        dispatch(getMenuItem(id)); // Refetch updated menu item
-        navigate(`/restaurants/${menuItem.restaurant_owner_id}/menu`);
-      })
-      .catch((error) => {
-        console.error('Update failed:', error);
-      });
+    if (validate()) {
+      dispatch(updateMenuItem(id, formData))
+        .then(() => {
+          dispatch(getMenuItem(id));
+          navigate(`/restaurants/${menuItem.restaurant_owner_id}/menu`);
+        })
+        .catch((error) => {
+          console.error('Update failed:', error);
+        });
+    }
   };
 
   if (error) {
@@ -80,7 +109,7 @@ const UpdateMenuItem = () => {
   }
 
   if (!menuItem || menuItem.restaurant_owner_id !== user?.id) {
-    return null; // Don't render if not authorized or still loading
+    return null;
   }
 
   return (
@@ -102,6 +131,7 @@ const UpdateMenuItem = () => {
             placeholder="Name"
             required
           />
+          {errors.name && <div className="error-message">{errors.name}</div>}
         </div>
 
         <div>
@@ -113,6 +143,7 @@ const UpdateMenuItem = () => {
             placeholder="Description"
             required
           />
+          {errors.description && <div className="error-message">{errors.description}</div>}
         </div>
 
         <div>
@@ -125,6 +156,7 @@ const UpdateMenuItem = () => {
             placeholder="Price"
             required
           />
+          {errors.price && <div className="error-message">{errors.price}</div>}
         </div>
 
         <div>
@@ -137,6 +169,7 @@ const UpdateMenuItem = () => {
             placeholder="Food Image URL"
             required
           />
+          {errors.food_image && <div className="error-message">{errors.food_image}</div>}
         </div>
 
         <div>
