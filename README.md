@@ -69,6 +69,31 @@ Users can manage their account and create, update, and delete restaurants and me
 
 <img width="400" alt="NomNow-account" src="./react-vite/public/images/manage-account.png">
 
+## Contributions — Katie Leong
+
+This is my fork of a five-person team project. I contributed 307 of roughly 596 commits and owned the cart, checkout and order-history flow.
+
+### Cart and restaurant state
+
+Items in the cart could show the wrong restaurant. The Flask menu-item route never returned the item's associated restaurant, so the cart fell back on a shared global value that went stale as the user browsed between restaurants.
+
+The fix crossed three layers: changed the menu-item route to return the association, threaded it through the React components, and re-keyed the Redux cart off the item itself rather than the shared global.
+
+### Quantity handling
+
+The quantity a user selected wasn't reaching the cart. I passed the selected quantity explicitly into the Redux cart action and normalized it to an integer, then made checkout totals and order-history item counts quantity-aware.
+
+### Order error handling
+
+Added error handling on the order submission path so a failed order surfaces to the user instead of leaving the cart in an indeterminate state.
+
+### Also built
+
+- Cart add, update and remove flows
+- Checkout
+- Order history and reordering
+
+
 ## Future Features
 
 1. Search
